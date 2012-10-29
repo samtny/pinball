@@ -1,11 +1,13 @@
 #pragma once
 
+#include "PPPlayfield.h"
+
 class PPPhysicsEngine
 {
 public:
 	PPPhysicsEngine(void);
 	~PPPhysicsEngine(void);
-	void loadPlayfield(char *filename);
+	void init(PPPlayfield *playfield);
 	void updatePhysics();
 };
 

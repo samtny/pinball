@@ -73,10 +73,12 @@
     <ClCompile Include=".\PPGame.cpp" />
     <ClCompile Include=".\PPPhysicsEngine.cpp" />
     <ClCompile Include=".\PPRenderer.cpp" />
+    <ClCompile Include="PPPlayfield.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PPGame.h" />
     <ClInclude Include="PPPhysicsEngine.h" />
+    <ClInclude Include="PPPlayfield.h" />
     <ClInclude Include="PPRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

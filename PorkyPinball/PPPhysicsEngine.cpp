@@ -20,7 +20,7 @@ PPPhysicsEngine::~PPPhysicsEngine(void)
 	cpSpaceFree(space);
 }
 
-void PPPhysicsEngine::loadPlayfield(char *filename) {
+void PPPhysicsEngine::init(PPPlayfield *playfield) {
 	
 	
 
