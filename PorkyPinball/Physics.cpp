@@ -40,7 +40,8 @@ static cpVect gravity = cpv(0.0, 9.80665f);
 static cpFloat timeStep = 1.0/180.0;
 
 enum shapeGroup {
-	shapeGroupBox
+	shapeGroupBox,
+	shapeGroupFlippers
 };
 
 Physics::Physics(void)
@@ -70,6 +71,8 @@ void Physics::createObject(string name, layoutItemProperties layoutItem, objectP
 		this->createBox(name, layoutItem, object, material);
 	} else if (strcmp(object.s.c_str(), "segment") == 0) {
 		this->createSegment(name, layoutItem, object, material);
+	} else if (strcmp(object.s.c_str(), "flipper") == 0) {
+		this->createFlipper(name, layoutItem, object, material);
 	}
 
 }
@@ -124,6 +127,36 @@ void Physics::createBox(string name, layoutItemProperties item, objectProperties
 	//box = staticBody;
 	box = body;
 	
+}
+
+void Physics::createFlipper(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+
+	cpFloat area = (object.r1 * M_PI) * 2; // approx
+	cpFloat mass = area * material.d;
+
+	cpFloat direction = item.v[0].x <= item.v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
+	cpFloat length = cpvdist(item.v[0], item.v[1]);
+	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item.v[1],item.v[0])), cpvnormalize(cpvsub(item.v[2],item.v[0]))));
+
+	// flipper body is round centered at base of flipper, and for this implementation has radius == flipper length;
+	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
+	cpBodySetPos(body, item.v[0]);
+
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box, item.v[0]));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box, flipAngle, 0.0f));
+
+	// lflipper base shape
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, object.r1, cpvzero));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupFlippers);
+
+	// lflipper face shape
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item.v[0], body->p), cpvsub(item.v[1], body->p), object.r2));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupFlippers);
+
 }
 
 void Physics::createSegment(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {

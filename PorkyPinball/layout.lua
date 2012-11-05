@@ -6,11 +6,11 @@ layout = {
 	},
 	lFlipper = {
 		o = "flipper",
-		v = { {3,3} , {8,2.5} }
+		v = { {3,3} , {8,2} , {8,4} } -- 3 = activated position
 	},
 	rFlipper = {
 		o = "flipper",
-		v = { {17,3} , {12,2.5} }
+		v = { {17,3} , {12,2.5} , {12,3.5} } -- 3 = activated position
 	},
 	troughSwitch = {
 		o = "switch",

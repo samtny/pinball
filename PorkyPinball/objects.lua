@@ -36,7 +36,7 @@ objects = {
 	},
 	flipper = {
 		s = "flipper", -- "flipper" shape defined internally
-		m = "rubber",
+		m = "flipper",
 		r1 = 0.45,
 		r2 = 0.35
 	},

@@ -22,6 +22,7 @@ protected:
 	void loadLayout();
 	void createObject(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createBox(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+	void createFlipper(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	cpBody *box;
 };
