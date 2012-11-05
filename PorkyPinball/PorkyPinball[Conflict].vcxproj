@@ -42,8 +42,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\samtny\Documents\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\samtny\Documents\Visual Studio 2012\Projects\PorkyPinball\PorkyPinball\lua;C:\Users\samtny\Documents\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -53,6 +53,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>chipmunk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

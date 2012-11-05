@@ -1,8 +1,8 @@
 
-#include "PPGame.h"
+#include "Game.h"
 
 int main(void) {
-	PPGame *g = new PPGame();
+	Game *g = new Game();
 	g->start();
 	return 0;
 }
