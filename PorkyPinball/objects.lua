@@ -29,6 +29,11 @@ objects = {
 		s = "poly",
 		m = "plastic"
 	},
+	box = {
+		s = "box", -- "box" shape defined internally - internal winding is clockwise from blh
+		m = "wood",
+		r1 = 0.25
+	},
 	flipper = {
 		s = "flipper", -- "flipper" shape defined internally
 		m = "rubber",

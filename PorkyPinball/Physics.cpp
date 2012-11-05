@@ -8,13 +8,10 @@ extern "C" {
 #include "lua/lualib.h"
 }
 
-using namespace std;
-#include <string>
-#include <map>
-
 typedef struct materialProperties {
 	float e;
 	float f;
+	float d;
 } materialProperties;
 map<string, materialProperties> materials;
 typedef map<string, materialProperties>::iterator it_materialProperties;
@@ -30,16 +27,21 @@ typedef map<string, objectProperties>::iterator it_objectProps;
 
 typedef struct layoutItemProperties {
 	string o;
-	float v[200];
+	cpVect v[200];
 	int count;
 } layoutItemProperties;
 map<string, layoutItemProperties> layoutItems;
 typedef map<string, layoutItemProperties>::iterator it_layoutItems;
 
 static cpSpace *space;
+
 static cpVect gravity = cpv(0.0, 9.80665f);
 
 static cpFloat timeStep = 1.0/180.0;
+
+enum shapeGroup {
+	shapeGroupBox
+};
 
 Physics::Physics(void)
 {
@@ -63,8 +65,70 @@ Physics::Physics(void)
 }
 
 void Physics::createObject(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
-		
+	
+	if (strcmp(object.s.c_str(), "box") == 0) {
+		this->createBox(name, layoutItem, object, material);
+	} else if (strcmp(object.s.c_str(), "segment") == 0) {
+		this->createSegment(name, layoutItem, object, material);
+	}
 
+}
+
+void Physics::createBox(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+
+	cpBody *body, *staticBody = cpSpaceGetStaticBody(space);
+	cpShape *shape;
+	cpConstraint *constraint;
+
+	cpFloat area = (item.v[1].y - item.v[0].y) * (item.v[3].x - item.v[0].x);
+	cpFloat mass = area * material.d;
+
+	// create body on which to hang the "box";
+	body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item.v, cpvzero)));
+	
+	// pin the box body at the four corners;
+	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[0]));
+	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[1]));
+	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[2]));
+	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[3]));
+	
+	// pin the box in place;
+	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
+	
+	// hang the box shapes on the body;
+	// left
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[0], item.v[1], object.r1));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupBox);
+
+	// top
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[1], item.v[2], object.r1));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupBox);
+
+	// right
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[2], item.v[3], object.r1));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupBox);
+
+	// bottom
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[3], item.v[0], object.r1));
+	cpShapeSetElasticity(shape, material.e);
+	cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupBox);
+
+	//box = staticBody;
+	box = body;
+	
+}
+
+void Physics::createSegment(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
+
+	//...
 
 }
 
@@ -102,6 +166,8 @@ void Physics::loadMaterials() {
 						props.e = val;
 					} else if (strcmp("f", key) == 0) {
 						props.f = val;
+					} else if (strcmp("d", key) == 0) {
+						props.d = val;
 					}
 
 					lua_pop(L, 1);
@@ -214,11 +280,32 @@ void Physics::loadLayout() {
 						
 						int length = lua_rawlen(L, -1);
 						
+						// traverse 2d vects
 						for (int i = 1; i <= length; i++)
 						{
+
+							// init vect object
+							cpVect v;
+
+							// get the 2d table
 							lua_rawgeti(L, -1, i);
-							props.v[i-1] = (float)lua_tonumber(L, -1);
+
+							// get the first vertex
+							lua_rawgeti(L, -1, 1);
+							v.x = (float)lua_tonumber(L, -1);
 							lua_pop(L, 1);
+
+							// get the second vertex
+							lua_rawgeti(L, -1, 2);
+							v.y = (float)lua_tonumber(L, -1);
+							lua_pop(L, 1);
+							
+							// pop the table;
+							lua_pop(L, 1);
+							
+							// assign vect to array
+							props.v[i-1] = v;
+
 						}
 
 						props.count = length;

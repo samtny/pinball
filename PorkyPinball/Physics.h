@@ -1,8 +1,14 @@
 #pragma once
 
+using namespace std;
+#include <string>
+#include <map>
+
 struct layoutItemProperties;
 struct objectProperties;
 struct materialProperties;
+
+struct cpBody;
 
 class Physics
 {
@@ -15,5 +21,8 @@ protected:
 	void loadObjects();
 	void loadLayout();
 	void createObject(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+	void createBox(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+	cpBody *box;
 };
 
