@@ -23,5 +23,11 @@ sam thompson
 	-".environmentVariables"
 		-return predefined object with some stuff (window/view dimensions, other stuff that is/isn't doable, etc...)...
 
+	- it appears this involves primarily a c "PinballHostInterface.h" which may forward declare all interface functions
+		-both "lib" and host include this header; "lib" calls, host responds...
 
-		
+so, a code+compile+run cycle from a given environment will look like this;
+
+	create native "main" methods
+
+	
