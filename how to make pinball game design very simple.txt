@@ -1,0 +1,150 @@
+how to make pinball game design very simple
+10.29.2012
+sam thompson
+
+WHAT ABOUT "CHEATS" TO PHYSICS (e.g., "start ball here, regardless") WHERE TO DEFINE??
+
+goal; design very fun, multi-platform *2D* pinball, having really fun physics and a fun gameplay "hook" pretty close to up front...
+	...without wanting to rip out my eyeballs in the process
+
+0) sketch up concept drawings on graph paper
+	-try and get object/feature "personality" defined a little
+	-there should be something that looks like it might be fun to hit with a couple flippers in there right off the bat
+	-there should be feature lights for just about everything, but this can wait
+	-FUN
+
+9) Write lua "materials" file
+	-these are just properties for physics engine
+	-FUN	
+	
+00) design objects (ball, flipper, target, etc.)
+	-include anchor point/s in vertices
+	-TEDIOUS AS SHIT
+
+000) write "objects" lua file
+	-name, full coords, material for each individual object
+	
+1) design plafield layout	
+	-use only "objects" as designed
+	-I dunno, maybe Sketchup has better API?
+		-https://developers.google.com/sketchup/docs/tutorial_attrreporting
+	-PRETTY TEDIOUS
+
+2) Tag (in l->r order) anchor points of each object in this new coordinate space
+	-include id/name of object in each tag somehow
+	-lights don't work here; or do they?  yeah, they do - graphic design is secondary to feature lights
+		-so, lights are "lightRound1, lightRound2, lightArrow1" etc; arrows take 2 anchors, etc...
+	-TEDIOUS AS SHIT
+	
+3) Export tags with anchor coords to lua "layout" file
+	-some coords will form basis of physics objs, e.g. posts, flipper anchor/s, etc.
+	-other coords will inform renderer only (e.g. lights, playfield background img maps (squares?), etc.)
+	-got to pull object type/material some way
+	-FREE, but above rig setup ***HELLA TEDIOUS***
+	
+3) Optionally generate wireframe image for use as PShop "tracing" / for ppl who will be drawing
+	-FREE
+	
+2) PShop shapes
+	-Make a couple shapes - playfield (top square, bottom square?), ball, flipper, target, switch
+	-Export shapes from pshop to multi-platform resolution file fldrs
+	-write lua "images" file, mapping files to "objects" names only
+		-some convention for multi-state, e.g. lights; "lit, unlit"
+			-[and/or "RGBLED" for infinite variance lights which have some transparency for fx engine to backfill]
+	-[later; this should all burn right into one giant .png I think, so "images" should include x,y offsets, translations, etc...]
+	-HELLA TEDIOUS
+	
+8) Write lua rules engine "rules"
+	-COMBO FUN/TEDIOUS
+
+10) Find/edit/dump some sounds to named files; "chime1, chime2, startGameMusic"
+	-decide on universal-ish compression?
+	-TEDIOUS AS SHIT
+
+11) Write lua "sounds" file
+	-[this should eventually all burn to one giant sounds file I think, so include offset/length here]
+	-FREE (without offsets)
+	-TEDIOUS AS SHIT (with offsets, unless we write tools for this...)
+
+12) Write lua "objtranslate" file
+	-how does "layout" map to physics units?
+	-how does "layout" map to renderer unit?
+	-what are viewports at resolution MxN?  NxM?
+	-zoom levels and accordant shiz/lookat offsets
+	-what are attract-mode coords / curves?
+		-[I want z-translates possible in here plzz...]
+	-FUCKING TEDIOUS AS MOTHERFUCKING SHIT
+
+122) Write lua "forces" file
+	-what is slingshot/trough kicker/etc. force?
+	-allows customization of forces even to layout objects of same class
+	
+13) write C physics engine calls
+	-init routines for engine X
+	-e.g. what is "slingshot" behavior in context of chosen engine?
+		-e.g., given points p1, p2 (anchors) in space, what objects / shapes / constraints, sensors surround these points to define the physics object?
+	-load routines for lua "materials, objects, layout, forces" files
+	-FUN
+
+14) write graphics engine
+	-setup routines for engine X
+	-debugDraw to start/as default for undefined "physics" objects?
+	-"stretchable" object support?
+		-a single image asset stretched across some objects, e.g. rubbers, rails, switches
+	-which pipeline?  fixed or shader?  compatibility plzz...
+	-FUN BUT EYEBALL-PIERCINGLY DIFFICULT
+
+15) write sound engine
+	-mostly just calls into existing engine
+	-FREE-ISH
+	
+10) run cycle is as follows;
+	-run C program
+	-C runs pre-init;
+		-pulls lua "objtranslate" file to local vars
+	-C initializes physics engine
+		-pulls in lua "materials" file
+		-pulls in lua "objects"
+		-pulls lua "layout"
+			-shape/position offset by any "objtranslate" vars
+			-validates that "startButton", and/or whatever necessary, is/are defined (non-nil) in lua
+	-C initializes renderer
+		-pulls in lua "images" file, init images defined there
+			-offsets/translates by "objtranslate"
+	-C initializes sound engine
+		-pull lua "sounds" file, init sounds defined there
+	-C pulls in lua "rules" file
+		-lua "rules" calls back to C to validate required callbacks exist WHERE/IF NECESSARY
+			-e.g. "playSound(DUMMY_INDEX, VOLUME_LEVEL_0, LOOP_INTERVAL_NONE)"
+			-e.g. "triggerMech(DUMMY_INDEX, LOOP_INTERVAL_NONE)"
+			-e.g. "updateScore(DUMMY_SCORE, PLAYER_NUMBER_TEST, BALL_IN_PLAY_TEST)"
+			-e.g. "gameOver()"
+			-and/or run all "resetX" routines with some kind of error handling
+	-C begins display/physics loop
+		-physics engine and/or renderer begins calling the other to update positions (look this up in Chipmunk docs for now...)
+	-player triggers C start function, which in turn triggers lua "startButton" switch
+	-lua rules + C physics determine course of game
+		-occasional "bounds" checking to see that "ball" is happy
+	-lua rules calls C "gameOver()" when appropriate
+	-DOPE
+
+9) tweak design, achieving something fun-ish and sorta open
+	-tweak "objtranslate" to get camera to follow ball properly, among other things - (FUN)
+	-tweak "materials" substantially - (FUN)
+	-tweak "objects" as needed in AutoCAD - remember that translation to "objects" file is FREE - (FUN)
+	-tweak "sounds" (volume, etc.) as needed - (MEH)
+	-tweak "rules" for balance - (MEH)
+	-FUN AS HELL
+
+27) ???
+
+28) Profit
+
+
+
+	
+	
+	
+	
+	
+

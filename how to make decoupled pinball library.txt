@@ -1,0 +1,27 @@
+how to make decoupled pinball library
+sam thompson
+11/5/2012
+
+-library must be pure c/c++
+
+-start with the obj c port;
+	-happy obj c app sets up opengl context/view, inits sound engine, readies user i/o
+	-Pinball p
+	-p.play()
+		-the library assumes;
+			-c/c++ callbacks exist in Host app (conforms to protocol)
+				-e.g.; "playSound(x, offset, loop)", "gameOver()"
+				-nah...
+					-e.g.; what are we doing currently about "open file" directives???
+...lots of problems...
+
+-basically any i/o to/from pinball library must be wrapped by "host" interface;
+	-"pathForResourceFile(string fileName)"
+		-gets localized path
+	-"playSound(string fileName, offset, volume, loop)"
+		-instructs host to play this sound
+	-".environmentVariables"
+		-return predefined object with some stuff (window/view dimensions, other stuff that is/isn't doable, etc...)...
+
+
+		
