@@ -28,6 +28,28 @@ sam thompson
 
 so, a code+compile+run cycle from a given environment will look like this;
 
-	create native "main" methods
+	create native "main" code, setup ogl, audio, etc..
+	hook "PinballHostInterface.h" methods to native code methods
+	init "Pinball" object and "start()"
+	"Pinball" object may then do following;
+		call for paths to ".lua" scripts
+		call for window/view dimensions, other "environment" characteristics
+		call "playSound..."
+			-how does this work?
+				-"Pinball" gets sound names from "audio.lua"
+					-these are called from 2 places;
+						-C engine will call "playSound(bumpSound)" for physical effects
+						-lua will call "playSound(chimeSound)" for rules based effects
+				-host gets name/filename pairs also from "audio.lua"
+				-etc...
+	"Host" object may request into "Pinball", e.g.;
+		-"pause()"
+		-"resume()"
+		-"environmentDidChange()" -- "Pinball" will then call back for new environment
 
+How to implement?
+	-try first with a single "PinballHostInterface.h" file, defining methods and any structs...
+	-host in Win and iPhone.
+	-if relatively painless then we are golden.
+	
 	

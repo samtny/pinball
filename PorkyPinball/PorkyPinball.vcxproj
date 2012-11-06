@@ -137,6 +137,7 @@
     <ClInclude Include="lua\lundump.h" />
     <ClInclude Include="lua\lvm.h" />
     <ClInclude Include="lua\lzio.h" />
+    <ClInclude Include=".\PinballHost.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="layout.lua" />
