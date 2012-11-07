@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\lua">
+      <UniqueIdentifier>{c975ce3f-f94a-4316-bd30-f7bdd79a5095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lua\src">
+      <UniqueIdentifier>{1451c41a-144f-4d29-8cd5-a3400d25390a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared">
+      <UniqueIdentifier>{8189271a-0878-47f7-a384-f6836e2b5857}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shared">
+      <UniqueIdentifier>{9359d279-644d-46d2-8d8a-124442f59160}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PinballHost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Physics.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Renderer.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lapi.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lauxlib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbaselib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbitlib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcode.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcorolib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lctype.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldblib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldebug.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldo.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldump.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lfunc.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lgc.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\linit.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\liolib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\llex.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmathlib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmem.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loadlib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lobject.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lopcodes.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loslib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lparser.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstate.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstring.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstrlib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltable.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltablib.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltm.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lundump.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c">
+      <Filter>Source Files\lua\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PinballHost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Physics.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\PinballHostInterface.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Renderer.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="materials.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+    <None Include="objects.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+    <None Include="layout.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+  </ItemGroup>
+</Project>

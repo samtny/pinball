@@ -1,0 +1,73 @@
+how to make decoupled pinball library
+sam thompson
+11/5/2012
+
+modules that must be "hosted" in our implementation;
+
+implicit;
+	-opengl context init
+
+output;
+	-audio file playback
+	
+input;
+	-file (path) mgmt (scripts, images)
+	-user input
+	-environment variables
+
+
+
+==============
+
+
+-library must be pure c/c++
+
+-start with the obj c port;
+	-happy obj c app sets up opengl context/view, inits sound engine, readies user i/o
+	-Pinball p
+	-p.play()
+		-the library assumes;
+			-c/c++ callbacks exist in Host app (conforms to protocol)
+				-e.g.; "playSound(x, offset, loop)", "gameOver()"
+				-nah...
+					-e.g.; what are we doing currently about "open file" directives???
+...lots of problems...
+
+-basically any i/o to/from pinball library must be wrapped by "host" interface;
+	-"pathForResourceFile(string fileName)"
+		-gets localized path
+	-"playSound(string fileName, offset, volume, loop)"
+		-instructs host to play this sound
+	-".environmentVariables"
+		-return predefined object with some stuff (window/view dimensions, other stuff that is/isn't doable, etc...)...
+
+	- it appears this involves primarily a c "PinballHostInterface.h" which may forward declare all interface functions
+		-both "lib" and host include this header; "lib" calls, host responds...
+
+so, a code+compile+run cycle from a given environment will look like this;
+
+	create native "main" code, setup ogl, audio, etc..
+	hook "PinballHostInterface.h" methods to native code methods
+	init "Pinball" object and "start()"
+	"Pinball" object may then do following;
+		call for paths to ".lua" scripts
+		call for window/view dimensions, other "environment" characteristics
+		call "playSound..."
+			-how does this work?
+				-"Pinball" gets sound names from "audio.lua"
+					-these are called from 2 places;
+						-C engine will call "playSound(bumpSound)" for physical effects
+						-lua will call "playSound(chimeSound)" for rules based effects
+				-host gets name/filename pairs also from "audio.lua"
+				-etc...
+	"Host" object may request into "Pinball", e.g.;
+		-"pause()"
+		-"resume()"
+		-"environmentDidChange()" -- "Pinball" will then call back for new environment
+
+How to implement?
+	-try first with a single "PinballHostInterface.h" file, defining methods and any structs...
+	-host in Win and iPhone.
+	-if relatively painless then we are golden.
+	
+	
