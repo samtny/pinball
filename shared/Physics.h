@@ -1,8 +1,8 @@
 #pragma once
 
-using namespace std;
 #include <string>
 #include <map>
+using namespace std;
 
 struct layoutItemProperties;
 struct objectProperties;
