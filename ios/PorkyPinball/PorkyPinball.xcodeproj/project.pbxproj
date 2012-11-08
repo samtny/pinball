@@ -58,7 +58,7 @@
 		4B170277164AB7CA007D4A2F /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170255164AB7CA007D4A2F /* lvm.c */; };
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
 		4B17027A164AB9C4007D4A2F /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B170279164AB9C4007D4A2F /* libChipmunk-iPhone.a */; };
-		4B17027D164AF666007D4A2F /* PinballHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B17027C164AF666007D4A2F /* PinballHost.m */; };
+		4B17027D164AF666007D4A2F /* PinballHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B17027C164AF666007D4A2F /* PinballHost.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,7 +81,7 @@
 		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		4B170220164AAF3F007D4A2F /* Physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Physics.cpp; path = ../../../shared/Physics.cpp; sourceTree = "<group>"; };
 		4B170221164AAF3F007D4A2F /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = ../../../shared/Physics.h; sourceTree = "<group>"; };
-		4B170222164AAF3F007D4A2F /* PinballHostInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinballHostInterface.h; path = ../../../shared/PinballHostInterface.h; sourceTree = "<group>"; };
+		4B170222164AAF3F007D4A2F /* PinballHostInterface.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PinballHostInterface.h; path = ../../../shared/PinballHostInterface.h; sourceTree = "<group>"; };
 		4B170224164AAF3F007D4A2F /* layout.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layout.lua; sourceTree = "<group>"; };
 		4B170225164AAF3F007D4A2F /* materials.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = materials.lua; sourceTree = "<group>"; };
 		4B170226164AAF3F007D4A2F /* objects.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = objects.lua; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 		4B170256164AB7CA007D4A2F /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lzio.c; path = "../../../../../../../src/lua/lua 5.2.1/lzio.c"; sourceTree = "<group>"; };
 		4B170279164AB9C4007D4A2F /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "/lib/chipmunk/chipmunk 6.1.1/iphone simulator/libChipmunk-iPhone.a"; sourceTree = "<absolute>"; };
 		4B17027B164AF666007D4A2F /* PinballHost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballHost.h; sourceTree = "<group>"; };
-		4B17027C164AF666007D4A2F /* PinballHost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinballHost.m; sourceTree = "<group>"; };
+		4B17027C164AF666007D4A2F /* PinballHost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballHost.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +180,7 @@
 				4B17020D164AAC50007D4A2F /* AppDelegate.h */,
 				4B17020E164AAC50007D4A2F /* AppDelegate.m */,
 				4B17027B164AF666007D4A2F /* PinballHost.h */,
-				4B17027C164AF666007D4A2F /* PinballHost.m */,
+				4B17027C164AF666007D4A2F /* PinballHost.mm */,
 				4B170210164AAC50007D4A2F /* Shader.fsh */,
 				4B170212164AAC50007D4A2F /* Shader.vsh */,
 				4B170214164AAC50007D4A2F /* ViewController.h */,
@@ -205,12 +205,12 @@
 		4B17021F164AAEF3007D4A2F /* shared */ = {
 			isa = PBXGroup;
 			children = (
-				4B170220164AAF3F007D4A2F /* Physics.cpp */,
 				4B170221164AAF3F007D4A2F /* Physics.h */,
+				4B170220164AAF3F007D4A2F /* Physics.cpp */,
 				4B170222164AAF3F007D4A2F /* PinballHostInterface.h */,
 				4B170223164AAF3F007D4A2F /* PorkyPinball */,
-				4B170228164AAF3F007D4A2F /* Renderer.cpp */,
 				4B170229164AAF3F007D4A2F /* Renderer.h */,
+				4B170228164AAF3F007D4A2F /* Renderer.cpp */,
 			);
 			name = shared;
 			sourceTree = "<group>";
@@ -372,7 +372,7 @@
 				4B170276164AB7CA007D4A2F /* lundump.c in Sources */,
 				4B170277164AB7CA007D4A2F /* lvm.c in Sources */,
 				4B170278164AB7CA007D4A2F /* lzio.c in Sources */,
-				4B17027D164AF666007D4A2F /* PinballHost.m in Sources */,
+				4B17027D164AF666007D4A2F /* PinballHost.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

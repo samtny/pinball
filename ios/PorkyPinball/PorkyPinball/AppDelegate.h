@@ -9,11 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @class ViewController;
+@class PinballHost;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate> {
+    PinballHost *pinballHost;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) ViewController *viewController;
+
+@property (nonatomic, retain) PinballHost *pinballHost;
 
 @end

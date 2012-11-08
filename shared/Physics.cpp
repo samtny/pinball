@@ -172,7 +172,7 @@ void Physics::loadMaterials() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	//const char *materialsFileName = _pinballHostImpl->getPathForScriptFileName("materials.lua");
+	const char *materialsFileName = _pinballHostImpl->getPathForScriptFileName((void *)"materials.lua");
 
 	int error = luaL_dofile(L, "materials.lua");
 	if (!error) {

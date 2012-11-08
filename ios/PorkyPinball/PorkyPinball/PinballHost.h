@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PinballHost : NSObject
+@interface PinballHost : NSObject {
+    BOOL finished;
+    BOOL paused;
+}
+
+-(void)start;
+-(const char *)getPathForScriptFileName:(void *)scriptFileName;
 
 @end
