@@ -43,7 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
