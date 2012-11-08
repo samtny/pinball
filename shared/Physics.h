@@ -10,14 +10,14 @@ struct materialProperties;
 
 struct cpBody;
 
-class PinballHostImpl;
+class PinballNativeImpl;
 
 class Physics
 {
 public:
 	Physics(void);
 	~Physics(void);
-	PinballHostImpl *_pinballHostImpl;
+	void init(PinballNativeImpl *pinballNative);
 	void updatePhysics();
 protected:
 	void loadMaterials();
@@ -28,6 +28,7 @@ protected:
 	void createFlipper(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 private:
+	PinballNativeImpl *_pinballNativeImpl;
 	cpBody *_box;
 };
 

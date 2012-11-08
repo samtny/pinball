@@ -1,9 +1,9 @@
 
-#include "PinballHost.h"
+#include "Game.h"
 
 int main(void) {
-	PinballHost *host = new PinballHost();
-	host->start("PorkyPinball");
+	Game *g = new Game();
+	g->start();
 	return 0;
 }
 

@@ -30,9 +30,6 @@
     <ClCompile Include=".\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PinballHost.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Physics.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
@@ -135,6 +132,12 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c">
       <Filter>Source Files\lua\src</Filter>
     </ClCompile>
+    <ClCompile Include="PinballNative.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\shared\Game.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PinballHost.h">
@@ -143,21 +146,30 @@
     <ClInclude Include="..\..\shared\Physics.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\PinballHostInterface.h">
+    <ClInclude Include="..\..\shared\Renderer.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Renderer.h">
+    <ClInclude Include="..\..\shared\PinballNativeInterface.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="PinballNative.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Game.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="materials.lua">
+    <None Include="..\..\shared\PorkyPinball\layout.lua">
       <Filter>Source Files\lua</Filter>
     </None>
-    <None Include="objects.lua">
+    <None Include="..\..\shared\PorkyPinball\materials.lua">
       <Filter>Source Files\lua</Filter>
     </None>
-    <None Include="layout.lua">
+    <None Include="..\..\shared\PorkyPinball\objects.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\rules.lua">
       <Filter>Source Files\lua</Filter>
     </None>
   </ItemGroup>

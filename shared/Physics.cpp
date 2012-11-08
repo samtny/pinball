@@ -8,7 +8,7 @@ extern "C" {
 #include "lualib.h"
 }
 
-#include "PinballHostInterface.h"
+#include "PinballNativeInterface.h"
 
 typedef struct materialProperties {
 	float e;
@@ -49,6 +49,12 @@ enum shapeGroup {
 Physics::Physics(void)
 {
 	
+}
+
+void Physics::init(PinballNativeImpl *pinballNative) {
+
+	this->_pinballNativeImpl = pinballNative;
+
 	this->loadMaterials();
 	this->loadObjects();
 	this->loadLayout();
@@ -172,9 +178,9 @@ void Physics::loadMaterials() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *materialsFileName = _pinballHostImpl->getPathForScriptFileName((void *)"materials.lua");
+	const char *materialsFileName = _pinballNativeImpl->getPathForScriptFileName("materials.lua");
 
-	int error = luaL_dofile(L, "materials.lua");
+	int error = luaL_dofile(L, materialsFileName);
 	if (!error) {
 
         lua_getglobal(L, "materials");
@@ -233,7 +239,9 @@ void Physics::loadObjects() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	int error = luaL_dofile(L, "objects.lua");
+	const char *objectsPath = _pinballNativeImpl->getPathForScriptFileName("objects.lua");
+
+	int error = luaL_dofile(L, objectsPath);
 	if (!error) {
 
         lua_getglobal(L, "objects");
@@ -289,7 +297,9 @@ void Physics::loadLayout() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	int error = luaL_dofile(L, "layout.lua");
+	const char *layoutPath = _pinballNativeImpl->getPathForScriptFileName("layout.lua");
+
+	int error = luaL_dofile(L, layoutPath);
 	if (!error) {
 
         lua_getglobal(L, "layout");
