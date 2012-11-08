@@ -178,7 +178,11 @@ void Physics::loadMaterials() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *materialsFileName = _pinballNativeImpl->getPathForScriptFileName((void *)"materials.lua");
+<<<<<<< HEAD
+	const char *materialsFileName = _pinballHostImpl->getPathForScriptFileName((void *)"materials.lua");
+=======
+	const char *materialsFileName = _pinballNativeImpl->getPathForScriptFileName("materials.lua");
+>>>>>>> develop
 
 	int error = luaL_dofile(L, materialsFileName);
 	if (!error) {
@@ -239,7 +243,7 @@ void Physics::loadObjects() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *objectsPath = _pinballNativeImpl->getPathForScriptFileName((void *)"objects.lua");
+	const char *objectsPath = _pinballNativeImpl->getPathForScriptFileName("objects.lua");
 
 	int error = luaL_dofile(L, objectsPath);
 	if (!error) {
@@ -297,7 +301,7 @@ void Physics::loadLayout() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *layoutPath = _pinballNativeImpl->getPathForScriptFileName((void *)"layout.lua");
+	const char *layoutPath = _pinballNativeImpl->getPathForScriptFileName("layout.lua");
 
 	int error = luaL_dofile(L, layoutPath);
 	if (!error) {

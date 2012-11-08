@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#import "Game.h"
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 // Uniform index.
@@ -121,6 +123,10 @@ GLfloat gCubeVertexData[216] =
     GLKView *view = (GLKView *)self.view;
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
+    
+    // TODO: this is just a test
+    Game *g = new Game();
+    g->start();
     
     [self setupGL];
 }

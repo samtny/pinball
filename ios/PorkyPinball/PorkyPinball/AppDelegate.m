@@ -10,17 +10,13 @@
 
 #import "ViewController.h"
 
-#import "PinballHost.h"
-
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
-@synthesize pinballHost;
 
 - (void)dealloc
 {
-    [pinballHost release];
     [_window release];
     [_viewController release];
     [super dealloc];
@@ -32,11 +28,6 @@
     
     self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
     self.window.rootViewController = self.viewController;
-    
-    PinballHost *host = [[PinballHost alloc] init];
-    self.pinballHost = host;
-    [host release];
-    [self.pinballHost start];
     
     [self.window makeKeyAndVisible];
     

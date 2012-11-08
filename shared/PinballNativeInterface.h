@@ -17,7 +17,7 @@ public:
 #ifdef _WIN32
 	void init(void);
 #elif __APPLE__
-	BOOL init(void);
+	bool init(void);
 #endif
 
 	const char * getPathForScriptFileName(void * scriptFileName);
