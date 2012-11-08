@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6AFCC126-491B-4A34-B3BE-A88810283844}</ProjectGuid>
+    <RootNamespace>PorkyPinball</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>chipmunk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lapi.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lauxlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbaselib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbitlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcode.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcorolib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lctype.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldblib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldebug.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldo.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldump.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lfunc.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lgc.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\linit.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\liolib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\llex.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmathlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmem.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loadlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lobject.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lopcodes.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loslib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lparser.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstate.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstring.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstrlib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltable.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltablib.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltm.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lundump.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c" />
+    <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c" />
+    <ClCompile Include="..\..\shared\Game.cpp" />
+    <ClCompile Include="..\..\shared\Physics.cpp" />
+    <ClCompile Include="..\..\shared\Renderer.cpp" />
+    <ClCompile Include=".\main.cpp" />
+    <ClCompile Include="PinballNative.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\shared\Game.h" />
+    <ClInclude Include="..\..\shared\PinballNativeInterface.h" />
+    <ClInclude Include="..\..\shared\Physics.h" />
+    <ClInclude Include="..\..\shared\Renderer.h" />
+    <ClInclude Include="PinballHost.h" />
+    <ClInclude Include="PinballNative.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\shared\PorkyPinball\layout.lua" />
+    <None Include="..\..\shared\PorkyPinball\materials.lua" />
+    <None Include="..\..\shared\PorkyPinball\objects.lua" />
+    <None Include="..\..\shared\PorkyPinball\rules.lua" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

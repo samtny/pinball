@@ -2,6 +2,24 @@ how to make decoupled pinball library
 sam thompson
 11/5/2012
 
+modules that must be "hosted" in our implementation;
+
+implicit;
+	-opengl context init
+
+output;
+	-audio file playback
+	
+input;
+	-file (path) mgmt (scripts, images)
+	-user input
+	-environment variables
+
+
+
+==============
+
+
 -library must be pure c/c++
 
 -start with the obj c port;
