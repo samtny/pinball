@@ -16,13 +16,15 @@
 
 @implementation PinballHost
 
-PinballHostImpl::PinballHostImpl(void) {
+PinballHostImpl::PinballHostImpl(void) : self(NULL) {
     
 }
 
 PinballHostImpl::~PinballHostImpl(void) {
-    
+    [(id)self dealloc];
 }
+
+
 
 const char *PinballHostImpl::getPathForScriptFileName(void *scriptFileName) {
     return [(id)self getPathForScriptFileName:scriptFileName];
