@@ -101,21 +101,25 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lundump.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c" />
+    <ClCompile Include="..\..\shared\Game.cpp" />
     <ClCompile Include="..\..\shared\Physics.cpp" />
     <ClCompile Include="..\..\shared\Renderer.cpp" />
     <ClCompile Include=".\main.cpp" />
-    <ClCompile Include="PinballHost.cpp" />
+    <ClCompile Include="PinballNative.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\shared\PinballHostInterface.h" />
+    <ClInclude Include="..\..\shared\Game.h" />
+    <ClInclude Include="..\..\shared\PinballNativeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
     <ClInclude Include="PinballHost.h" />
+    <ClInclude Include="PinballNative.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="layout.lua" />
-    <None Include="materials.lua" />
-    <None Include="objects.lua" />
+    <None Include="..\..\shared\PorkyPinball\layout.lua" />
+    <None Include="..\..\shared\PorkyPinball\materials.lua" />
+    <None Include="..\..\shared\PorkyPinball\objects.lua" />
+    <None Include="..\..\shared\PorkyPinball\rules.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
