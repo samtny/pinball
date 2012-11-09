@@ -1,0 +1,54 @@
+once upon a time...
+
+"multi-platform" is an unfortunate necessity.
+"rapid prototyping" is much wanted.
+
+the latter may be achieved through the use of scripting alone.
+
+the former may be achived either through writing of multiple native engines, or through some sharing.
+
+a native engine stub has (currently) undefined responsibility.
+
+what may assuredly be done in shared land is as follows;
+	draw a scene using opengl ES 1.1 and/or 2.0 compliant calls
+	maintain a physics model
+	
+what may not be done in shared land;
+	set up opengl context and keep a loop going
+		-the latter largely due to glut, etc., issues
+	set up audio context and queue sound data
+	receive input from user
+
+it may be possible in shared land to;
+	queue audio indirectly via assigned function
+		this may need to be via pimpl, as the native implementation is not known...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
