@@ -31,11 +31,8 @@ on win32 this looks like;
 	
 		(native)
 			glutInit()...
-		(shared)
-			init()
-		(native)
 			set up glutDisplayFunc()
-				-fires shared draw routine
+				-point to shared draw routine
 			glutMainLoop()
 			glutTimerFunc()
 				-fires shared physics update
