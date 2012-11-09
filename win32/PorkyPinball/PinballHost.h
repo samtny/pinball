@@ -1,18 +1,15 @@
 #pragma once
 
-#include "PinballNativeInterface.h"
-
-#ifdef _WIN32
+class GlutEngine;
 
 class PinballHost
 {
 public:
 	PinballHost(void);
 	~PinballHost(void);
-	void start(const char *gameName);
+	void init();
+	void start();
 private:
-	bool finished;
-	bool paused;
+	GlutEngine *_glutEngine;
 };
 
-#endif

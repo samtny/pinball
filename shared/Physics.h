@@ -8,16 +8,19 @@ struct layoutItemProperties;
 struct objectProperties;
 struct materialProperties;
 
+struct cpSpace;
 struct cpBody;
 
-class PinballNativeImpl;
+class PinballBridgeInterface;
 
 class Physics
 {
 public:
 	Physics(void);
 	~Physics(void);
-	void init(PinballNativeImpl *pinballNative);
+	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	void init();
+	cpSpace *getSpace();
 	void updatePhysics();
 protected:
 	void loadMaterials();
@@ -28,7 +31,7 @@ protected:
 	void createFlipper(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 private:
-	PinballNativeImpl *_pinballNativeImpl;
+	PinballBridgeInterface *_bridgeInterface;
 	cpBody *_box;
 };
 

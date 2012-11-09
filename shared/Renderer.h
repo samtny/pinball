@@ -1,19 +1,23 @@
 
-#include "Physics.h"
-
 #pragma once
 
-class PinballNativeImpl;
+// TODO: move typedefs out to new header and move folowing to implementation file
+#include "PinballBridgeInterface.h"
+
+class Physics;
 
 class Renderer
 {
 public:
 	Renderer(void);
 	~Renderer(void);
-	void init();
-	void draw();
-	Physics *physics;
+	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	void setPhysics(Physics *physics);
+	void init(void);
+	void draw(void);
 private:
-	PinballNativeImpl *_pinballNative;
+	PinballBridgeInterface *_bridgeInterface;
+	Physics *_physics;
+	DisplayProperties *_displayProperties;
 };
 

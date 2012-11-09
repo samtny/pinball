@@ -1,12 +1,14 @@
 #pragma once
-#include "PinballNativeInterface.h"
-class PinballNative
+
+#include "PinballBridgeInterface.h"
+
+class PinballBridge
 {
 public:
-	PinballNative(void);
-	~PinballNative(void);
+	PinballBridge(void);
+	~PinballBridge(void);
 	void init();
-	void initOpenGl();
+
 	const char * getPathForScriptFileName(void * scriptFileName);
     DisplayProperties *getDisplayProperties();
 	void playSound(void * soundName);

@@ -43,7 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\lib\glut;C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
-    <IncludePath>c:\include\GL;C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+    <IncludePath>c:\include\GL;C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\debugdraw;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\src\chipmunk\debugdraw\ChipmunkDebugDraw.cpp" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lapi.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lauxlib.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbaselib.c" />
@@ -105,15 +106,19 @@
     <ClCompile Include="..\..\shared\Physics.cpp" />
     <ClCompile Include="..\..\shared\Renderer.cpp" />
     <ClCompile Include=".\main.cpp" />
-    <ClCompile Include="PinballNative.cpp" />
+    <ClCompile Include="GlutEngine.cpp" />
+    <ClCompile Include="PinballHost.cpp" />
+    <ClCompile Include=".\PinballBridge.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Game.h" />
-    <ClInclude Include="..\..\shared\PinballNativeImplementation.h" />
+    <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
+    <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
-    <ClInclude Include="PinballNative.h" />
+    <ClInclude Include=".\PinballBridge.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\layout.lua" />

@@ -25,11 +25,20 @@
     <Filter Include="Header Files\shared">
       <UniqueIdentifier>{9359d279-644d-46d2-8d8a-124442f59160}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\bridge">
+      <UniqueIdentifier>{8c2a24e2-0b60-4375-9618-afa839d2e547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\bridge">
+      <UniqueIdentifier>{b2821ab5-9368-480b-a8c6-bdbf741bb2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\native">
+      <UniqueIdentifier>{a007d5dd-f27d-42e1-b275-598e241ffda3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\native">
+      <UniqueIdentifier>{71fb1723-d855-49d6-bff6-b48ee682e8dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include=".\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Physics.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
@@ -132,30 +141,48 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c">
       <Filter>Source Files\lua\src</Filter>
     </ClCompile>
-    <ClCompile Include="PinballNative.cpp">
+    <ClCompile Include="..\..\shared\Game.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PinballBridge.cpp">
+      <Filter>Source Files\bridge</Filter>
+    </ClCompile>
+    <ClCompile Include="PinballHost.cpp">
+      <Filter>Source Files\native</Filter>
+    </ClCompile>
+    <ClCompile Include=".\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Game.cpp">
+    <ClCompile Include="GlutEngine.cpp">
+      <Filter>Source Files\native</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\chipmunk\debugdraw\ChipmunkDebugDraw.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PinballHost.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Physics.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Renderer.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="PinballNative.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Game.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\PinballNativeImplementation.h">
+    <ClInclude Include="..\..\shared\PinballBridgeInterface.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include=".\PinballBridge.h">
+      <Filter>Header Files\bridge</Filter>
+    </ClInclude>
+    <ClInclude Include="GlutEngine.h">
+      <Filter>Header Files\native</Filter>
+    </ClInclude>
+    <ClInclude Include="PinballHost.h">
+      <Filter>Header Files\native</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>

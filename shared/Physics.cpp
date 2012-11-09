@@ -8,7 +8,7 @@ extern "C" {
 #include "lualib.h"
 }
 
-#include "PinballNativeInterface.h"
+#include "PinballBridgeInterface.h"
 
 typedef struct materialProperties {
 	float e;
@@ -51,9 +51,11 @@ Physics::Physics(void)
 	
 }
 
-void Physics::init(PinballNativeImpl *pinballNative) {
+void Physics::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
+	this->_bridgeInterface = bridgeInterface;
+}
 
-	this->_pinballNativeImpl = pinballNative;
+void Physics::init() {
 
 	this->loadMaterials();
 	this->loadObjects();
@@ -71,6 +73,10 @@ void Physics::init(PinballNativeImpl *pinballNative) {
 
 	cpSpaceSetGravity(space, gravity);
 
+}
+
+cpSpace *Physics::getSpace() {
+	return space;
 }
 
 void Physics::createObject(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
@@ -178,7 +184,7 @@ void Physics::loadMaterials() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *materialsFileName = _pinballNativeImpl->getPathForScriptFileName((void *)"materials.lua");
+	const char *materialsFileName = _bridgeInterface->getPathForScriptFileName((void *)"materials.lua");
 
 	int error = luaL_dofile(L, materialsFileName);
 	if (!error) {
@@ -239,7 +245,7 @@ void Physics::loadObjects() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *objectsPath = _pinballNativeImpl->getPathForScriptFileName((void *)"objects.lua");
+	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"objects.lua");
 
 	int error = luaL_dofile(L, objectsPath);
 	if (!error) {
@@ -297,7 +303,7 @@ void Physics::loadLayout() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *layoutPath = _pinballNativeImpl->getPathForScriptFileName((void *)"layout.lua");
+	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"layout.lua");
 
 	int error = luaL_dofile(L, layoutPath);
 	if (!error) {

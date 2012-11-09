@@ -1,55 +1,44 @@
 #include "PinballHost.h"
 
+#include "PinballBridgeInterface.h"
+
 #include "Physics.h"
+
 #include "Renderer.h"
 
-#include <cstddef>
+#include "GlutEngine.h"
 
-PinballHostImpl::PinballHostImpl(void) {
-	// noes?
+PinballHost::PinballHost() {
 }
 
-PinballHostImpl::~PinballHostImpl(void) {
-	// noes?
+PinballHost::~PinballHost() {
 }
 
-const char *PinballHostImpl::getPathForScriptFileName(void * scriptFileName) {
-	// in c++, yes it is;
-	return (const char *)scriptFileName;
+void PinballHost::init() {
+
+	PinballBridgeInterface *bi = new PinballBridgeInterface();
+	bi->init();
+
+	Physics *p = new Physics();
+	p->setBridgeInterface(bi);
+	p->init();
+
+	Renderer *r = new Renderer();
+	r->setBridgeInterface(bi);
+	r->setPhysics(p);
+	r->init();
+	
+	GlutEngine *e = new GlutEngine();
+	e->setPhysics(p);
+	e->setRenderer(r);
+	e->init();
+	_glutEngine = e;
+	
 }
 
-PinballHostEnvironment *PinballHostImpl::getPinballHostEnvironment() {
-	// TODO: something
-	return NULL;
-}
+void PinballHost::start() {
 
-void PinballHostImpl::playSound(void *soundName) {
-	// TODO: something
-}
-
-PinballHost::PinballHost(void)
-{
-}
-
-
-PinballHost::~PinballHost(void)
-{
-}
-
-void PinballHost::start(const char *gameName) {
-
-	// TODO: init win32 stuff...
-
-	Physics *physics = new Physics();
-	Renderer *renderer = new Renderer();
-
-	finished = false;
-	paused = false;
-	while (!finished) {
-		if (!paused) {
-			physics->updatePhysics();
-		}
-		renderer->draw();
-	}
+	_glutEngine->start(); // for now...
 
 }
+

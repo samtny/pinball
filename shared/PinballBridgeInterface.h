@@ -8,16 +8,19 @@
 #endif
 
 typedef struct {
-	int viewHeight;
-	int viewWidth;
+	int viewportX;
+	int viewportY;
+	int viewportHeight;
+	int viewportWidth;
+	float scale;
 } DisplayProperties;
 
-class PinballNativeImplementation
+class PinballBridgeInterface
 {
 public:
     
-	PinballNativeImpl(void);
-    ~PinballNativeImpl(void);
+	PinballBridgeInterface(void);
+    ~PinballBridgeInterface(void);
     
 #ifdef _WIN32
 	void init(void);
