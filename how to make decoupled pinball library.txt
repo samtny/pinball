@@ -2,6 +2,65 @@ how to make decoupled pinball library
 sam thompson
 11/5/2012
 
+
+main
+	host = new PinballHost
+	host->init()
+	host->startGame()
+	
+PinballHost
+	
+	-init() {
+		
+		PinballBridgeImplementation bi = new PinballBridgeImplementation();
+		bi->init();
+		
+		Physics p = new Physics();
+		p->setBridgeImplementation(bi);
+		p->init();
+		
+		Renderer r = new Renderer();
+		r->setBridgeImplementation(bi);
+		r->setPhysics(p);
+		r->init();
+		
+		GlutEngine e = new GlutEngine();
+		e->setPhysics(e);
+		e->setRenderer(r);
+		e->init();
+		this->setGlutEngine(e);
+				
+	}
+	
+	-startGame() {
+		this->glutEngine->startGame();
+	}
+
+GlutEngine
+	-init() {
+		glutInit();
+	}
+	-startGame() {
+		glutTimerFunc(this->timerFunc);
+		glutDisplayFunc(this->displayFunc);
+		glutMainLoop();
+	}
+	-timerFunc() {
+		for (stepsPerFrame) {
+			this->p->step();
+		}
+		glutPostRedisplay();
+		glutTimerFunc(this->timerFunc);
+	}
+	-displayFunc() {
+		this->r->draw();
+		glutSwapBuffers();
+	}
+	
+
+==============
+
+
 modules that must be "hosted" in our implementation;
 
 implicit;

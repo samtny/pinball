@@ -19,7 +19,6 @@ the actual order is;
 	
 on win32 this looks like;
 	
-
 	glutMainLoop - processes all events as necessary
 	glutDisplayFunc - pointer to a callback function
 	glutPostRedisplay - inform glut that display callback is required on next loop
