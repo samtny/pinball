@@ -22,8 +22,9 @@ void Game::start(void) {
 
 	Physics *physics = new Physics();
 	physics->init(_pinballNative);
+
 	Renderer *renderer = new Renderer();
-	renderer->init(_pinballNative);
+	//renderer->init(_pinballNative);
 
 	finished = false;
 	paused = false;

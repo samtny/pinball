@@ -10,7 +10,7 @@ class Renderer
 public:
 	Renderer(void);
 	~Renderer(void);
-	void init(PinballNativeImpl *pinballNative);
+	void init();
 	void draw();
 	Physics *physics;
 private:

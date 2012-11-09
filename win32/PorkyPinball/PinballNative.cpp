@@ -1,5 +1,7 @@
 #include "PinballNative.h"
 
+#include "glut.h"
+
 #include <sstream>
 #include <string>
 using namespace std;
@@ -14,6 +16,8 @@ PinballNativeImpl::~PinballNativeImpl(void) {
 
 void PinballNativeImpl::init() {
 	_this = new PinballNative();
+	PinballNative *i = (PinballNative *)_this;
+	i->init();
 }
 
 const char * PinballNativeImpl::getPathForScriptFileName(void * scriptFileName) {
@@ -33,6 +37,26 @@ PinballNative::PinballNative(void)
 
 PinballNative::~PinballNative(void)
 {
+}
+
+void PinballNative::init() {
+	this->initOpenGl();
+}
+
+void PinballNative::initOpenGl() {
+	
+	int n = 0;
+	char* v[1];
+	v[0] = "";
+
+	//glutInit(&n, v);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitWindowSize(800, 600);
+	glutInitWindowPosition(100, 50);
+	glutCreateWindow("PorkyPinball");
+
+	
+
 }
 
 void PinballNativeImpl::playSound(void * soundName) {

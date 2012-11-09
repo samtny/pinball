@@ -1,0 +1,45 @@
+opengl pieces of puzzle
+sam thompson
+11/8/2012
+
+timer function/s to be handled by "host" architecture
+
+=============================
+
+we thought order was;
+	1) setup opengl context
+	2) draw stuff (don't worry about physics, because somehow it will be tidied up, timers, etc., internally)
+	3) END
+	
+the actual order is;
+	1) setup opengl context
+	2) set a physics "update" function
+	3) set an opengl "draw" function
+	4) start timer that calls both
+	
+on win32 this looks like;
+	
+
+	glutMainLoop - processes all events as necessary
+	glutDisplayFunc - pointer to a callback function
+	glutPostRedisplay - inform glut that display callback is required on next loop
+	glutTimerFunc - registers a new timer with any callback we choose
+
+	e.g., on win32 with this architecture, the "loop" is "outside" the shared library control...
+	
+	if we were to live with this, then we would have something e.g.;
+	
+		(native)
+			glutInit()...
+		(shared)
+			init()
+		(native)
+			set up glutDisplayFunc()
+				-fires shared draw routine
+			glutMainLoop()
+			glutTimerFunc()
+				-fires shared physics update
+				-fires glutPostRedisplay()
+				-sets new timer
+
+			

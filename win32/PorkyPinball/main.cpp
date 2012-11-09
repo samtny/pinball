@@ -1,9 +1,10 @@
 
-#include "Game.h"
+#include "PinballNativeImplementation.h"
 
 int main(void) {
-	Game *g = new Game();
-	g->start();
+	
+
+
 	return 0;
 }
 

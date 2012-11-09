@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PinballHostInterface.h"
+#include "PinballNativeInterface.h"
 
 #ifdef _WIN32
 

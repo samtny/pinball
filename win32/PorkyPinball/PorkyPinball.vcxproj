@@ -42,8 +42,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib\glut;C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
+    <IncludePath>c:\include\GL;C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\shared\Game.h" />
-    <ClInclude Include="..\..\shared\PinballNativeInterface.h" />
+    <ClInclude Include="..\..\shared\PinballNativeImplementation.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
     <ClInclude Include="PinballHost.h" />

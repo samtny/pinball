@@ -149,13 +149,13 @@
     <ClInclude Include="..\..\shared\Renderer.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\PinballNativeInterface.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="PinballNative.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Game.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\PinballNativeImplementation.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
