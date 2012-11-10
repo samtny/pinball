@@ -6,32 +6,37 @@
 //  Copyright (c) 2012 It-Just-Works Software, llc. All rights reserved.
 //
 
-#import "PinballNative.h"
+#import "PinballBridge.h"
 
-@implementation PinballNative
+@implementation PinballBridge
 
-PinballNativeImpl::PinballNativeImpl(void) : self (NULL) {
+PinballBridgeInterface::PinballBridgeInterface(void) : self (NULL) {
     
 }
 
-PinballNativeImpl::~PinballNativeImpl(void) {
+PinballBridgeInterface::~PinballBridgeInterface(void) {
     [(id)self dealloc];
 }
 
-bool PinballNativeImpl::init(void) {
-    self = [[PinballNative alloc] init];
+bool PinballBridgeInterface::init(void) {
+    self = [[PinballBridge alloc] init];
+    [(PinballBridge *)self initI];
     return YES;
 }
 
-const char * PinballNativeImpl::getPathForScriptFileName(void * scriptFileName) {
+-(void)initI {
+    
+}
+
+const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
     return [(id)self getPathForScriptFileName:scriptFileName];
 }
 
-DisplayProperties * PinballNativeImpl::getDisplayProperties() {
+DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
     return [(id)self getDisplayProperties];
 }
 
-void PinballNativeImpl::playSound(void * soundName) {
+void PinballBridgeInterface::playSound(void * soundName) {
     [(id)self playSound:soundName];
 }
 
@@ -45,6 +50,12 @@ void PinballNativeImpl::playSound(void * soundName) {
 
 -(DisplayProperties *)getDisplayProperties {
     DisplayProperties *props = new DisplayProperties();
+    // TODO: vary by view props;
+    props->viewportX = 0;
+    props->viewportY = 0;
+    props->viewportHeight = 480;
+    props->viewportWidth = 320;
+    props->scale = 14.5;
     return props;
 }
 

@@ -124,10 +124,6 @@ GLfloat gCubeVertexData[216] =
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
-    // TODO: this is just a test
-    Game *g = new Game();
-    g->start();
-    
     [self setupGL];
 }
 

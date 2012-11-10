@@ -2,6 +2,11 @@
 
 #include "Physics.h"
 
+#ifdef __APPLE__
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#endif
+
 #include "chipmunk.h"
 
 #include "ChipmunkDebugDraw.h"
@@ -59,8 +64,21 @@ void Renderer::draw(void) {
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, hw, 0, hh, -1.0, 1.0);
-	glTranslated(0.5, 0.5, 0.0); // margin
+    
+	//glOrtho(0, hw, 0, hh, -1.0, 1.0);
+    
+    static const GLfloat multMatrix[] = {
+        hw, 0, 0, -(hw + 0)/(hw - 0),
+        0, hh, 0, -(hh + 0)/(hh - 0),
+        0, 0, -1, 0,
+        0, 0, 0, 1
+    };
+    
+    glMultMatrixf(multMatrix);
+    
+	//glTranslated(0.5, 0.5, 0.0); // margin
+    
+    glTranslatef(0.5, 0.5, 0.0);
 
 	ChipmunkDebugDrawShapes(_physics->getSpace());	
 

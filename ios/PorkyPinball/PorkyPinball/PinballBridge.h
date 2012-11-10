@@ -6,10 +6,11 @@
 //  Copyright (c) 2012 It-Just-Works Software, llc. All rights reserved.
 //
 
-#import "PinballNativeInterface.h"
+#import "PinballBridgeInterface.h"
 
-@interface PinballNative : NSObject
+@interface PinballBridge : NSObject
 
+-(void)initI;
 -(const char *)getPathForScriptFileName:(void *)scriptFileName;
 -(DisplayProperties *)getDisplayProperties;
 -(void)playSound:(void *)soundName;
