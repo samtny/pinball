@@ -65,21 +65,14 @@ void Renderer::draw(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
     
-	//glOrtho(0, hw, 0, hh, -1.0, 1.0);
-    
-    static const GLfloat multMatrix[] = {
-        hw, 0, 0, -(hw + 0)/(hw - 0),
-        0, hh, 0, -(hh + 0)/(hh - 0),
-        0, 0, -1, 0,
-        0, 0, 0, 1
-    };
-    
-    glMultMatrixf(multMatrix);
-    
-	//glTranslated(0.5, 0.5, 0.0); // margin
-    
+#ifdef __APPLE__
+    glOrthof(0, hw, 0, hh, -1.0, 1.0);
     glTranslatef(0.5, 0.5, 0.0);
-
+#else
+	glOrtho(0, hw, 0, hh, -1.0, 1.0);
+    glTranslated(0.5, 0.5, 0.0);
+#endif
+    
 	ChipmunkDebugDrawShapes(_physics->getSpace());	
 
 }
