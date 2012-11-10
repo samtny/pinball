@@ -1,6 +1,7 @@
 
 #include "GlutEngine.h"
 
+#include <stdlib.h>
 #include "glut.h"
 
 #include "Physics.h"
