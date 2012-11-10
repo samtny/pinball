@@ -8,7 +8,11 @@
 
 #import "ViewController.h"
 
-#import "Game.h"
+#import "PinballBridgeInterface.h"
+
+#import "Physics.h"
+
+#import "Renderer.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -85,6 +89,12 @@ GLfloat gCubeVertexData[216] =
     
     GLuint _vertexArray;
     GLuint _vertexBuffer;
+    
+@private
+    PinballBridgeInterface *bridgeInterface;
+    Physics *physics;
+    Renderer *renderer;
+    
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -105,6 +115,9 @@ GLfloat gCubeVertexData[216] =
 
 - (void)dealloc
 {
+    delete renderer;
+    delete physics;
+    delete bridgeInterface;
     [_context release];
     [_effect release];
     [super dealloc];
@@ -113,6 +126,22 @@ GLfloat gCubeVertexData[216] =
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    PinballBridgeInterface *bi = new PinballBridgeInterface();
+    bi->init();
+    
+    Physics *p = new Physics();
+    p->setBridgeInterface(bi);
+    p->init();
+    
+    Renderer *r = new Renderer();
+    r->setBridgeInterface(bi);
+    r->setPhysics(p);
+    //r->init();
+    
+    bridgeInterface = bi;
+    physics = p;
+    renderer = r;
     
     self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
 
@@ -159,6 +188,10 @@ GLfloat gCubeVertexData[216] =
 {
     [EAGLContext setCurrentContext:self.context];
     
+    renderer->init();
+    
+    // ...
+    
     [self loadShaders];
     
     self.effect = [[[GLKBaseEffect alloc] init] autorelease];
@@ -201,6 +234,10 @@ GLfloat gCubeVertexData[216] =
 
 - (void)update
 {
+    
+    physics->updatePhysics();
+    return;
+    
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
     
@@ -230,6 +267,10 @@ GLfloat gCubeVertexData[216] =
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    
+    renderer->draw();
+    return;
+    
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
