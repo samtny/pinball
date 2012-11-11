@@ -1,7 +1,7 @@
 
 objects = {
 	ball = {
-		s = "circle",
+		s = "ball", -- "ball" shape defined internally - is in shape group "ballShapeGroup"
 		m = "ball",
 		r1 = 0.5
 	},

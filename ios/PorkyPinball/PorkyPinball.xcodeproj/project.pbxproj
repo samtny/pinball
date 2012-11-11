@@ -59,6 +59,7 @@
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
 		4B17027A164AB9C4007D4A2F /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B170279164AB9C4007D4A2F /* libChipmunk-iPhone.a */; };
 		4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */; };
+		4BD5DFBF164F40BB00D4850D /* physics.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BD5DFBE164F40BB00D4850D /* physics.lua */; };
 		4BE9DFD5164C101700599EB8 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD2164C101700599EB8 /* Game.cpp */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
 /* End PBXBuildFile section */
@@ -125,6 +126,7 @@
 		4BB93822164DD60A00EC9983 /* PinballBridgeInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinballBridgeInterface.h; path = ../../../shared/PinballBridgeInterface.h; sourceTree = "<group>"; };
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
 		4BB93826164DF74000EC9983 /* ChipmunkDebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChipmunkDebugDraw.h; path = ../../../../../../../include/chipmunk/debugdraw/ChipmunkDebugDraw.h; sourceTree = "<group>"; };
+		4BD5DFBE164F40BB00D4850D /* physics.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = physics.lua; sourceTree = "<group>"; };
 		4BE9DFD2164C101700599EB8 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = ../../../shared/Game.cpp; sourceTree = "<group>"; };
 		4BE9DFD3164C101700599EB8 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = ../../../shared/Game.h; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
@@ -212,13 +214,13 @@
 		4B17021F164AAEF3007D4A2F /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B170223164AAF3F007D4A2F /* PorkyPinball */,
 				4BB93826164DF74000EC9983 /* ChipmunkDebugDraw.h */,
 				4BB93822164DD60A00EC9983 /* PinballBridgeInterface.h */,
 				4BE9DFD3164C101700599EB8 /* Game.h */,
 				4BE9DFD2164C101700599EB8 /* Game.cpp */,
 				4B170221164AAF3F007D4A2F /* Physics.h */,
 				4B170220164AAF3F007D4A2F /* Physics.cpp */,
-				4B170223164AAF3F007D4A2F /* PorkyPinball */,
 				4B170229164AAF3F007D4A2F /* Renderer.h */,
 				4B170228164AAF3F007D4A2F /* Renderer.cpp */,
 			);
@@ -231,6 +233,7 @@
 				4B170224164AAF3F007D4A2F /* layout.lua */,
 				4B170225164AAF3F007D4A2F /* materials.lua */,
 				4B170226164AAF3F007D4A2F /* objects.lua */,
+				4BD5DFBE164F40BB00D4850D /* physics.lua */,
 				4B170227164AAF3F007D4A2F /* rules.lua */,
 			);
 			name = PorkyPinball;
@@ -335,6 +338,7 @@
 				4B17022C164AAF3F007D4A2F /* materials.lua in Resources */,
 				4B17022D164AAF3F007D4A2F /* objects.lua in Resources */,
 				4B17022E164AAF3F007D4A2F /* rules.lua in Resources */,
+				4BD5DFBF164F40BB00D4850D /* physics.lua in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,7 +1,7 @@
 
 
 materials = {
-	ball = { e=0.99, f=0.99 },
+	ball = { e=0.99, f=0.99, d=7.85 },
 	wood = { e=0.70, f=0.65, d=0.53 },
 	rubber = { e=0.80, f=0.90 },
 	flipper = { e=0.80, f=0.80, d=0.5 },

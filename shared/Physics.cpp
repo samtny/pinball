@@ -43,8 +43,33 @@ static cpFloat timeStep = 1.0/180.0;
 
 enum shapeGroup {
 	shapeGroupBox,
+    shapeGroupBall,
 	shapeGroupFlippers
 };
+
+#ifdef _WIN32
+
+static double absoluteTime() {
+    return timeGetTime() / (double) 1000;
+}
+
+#elif __APPLE__
+
+#import <mach/mach_time.h>
+
+static double absoluteTime() {
+    static double sysTimebaseMult = -1;
+    if (sysTimebaseMult == -1) {
+        mach_timebase_info_data_t info;
+        kern_return_t err = mach_timebase_info(&info);
+        if (err == 0) {
+            sysTimebaseMult = 1e-9 * (double) info.numer / (double) info.denom;
+        }
+    }
+    return mach_absolute_time() * sysTimebaseMult;
+}
+
+#endif
 
 Physics::Physics(void)
 {
@@ -60,6 +85,7 @@ void Physics::init() {
 	this->loadMaterials();
 	this->loadObjects();
 	this->loadLayout();
+    this->loadPhysics();
 
 	space = cpSpaceNew();
 	
@@ -87,7 +113,9 @@ void Physics::createObject(string name, layoutItemProperties layoutItem, objectP
 		this->createSegment(name, layoutItem, object, material);
 	} else if (strcmp(object.s.c_str(), "flipper") == 0) {
 		this->createFlipper(name, layoutItem, object, material);
-	}
+	} else if (strcmp(object.s.c_str(), "ball") == 0) {
+        this->createBall(name, layoutItem, object, material);
+    }
 
 }
 
@@ -141,6 +169,21 @@ void Physics::createBox(string name, layoutItemProperties item, objectProperties
 	//box = staticBody;
 	_box = body;
 	
+}
+
+void Physics::createBall(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+    
+    cpFloat area = (object.r1 * M_PI) * 2;
+    cpFloat mass = area * material.d;
+    
+    cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, object.r1, cpvzero)));
+    cpBodySetPos(body, item.v[0]);
+    
+    cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, object.r1, cpvzero));
+    cpShapeSetElasticity(shape, material.e);
+    cpShapeSetFriction(shape, material.f);
+	cpShapeSetGroup(shape, shapeGroupBall);
+    
 }
 
 void Physics::createFlipper(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
@@ -386,13 +429,88 @@ void Physics::loadLayout() {
 
 }
 
+void Physics::loadPhysics() {
+    
+    lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+    
+	const char *physicsPath = _bridgeInterface->getPathForScriptFileName((void *)"physics.lua");
+    
+	int error = luaL_dofile(L, physicsPath);
+	if (!error) {
+        
+        lua_getglobal(L, "physics");
+        
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("timeStep", key) == 0) {
+						
+                        timeStep = lua_tonumber(L, -1);
+                        
+					} else if (strcmp("gravity", key) == 0) {
+						
+                        // get the first vertex
+                        lua_rawgeti(L, -1, 1);
+                        gravity.x = (float)lua_tonumber(L, -1);
+                        lua_pop(L, 1);
+                        
+                        // get the second vertex
+                        lua_rawgeti(L, -1, 2);
+                        gravity.y = (float)lua_tonumber(L, -1);
+                        lua_pop(L, 1);
+                                                
+					}
+                    
+					lua_pop(L, 1);
+				}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+        
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+    
+	lua_close(L);
+    
+}
+
 Physics::~Physics(void)
 {
 	cpSpaceFree(space);
 }
 
+double currentTime;
+double newTime;
+double accumulator;
+
 void Physics::updatePhysics() {
 
-	cpSpaceStep(space, timeStep);
-
+    double newTime = absoluteTime();
+    
+    if (currentTime == 0) { currentTime = newTime; return; }
+    
+    double fTime = newTime - currentTime;
+    accumulator += fTime;
+    
+    while (accumulator >= timeStep) {
+        cpSpaceStep(space, timeStep);
+        accumulator -= timeStep;
+    }
+    
+    currentTime = newTime;
+    
 }
+
+
+
+
+
+

@@ -26,8 +26,10 @@ protected:
 	void loadMaterials();
 	void loadObjects();
 	void loadLayout();
+    void loadPhysics();
 	void createObject(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createBox(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+    void createBall(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createFlipper(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 private:

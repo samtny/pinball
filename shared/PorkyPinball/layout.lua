@@ -15,6 +15,10 @@ layout = {
 	troughSwitch = {
 		o = "switch",
 		v = { {0.5,0.5} , {19.5,0.5} }
-	}
+	},
+    ball = {
+        o = "ball",
+        v = { {5,30} }
+    }
 }
 
