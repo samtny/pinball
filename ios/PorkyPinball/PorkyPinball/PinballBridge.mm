@@ -55,7 +55,7 @@ void PinballBridgeInterface::playSound(void * soundName) {
     props->viewportY = 0;
     props->viewportHeight = 480;
     props->viewportWidth = 320;
-    props->scale = 14.5;
+    props->scale = 8;
     return props;
 }
 

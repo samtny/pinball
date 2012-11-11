@@ -143,8 +143,9 @@ GLfloat gCubeVertexData[216] =
     physics = p;
     renderer = r;
     
-    self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
-
+    //self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
+    self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1] autorelease];
+    
     if (!self.context) {
         NSLog(@"Failed to create ES context");
     }
@@ -189,6 +190,8 @@ GLfloat gCubeVertexData[216] =
     [EAGLContext setCurrentContext:self.context];
     
     renderer->init();
+    
+    return;
     
     // ...
     

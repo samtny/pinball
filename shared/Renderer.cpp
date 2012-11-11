@@ -36,13 +36,13 @@ void Renderer::init(void) {
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_POINT_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
-	glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	//glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_POINT_SMOOTH);
+	//glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+	//glHint(GL_POINT_SMOOTH_HINT, GL_DONT_CARE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 }
 
 void Renderer::draw(void) {
@@ -67,7 +67,7 @@ void Renderer::draw(void) {
     
 #ifdef __APPLE__
     glOrthof(0, hw, 0, hh, -1.0, 1.0);
-    glTranslatef(0.5, 0.5, 0.0);
+    //glTranslatef(0.5, 0.5, 0.0);
 #else
 	glOrtho(0, hw, 0, hh, -1.0, 1.0);
     glTranslated(0.5, 0.5, 0.0);
