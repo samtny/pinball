@@ -26,7 +26,7 @@ void PinballHost::init() {
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
 	r->setPhysics(p);
-	r->init();
+	//r->init();
 	
 	GlutEngine *e = new GlutEngine();
 	e->setPhysics(p);

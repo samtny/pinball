@@ -18,6 +18,7 @@ what may not be done in shared land;
 		-the latter largely due to glut, etc., issues
 	set up audio context and queue sound data
 	receive input from user
+	invoke network calls
 
 it may be possible in shared land to;
 	queue audio indirectly via assigned function
