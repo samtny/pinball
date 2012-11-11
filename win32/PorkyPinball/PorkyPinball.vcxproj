@@ -121,9 +121,11 @@
     <ClInclude Include=".\PinballBridge.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\shared\PorkyPinball\config.lua" />
     <None Include="..\..\shared\PorkyPinball\layout.lua" />
     <None Include="..\..\shared\PorkyPinball\materials.lua" />
     <None Include="..\..\shared\PorkyPinball\objects.lua" />
+    <None Include="..\..\shared\PorkyPinball\forces.lua" />
     <None Include="..\..\shared\PorkyPinball\rules.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

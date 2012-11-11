@@ -20,13 +20,16 @@ public:
 	~Physics(void);
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void init();
+	float getBoxWidth();
 	cpSpace *getSpace();
 	void updatePhysics();
 protected:
+	void loadConfig();
 	void loadMaterials();
 	void loadObjects();
 	void loadLayout();
-    void loadPhysics();
+    void loadForces();
+	void applyScale(layoutItemProperties *iprops, objectProperties *oprops);
 	void createObject(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 	void createBox(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
     void createBall(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
@@ -35,5 +38,6 @@ protected:
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	cpBody *_box;
+	float _boxWidth;
 };
 

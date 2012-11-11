@@ -1,0 +1,16 @@
+a word about scaling
+sam thompson
+11/11/2012
+
+
+it should be possible to "auto-scale" all figures, but this is perhaps not ideal.
+
+we will use one set of units to "design" objects
+the physics model should translate these units into reasonably accurate "sizes"
+	this translation should be specified manually somewhere, perhaps in "config.lua"
+the render engine...
+	currently gets position data from the physics engine
+	should translate the desired viewable space into screen coordinate space
+		e.g.; if "box width" zoom level is desired, take "viewport width / box width" as multiplier
+
+

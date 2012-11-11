@@ -41,6 +41,8 @@ static cpVect gravity = cpv(0.0, 9.80665f);
 
 static cpFloat timeStep = 1.0/180.0;
 
+static cpFloat scale = 37;
+
 enum shapeGroup {
 	shapeGroupBox,
     shapeGroupBall,
@@ -82,10 +84,11 @@ void Physics::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 
 void Physics::init() {
 
+	this->loadConfig();
 	this->loadMaterials();
 	this->loadObjects();
 	this->loadLayout();
-    this->loadPhysics();
+    this->loadForces();
 
 	space = cpSpaceNew();
 	
@@ -94,6 +97,7 @@ void Physics::init() {
 		layoutItemProperties lprops = iterator->second;
 		objectProperties oprops = objects[lprops.o];
 		materialProperties mprops = materials[oprops.m];
+		this->applyScale(&lprops, &oprops);
 		this->createObject(name, lprops, oprops, mprops);
 	}
 
@@ -101,8 +105,24 @@ void Physics::init() {
 
 }
 
+float Physics::getBoxWidth() {
+	return _boxWidth;
+}
+
 cpSpace *Physics::getSpace() {
 	return space;
+}
+
+void Physics::applyScale(layoutItemProperties *iprops, objectProperties *oprops) {
+
+	for (int i = 0; i < iprops->count; i++) {
+		iprops->v[i].x *= 1 / scale;
+		iprops->v[i].y *= 1 / scale;
+	}
+
+	oprops->r1 *= 1 / scale;
+	oprops->r2 *= 1 / scale;
+
 }
 
 void Physics::createObject(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
@@ -168,6 +188,7 @@ void Physics::createBox(string name, layoutItemProperties item, objectProperties
 
 	//box = staticBody;
 	_box = body;
+	_boxWidth = item.v[3].x - item.v[0].x;
 	
 }
 
@@ -191,7 +212,8 @@ void Physics::createFlipper(string name, layoutItemProperties item, objectProper
 	cpFloat area = (object.r1 * M_PI) * 2; // approx
 	cpFloat mass = area * material.d;
 
-	cpFloat direction = item.v[0].x <= item.v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
+	cpFloat direction = item.v[0].x <= item.v[1].x ? -1 : -1; // rotate clockwise for right-facing flipper...
+
 	cpFloat length = cpvdist(item.v[0], item.v[1]);
 	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item.v[1],item.v[0])), cpvnormalize(cpvsub(item.v[2],item.v[0]))));
 
@@ -219,6 +241,51 @@ void Physics::createFlipper(string name, layoutItemProperties item, objectProper
 void Physics::createSegment(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
 
 	//...
+
+}
+
+void Physics::loadConfig() {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+
+	int error = luaL_dofile(L, configFileName);
+	if (!error) {
+
+        lua_getglobal(L, "config");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("timeStep", key) == 0) {
+						
+                        timeStep = lua_tonumber(L, -1);
+                        
+					} else if (strcmp("scale", key) == 0) {
+
+						scale = lua_tonumber(L, -1);
+
+					}
+                    
+					lua_pop(L, 1);
+				}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
 
 }
 
@@ -429,17 +496,17 @@ void Physics::loadLayout() {
 
 }
 
-void Physics::loadPhysics() {
+void Physics::loadForces() {
     
     lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
     
-	const char *physicsPath = _bridgeInterface->getPathForScriptFileName((void *)"physics.lua");
+	const char *forcesPath = _bridgeInterface->getPathForScriptFileName((void *)"forces.lua");
     
-	int error = luaL_dofile(L, physicsPath);
+	int error = luaL_dofile(L, forcesPath);
 	if (!error) {
         
-        lua_getglobal(L, "physics");
+        lua_getglobal(L, "forces");
         
 		if (lua_istable(L, -1)) {
 			

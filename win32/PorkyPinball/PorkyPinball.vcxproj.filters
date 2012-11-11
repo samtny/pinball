@@ -25,12 +25,6 @@
     <Filter Include="Header Files\shared">
       <UniqueIdentifier>{9359d279-644d-46d2-8d8a-124442f59160}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\bridge">
-      <UniqueIdentifier>{8c2a24e2-0b60-4375-9618-afa839d2e547}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\bridge">
-      <UniqueIdentifier>{b2821ab5-9368-480b-a8c6-bdbf741bb2c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\native">
       <UniqueIdentifier>{a007d5dd-f27d-42e1-b275-598e241ffda3}</UniqueIdentifier>
     </Filter>
@@ -144,9 +138,6 @@
     <ClCompile Include="..\..\shared\Game.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
-    <ClCompile Include=".\PinballBridge.cpp">
-      <Filter>Source Files\bridge</Filter>
-    </ClCompile>
     <ClCompile Include="PinballHost.cpp">
       <Filter>Source Files\native</Filter>
     </ClCompile>
@@ -158,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\chipmunk\debugdraw\ChipmunkDebugDraw.cpp">
       <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PinballBridge.cpp">
+      <Filter>Source Files\native</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +167,6 @@
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include=".\PinballBridge.h">
-      <Filter>Header Files\bridge</Filter>
-    </ClInclude>
     <ClInclude Include="GlutEngine.h">
       <Filter>Header Files\native</Filter>
     </ClInclude>
@@ -184,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h">
       <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include=".\PinballBridge.h">
+      <Filter>Header Files\native</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +191,12 @@
       <Filter>Source Files\lua</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\rules.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\config.lua">
+      <Filter>Source Files\lua</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\forces.lua">
       <Filter>Source Files\lua</Filter>
     </None>
   </ItemGroup>

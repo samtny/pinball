@@ -52,16 +52,12 @@ void Renderer::draw(void) {
 	glEnable(GL_DEPTH_TEST);
 
 	glViewport(_displayProperties->viewportX, _displayProperties->viewportY, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
-	
-	//double scale = cpfmin(_displayProperties->viewportWidth/boxWidth, _displayProperties->viewportHeight/boxHeight);
 
-	double hw = _displayProperties->viewportWidth * (0.5 / _displayProperties->scale);
-	double hh = _displayProperties->viewportHeight * (0.5 / _displayProperties->scale);
-	
-	ChipmunkDebugDrawPointLineScale = _displayProperties->scale;
-	
-	glLineWidth(1);
-	
+	double scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+
+	double hw = _displayProperties->viewportWidth / scale;
+	double hh = _displayProperties->viewportHeight / (_displayProperties->viewportWidth / hw);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
     
@@ -70,7 +66,7 @@ void Renderer::draw(void) {
     //glTranslatef(0.5, 0.5, 0.0);
 #else
 	glOrtho(0, hw, 0, hh, -1.0, 1.0);
-    glTranslated(0.5, 0.5, 0.0);
+    //glTranslated(0.45, 0.5, 0.0);
 #endif
     
 	ChipmunkDebugDrawShapes(_physics->getSpace());	

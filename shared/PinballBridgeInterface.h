@@ -12,7 +12,6 @@ typedef struct {
 	int viewportY;
 	int viewportHeight;
 	int viewportWidth;
-	float scale;
 } DisplayProperties;
 
 class PinballBridgeInterface

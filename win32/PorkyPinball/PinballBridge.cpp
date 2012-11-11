@@ -58,13 +58,15 @@ const char *PinballBridge::getPathForScriptFileName(void *scriptFileName) {
 }
 
 DisplayProperties *PinballBridge::getDisplayProperties() {
+
 	DisplayProperties *props = new DisplayProperties();
+
 	// TODO: vary by glut props;
-	props->viewportX = 100;
+	props->viewportX = 0;
 	props->viewportY = 0;
 	props->viewportHeight = 600;
 	props->viewportWidth = 800;
-	props->scale = 14.5;
 	return props;
+
 }
 
