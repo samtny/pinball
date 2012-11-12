@@ -5,6 +5,10 @@
 #include "PinballBridgeInterface.h"
 
 class Physics;
+namespace glfont
+{
+	class GLFont;	
+}
 
 class Renderer
 {
@@ -18,6 +22,7 @@ public:
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Physics *_physics;
+	glfont::GLFont *_glfont;
 	DisplayProperties *_displayProperties;
 };
 

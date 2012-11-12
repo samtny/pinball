@@ -27,6 +27,10 @@ void Game::setPhysics(Physics *physics) {
 	_physics = physics;
 }
 
+void Game::setRenderer(Renderer *renderer) {
+	_renderer = renderer;
+}
+
 static Game *lua_currentInstance;
 
 void Game::init(void) {

@@ -10,6 +10,7 @@ public:
 	void init();
 
 	const char * getPathForScriptFileName(void * scriptFileName);
+	const char *getPathForTextureFilename(void * textureFilename);
     DisplayProperties *getDisplayProperties();
 	void playSound(void * soundName);
 };

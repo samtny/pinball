@@ -34,6 +34,7 @@ void PinballHost::init() {
 	g->setBridgeInterface(bi);
 	g->init();
 	g->setPhysics(p);
+	g->setRenderer(r);
 
 	GlutEngine *e = new GlutEngine();
 	e->setPhysics(p);

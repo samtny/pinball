@@ -23,6 +23,11 @@ const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileN
 	return nativeInstance->getPathForScriptFileName(scriptFileName);
 }
 
+const char *PinballBridgeInterface::getPathForTextureFileName(void *textureFilename) {
+	PinballBridge *nativeInstance = (PinballBridge *)_this;
+	return nativeInstance->getPathForTextureFilename(textureFilename);
+}
+
 DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getDisplayProperties();
@@ -49,6 +54,18 @@ const char *PinballBridge::getPathForScriptFileName(void *scriptFileName) {
 	
 	const char *p = "..\\..\\shared\\PorkyPinball\\";
 	const char *f = (const char *)scriptFileName;
+	// TODO: this is a leak;
+	char *concat = new char[strlen(p) + strlen(f) + 1];
+	strcpy(concat, p);
+	strcat(concat, f);
+	return concat;
+
+}
+
+const char *PinballBridge::getPathForTextureFilename(void *textureFilename) {
+	
+	const char *p = "..\\..\\shared\\PorkyPinball\\textures\\";
+	const char *f = (const char *)textureFilename;
 	// TODO: this is a leak;
 	char *concat = new char[strlen(p) + strlen(f) + 1];
 	strcpy(concat, p);

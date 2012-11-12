@@ -1,0 +1,18 @@
+how to make pinball game design very simple
+11.12.2012
+sam thompson
+
+we have a render pipeline, physics, input, now what?
+
+big "question marks" are;
+
+-texture loading?????
+-score / text / overlay display
+
+re; score / overlays;
+	score at any position + size combo desired
+	overlays may include texture + text
+	positions like "top middle", etc., some kind of markup
+	furthermore;
+		i would like text to appear the same on all platforms
+	

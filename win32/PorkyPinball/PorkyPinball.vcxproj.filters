@@ -156,6 +156,9 @@
     <ClCompile Include=".\PinballBridge.cpp">
       <Filter>Source Files\native</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\shared\glfont2.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\shared\Physics.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include=".\PinballBridge.h">
       <Filter>Header Files\native</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\glfont2.h">
+      <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

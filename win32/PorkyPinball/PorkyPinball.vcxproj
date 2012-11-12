@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c" />
     <ClCompile Include="..\..\shared\Game.cpp" />
+    <ClCompile Include="..\..\shared\glfont2.cpp" />
     <ClCompile Include="..\..\shared\Physics.cpp" />
     <ClCompile Include="..\..\shared\Renderer.cpp" />
     <ClCompile Include=".\main.cpp" />
@@ -113,6 +114,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Game.h" />
+    <ClInclude Include="..\..\shared\glfont2.h" />
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
