@@ -58,6 +58,8 @@
 		4B170277164AB7CA007D4A2F /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170255164AB7CA007D4A2F /* lvm.c */; };
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
 		4B17027A164AB9C4007D4A2F /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B170279164AB9C4007D4A2F /* libChipmunk-iPhone.a */; };
+		4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CB8891651818C00F860A4 /* glfont2.cpp */; };
+		4B6CB88F165181AD00F860A4 /* font.glf in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CB88E165181AD00F860A4 /* font.glf */; };
 		4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */; };
 		4BC180EF16502AC100D563AF /* config.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180ED16502AC100D563AF /* config.lua */; };
 		4BC180F016502AC100D563AF /* forces.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180EE16502AC100D563AF /* forces.lua */; };
@@ -124,6 +126,9 @@
 		4B170255164AB7CA007D4A2F /* lvm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lvm.c; path = "../../../../../../../src/lua/lua 5.2.1/lvm.c"; sourceTree = "<group>"; };
 		4B170256164AB7CA007D4A2F /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lzio.c; path = "../../../../../../../src/lua/lua 5.2.1/lzio.c"; sourceTree = "<group>"; };
 		4B170279164AB9C4007D4A2F /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "/lib/chipmunk/chipmunk 6.1.1/iphone simulator/libChipmunk-iPhone.a"; sourceTree = "<absolute>"; };
+		4B6CB8891651818C00F860A4 /* glfont2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glfont2.cpp; path = ../../../shared/glfont2.cpp; sourceTree = "<group>"; };
+		4B6CB88A1651818C00F860A4 /* glfont2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont2.h; path = ../../../shared/glfont2.h; sourceTree = "<group>"; };
+		4B6CB88E165181AD00F860A4 /* font.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = font.glf; sourceTree = "<group>"; };
 		4BB93822164DD60A00EC9983 /* PinballBridgeInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinballBridgeInterface.h; path = ../../../shared/PinballBridgeInterface.h; sourceTree = "<group>"; };
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
 		4BB93826164DF74000EC9983 /* ChipmunkDebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChipmunkDebugDraw.h; path = ../../../../../../../include/chipmunk/debugdraw/ChipmunkDebugDraw.h; sourceTree = "<group>"; };
@@ -216,6 +221,7 @@
 		4B17021F164AAEF3007D4A2F /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B6CB88D165181AD00F860A4 /* textures */,
 				4B170223164AAF3F007D4A2F /* PorkyPinball */,
 				4BB93826164DF74000EC9983 /* ChipmunkDebugDraw.h */,
 				4BB93822164DD60A00EC9983 /* PinballBridgeInterface.h */,
@@ -225,6 +231,8 @@
 				4B170220164AAF3F007D4A2F /* Physics.cpp */,
 				4B170229164AAF3F007D4A2F /* Renderer.h */,
 				4B170228164AAF3F007D4A2F /* Renderer.cpp */,
+				4B6CB88A1651818C00F860A4 /* glfont2.h */,
+				4B6CB8891651818C00F860A4 /* glfont2.cpp */,
 			);
 			name = shared;
 			sourceTree = "<group>";
@@ -280,6 +288,15 @@
 				4B170256164AB7CA007D4A2F /* lzio.c */,
 			);
 			name = lua;
+			sourceTree = "<group>";
+		};
+		4B6CB88D165181AD00F860A4 /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				4B6CB88E165181AD00F860A4 /* font.glf */,
+			);
+			name = textures;
+			path = ../../../shared/PorkyPinball/textures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,6 +360,7 @@
 				4B17022E164AAF3F007D4A2F /* rules.lua in Resources */,
 				4BC180EF16502AC100D563AF /* config.lua in Resources */,
 				4BC180F016502AC100D563AF /* forces.lua in Resources */,
+				4B6CB88F165181AD00F860A4 /* font.glf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +411,7 @@
 				4BE9DFD5164C101700599EB8 /* Game.cpp in Sources */,
 				4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */,
 				4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */,
+				4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

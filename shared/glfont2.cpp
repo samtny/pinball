@@ -12,12 +12,6 @@
 #include <fstream>
 using namespace std;
 
-//OpenGL headers
-#ifdef _WIN32
-#include "windows.h"
-#endif
-#include <GL/gl.h>
-
 //glFont header
 #include "glfont2.h"
 using namespace glfont;

@@ -12,6 +12,14 @@
 //GLFont Interface
 //*******************************************************************
 
+//OpenGL headers
+#ifdef _WIN32
+#include "windows.h"
+#include <GL/gl.h>
+#elseif __APPLE__
+#include "gl.h"
+#endif
+
 //glFont namespace
 namespace glfont
 {
