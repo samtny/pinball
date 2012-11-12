@@ -51,6 +51,9 @@ void Renderer::init(void) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	_glfont = new glfont::GLFont();
 	_glfont->Create(_bridgeInterface->getPathForTextureFileName("font.glf"), txIdFont);
 	
@@ -81,11 +84,9 @@ void Renderer::draw(void) {
     //glTranslated(0.45, 0.5, 0.0);
 #endif
     
-	glEnableClientState(GL_VERTEX_ARRAY);
+	
 
 	ChipmunkDebugDrawShapes(_physics->getSpace());	
-
-	glDisableClientState(GL_VERTEX_ARRAY);
 
 	// textures;
 	
@@ -106,8 +107,6 @@ void Renderer::draw(void) {
 
 	//glTranslated(0.0, 200.0, -1.0);
 	//glRotatef(15, 0, 0, 1);
-
-	//glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 
