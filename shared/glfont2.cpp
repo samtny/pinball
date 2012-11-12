@@ -81,8 +81,13 @@ bool GLFont::Create (const char *file_name, int tex)
 
 	//Create OpenGL texture
 	glBindTexture(GL_TEXTURE_2D, tex);  
+#ifdef __APPLE__
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+#else
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+#endif
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -178,6 +183,7 @@ void GLFont::GetCharSize (int c, std::pair<int, int> *size)
 	}
 }
 //*******************************************************************
+/*
 int GLFont::GetCharWidth (int c)
 {
 	//Make sure in range
@@ -192,6 +198,7 @@ int GLFont::GetCharWidth (int c)
 		return (int)(glfont_char->dx * header.tex_width);
 	}
 }
+*/
 //*******************************************************************
 int GLFont::GetCharHeight (int c)
 {

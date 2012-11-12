@@ -69,7 +69,7 @@ public:
 
 	//Character size retrieval methods
 	void GetCharSize (int c, std::pair<int, int> *size);
-	int GetCharWidth (int c);
+	//int GetCharWidth (int c);
 	int GetCharHeight (int c);
 
 	//Calculates the size in pixels of a character array
