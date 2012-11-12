@@ -12,6 +12,7 @@
 
 -(void)initI;
 -(const char *)getPathForScriptFileName:(void *)scriptFileName;
+-(const char *)getPathForTextureFileName:(void *)textureFileName;
 -(DisplayProperties *)getDisplayProperties;
 -(void)playSound:(void *)soundName;
 

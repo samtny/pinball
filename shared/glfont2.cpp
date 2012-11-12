@@ -16,6 +16,17 @@ using namespace std;
 #include "glfont2.h"
 using namespace glfont;
 
+//OpenGL headers
+#ifdef _WIN32
+#include "windows.h"
+#include <GL/gl.h>
+#endif
+
+#ifdef __APPLE__
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#endif
+
 //*******************************************************************
 //GLFont Class Implementation
 //*******************************************************************
@@ -70,15 +81,19 @@ bool GLFont::Create (const char *file_name, int tex)
 
 	//Create OpenGL texture
 	glBindTexture(GL_TEXTURE_2D, tex);  
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    
+#ifdef __APPLE__
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, header.tex_width, header.tex_height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, (void *)tex_bytes);
+#else
 	glTexImage2D(GL_TEXTURE_2D, 0, 2, header.tex_width,
 		header.tex_height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,
 		(void *)tex_bytes);
-
+#endif
 	//Free texture pixels memory
 	delete[] tex_bytes;
 
@@ -199,6 +214,79 @@ void GLFont::Begin (void)
 	glBindTexture(GL_TEXTURE_2D, header.tex);
 }
 //*******************************************************************
+
+void GLFont::DrawString(const char *text, float x, float y) {
+    
+    
+		const char *i;
+		GLFontChar *glfont_char;
+		float width, height;
+		
+		static float t[12];
+		static float v[18];
+		
+		for (i = text; *i != (const char)'\0'; i++) {
+            
+			if (*i < header.start_char || *i > header.end_char)
+				continue;
+            
+			//Get pointer to glFont character
+			glfont_char = &header.chars[*i - header.start_char];
+            
+			//Get width and height
+			width = glfont_char->dx * header.tex_width;
+			height = glfont_char->dy * header.tex_height;
+			
+			//Specify vertices and texture coordinates
+            
+			t[0] = glfont_char->tx1;
+			t[1] = glfont_char->ty1;
+			t[2] = glfont_char->tx1;
+			t[3] = glfont_char->ty2;
+			t[4] = glfont_char->tx2;
+			t[5] = glfont_char->ty2;
+            
+			t[6] = glfont_char->tx2;
+			t[7] = glfont_char->ty2;
+			t[8] = glfont_char->tx2;
+			t[9] = glfont_char->ty1;
+			t[10] = glfont_char->tx1;
+			t[11] = glfont_char->ty1;
+			
+			glTexCoordPointer(2, GL_FLOAT, 0, t);
+			
+			v[0] = x;
+			v[1] = y;
+			v[2] = 0;
+			v[3] = x;
+			v[4] = y - height;
+			v[5] = 0;
+			v[6] = x + width;
+			v[7] = y - height;
+			v[8] = 0;
+            
+			v[9] = x + width;
+			v[10] = y - height;
+			v[11] = 0;
+			v[12] = x + width;
+			v[13] = y;
+			v[14] = 0;
+			v[15] = x;
+			v[16] = y;
+			v[17] = 0;
+			
+			glVertexPointer(3, GL_FLOAT, 0, v);
+            
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+            
+			//Move to next character
+			x += width;
+            
+		}
+		
+	
+    
+}
 
 //End of file
 

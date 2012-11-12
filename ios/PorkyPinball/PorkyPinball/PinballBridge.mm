@@ -32,6 +32,10 @@ const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileN
     return [(id)self getPathForScriptFileName:scriptFileName];
 }
 
+const char * PinballBridgeInterface::getPathForTextureFileName(void * textureFileName) {
+    return [(id)self getPathForTextureFileName:textureFileName];
+}
+
 DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
     return [(id)self getDisplayProperties];
 }
@@ -43,6 +47,14 @@ void PinballBridgeInterface::playSound(void * soundName) {
 -(const char *)getPathForScriptFileName:(void *)scriptFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)scriptFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)scriptFileName] pathExtension];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix];
+    const char *path = [filePath UTF8String];
+    return path;
+}
+
+-(const char *)getPathForTextureFileName:(void *)textureFileName {
+    NSString *prefix = [[NSString stringWithUTF8String:(const char *)textureFileName] stringByDeletingPathExtension];
+    NSString *suffix = [[NSString stringWithUTF8String:(const char *)textureFileName] pathExtension];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix];
     const char *path = [filePath UTF8String];
     return path;

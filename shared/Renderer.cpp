@@ -55,7 +55,7 @@ void Renderer::init(void) {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	_glfont = new glfont::GLFont();
-	_glfont->Create(_bridgeInterface->getPathForTextureFileName("font.glf"), txIdFont);
+	_glfont->Create(_bridgeInterface->getPathForTextureFileName((void *)"font.glf"), txIdFont);
 	
 
 }
@@ -92,8 +92,14 @@ void Renderer::draw(void) {
 	
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(0, 800, 0, 600, -1, 1);
-
+    
+#ifdef __APPLE__
+    // todo; get these from the correct place...
+    glOrthof(0, 640, 0, 1136, -1.0, 1.0);
+#else
+	glOrtho(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, -1, 1);
+#endif
+    
 	glEnable(GL_TEXTURE_2D);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -101,7 +107,11 @@ void Renderer::draw(void) {
 
 	//glPushMatrix();
 
+#ifdef __APPLE__
+    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+#else
 	glColor3f(0.0f, 0.0f, 1.0f);
+#endif
 	_glfont->Begin();
 	_glfont->DrawString("hello world", 100, 100);
 
