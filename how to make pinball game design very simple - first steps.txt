@@ -10,12 +10,13 @@ to get started (e.g. test that Lua + C + physics engine + graphx engine + rulesh
 3) DONE write lua "objects" file, using some reasonable shape coords
 4) DONE write lua "layout" file, anchoring reasonable objects in reasonable (arbitrary) space
 5) DONE write lua "forces" file, gravity, left flipper / right flipper forces
-6) write lua "objtranslate" file
+6) DONE write lua "config" file
 7) DONE write lua "rules" file
-8) ... write C physics engine init + for each object + lua "materials, objects, layout, forces, objtranslate" loads
+8) DONE write C physics engine init + for each object + lua "materials, objects, layout, forces, objtranslate" loads
 9) DONE write C render engine using debugDraw (e.g. just draw "object" coords) to OpenGL-ish thingy-do (e.g. glut + opengl vanilla)
 10) DONE  design and debug run cycle
-11) tweak and test
+11) DONE test a lua rule C callback
+11) DONE tweak and test
 12) DONE port to iPhone
 
 THE END

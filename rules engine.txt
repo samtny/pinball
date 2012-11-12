@@ -1,0 +1,28 @@
+rules engine interop
+sam thompson
+11/11/2012
+
+
+the lua "rules" may call;
+	sound engine
+	physics engine ("resetMechs")
+	native, such as game over
+	
+the lua "rules" may be called by;
+	physics engine ("switchClosed")
+	native engine ("startButtonPressed")
+
+this must be managed by "X";
+	lua "rules" calls "X", "X" parcels to physics AND NATIVE...
+	physics calls "X", "X" parcels to rules AND NATIVE...
+	native calls "X", "X" parcels to rules and physics (e.g. "pause")
+
+possible paths;
+	physics -> X -> bridge -> sound
+	physics -> X -> rules
+	rules -> X -> physics
+	rules -> X -> bridge -> sound
+	ui -> physics
+	ui -> rules
+
+	

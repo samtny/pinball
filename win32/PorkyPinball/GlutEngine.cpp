@@ -8,6 +8,8 @@
 
 #include "Renderer.h"
 
+#include "Game.h"
+
 GlutEngine *glut_currentInstance;
 
 GlutEngine::GlutEngine() {
@@ -25,6 +27,18 @@ void GlutEngine::setRenderer(Renderer *renderer) {
 	_renderer = renderer;
 }
 
+void GlutEngine::setGame(Game *game) {
+	_game = game;
+}
+
+void glut_keyboardCallback(unsigned char key, int x, int y) {
+	glut_currentInstance->keyboardCallback(key);
+}
+
+void glut_keyboardUpCallback(unsigned char key, int x, int y) {
+	glut_currentInstance->keyboardUpCallback(key);
+}
+
 void GlutEngine::init() {
 	
 	//glutInit(&argc, argv);
@@ -34,8 +48,8 @@ void GlutEngine::init() {
 	glutCreateWindow("Porky Pinball");
 
 	glutIgnoreKeyRepeat(1);
-	//glutKeyboardFunc(keyboardCallback);
-	//glutKeyboardUpFunc(keyboardUpCallback);
+	glutKeyboardFunc(glut_keyboardCallback);
+	glutKeyboardUpFunc(glut_keyboardUpCallback);
 
 	_renderer->init();
 
@@ -71,5 +85,18 @@ void GlutEngine::displayFunc() {
 
 	this->_renderer->draw();
 	glutSwapBuffers();
+
+}
+
+void GlutEngine::keyboardCallback(unsigned char key) {
+	
+	if (key == 's') {
+		// TODO: access _games public member "startButton" and pass to this method instead;
+		_game->closeSwitch(0);
+	}
+
+}
+
+void GlutEngine::keyboardUpCallback(unsigned char key) {
 
 }

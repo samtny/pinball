@@ -18,7 +18,7 @@ switches = {}
 
 targetStateLit = 0
 targetStateUnlit = 1
-leftTargetBankStates {}
+leftTargetBankStates = {}
 leftTargetBankTargetCount = 5
 
 leftTargetBankScoreUnlit = 1000
@@ -28,18 +28,20 @@ leftTargetBankScoreLit = 100
 LOOP_INTERVAL_NONE = -1
 
 function handleSwitchClosed(switch)
-	if ballInPlay == true or switch = troughSwitch then
-	if switch == startButton then
+	print "handleSwitchClosed"
+	if ballInPlay == true or switch == troughSwitch then
+		if switch == troughSwitch then
+			troughSwitchClosed()
+		elseif switch == target1 then
+			leftTargetBankHit(1)
+		end
+	elseif switch == "startButton" then
 		startButtonPressed()
-	elseif switch == troughSwitch then
-		troughSwitchClosed()
-	elseif switch == target1 then
-		leftTargetBankHit(1)
-	end
 	end
 end
 
 function leftTargetBankHit(index)
+	
 	if leftTargetBankStates[index] == targetStateUnlit then
 		
 		score = score + leftTargetBankScoreUnlit
@@ -61,10 +63,13 @@ function leftTargetBankHit(index)
 		
 		playSound(chimeC1, LOOP_INTERVAL_NONE)
 		
-	else if leftTargetBankStates[index] == targetStateLit then
+	elseif leftTargetBankStates[index] == targetStateLit then
+		
 		score = score + leftTargetBankScoreLit
 		playSound(chimeC0, LOOP_INTERVAL_NONE)
+
 	end
+
 end
 
 function handleSwitchOpened(switch)
@@ -80,9 +85,18 @@ function troughSwitchClosed()
 end
 
 function startButtonPressed()
+	
+	print "startButtonPressed"
+	resetBallPosition() -- TODO: switch on __PINBALL_DEBUG flag
+
 	if gameInProgress == false then
 		startGame()
 	end
+
+end
+
+function resetBallPosition()
+	-- C API stub
 end
 
 function startGame()
@@ -118,11 +132,13 @@ function resetMechs()
 	--C API stub
 end
 
-function resetLights() {
+function resetLights()
 	--C API stub
-}
+end
 
-function serveBallToTrough() {
+function serveBallToTrough()
 	--C API stub
-}
+end
+
+
 

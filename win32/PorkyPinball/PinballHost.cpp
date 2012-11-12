@@ -6,6 +6,8 @@
 
 #include "Renderer.h"
 
+#include "Game.h"
+
 #include "GlutEngine.h"
 
 PinballHost::PinballHost() {
@@ -28,9 +30,15 @@ void PinballHost::init() {
 	r->setPhysics(p);
 	//r->init();
 	
+	Game *g = new Game();
+	g->setBridgeInterface(bi);
+	g->init();
+	g->setPhysics(p);
+
 	GlutEngine *e = new GlutEngine();
 	e->setPhysics(p);
 	e->setRenderer(r);
+	e->setGame(g);
 	e->init();
 	_glutEngine = e;
 	

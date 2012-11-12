@@ -31,6 +31,9 @@
     <Filter Include="Source Files\native">
       <UniqueIdentifier>{71fb1723-d855-49d6-bff6-b48ee682e8dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shared\script">
+      <UniqueIdentifier>{3aea6403-6d62-4817-887f-59d28d468e4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\shared\Physics.cpp">
@@ -181,23 +184,23 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\shared\PorkyPinball\layout.lua">
-      <Filter>Source Files\lua</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\materials.lua">
-      <Filter>Source Files\lua</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\objects.lua">
-      <Filter>Source Files\lua</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\rules.lua">
-      <Filter>Source Files\lua</Filter>
-    </None>
     <None Include="..\..\shared\PorkyPinball\config.lua">
-      <Filter>Source Files\lua</Filter>
+      <Filter>Source Files\shared\script</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\forces.lua">
-      <Filter>Source Files\lua</Filter>
+      <Filter>Source Files\shared\script</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\layout.lua">
+      <Filter>Source Files\shared\script</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\materials.lua">
+      <Filter>Source Files\shared\script</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\objects.lua">
+      <Filter>Source Files\shared\script</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\rules.lua">
+      <Filter>Source Files\shared\script</Filter>
     </None>
   </ItemGroup>
 </Project>

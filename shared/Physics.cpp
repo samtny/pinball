@@ -205,6 +205,9 @@ void Physics::createBall(string name, layoutItemProperties item, objectPropertie
     cpShapeSetFriction(shape, material.f);
 	cpShapeSetGroup(shape, shapeGroupBall);
     
+	// TODO: something better;
+	_balls[0] = body;
+
 }
 
 void Physics::createFlipper(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
@@ -547,6 +550,13 @@ void Physics::loadForces() {
     
 	lua_close(L);
     
+}
+
+void Physics::resetBallPosition(int ballIndex) {
+	cpBody *ball = _balls[ballIndex];
+	cpBodyResetForces(ball);
+	// TODO: something way, way better;
+	cpBodySetPos(ball, cpv(0.1, 0.65));
 }
 
 Physics::~Physics(void)

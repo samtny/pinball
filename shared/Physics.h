@@ -23,6 +23,7 @@ public:
 	float getBoxWidth();
 	cpSpace *getSpace();
 	void updatePhysics();
+	void resetBallPosition(int ballIndex);
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -38,6 +39,7 @@ protected:
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	cpBody *_box;
+	cpBody *_balls[10];
 	float _boxWidth;
 };
 
