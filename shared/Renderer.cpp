@@ -2,6 +2,12 @@
 
 #include "Physics.h"
 
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 #include "glfont2.h"
 
 #ifdef __APPLE__
@@ -12,6 +18,14 @@
 #include "chipmunk.h"
 
 #include "ChipmunkDebugDraw.h"
+
+typedef struct textureProperties {
+	string name;
+	string filename;
+	GLuint gl_index;
+} textureProperties;
+map<string, textureProperties> textures;
+typedef map<string, textureProperties>::iterator it_textureProperties;
 
 Renderer::Renderer(void)
 {
@@ -54,10 +68,88 @@ void Renderer::init(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	this->loadTextures();
+	this->loadFonts();
+
+	for (it_textureProperties iterator = textures.begin(); iterator != textures.end(); iterator++) {
+
+		string name = (&*iterator)->first;
+		textureProperties *props = &(&*iterator)->second;
+
+		glGenTextures(1, &props->gl_index);
+		glBindTexture(GL_TEXTURE_2D, props->gl_index);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		Texture *tex = _bridgeInterface->createRGBATexture((void *)props->filename.c_str());
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
+
+		delete tex;
+
+	}
+
+}
+
+void Renderer::loadTextures(void) {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
+
+	int error = luaL_dofile(L, texturesFileName);
+	if (!error) {
+
+        lua_getglobal(L, "textures");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+
+				textureProperties props = { "", "", -1 };
+				props.name = name;
+				
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("filename", key) == 0) {
+						
+						props.filename = lua_tostring(L, -1);
+                        
+					}
+                    
+					lua_pop(L, 1);
+				}
+
+				textures.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+
+			}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Renderer::loadFonts(void) {
 	_glfont = new glfont::GLFont();
 	_glfont->Create(_bridgeInterface->getPathForTextureFileName((void *)"font.glf"), txIdFont);
-	
-
 }
 
 void Renderer::draw(void) {
@@ -75,7 +167,6 @@ void Renderer::draw(void) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 #ifdef __APPLE__
     glOrthof(0, hw, 0, hh, -1.0, 1.0);
     //glTranslatef(0.5, 0.5, 0.0);
@@ -84,28 +175,87 @@ void Renderer::draw(void) {
     //glTranslated(0.45, 0.5, 0.0);
 #endif
     
-	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	ChipmunkDebugDrawShapes(_physics->getSpace());	
-
-	// textures;
 	
+	glEnable(GL_TEXTURE_2D);
+	
+	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-    
+#ifdef __APPLE__
+    glOrthof(0, hw, 0, hh, -1.0, 1.0);
+    //glTranslatef(0.5, 0.5, 0.0);
+#else
+	glOrtho(0, hw, 0, hh, -1.0, 1.0);
+    //glTranslated(0.45, 0.5, 0.0);
+#endif
+
+	for (it_textureProperties iterator = textures.begin(); iterator != textures.end(); iterator++) {
+
+		string name = iterator->first;
+		textureProperties props = iterator->second;
+		
+		static const GLfloat vertices[] = {
+			-1.0,  1.0, -0.0,
+			 1.0,  1.0, -0.0,
+			-1.0, -1.0, -0.0,
+			 1.0, -1.0, -0.0
+		};
+		static const GLfloat normals[] = {
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0,
+			0.0, 0.0, 1.0
+		};
+		static const GLfloat texCoords[] = {
+			0.0, 1.0,
+			1.0, 1.0,
+			0.0, 0.0,
+			1.0, 0.0
+		};
+		
+		glPushMatrix();
+
+		glLoadIdentity();
+
+
+
+		glTranslatef(0, 0, 0.0);
+		glTranslatef(_physics->_balls[0]->p.x, _physics->_balls[0]->p.y, 0);
+		//glRotatef(rot, 1.0, 1.0, 1.0);
+		glRotatef(_physics->_balls[0]->a * 57.2957795f, 0, 0, 1);
+		glScalef(0.1, 0.1, 1);
+		
+		glBindTexture(GL_TEXTURE_2D, props.gl_index);
+		glVertexPointer(3, GL_FLOAT, 0, vertices);
+		//glNormalPointer(GL_FLOAT, 0, normals);
+		glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		
+		glPopMatrix();
+
+	}
+	
+	// font;
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
 #ifdef __APPLE__
     // todo; get these from the correct place...
     glOrthof(0, 640, 0, 1136, -1.0, 1.0);
 #else
 	glOrtho(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, -1, 1);
 #endif
-    
-	glEnable(GL_TEXTURE_2D);
-
+   
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	//glPushMatrix();
 
 #ifdef __APPLE__
     glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
@@ -113,14 +263,9 @@ void Renderer::draw(void) {
 	glColor3f(0.0f, 0.0f, 1.0f);
 #endif
 	_glfont->Begin();
-	_glfont->DrawString("hello world", 100, 100);
-
-	//glTranslated(0.0, 200.0, -1.0);
-	//glRotatef(15, 0, 0, 1);
+	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 50, 75);
 
 	glDisable(GL_TEXTURE_2D);
-
-	glPopMatrix();
-
+	
 }
 

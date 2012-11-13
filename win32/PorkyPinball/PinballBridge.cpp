@@ -1,5 +1,11 @@
 #include "PinballBridge.h"
 
+#pragma comment(lib, "DevIL.lib")
+#pragma comment(lib, "ILU.lib")
+#pragma comment(lib, "ILUT.lib")
+
+#include <IL/il.h>
+
 #include <sstream>
 #include <string>
 using namespace std;
@@ -26,6 +32,11 @@ const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileN
 const char *PinballBridgeInterface::getPathForTextureFileName(void *textureFilename) {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getPathForTextureFilename(textureFilename);
+}
+
+Texture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
+	PinballBridge *nativeInstance = (PinballBridge *)_this;
+	return nativeInstance->createRGBATexture(textureFilename);
 }
 
 DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
@@ -71,6 +82,28 @@ const char *PinballBridge::getPathForTextureFilename(void *textureFilename) {
 	strcpy(concat, p);
 	strcat(concat, f);
 	return concat;
+
+}
+
+Texture *PinballBridge::createRGBATexture(void *textureFilename) {
+
+	Texture *tex = new Texture();
+
+	ilInit();
+	ILuint imageName;
+	ilGenImages(1, &imageName);
+	ilBindImage(imageName);
+	const char *filename = this->getPathForTextureFilename(textureFilename);
+	ilLoadImage(filename);
+	
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	
+	tex->bpp = ilGetInteger(IL_IMAGE_BPP);
+	tex->width = ilGetInteger(IL_IMAGE_WIDTH);
+	tex->height = ilGetInteger(IL_IMAGE_HEIGHT);
+	tex->data = ilGetData();
+
+	return tex;
 
 }
 

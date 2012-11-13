@@ -42,8 +42,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\lib\glut;C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
-    <IncludePath>c:\include\GL;C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\debugdraw;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib;C:\lib\glut;C:\lib\chipmunk\chipmunk 6.1.1;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\include;C:\Program Files (x86)\GnuWin32\include;c:\include\GL;C:\Users\sam\Documents\pinball\shared;C:\include\lua\lua 5.2.1;C:\Users\samtny\Documents\pinball\shared;C:\include\chipmunk\debugdraw;C:\include\chipmunk\chipmunk 6.1.1;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,6 +129,15 @@
     <None Include="..\..\shared\PorkyPinball\objects.lua" />
     <None Include="..\..\shared\PorkyPinball\forces.lua" />
     <None Include="..\..\shared\PorkyPinball\rules.lua" />
+    <None Include="..\..\shared\PorkyPinball\textures.lua" />
+    <None Include="..\..\shared\PorkyPinball\textures\font.glf">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

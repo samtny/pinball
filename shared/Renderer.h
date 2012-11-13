@@ -18,6 +18,8 @@ public:
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setPhysics(Physics *physics);
 	void init(void);
+	void loadTextures(void);
+	void loadFonts(void);
 	void draw(void);
 private:
 	PinballBridgeInterface *_bridgeInterface;

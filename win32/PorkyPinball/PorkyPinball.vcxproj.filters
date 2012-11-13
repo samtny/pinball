@@ -208,5 +208,16 @@
     <None Include="..\..\shared\PorkyPinball\rules.lua">
       <Filter>Source Files\shared\script</Filter>
     </None>
+    <None Include="..\..\shared\PorkyPinball\textures.lua">
+      <Filter>Source Files\shared\script</Filter>
+    </None>
+    <None Include="..\..\shared\PorkyPinball\textures\font.glf">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

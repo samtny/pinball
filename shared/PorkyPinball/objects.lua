@@ -3,7 +3,8 @@ objects = {
 	ball = {
 		s = "ball", -- "ball" shape defined internally - is in shape group "ballShapeGroup"
 		m = "ball",
-		r1 = 0.5
+		r1 = 0.5,
+		t = "pinball"
 	},
 	post = {
 		s = "circle",

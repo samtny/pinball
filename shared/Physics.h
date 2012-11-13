@@ -24,6 +24,8 @@ public:
 	cpSpace *getSpace();
 	void updatePhysics();
 	void resetBallPosition(int ballIndex);
+	cpBody *_box;
+	cpBody *_balls[10];
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -38,8 +40,6 @@ protected:
 	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
 private:
 	PinballBridgeInterface *_bridgeInterface;
-	cpBody *_box;
-	cpBody *_balls[10];
 	float _boxWidth;
 };
 

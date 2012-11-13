@@ -11,6 +11,7 @@ public:
 
 	const char * getPathForScriptFileName(void * scriptFileName);
 	const char *getPathForTextureFilename(void * textureFilename);
+	Texture *createRGBATexture(void *textureFilename);
     DisplayProperties *getDisplayProperties();
 	void playSound(void * soundName);
 };

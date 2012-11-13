@@ -14,6 +14,13 @@ typedef struct {
 	int viewportWidth;
 } DisplayProperties;
 
+typedef struct {
+	int bpp;
+	int width;
+	int height;
+	void *data;
+} Texture;
+
 class PinballBridgeInterface
 {
 public:
@@ -30,6 +37,8 @@ public:
 	const char * getPathForScriptFileName(void * scriptFileName);
 
 	const char *getPathForTextureFileName(void *textureFileName);
+
+	Texture *createRGBATexture(void *textureFileName);
 
     DisplayProperties *getDisplayProperties();
 	
