@@ -23,6 +23,8 @@ typedef struct textureProperties {
 	string name;
 	string filename;
 	GLuint gl_index;
+	int w;
+	int h;
 } textureProperties;
 map<string, textureProperties> textures;
 typedef map<string, textureProperties>::iterator it_textureProperties;
@@ -87,6 +89,8 @@ void Renderer::init(void) {
 		
 		// TODO: move bpp, w, h, data up to textures ivar;
 		glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
+		props->w = tex->width;
+		props->h = tex->height;
 
 		// TODO: delete textures->data instead;
 		delete tex;
@@ -192,69 +196,60 @@ void Renderer::drawPhysicsLayoutItems() {
 	
 	glEnable(GL_TEXTURE_2D);
 	
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-#ifdef __APPLE__
-    glOrthof(0, hw, 0, hh, -1.0, 1.0);
-    //glTranslatef(0.5, 0.5, 0.0);
-#else
-	glOrtho(0, hw, 0, hh, -1.0, 1.0);
-    //glTranslated(0.45, 0.5, 0.0);
-#endif
-
 	for (it_layoutItems iterator = _physics->layoutItems.begin(); iterator != _physics->layoutItems.end(); iterator++) {
 
+		layoutItemProperties props = iterator->second;
 
+		// if item has texture;
+		if (strcmp(props.o.t.n.c_str(), "") != 0) {
+
+			// this object has a texture...
+
+			// we are currently in "physics" space; if we draw an object using physics coords it will appear correctly
+
+			// this layoutItem refers to a texture by name;
+			textureProperties t = textures[props.o.t.n];
+
+			// now we have a layoutItem, describing x,y,h,w coords in a texture t
+			
+			glPushMatrix();
+			glLoadIdentity();
+
+			// set the scale such that item texture width / height fit in the bounds of the object...
+			glScalef(props.o.t.s, props.o.t.s, 1.0);
+			glTranslatef(_physics->_balls[0]->p.x * 72, _physics->_balls[0]->p.y * 72, 0);
+			glRotatef(_physics->_balls[0]->a * 57.2957795f, 0, 0, 1);
+			
+			static const GLfloat vertices[] = {
+				-1.0,  1.0, -0.0,
+				 1.0,  1.0, -0.0,
+				-1.0, -1.0, -0.0,
+				 1.0, -1.0, -0.0
+			};
+
+			static const GLfloat texCoords[] = {
+				0.0, 1.0,
+				1.0, 1.0,
+				0.0, 0.0,
+				1.0, 0.0
+			};
+
+			glBindTexture(GL_TEXTURE_2D, t.gl_index);
+			glVertexPointer(3, GL_FLOAT, 0, vertices);
+			//glNormalPointer(GL_FLOAT, 0, normals);
+			glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+
+			glColor4f(1.0, 1.0, 1.0, 1.0);
+
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			glPopMatrix();
+
+		}
 
 	}
+	
 
-	for (it_textureProperties iterator = textures.begin(); iterator != textures.end(); iterator++) {
-
-		string name = iterator->first;
-		textureProperties props = iterator->second;
-		
-		static const GLfloat vertices[] = {
-			-1.0,  1.0, -0.0,
-			 1.0,  1.0, -0.0,
-			-1.0, -1.0, -0.0,
-			 1.0, -1.0, -0.0
-		};
-		static const GLfloat normals[] = {
-			0.0, 0.0, 1.0,
-			0.0, 0.0, 1.0,
-			0.0, 0.0, 1.0,
-			0.0, 0.0, 1.0
-		};
-		static const GLfloat texCoords[] = {
-			0.0, 1.0,
-			1.0, 1.0,
-			0.0, 0.0,
-			1.0, 0.0
-		};
-		
-		glPushMatrix();
-
-		glLoadIdentity();
-
-		glTranslatef(0, 0, 0.0);
-		glTranslatef(_physics->_balls[0]->p.x, _physics->_balls[0]->p.y, 0);
-		//glRotatef(rot, 1.0, 1.0, 1.0);
-		glRotatef(_physics->_balls[0]->a * 57.2957795f, 0, 0, 1);
-		glScalef(0.1, 0.1, 1);
-		
-		glBindTexture(GL_TEXTURE_2D, props.gl_index);
-		glVertexPointer(3, GL_FLOAT, 0, vertices);
-		//glNormalPointer(GL_FLOAT, 0, normals);
-		glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		
-		glPopMatrix();
-
-	}
 	
 }
 

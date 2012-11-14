@@ -68,11 +68,17 @@ void Physics::init() {
 	space = cpSpaceNew();
 	
 	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
+		layoutItemProperties *lprops = &(&*iterator)->second;
+		this->applyScale(lprops);
+		this->createObject(lprops);
+	}
+	/*
+	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
 		layoutItemProperties lprops = iterator->second;
 		this->applyScale(&lprops);
 		this->createObject(&lprops);
 	}
-
+	*/
 	cpSpaceSetGravity(space, gravity);
 
 }
@@ -94,6 +100,8 @@ void Physics::applyScale(layoutItemProperties *iprops) {
 
 	iprops->o.r1 *= 1 / scale;
 	iprops->o.r2 *= 1 / scale;
+	
+	//iprops->o.t.s *= 1 / scale;
 
 }
 
@@ -377,6 +385,10 @@ void Physics::loadObjects() {
 								props.t.w = (int)lua_tonumber(L, -1);
 							} else if (strcmp("h", tkey) == 0) {
 								props.t.h = (int)lua_tonumber(L, -1);
+							} else if (strcmp("s", tkey) == 0) {
+								props.t.s = (float)lua_tonumber(L, -1);
+							} else if (strcmp("a", tkey) == 0) {
+								props.t.a = (float)lua_tonumber(L, -1);
 							}
 
 							lua_pop(L, 1);
