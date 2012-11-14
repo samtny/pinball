@@ -4,12 +4,44 @@
 #include <map>
 using namespace std;
 
-struct layoutItemProperties;
-struct objectProperties;
-struct materialProperties;
-
 struct cpSpace;
 struct cpBody;
+
+// TODO: move typedefs up and/or out...
+#include "chipmunk/chipmunk.h"
+typedef struct materialProperties {
+	string n;
+	float e;
+	float f;
+	float d;
+} materialProperties;
+typedef map<string, materialProperties>::iterator it_materialProperties;
+
+typedef struct objectTextureProperties {
+	string n;
+	int x;
+	int y;
+	int w;
+	int h;
+} objectTextureProperties;
+
+typedef struct objectProperties {
+	string n;
+	string s;
+	float r1;
+	float r2;
+	materialProperties m;
+	objectTextureProperties t;
+} objectProperties;
+typedef map<string, objectProperties>::iterator it_objectProps;
+
+typedef struct layoutItemProperties {
+	string n;
+	objectProperties o;
+	cpVect v[200];
+	int count;
+} layoutItemProperties;
+typedef map<string, layoutItemProperties>::iterator it_layoutItems;
 
 class PinballBridgeInterface;
 
@@ -24,6 +56,9 @@ public:
 	cpSpace *getSpace();
 	void updatePhysics();
 	void resetBallPosition(int ballIndex);
+	map<string, materialProperties> materials;
+	map<string, objectProperties> objects;
+	map<string, layoutItemProperties> layoutItems;
 	cpBody *_box;
 	cpBody *_balls[10];
 protected:
@@ -32,12 +67,12 @@ protected:
 	void loadObjects();
 	void loadLayout();
     void loadForces();
-	void applyScale(layoutItemProperties *iprops, objectProperties *oprops);
-	void createObject(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
-	void createBox(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
-    void createBall(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
-	void createFlipper(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
-	void createSegment(string name, layoutItemProperties iprops, objectProperties oprops, materialProperties mprops);
+	void applyScale(layoutItemProperties *iprops);
+	void createObject(layoutItemProperties *iprops);
+	void createBox(layoutItemProperties *iprops);
+    void createBall(layoutItemProperties *iprops);
+	void createFlipper(layoutItemProperties *iprops);
+	void createSegment(layoutItemProperties *iprops);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	float _boxWidth;

@@ -1,6 +1,6 @@
 
 #include "Physics.h"
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 
 extern "C" {
 #include "lua.h"
@@ -9,31 +9,6 @@ extern "C" {
 }
 
 #include "PinballBridgeInterface.h"
-
-typedef struct materialProperties {
-	float e;
-	float f;
-	float d;
-} materialProperties;
-map<string, materialProperties> materials;
-typedef map<string, materialProperties>::iterator it_materialProperties;
-
-typedef struct objectProperties {
-	string s;
-	string m;
-	float r1;
-	float r2;
-} objectProperties;
-map<string, objectProperties> objects;
-typedef map<string, objectProperties>::iterator it_objectProps;
-
-typedef struct layoutItemProperties {
-	string o;
-	cpVect v[200];
-	int count;
-} layoutItemProperties;
-map<string, layoutItemProperties> layoutItems;
-typedef map<string, layoutItemProperties>::iterator it_layoutItems;
 
 static cpSpace *space;
 
@@ -93,12 +68,9 @@ void Physics::init() {
 	space = cpSpaceNew();
 	
 	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
-		string name = iterator->first;
 		layoutItemProperties lprops = iterator->second;
-		objectProperties oprops = objects[lprops.o];
-		materialProperties mprops = materials[oprops.m];
-		this->applyScale(&lprops, &oprops);
-		this->createObject(name, lprops, oprops, mprops);
+		this->applyScale(&lprops);
+		this->createObject(&lprops);
 	}
 
 	cpSpaceSetGravity(space, gravity);
@@ -113,43 +85,43 @@ cpSpace *Physics::getSpace() {
 	return space;
 }
 
-void Physics::applyScale(layoutItemProperties *iprops, objectProperties *oprops) {
+void Physics::applyScale(layoutItemProperties *iprops) {
 
 	for (int i = 0; i < iprops->count; i++) {
 		iprops->v[i].x *= 1 / scale;
 		iprops->v[i].y *= 1 / scale;
 	}
 
-	oprops->r1 *= 1 / scale;
-	oprops->r2 *= 1 / scale;
+	iprops->o.r1 *= 1 / scale;
+	iprops->o.r2 *= 1 / scale;
 
 }
 
-void Physics::createObject(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
+void Physics::createObject(layoutItemProperties *layoutItem) {
 	
-	if (strcmp(object.s.c_str(), "box") == 0) {
-		this->createBox(name, layoutItem, object, material);
-	} else if (strcmp(object.s.c_str(), "segment") == 0) {
-		this->createSegment(name, layoutItem, object, material);
-	} else if (strcmp(object.s.c_str(), "flipper") == 0) {
-		this->createFlipper(name, layoutItem, object, material);
-	} else if (strcmp(object.s.c_str(), "ball") == 0) {
-        this->createBall(name, layoutItem, object, material);
+	if (strcmp(layoutItem->o.s.c_str(), "box") == 0) {
+		this->createBox(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "segment") == 0) {
+		this->createSegment(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "flipper") == 0) {
+		this->createFlipper(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "ball") == 0) {
+        this->createBall(layoutItem);
     }
 
 }
 
-void Physics::createBox(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+void Physics::createBox(layoutItemProperties *item) {
 
 	cpBody *body, *staticBody = cpSpaceGetStaticBody(space);
 	cpShape *shape;
 	cpConstraint *constraint;
 
-	cpFloat area = (item.v[1].y - item.v[0].y) * (item.v[3].x - item.v[0].x);
-	cpFloat mass = area * material.d;
+	cpFloat area = (item->v[1].y - item->v[0].y) * (item->v[3].x - item->v[0].x);
+	cpFloat mass = area * item->o.m.d;
 
 	// create body on which to hang the "box";
-	body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item.v, cpvzero)));
+	body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item->v, cpvzero)));
 	
 	// pin the box body at the four corners;
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[0]));
@@ -163,46 +135,46 @@ void Physics::createBox(string name, layoutItemProperties item, objectProperties
 	
 	// hang the box shapes on the body;
 	// left
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[0], item.v[1], object.r1));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[0], item->v[1], item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// top
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[1], item.v[2], object.r1));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[1], item->v[2], item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// right
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[2], item.v[3], object.r1));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[2], item->v[3], item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// bottom
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item.v[3], item.v[0], object.r1));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[3], item->v[0], item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	//box = staticBody;
 	_box = body;
-	_boxWidth = item.v[3].x - item.v[0].x;
+	_boxWidth = item->v[3].x - item->v[0].x;
 	
 }
 
-void Physics::createBall(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+void Physics::createBall(layoutItemProperties *item) {
     
-    cpFloat area = (object.r1 * M_PI) * 2;
-    cpFloat mass = area * material.d;
+    cpFloat area = (item->o.r1 * M_PI) * 2;
+    cpFloat mass = area * item->o.m.d;
     
-    cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, object.r1, cpvzero)));
-    cpBodySetPos(body, item.v[0]);
+    cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
+    cpBodySetPos(body, item->v[0]);
     
-    cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, object.r1, cpvzero));
-    cpShapeSetElasticity(shape, material.e);
-    cpShapeSetFriction(shape, material.f);
+    cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));
+    cpShapeSetElasticity(shape, item->o.m.e);
+    cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBall);
     
 	// TODO: something better;
@@ -210,38 +182,38 @@ void Physics::createBall(string name, layoutItemProperties item, objectPropertie
 
 }
 
-void Physics::createFlipper(string name, layoutItemProperties item, objectProperties object, materialProperties material) {
+void Physics::createFlipper(layoutItemProperties *item) {
 
-	cpFloat area = (object.r1 * M_PI) * 2; // approx
-	cpFloat mass = area * material.d;
+	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
+	cpFloat mass = area * item->o.m.d;
 
-	cpFloat direction = item.v[0].x <= item.v[1].x ? -1 : -1; // rotate clockwise for right-facing flipper...
+	cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : -1; // rotate clockwise for right-facing flipper...
 
-	cpFloat length = cpvdist(item.v[0], item.v[1]);
-	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item.v[1],item.v[0])), cpvnormalize(cpvsub(item.v[2],item.v[0]))));
+	cpFloat length = cpvdist(item->v[0], item->v[1]);
+	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item->v[1],item->v[0])), cpvnormalize(cpvsub(item->v[2],item->v[0]))));
 
 	// flipper body is round centered at base of flipper, and for this implementation has radius == flipper length;
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
-	cpBodySetPos(body, item.v[0]);
+	cpBodySetPos(body, item->v[0]);
 
-	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, _box, item.v[0]));
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, _box, item->v[0]));
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, _box, flipAngle, 0.0f));
 
 	// lflipper base shape
-	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, object.r1, cpvzero));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
 	// lflipper face shape
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item.v[0], body->p), cpvsub(item.v[1], body->p), object.r2));
-	cpShapeSetElasticity(shape, material.e);
-	cpShapeSetFriction(shape, material.f);
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r2));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
 }
 
-void Physics::createSegment(string name, layoutItemProperties layoutItem, objectProperties object, materialProperties material) {
+void Physics::createSegment(layoutItemProperties *layoutItem) {
 
 	//...
 
@@ -312,7 +284,7 @@ void Physics::loadMaterials() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				materialProperties props = { -1, -1 };
+				materialProperties props = { "", -1, -1, -1 };
 
 				// "value" is properties table;
 				lua_pushnil(L);
@@ -373,7 +345,7 @@ void Physics::loadObjects() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				objectProperties props = { "", "", -1, -1 };
+				objectProperties props = { "", "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -383,11 +355,34 @@ void Physics::loadObjects() {
 					if (strcmp("s", key) == 0) {
 						props.s = lua_tostring(L, -1);
 					} else if (strcmp("m", key) == 0) {
-						props.m = lua_tostring(L, -1);
+						props.m = materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
 						props.r1 = (float)lua_tonumber(L, -1);
 					} else if (strcmp("r2", key) == 0) {
 						props.r2 = (float)lua_tonumber(L, -1);
+					} else if (strcmp("t", key) == 0) {
+
+						lua_pushnil(L);
+						while(lua_next(L, -2) != 0) {
+							
+							const char *tkey = lua_tostring(L, -2);
+
+							if (strcmp("n", tkey) == 0) {
+								props.t.n = lua_tostring(L, -1);
+							} else if (strcmp("x", tkey) == 0) {
+								props.t.x = (int)lua_tonumber(L, -1);
+							} else if (strcmp("y", tkey) == 0) {
+								props.t.y = (int)lua_tonumber(L, -1);
+							} else if (strcmp("w", tkey) == 0) {
+								props.t.w = (int)lua_tonumber(L, -1);
+							} else if (strcmp("h", tkey) == 0) {
+								props.t.h = (int)lua_tonumber(L, -1);
+							}
+
+							lua_pop(L, 1);
+
+						}
+
 					}
 
 					lua_pop(L, 1);
@@ -431,7 +426,7 @@ void Physics::loadLayout() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				layoutItemProperties props = { "", NULL };
+				layoutItemProperties props = { "" };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -440,7 +435,7 @@ void Physics::loadLayout() {
 
 					if (strcmp("o", key) == 0) {
 						
-						props.o = lua_tostring(L, -1);
+						props.o = objects[lua_tostring(L, -1)];
 
 					} else if (strcmp("v", key) == 0) {
 						

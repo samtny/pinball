@@ -8,16 +8,16 @@ extern "C" {
 #include "lualib.h"
 }
 
+#include "chipmunk/chipmunk.h"
+
+#include "chipmunk/ChipmunkDebugDraw.h"
+
 #include "glfont2.h"
 
 #ifdef __APPLE__
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
 #endif
-
-#include "chipmunk.h"
-
-#include "ChipmunkDebugDraw.h"
 
 typedef struct textureProperties {
 	string name;
@@ -82,10 +82,13 @@ void Renderer::init(void) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+		// TODO: change to "inject"...
 		Texture *tex = _bridgeInterface->createRGBATexture((void *)props->filename.c_str());
 		
+		// TODO: move bpp, w, h, data up to textures ivar;
 		glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
 
+		// TODO: delete textures->data instead;
 		delete tex;
 
 	}
@@ -160,6 +163,13 @@ void Renderer::draw(void) {
 
 	glViewport(_displayProperties->viewportX, _displayProperties->viewportY, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
 
+	this->drawPhysicsLayoutItems();
+	this->drawFonts();
+	
+}
+
+void Renderer::drawPhysicsLayoutItems() {
+	
 	double scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
 
 	double hw = _displayProperties->viewportWidth / scale;
@@ -193,6 +203,12 @@ void Renderer::draw(void) {
     //glTranslated(0.45, 0.5, 0.0);
 #endif
 
+	for (it_layoutItems iterator = _physics->layoutItems.begin(); iterator != _physics->layoutItems.end(); iterator++) {
+
+
+
+	}
+
 	for (it_textureProperties iterator = textures.begin(); iterator != textures.end(); iterator++) {
 
 		string name = iterator->first;
@@ -221,8 +237,6 @@ void Renderer::draw(void) {
 
 		glLoadIdentity();
 
-
-
 		glTranslatef(0, 0, 0.0);
 		glTranslatef(_physics->_balls[0]->p.x, _physics->_balls[0]->p.y, 0);
 		//glRotatef(rot, 1.0, 1.0, 1.0);
@@ -242,6 +256,10 @@ void Renderer::draw(void) {
 
 	}
 	
+}
+
+void Renderer::drawFonts() {
+
 	// font;
 
 	glMatrixMode(GL_PROJECTION);

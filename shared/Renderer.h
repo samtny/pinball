@@ -21,6 +21,8 @@ public:
 	void loadTextures(void);
 	void loadFonts(void);
 	void draw(void);
+	void drawPhysicsLayoutItems(void);
+	void drawFonts(void);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Physics *_physics;
