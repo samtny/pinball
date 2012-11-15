@@ -92,8 +92,11 @@ void Renderer::init(void) {
 		// TODO: change to "inject"...
 		Texture *tex = _bridgeInterface->createRGBATexture((void *)props->filename.c_str());
 		
-		// TODO: move bpp, w, h, data up to textures ivar;
-		glTexImage2D(GL_TEXTURE_2D, 0, tex->bpp, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
+#ifdef __APPLE__
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
+#else
+        glTexImage2D(GL_TEXTURE_2D, 0, 4, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
+#endif
 		props->w = tex->width;
 		props->h = tex->height;
 
@@ -187,8 +190,13 @@ void Renderer::drawPlayfield() {
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+#ifdef __APPLE__
+    glOrthof(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 1);
+#else
 	gluOrtho2D(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight);
-	
+#endif
+    
+    
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
@@ -264,9 +272,9 @@ void Renderer::drawFonts() {
 	glLoadIdentity();
 #ifdef __APPLE__
     // todo; get these from the correct place...
-    glOrthof(0, 640, 0, 1136, -1.0, 1.0);
+    glOrthof(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 1.0);
 #else
-	glOrtho(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, -1, 1);
+	glOrtho(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 1);
 #endif
    
 	glMatrixMode(GL_MODELVIEW);
@@ -282,8 +290,13 @@ void Renderer::drawFonts() {
 	_glfont->Begin();
 	pair<int, int> texSize;
 	_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
-	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", _displayProperties->viewportWidth * 0.5 - texSize.first / 2.0, _displayProperties->viewportHeight * 0.95 + texSize.second / 2.0);
+    
+    glTranslatef(_displayProperties->viewportWidth * 0.5 - texSize.first / 2.0 * _displayProperties->fontScale, _displayProperties->viewportHeight * 0.95 + texSize.second / 2.0 * _displayProperties->fontScale, 0);
+    glScalef(0.4, 0.4, 1);
+    
+	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 0, 0);
+    
 	glDisable(GL_TEXTURE_2D);
-
+    
 }
 

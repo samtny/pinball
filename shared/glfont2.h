@@ -139,6 +139,7 @@ public:
 	//Begins text output with this font
 	void Begin (void);
     void DrawString (const char *text, float x, float y);
+    void DrawString (const char *text, float x, float y, float scale);
 	
 };
 

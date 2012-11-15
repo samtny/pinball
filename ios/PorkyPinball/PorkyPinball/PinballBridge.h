@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 It-Just-Works Software, llc. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "PinballBridgeInterface.h"
 
 @interface PinballBridge : NSObject
@@ -13,6 +14,7 @@
 -(void)initI;
 -(const char *)getPathForScriptFileName:(void *)scriptFileName;
 -(const char *)getPathForTextureFileName:(void *)textureFileName;
+-(Texture *)createRGBATexture:(void *)textureFileName;
 -(DisplayProperties *)getDisplayProperties;
 -(void)playSound:(void *)soundName;
 

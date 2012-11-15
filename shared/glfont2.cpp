@@ -222,8 +222,14 @@ void GLFont::Begin (void)
 }
 //*******************************************************************
 
-void GLFont::DrawString(const char *text, float x, float y) {
+void GLFont::DrawString(const char *text, float x, float y, float scale) {
     
+    this->DrawString(text, x, y);
+    glScalef(scale, scale, 1);
+    
+}
+
+void GLFont::DrawString(const char *text, float x, float y) {
     
 		const char *i;
 		GLFontChar *glfont_char;

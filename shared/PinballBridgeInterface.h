@@ -12,6 +12,7 @@ typedef struct {
 	int viewportY;
 	int viewportHeight;
 	int viewportWidth;
+    float fontScale;
 } DisplayProperties;
 
 typedef struct {
