@@ -114,7 +114,7 @@ void Physics::createObject(layoutItemProperties *layoutItem) {
 	} else if (strcmp(layoutItem->o.s.c_str(), "flipper") == 0) {
 		this->createFlipper(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "ball") == 0) {
-        this->createBall(layoutItem);
+        layoutItem->body = this->createBall(layoutItem);
     }
 
 }
@@ -172,7 +172,7 @@ void Physics::createBox(layoutItemProperties *item) {
 	
 }
 
-void Physics::createBall(layoutItemProperties *item) {
+cpBody *Physics::createBall(layoutItemProperties *item) {
     
     cpFloat area = (item->o.r1 * M_PI) * 2;
     cpFloat mass = area * item->o.m.d;
@@ -185,8 +185,10 @@ void Physics::createBall(layoutItemProperties *item) {
     cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBall);
     
-	// TODO: something better;
+	// TODO: something elsewise;
 	_balls[0] = body;
+
+	return body;
 
 }
 

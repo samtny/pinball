@@ -10,6 +10,8 @@ namespace glfont
 	class GLFont;	
 }
 
+struct layoutItemProperties;
+
 class Renderer
 {
 public:
@@ -21,7 +23,8 @@ public:
 	void loadTextures(void);
 	void loadFonts(void);
 	void draw(void);
-	void drawPhysicsLayoutItems(void);
+	void drawBall(layoutItemProperties layoutItem);
+	void drawPlayfield(void);
 	void drawFonts(void);
 private:
 	PinballBridgeInterface *_bridgeInterface;

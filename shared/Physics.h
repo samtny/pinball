@@ -42,6 +42,7 @@ typedef struct layoutItemProperties {
 	objectProperties o;
 	cpVect v[200];
 	int count;
+	cpBody *body;
 } layoutItemProperties;
 typedef map<string, layoutItemProperties>::iterator it_layoutItems;
 
@@ -72,7 +73,7 @@ protected:
 	void applyScale(layoutItemProperties *iprops);
 	void createObject(layoutItemProperties *iprops);
 	void createBox(layoutItemProperties *iprops);
-    void createBall(layoutItemProperties *iprops);
+    cpBody *createBall(layoutItemProperties *iprops);
 	void createFlipper(layoutItemProperties *iprops);
 	void createSegment(layoutItemProperties *iprops);
 private:

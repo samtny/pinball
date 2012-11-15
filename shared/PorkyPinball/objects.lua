@@ -3,14 +3,14 @@ objects = {
 	ball = {
 		s = "ball", -- "ball" shape defined internally - is in shape group "ballShapeGroup"
 		m = "ball",
-		r1 = 0.5,
+		r1 = 0.75,
 		t = {
 			n = "pinball",
 			x = 0,
 			y = 0,
 			w = 64,
 			h = 64,
-			s = 1 / 64,
+			s = 1.5 / 64,
 			a = 0.0
 		}
 	},

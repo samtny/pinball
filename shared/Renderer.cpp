@@ -8,16 +8,21 @@ extern "C" {
 #include "lualib.h"
 }
 
+#ifdef __APPLE__
+#include <OpenGLES/ES1/gl.h>
+#include <OpenGLES/ES1/glext.h>
+#else
+#include <GL/GL.h>
+#include <GL/GLU.h>
+#endif
+
 #include "chipmunk/chipmunk.h"
 
 #include "chipmunk/ChipmunkDebugDraw.h"
 
 #include "glfont2.h"
 
-#ifdef __APPLE__
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
-#endif
+
 
 typedef struct textureProperties {
 	string name;
@@ -162,95 +167,87 @@ void Renderer::loadFonts(void) {
 void Renderer::draw(void) {
 
 	glClearColor(0.9, 0.9, 0.80, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 	//glEnable(GL_DEPTH_TEST);
 
-	glViewport(_displayProperties->viewportX, _displayProperties->viewportY, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
-
-	this->drawPhysicsLayoutItems();
-	this->drawFonts();
+	this->drawPlayfield();
+	//this->drawFonts();
 	
+	int err = glGetError();
+	if (err != GL_NO_ERROR) {
+		fprintf(stderr, "%x", err);
+	}
+
 }
 
-void Renderer::drawPhysicsLayoutItems() {
+void Renderer::drawPlayfield() {
 	
-	double scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
-
-	double hw = _displayProperties->viewportWidth / scale;
-	double hh = _displayProperties->viewportHeight / (_displayProperties->viewportWidth / hw);
-
+	glViewport(0, 0, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-#ifdef __APPLE__
-    glOrthof(0, hw, 0, hh, -1.0, 1.0);
-    //glTranslatef(0.5, 0.5, 0.0);
-#else
-	glOrtho(0, hw, 0, hh, -1.0, 1.0);
-    //glTranslated(0.45, 0.5, 0.0);
-#endif
-    
+	gluOrtho2D(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight);
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glTranslatef(0.375, 0.375, 0.0);
 
-	ChipmunkDebugDrawShapes(_physics->getSpace());	
-	
-	glEnable(GL_TEXTURE_2D);
-	
 	for (it_layoutItems iterator = _physics->layoutItems.begin(); iterator != _physics->layoutItems.end(); iterator++) {
 
-		layoutItemProperties props = iterator->second;
+		layoutItemProperties item = iterator->second;
 
-		// if item has texture;
-		if (strcmp(props.o.t.n.c_str(), "") != 0) {
-
-			// this object has a texture...
-
-			// we are currently in "physics" space; if we draw an object using physics coords it will appear correctly
-
-			// this layoutItem refers to a texture by name;
-			textureProperties t = textures[props.o.t.n];
-
-			// now we have a layoutItem, describing x,y,h,w coords in a texture t
-			
-			glPushMatrix();
-			glLoadIdentity();
-
-			// set the scale such that item texture width / height fit in the bounds of the object...
-			glScalef(props.o.t.s, props.o.t.s, 1.0);
-			glTranslatef(_physics->_balls[0]->p.x * 72, _physics->_balls[0]->p.y * 72, 0);
-			glRotatef(_physics->_balls[0]->a * 57.2957795f, 0, 0, 1);
-			
-			static const GLfloat vertices[] = {
-				-1.0,  1.0, -0.0,
-				 1.0,  1.0, -0.0,
-				-1.0, -1.0, -0.0,
-				 1.0, -1.0, -0.0
-			};
-
-			static const GLfloat texCoords[] = {
-				0.0, 1.0,
-				1.0, 1.0,
-				0.0, 0.0,
-				1.0, 0.0
-			};
-
-			glBindTexture(GL_TEXTURE_2D, t.gl_index);
-			glVertexPointer(3, GL_FLOAT, 0, vertices);
-			//glNormalPointer(GL_FLOAT, 0, normals);
-			glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-
-			glColor4f(1.0, 1.0, 1.0, 1.0);
-
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-			glPopMatrix();
-
+		if (strcmp(item.o.s.c_str(), "ball") == 0) {
+			this->drawBall(item);
 		}
 
 	}
-	
 
+	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+
+	glScalef(scale, scale, 1);
+	ChipmunkDebugDrawShapes(_physics->getSpace());
 	
+}
+
+void Renderer::drawBall(layoutItemProperties layoutItem) {
+
+	static const GLfloat verts[] = {
+		-0.5, -0.5,
+		-0.5, 0.5,
+		0.5, -0.5,
+		0.5, 0.5
+	};
+
+	static const GLfloat tex[] = {
+		0, 0,
+		0, 1,
+		1, 0,
+		1, 1
+	};
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	cpBody *ball = layoutItem.body;
+	textureProperties *t = &textures[layoutItem.o.t.n];
+
+	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+	
+	float posX = ball->p.x * scale;
+	float posY = ball->p.y * scale;
+
+	glPushMatrix();
+	glTranslatef(posX, posY, 0);
+	glScalef(layoutItem.o.r1 * 2 * scale, layoutItem.o.r1 * 2 * scale, 0);
+	glRotatef(ball->a * 57.2957795, 0, 0, 1);
+	glColor4f(0, 0, 1, 1);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	
+	
+	
+	glPopMatrix();
+
 }
 
 void Renderer::drawFonts() {

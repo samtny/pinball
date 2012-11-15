@@ -2,6 +2,16 @@ a word about scaling
 sam thompson
 11/11/2012
 
+scaling;
+
+texture size
+	-auto by opengl
+
+
+
+
+
+==============================
 
 it should be possible to "auto-scale" all figures, but this is perhaps not ideal.
 
