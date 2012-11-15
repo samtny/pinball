@@ -193,6 +193,13 @@ void Renderer::drawPlayfield() {
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
 
+	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+
+	glPushMatrix();
+	glScalef(scale, scale, 1);
+	ChipmunkDebugDrawShapes(_physics->getSpace());
+	glPopMatrix();
+
 	for (it_layoutItems iterator = _physics->layoutItems.begin(); iterator != _physics->layoutItems.end(); iterator++) {
 
 		layoutItemProperties item = iterator->second;
@@ -203,11 +210,6 @@ void Renderer::drawPlayfield() {
 
 	}
 
-	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
-
-	glScalef(scale, scale, 1);
-	ChipmunkDebugDrawShapes(_physics->getSpace());
-	
 }
 
 void Renderer::drawBall(layoutItemProperties layoutItem) {
@@ -241,10 +243,14 @@ void Renderer::drawBall(layoutItemProperties layoutItem) {
 	glTranslatef(posX, posY, 0);
 	glScalef(layoutItem.o.r1 * 2 * scale, layoutItem.o.r1 * 2 * scale, 0);
 	glRotatef(ball->a * 57.2957795, 0, 0, 1);
-	glColor4f(0, 0, 1, 1);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, t->gl_index);
+	
+	glColor4f(1, 1, 1, 1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
-	
+	glDisable(GL_TEXTURE_2D);
 	
 	glPopMatrix();
 
