@@ -23,7 +23,6 @@ typedef struct objectTextureProperties {
 	int y;
 	int w;
 	int h;
-	float s;
 	float a;
 } objectTextureProperties;
 

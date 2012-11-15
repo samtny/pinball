@@ -172,7 +172,7 @@ void Renderer::draw(void) {
 	//glEnable(GL_DEPTH_TEST);
 
 	this->drawPlayfield();
-	//this->drawFonts();
+	this->drawFonts();
 	
 	int err = glGetError();
 	if (err != GL_NO_ERROR) {
@@ -261,7 +261,6 @@ void Renderer::drawFonts() {
 	// font;
 
 	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
 	glLoadIdentity();
 #ifdef __APPLE__
     // todo; get these from the correct place...
@@ -278,10 +277,13 @@ void Renderer::drawFonts() {
 #else
 	glColor3f(0.0f, 0.0f, 1.0f);
 #endif
-	_glfont->Begin();
-	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 50, 75);
 
+	glEnable(GL_TEXTURE_2D);
+	_glfont->Begin();
+	pair<int, int> texSize;
+	_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
+	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", _displayProperties->viewportWidth * 0.5 - texSize.first / 2.0, _displayProperties->viewportHeight * 0.95 + texSize.second / 2.0);
 	glDisable(GL_TEXTURE_2D);
-	
+
 }
 

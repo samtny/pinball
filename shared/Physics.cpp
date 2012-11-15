@@ -387,8 +387,6 @@ void Physics::loadObjects() {
 								props.t.w = (int)lua_tonumber(L, -1);
 							} else if (strcmp("h", tkey) == 0) {
 								props.t.h = (int)lua_tonumber(L, -1);
-							} else if (strcmp("s", tkey) == 0) {
-								props.t.s = (float)lua_tonumber(L, -1);
 							} else if (strcmp("a", tkey) == 0) {
 								props.t.a = (float)lua_tonumber(L, -1);
 							}
