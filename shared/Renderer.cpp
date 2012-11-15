@@ -292,7 +292,7 @@ void Renderer::drawFonts() {
 	_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
     
     glTranslatef(_displayProperties->viewportWidth * 0.5 - texSize.first / 2.0 * _displayProperties->fontScale, _displayProperties->viewportHeight * 0.95 + texSize.second / 2.0 * _displayProperties->fontScale, 0);
-    glScalef(0.4, 0.4, 1);
+    glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
     
 	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 0, 0);
     
