@@ -31,8 +31,9 @@ LOOP_INTERVAL_NONE = -1
 
 function handleSwitchClosed(switch)
 	print "handleSwitchClosed"
-	if ballInPlay == true or switch == troughSwitch then
-		if switch == troughSwitch then
+	print (switch)
+	if ballInPlay == true or switch == troughSwitch or switch == "troughSwitch" then -- TODO: decide int vs. strings plzz...
+		if switch == troughSwitch or switch == "troughSwitch" then
 			troughSwitchClosed()
 		elseif switch == target1 then
 			leftTargetBankHit(1)
@@ -81,8 +82,11 @@ function handleSwitchOpened(switch)
 end
 
 function troughSwitchClosed()
+	print "troughSwitchClosed"
 	if ballInPlay == false then
 		ballInPlay = true -- unnecessary?
+	else
+		--resetBallPosition()
 	end
 end
 
@@ -97,10 +101,6 @@ function startButtonPressed()
 		startGame()
 	end
 
-end
-
-function resetBallPosition()
-	-- C API stub
 end
 
 function startGame()
@@ -130,6 +130,10 @@ function resetScore()
 	bonus = startingBonus
 	scoreMult = startingScoreMult
 	bonusMult = startingBonusMult
+end
+
+function resetBallPosition()
+	-- C API stub
 end
 
 function resetAudio()

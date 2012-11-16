@@ -27,6 +27,7 @@ void Game::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 
 void Game::setPhysics(Physics *physics) {
 	_physics = physics;
+	_physics->setDelegate(this);
 }
 
 void Game::setRenderer(Renderer *renderer) {
@@ -82,6 +83,13 @@ void Game::loadRules(void) {
 
 }
 
+void Game::switchClosed(const char *switchName) {
+	lua_getglobal(_rules, "handleSwitchClosed");
+	lua_pushstring(_rules, switchName);
+	lua_call(_rules, 1, 0);
+}
+
+// TODO: this is redundant (legacy) method;
 void Game::closeSwitch(int switchIndex) {
 
 	// TODO: this is all set dynamically / lookup table probably here...
@@ -104,3 +112,12 @@ void Game::setCameraFollowsBall() {
 	_renderer->setCameraFollowsBall();	
 
 }
+
+void Game::setZoomLevel(float zoomLevel) {
+	_renderer->setZoomLevel(zoomLevel);
+}
+
+float Game::getZoomLevel() {
+	return _renderer->getZoomLevel();
+}
+

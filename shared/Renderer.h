@@ -28,6 +28,8 @@ public:
 	void drawPlayfield(void);
 	void drawFonts(void);
 	void setCameraFollowsBall(void);
+	void setZoomLevel(float zoomLevel);
+	float getZoomLevel();
 protected:
 	void applyCameraTransform(void);
 private:

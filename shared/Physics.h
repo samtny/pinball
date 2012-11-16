@@ -4,6 +4,11 @@
 #include <map>
 using namespace std;
 
+#include "PhysicsDelegate.h"
+
+class PinballBridgeInterface;
+class Game;
+
 struct cpSpace;
 struct cpBody;
 
@@ -45,14 +50,14 @@ typedef struct layoutItemProperties {
 } layoutItemProperties;
 typedef map<string, layoutItemProperties>::iterator it_layoutItems;
 
-class PinballBridgeInterface;
-
 class Physics
 {
 public:
 	Physics(void);
 	~Physics(void);
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	void setDelegate(IPhysicsDelegate *delegate);
+	IPhysicsDelegate *getDelegate();
 	void init();
 	float getBoxWidth();
 	cpBody *getBallSlerped();
@@ -70,14 +75,17 @@ protected:
 	void loadObjects();
 	void loadLayout();
     void loadForces();
+	void initCollisionHandlers();
 	void applyScale(layoutItemProperties *iprops);
 	void createObject(layoutItemProperties *iprops);
 	void createBox(layoutItemProperties *iprops);
     cpBody *createBall(layoutItemProperties *iprops);
 	void createFlipper(layoutItemProperties *iprops);
+	void createSwitch(layoutItemProperties *iprops);
 	void createSegment(layoutItemProperties *iprops);
 private:
 	PinballBridgeInterface *_bridgeInterface;
+	IPhysicsDelegate *_delegate;
 	float _boxWidth;
 };
 

@@ -182,6 +182,9 @@
     <ClInclude Include=".\PinballBridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\shared\PhysicsDelegate.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\config.lua">
