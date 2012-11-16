@@ -116,6 +116,7 @@ DisplayProperties *PinballBridge::getDisplayProperties() {
 	props->viewportY = 0;
 	props->viewportHeight = 600;
 	props->viewportWidth = 800;
+	props->fontScale = 1;
 	return props;
 
 }
