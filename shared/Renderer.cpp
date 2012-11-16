@@ -36,11 +36,15 @@ enum {
 	CAMERA_MODE_FOLLOW_BALL
 };
 
+// TODO: class instead, plzz...
 typedef struct Camera {
 	int CAMERA_MODE;
 	GLfloat minY;
 	GLfloat maxY;
 	GLfloat margin;
+	float minZoomLevel;
+	float maxZoomLevel;
+	float zoomLevel;
 } Camera;
 
 Renderer::Renderer(void)
@@ -113,6 +117,8 @@ void Renderer::init(void) {
 		delete tex;
 
 	}
+
+	_scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
 
 	_camera = new Camera();
 	this->setCameraFollowsBall();
@@ -238,16 +244,22 @@ void Renderer::applyCameraTransform(void) {
 	{
 	case CAMERA_MODE_FOLLOW_BALL:
 	default:
-		GLfloat pos = _physics->getBallSlerped()->p.y; // ball center
-		pos -= _physics->layoutItems["ball"].o.r1; // full ball
-		pos -= _camera->margin; // margin
-		if (pos < _camera->minY) {
-			pos = _camera->minY;
-		} else if (pos > _camera->maxY) {
-			pos = _camera->maxY;
+
+		GLfloat posY = _physics->getBallSlerped()->p.y; // ball center
+		posY -= _physics->layoutItems["ball"].o.r1; // full ball
+		posY -= _camera->margin; // margin
+
+		if (posY < _camera->minY) {
+			posY = _camera->minY;
+		} else if (posY > _camera->maxY * _camera->zoomLevel) {
+			posY = _camera->maxY * _camera->zoomLevel;
 		}
-		pos *= _scale;
-		glTranslatef(0, -pos, 0);
+		posY *= _scale * _camera->zoomLevel;
+
+		glTranslatef(0, -posY, 0);
+
+		glScalef(_camera->zoomLevel, _camera->zoomLevel, 0);
+
 		break;
 	}
 
@@ -337,13 +349,39 @@ void Renderer::setCameraFollowsBall(void) {
 
 	_camera->CAMERA_MODE = CAMERA_MODE_FOLLOW_BALL;
 	
+	_camera->minZoomLevel = 0.25;
+
+	_camera->maxZoomLevel = 3.5;
+
+	if (_camera->zoomLevel == 0) {
+		_camera->zoomLevel = 1;
+	}
+
+	if (_camera->zoomLevel > _camera->maxZoomLevel) {
+		_camera->zoomLevel = _camera->maxZoomLevel;
+	} else if (_camera->zoomLevel < _camera->minZoomLevel) {
+		_camera->zoomLevel = _camera->minZoomLevel;
+	}
+
 	_camera->minY = 0;
 	
-
-
 	_camera->maxY = _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y;
 	
+	// can never go above "max" minus the height of the screen in world coords
+	_camera->maxY -= _displayProperties->viewportHeight / _scale;
+
 	_camera->margin = ( _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y ) * 0.15;
 
 
 }
+
+void Renderer::setZoomLevel(float zoomLevel) {
+	if (zoomLevel <= _camera->maxZoomLevel && zoomLevel >= _camera->minZoomLevel) {
+		_camera->zoomLevel = zoomLevel;
+	}
+}
+
+float Renderer::getZoomLevel() {
+	return _camera->zoomLevel;
+}
+

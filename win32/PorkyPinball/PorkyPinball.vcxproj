@@ -115,6 +115,7 @@
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
+    <ClInclude Include="..\..\shared\PhysicsDelegate.h" />
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />

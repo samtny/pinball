@@ -10,6 +10,10 @@ extern "C" {
 
 #include "PinballBridgeInterface.h"
 
+#include "PhysicsDelegate.h"
+
+static Physics *physics_currentInstance;
+
 static cpSpace *space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
@@ -22,6 +26,11 @@ enum shapeGroup {
 	shapeGroupBox,
     shapeGroupBall,
 	shapeGroupFlippers
+};
+
+enum CollisionType {
+	CollisionTypeBall,
+	CollisionTypeSwitch
 };
 
 #ifdef _WIN32
@@ -64,11 +73,19 @@ static double absoluteTime() {
 
 Physics::Physics(void)
 {
-	
+	physics_currentInstance = this;
 }
 
 void Physics::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	this->_bridgeInterface = bridgeInterface;
+}
+
+void Physics::setDelegate(IPhysicsDelegate *delegate) {
+	_delegate = delegate;
+}
+
+IPhysicsDelegate * Physics::getDelegate() {
+	return _delegate;
 }
 
 void Physics::init() {
@@ -86,6 +103,7 @@ void Physics::init() {
 		this->applyScale(lprops);
 		this->createObject(lprops);
 	}
+
 	/*
 	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
 		layoutItemProperties lprops = iterator->second;
@@ -93,7 +111,36 @@ void Physics::init() {
 		this->createObject(&lprops);
 	}
 	*/
+
+	this->initCollisionHandlers();
+
 	cpSpaceSetGravity(space, gravity);
+
+}
+
+static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	cpShape *a;
+	cpShape *b;
+	cpArbiterGetShapes(arb, &a, &b);
+
+	layoutItemProperties *l = (layoutItemProperties *)b->data;
+
+	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+
+	return 1;
+
+}
+
+static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
+
+
+
+}
+
+void Physics::initCollisionHandlers(void) {
+
+	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
 
 }
 
@@ -129,7 +176,9 @@ void Physics::createObject(layoutItemProperties *layoutItem) {
 		this->createFlipper(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "ball") == 0) {
         layoutItem->body = this->createBall(layoutItem);
-    }
+    } else if (strcmp(layoutItem->o.s.c_str(), "switch") == 0) {
+		this->createSwitch(layoutItem);
+	}
 
 }
 
@@ -198,7 +247,8 @@ cpBody *Physics::createBall(layoutItemProperties *item) {
     cpShapeSetElasticity(shape, item->o.m.e);
     cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBall);
-    
+	cpShapeSetCollisionType(shape, CollisionTypeBall);
+
 	body->data = item;
 
 	// TODO: something elsewise;
@@ -237,6 +287,15 @@ void Physics::createFlipper(layoutItemProperties *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
+}
+
+void Physics::createSwitch(layoutItemProperties *item) {
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, item->v[0], item->v[1], item->o.r1));
+	cpShapeSetSensor(shape, true);
+	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
+	cpShapeSetUserData(shape, item);
+	
 }
 
 void Physics::createSegment(layoutItemProperties *layoutItem) {
@@ -454,7 +513,7 @@ void Physics::loadLayout() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				layoutItemProperties props = { "" };
+				layoutItemProperties props = { name };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -613,8 +672,8 @@ void Physics::updatePhysics() {
     
 	const double alpha = accumulator / timeStep;
 
-	ballSlerped->p = cpvlerp(ballPrevious->p, _balls[0]->p, alpha);
-	ballSlerped->a = _balls[0]->a * alpha + ballPrevious->a * (1.0 - alpha);
+	ballSlerped->p = cpvlerp(ballPrevious->p, _balls[0]->p, - alpha);
+	ballSlerped->a = _balls[0]->a * - alpha + ballPrevious->a * (1.0 - - alpha);
 
 }
 

@@ -93,6 +93,12 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 	if (key == 's') {
 		// TODO: access _games public member "startButton" and pass to this method instead;
 		_game->closeSwitch(0);
+	} else if (key == '=') {
+		// increase "zoom"
+		_game->setZoomLevel(_game->getZoomLevel()+0.25);
+	} else if (key == '-') {
+		// decrease "zoom"
+		_game->setZoomLevel(_game->getZoomLevel()-0.25);
 	}
 
 }
