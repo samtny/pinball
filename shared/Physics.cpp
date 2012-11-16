@@ -14,7 +14,7 @@ static cpSpace *space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
-static cpFloat timeStep = 1.0/180.0;
+static double timeStep = 1.0/180.0;
 
 static cpFloat scale = 37;
 
@@ -27,7 +27,21 @@ enum shapeGroup {
 #ifdef _WIN32
 
 static double absoluteTime() {
-    return timeGetTime() / (double) 1000;
+    //return timeGetTime() / (double) 1000;
+	// hi-res timer courtesy gafferongames.com;
+	static __int64 start = 0;
+    static __int64 frequency = 0;
+
+    if (start==0)
+    {
+        QueryPerformanceCounter((LARGE_INTEGER*)&start);
+        QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
+        return 0.0f;
+    }
+
+    __int64 counter = 0;
+    QueryPerformanceCounter((LARGE_INTEGER*)&counter);
+    return (float) ((counter - start) / double(frequency));
 }
 
 #elif __APPLE__
@@ -185,6 +199,8 @@ cpBody *Physics::createBall(layoutItemProperties *item) {
     cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBall);
     
+	body->data = item;
+
 	// TODO: something elsewise;
 	_balls[0] = body;
 
@@ -572,28 +588,39 @@ Physics::~Physics(void)
 }
 
 double currentTime;
-double newTime;
 double accumulator;
+
+cpBody *ballPrevious = cpBodyAlloc();
+cpBody *ballSlerped = cpBodyAlloc();
 
 void Physics::updatePhysics() {
 
     double newTime = absoluteTime();
-    
-    if (currentTime == 0) { currentTime = newTime; return; }
-    
     double fTime = newTime - currentTime;
+	if (fTime > 0.25) {
+		fTime = 0.25;
+	}
+	currentTime = newTime;
+
     accumulator += fTime;
     
     while (accumulator >= timeStep) {
+		ballPrevious->p = _balls[0]->p;
+		ballPrevious->a = _balls[0]->a;
         cpSpaceStep(space, timeStep);
         accumulator -= timeStep;
     }
     
-    currentTime = newTime;
-    
+	const double alpha = accumulator / timeStep;
+
+	ballSlerped->p = cpvlerp(ballPrevious->p, _balls[0]->p, alpha);
+	ballSlerped->a = _balls[0]->a * alpha + ballPrevious->a * (1.0 - alpha);
+
 }
 
-
+cpBody *Physics::getBallSlerped() {
+	return ballSlerped;
+}
 
 
 

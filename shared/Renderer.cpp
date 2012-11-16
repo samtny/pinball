@@ -238,7 +238,7 @@ void Renderer::applyCameraTransform(void) {
 	{
 	case CAMERA_MODE_FOLLOW_BALL:
 	default:
-		GLfloat pos = _physics->_balls[0]->p.y; // ball center
+		GLfloat pos = _physics->getBallSlerped()->p.y; // ball center
 		pos -= _physics->layoutItems["ball"].o.r1; // full ball
 		pos -= _camera->margin; // margin
 		if (pos < _camera->minY) {
@@ -272,9 +272,10 @@ void Renderer::drawBall(layoutItemProperties layoutItem) {
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-	cpBody *ball = layoutItem.body;
+	cpBody *ball = _physics->getBallSlerped();
 	textureProperties *t = &textures[layoutItem.o.t.n];
 
+	// lerp
 	float posX = ball->p.x * _scale;
 	float posY = ball->p.y * _scale;
 
