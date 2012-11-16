@@ -22,8 +22,6 @@ extern "C" {
 
 #include "glfont2.h"
 
-
-
 typedef struct textureProperties {
 	string name;
 	string filename;
@@ -33,6 +31,17 @@ typedef struct textureProperties {
 } textureProperties;
 map<string, textureProperties> textures;
 typedef map<string, textureProperties>::iterator it_textureProperties;
+
+enum {
+	CAMERA_MODE_FOLLOW_BALL
+};
+
+typedef struct Camera {
+	int CAMERA_MODE;
+	GLfloat minY;
+	GLfloat maxY;
+	GLfloat margin;
+} Camera;
 
 Renderer::Renderer(void)
 {
@@ -104,6 +113,9 @@ void Renderer::init(void) {
 		delete tex;
 
 	}
+
+	_camera = new Camera();
+	this->setCameraFollowsBall();
 
 }
 
@@ -196,15 +208,15 @@ void Renderer::drawPlayfield() {
 	gluOrtho2D(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight);
 #endif
     
-    
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
 
-	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+	_scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
 
 	glPushMatrix();
-	glScalef(scale, scale, 1);
+	this->applyCameraTransform();
+	glScalef(_scale, _scale, 1);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
 	glPopMatrix();
 
@@ -216,6 +228,27 @@ void Renderer::drawPlayfield() {
 			this->drawBall(item);
 		}
 
+	}
+
+}
+
+void Renderer::applyCameraTransform(void) {
+
+	switch (_camera->CAMERA_MODE)
+	{
+	case CAMERA_MODE_FOLLOW_BALL:
+	default:
+		GLfloat pos = _physics->_balls[0]->p.y; // ball center
+		pos -= _physics->layoutItems["ball"].o.r1; // full ball
+		pos -= _camera->margin; // margin
+		if (pos < _camera->minY) {
+			pos = _camera->minY;
+		} else if (pos > _camera->maxY) {
+			pos = _camera->maxY;
+		}
+		pos *= _scale;
+		glTranslatef(0, -pos, 0);
+		break;
 	}
 
 }
@@ -242,14 +275,13 @@ void Renderer::drawBall(layoutItemProperties layoutItem) {
 	cpBody *ball = layoutItem.body;
 	textureProperties *t = &textures[layoutItem.o.t.n];
 
-	float scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
-	
-	float posX = ball->p.x * scale;
-	float posY = ball->p.y * scale;
+	float posX = ball->p.x * _scale;
+	float posY = ball->p.y * _scale;
 
 	glPushMatrix();
+	this->applyCameraTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef(layoutItem.o.r1 * 2 * scale, layoutItem.o.r1 * 2 * scale, 0);
+	glScalef(layoutItem.o.r1 * 2 * _scale, layoutItem.o.r1 * 2 * _scale, 0);
 	glRotatef(ball->a * 57.2957795, 0, 0, 1);
 	
 	glEnable(GL_TEXTURE_2D);
@@ -300,3 +332,17 @@ void Renderer::drawFonts() {
     
 }
 
+void Renderer::setCameraFollowsBall(void) {
+
+	_camera->CAMERA_MODE = CAMERA_MODE_FOLLOW_BALL;
+	
+	_camera->minY = 0;
+	
+
+
+	_camera->maxY = _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y;
+	
+	_camera->margin = ( _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y ) * 0.15;
+
+
+}

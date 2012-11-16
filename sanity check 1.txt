@@ -1,0 +1,41 @@
+sanity check 1
+sam thompson
+11/15/2012
+
+we started off wishing for some kind of "fun" environment to develop "fun" games...
+
+have we learned something in the process of development that may change original intent?
+
+	we have not begun sketchup w/ "object personality" yet, that was supposed to be fun
+	we have nothing that "looks like it might be fun to hit with flippers"
+	
+	ACAD not started
+	ACAD export not started
+	sounds not started
+	sound engine not started
+	rules not done
+	PShop not started
+	physics objects not done
+	
+	"simple" camera is completely missing
+	any font/notification fx completely missing
+	
+so, to address;
+	
+	write switch routines and test
+	think of 5 different things to do with camera and implement a camera system
+		"swirl in" to playfield on game start "effect"
+		fade-in / out ""
+		follow 1 ball
+		follow lowest ball in multi-ball
+		focus on single point w/ zoom
+	think of 3 different ways to present / position text and implement ""
+	write sound engine
+	write target, pop bumper, slingshot, post, rubber/rail/guide
+	design a playfield with a couple of each
+	design rules for target points + bonus points + bonus multiplier
+	
+	
+
+
+

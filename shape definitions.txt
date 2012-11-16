@@ -1,0 +1,16 @@
+shape definitions
+sam thompson
+11/15/2012
+
+
+
+flipper;
+
+dist = v[1] - v[0]
+diff = r1 - r2
+
+angle = atan2(diff, dist)
+
+
+
+
