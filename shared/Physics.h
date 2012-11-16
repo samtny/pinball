@@ -55,6 +55,7 @@ public:
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void init();
 	float getBoxWidth();
+	cpBody *getBallSlerped();
 	cpSpace *getSpace();
 	void updatePhysics();
 	void resetBallPosition(int ballIndex);
