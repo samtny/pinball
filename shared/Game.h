@@ -14,6 +14,7 @@ public:
 	void init();
 	void closeSwitch(int switchIndex);
 	void resetBallPosition();
+	void setCameraFollowsBall();
 protected:
 	void loadRules();
 private:

@@ -1,4 +1,6 @@
 
+gameInProgress = false
+
 startingScore = 0
 startingBonus = 0
 startingScoreMult = 1
@@ -87,7 +89,9 @@ end
 function startButtonPressed()
 	
 	print "startButtonPressed"
-	resetBallPosition() -- TODO: switch on __PINBALL_DEBUG flag
+	-- TODO: switch on __PINBALL_DEBUG flag;
+	resetBallPosition()
+	setCameraFollowsBall()
 
 	if gameInProgress == false then
 		startGame()
@@ -100,6 +104,9 @@ function resetBallPosition()
 end
 
 function startGame()
+
+	print "startGame"
+
 	resetAll()
 	serveBallToTrough()
 	playSound(gameStartMusic, 10)
@@ -115,6 +122,7 @@ function resetAll()
 	resetAudio()
 	resetMechs()
 	resetLights()
+	resetCamera()
 end
 
 function resetScore()
@@ -136,9 +144,15 @@ function resetLights()
 	--C API stub
 end
 
+function resetCamera()
+	setCameraFollowsBall()
+end
+
 function serveBallToTrough()
 	--C API stub
 end
 
-
+function setCameraFollowsBall()
+	--C API stub
+end
 

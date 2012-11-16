@@ -3,7 +3,7 @@ objects = {
 	ball = {
 		s = "ball", -- "ball" shape defined internally - is in shape group "ballShapeGroup"
 		m = "ball",
-		r1 = 1.25,
+		r1 = 0.93,
 		t = {
 			n = "pinball",
 			x = 0,
@@ -45,7 +45,7 @@ objects = {
 	flipper = {
 		s = "flipper", -- "flipper" shape defined internally
 		m = "flipper",
-		r1 = 0.45,
+		r1 = 0.75,
 		r2 = 0.35
 	},
 	slingshot = {

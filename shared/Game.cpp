@@ -5,6 +5,8 @@
 
 #include "Physics.h"
 
+#include "Renderer.h"
+
 extern "C" {
 #include "lua/lua.h"
 #include "lua/lauxlib.h"
@@ -45,6 +47,13 @@ static int lua_resetBallPosition(lua_State *L) {
 
 }
 
+static int lua_setCameraFollowsBall(lua_State *L) {
+
+	lua_currentInstance->setCameraFollowsBall();
+	return 0;
+
+}
+
 void Game::loadRules(void) {
 	
 	lua_State *L = luaL_newstate();
@@ -58,6 +67,9 @@ void Game::loadRules(void) {
         // TODO: any init here from lua vars...?
 		lua_pushcfunction(L, lua_resetBallPosition);
 		lua_setglobal(L, "resetBallPosition");
+
+		lua_pushcfunction(L, lua_setCameraFollowsBall);
+		lua_setglobal(L, "setCameraFollowsBall");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));
@@ -86,3 +98,9 @@ void Game::resetBallPosition() {
 	_physics->resetBallPosition(0);
 }
 
+void Game::setCameraFollowsBall() {
+
+	fprintf(stderr, "%s\n", "setCameraFollowsBall");
+	_renderer->setCameraFollowsBall();	
+
+}

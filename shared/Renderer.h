@@ -10,6 +10,7 @@ namespace glfont
 	class GLFont;	
 }
 
+struct Camera;
 struct layoutItemProperties;
 
 class Renderer
@@ -26,10 +27,15 @@ public:
 	void drawBall(layoutItemProperties layoutItem);
 	void drawPlayfield(void);
 	void drawFonts(void);
+	void setCameraFollowsBall(void);
+protected:
+	void applyCameraTransform(void);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Physics *_physics;
+	Camera *_camera;
 	glfont::GLFont *_glfont;
 	DisplayProperties *_displayProperties;
+	GLfloat _scale;
 };
 
