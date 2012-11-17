@@ -18,6 +18,8 @@ namespace glfont
 	class GLFont;	
 }
 
+#include <string>
+
 //glFont class
 class glfont::GLFont
 {

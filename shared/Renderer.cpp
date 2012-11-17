@@ -2,6 +2,10 @@
 
 #include "Physics.h"
 
+#include "Camera.h"
+
+#include "Parts.h"
+
 extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
@@ -22,6 +26,11 @@ extern "C" {
 
 #include "glfont2.h"
 
+#include <string>
+#include <map>
+
+using namespace std;
+
 typedef struct textureProperties {
 	string name;
 	string filename;
@@ -32,24 +41,11 @@ typedef struct textureProperties {
 map<string, textureProperties> textures;
 typedef map<string, textureProperties>::iterator it_textureProperties;
 
-enum {
-	CAMERA_MODE_FOLLOW_BALL
-};
-
-// TODO: class instead, plzz...
-typedef struct Camera {
-	int CAMERA_MODE;
-	GLfloat minY;
-	GLfloat maxY;
-	GLfloat margin;
-	float minZoomLevel;
-	float maxZoomLevel;
-	float zoomLevel;
-} Camera;
+static Renderer *renderer_CurrentInstance;
 
 Renderer::Renderer(void)
 {
-
+	renderer_CurrentInstance = this;
 }
 
 Renderer::~Renderer(void)
@@ -118,7 +114,7 @@ void Renderer::init(void) {
 
 	}
 
-	_scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+	_scale = _displayProperties->viewportWidth / _physics->getBox()->width;
 
 	_camera = new Camera();
 	this->setCameraFollowsBall();
@@ -187,7 +183,7 @@ void Renderer::loadFonts(void) {
 
 void Renderer::draw(void) {
 
-	glClearColor(0.9, 0.9, 0.80, 1.0);
+	glClearColor(0.9f, 0.9f, 0.80f, 1.0f);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glEnable(GL_DEPTH_TEST);
@@ -200,6 +196,10 @@ void Renderer::draw(void) {
 		fprintf(stderr, "%x", err);
 	}
 
+}
+
+static void _drawObject(cpBody *body, void *data) {
+	renderer_CurrentInstance->drawObject(body, data);
 }
 
 void Renderer::drawPlayfield() {
@@ -218,54 +218,30 @@ void Renderer::drawPlayfield() {
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
 
-	_scale = _displayProperties->viewportWidth / _physics->getBoxWidth();
+	_scale = _displayProperties->viewportWidth / _physics->getBox()->width;
 
 	glPushMatrix();
-	this->applyCameraTransform();
+	_camera->applyTransform();
 	glScalef(_scale, _scale, 1);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
 	glPopMatrix();
 
-	for (it_layoutItems iterator = _physics->layoutItems.begin(); iterator != _physics->layoutItems.end(); iterator++) {
+	cpSpaceEachBody(_physics->getSpace(), _drawObject, NULL);
+	
+}
 
-		layoutItemProperties item = iterator->second;
+void Renderer::drawObject(cpBody *body, void *data) {
 
-		if (strcmp(item.o.s.c_str(), "ball") == 0) {
+	if (body->data) {
+		layoutItem *item = (layoutItem *)body->data;
+		if (strcmp(item->o.s.c_str(), "ball") == 0) {
 			this->drawBall(item);
 		}
-
 	}
 
 }
 
-void Renderer::applyCameraTransform(void) {
-
-	switch (_camera->CAMERA_MODE)
-	{
-	case CAMERA_MODE_FOLLOW_BALL:
-	default:
-
-		GLfloat posY = _physics->getBallSlerped()->p.y; // ball center
-		posY -= _physics->layoutItems["ball"].o.r1; // full ball
-		posY -= _camera->margin; // margin
-
-		if (posY < _camera->minY) {
-			posY = _camera->minY;
-		} else if (posY > _camera->maxY * _camera->zoomLevel) {
-			posY = _camera->maxY * _camera->zoomLevel;
-		}
-		posY *= _scale * _camera->zoomLevel;
-
-		glTranslatef(0, -posY, 0);
-
-		glScalef(_camera->zoomLevel, _camera->zoomLevel, 0);
-
-		break;
-	}
-
-}
-
-void Renderer::drawBall(layoutItemProperties layoutItem) {
+void Renderer::drawBall(layoutItem *item) {
 
 	static const GLfloat verts[] = {
 		-0.5, -0.5,
@@ -284,18 +260,18 @@ void Renderer::drawBall(layoutItemProperties layoutItem) {
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-	cpBody *ball = _physics->getBallSlerped();
-	textureProperties *t = &textures[layoutItem.o.t.n];
+	cpBody *ball = item->body;
+	textureProperties *t = &textures[item->o.t.n];
 
 	// lerp
-	float posX = ball->p.x * _scale;
-	float posY = ball->p.y * _scale;
+	float posX = (float)ball->p.x * _scale;
+	float posY = (float)ball->p.y * _scale;
 
 	glPushMatrix();
-	this->applyCameraTransform();
+	_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef(layoutItem.o.r1 * 2 * _scale, layoutItem.o.r1 * 2 * _scale, 0);
-	glRotatef(ball->a * 57.2957795, 0, 0, 1);
+	glScalef(item->o.r1 * 2 * _scale, item->o.r1 * 2 * _scale, 0);
+	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, t->gl_index);
@@ -336,7 +312,10 @@ void Renderer::drawFonts() {
 	pair<int, int> texSize;
 	_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
     
-    glTranslatef(_displayProperties->viewportWidth * 0.5 - texSize.first / 2.0 * _displayProperties->fontScale, _displayProperties->viewportHeight * 0.95 + texSize.second / 2.0 * _displayProperties->fontScale, 0);
+	float txX = (float)(_displayProperties->viewportWidth * 0.5 - texSize.first / 2.0 * _displayProperties->fontScale);
+	float txY = (float)(_displayProperties->viewportHeight * 0.95 + texSize.second / 2.0 * _displayProperties->fontScale);
+
+    glTranslatef(txX, txY, 0);
     glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
     
 	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 0, 0);
@@ -347,31 +326,7 @@ void Renderer::drawFonts() {
 
 void Renderer::setCameraFollowsBall(void) {
 
-	_camera->CAMERA_MODE = CAMERA_MODE_FOLLOW_BALL;
-	
-	_camera->minZoomLevel = 0.25;
-
-	_camera->maxZoomLevel = 3.5;
-
-	if (_camera->zoomLevel == 0) {
-		_camera->zoomLevel = 1;
-	}
-
-	if (_camera->zoomLevel > _camera->maxZoomLevel) {
-		_camera->zoomLevel = _camera->maxZoomLevel;
-	} else if (_camera->zoomLevel < _camera->minZoomLevel) {
-		_camera->zoomLevel = _camera->minZoomLevel;
-	}
-
-	_camera->minY = 0;
-	
-	_camera->maxY = _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y;
-	
-	// can never go above "max" minus the height of the screen in world coords
-	_camera->maxY -= _displayProperties->viewportHeight / _scale;
-
-	_camera->margin = ( _physics->layoutItems["box"].v[1].y - _physics->layoutItems["box"].v[0].y ) * 0.15;
-
+	//_camera->setModeFollowBall(_physics->_balls, _physics->_box);
 
 }
 

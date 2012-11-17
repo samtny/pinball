@@ -103,7 +103,6 @@ void Game::closeSwitch(int switchIndex) {
 
 void Game::resetBallPosition() {
 	// TODO: something...
-	_physics->resetBallPosition(0);
 }
 
 void Game::setCameraFollowsBall() {
