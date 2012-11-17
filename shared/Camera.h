@@ -14,16 +14,20 @@ public:
 	int mode;
 	float minY;
 	float maxY;
-	float margin;
+	float marginY;
 	float minZoomLevel;
 	float maxZoomLevel;
-	float zoomLevel;
 	void setRenderer(Renderer *renderer);
 	void setPhysics(Physics *physics);
-	void setModeFollowBall(layoutItem *ball, layoutItem *box);
+	void setZoomLevel(float zoomLevel);
+	float getZoomLevel();
+	void setWorldScale(float worldScale);
+	void setModeFollowBall();
 	void applyTransform(void);
 private:
 	Renderer *_renderer;
 	Physics *_physics;
+	float _zoomLevel;
+	float _worldScale;
 };
 

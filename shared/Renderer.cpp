@@ -114,9 +114,13 @@ void Renderer::init(void) {
 
 	}
 
-	_scale = _displayProperties->viewportWidth / _physics->getBox()->width;
+	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
+	_scale = _displayProperties->viewportWidth / box->width;
 
 	_camera = new Camera();
+
+	_camera->setPhysics(_physics);
+
 	this->setCameraFollowsBall();
 
 }
@@ -218,9 +222,11 @@ void Renderer::drawPlayfield() {
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
 
-	_scale = _displayProperties->viewportWidth / _physics->getBox()->width;
+	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
+	_scale = _displayProperties->viewportWidth / box->width;
 
 	glPushMatrix();
+	_camera->setWorldScale(_scale);
 	_camera->applyTransform();
 	glScalef(_scale, _scale, 1);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
@@ -326,17 +332,15 @@ void Renderer::drawFonts() {
 
 void Renderer::setCameraFollowsBall(void) {
 
-	//_camera->setModeFollowBall(_physics->_balls, _physics->_box);
+	_camera->setModeFollowBall();
 
 }
 
 void Renderer::setZoomLevel(float zoomLevel) {
-	if (zoomLevel <= _camera->maxZoomLevel && zoomLevel >= _camera->minZoomLevel) {
-		_camera->zoomLevel = zoomLevel;
-	}
+	_camera->setZoomLevel(zoomLevel);
 }
 
 float Renderer::getZoomLevel() {
-	return _camera->zoomLevel;
+	return _camera->getZoomLevel();
 }
 

@@ -95,10 +95,10 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 		_game->closeSwitch(0);
 	} else if (key == '=') {
 		// increase "zoom"
-		_game->setZoomLevel(_game->getZoomLevel()+0.25);
+		_game->setZoomLevel(_game->getZoomLevel() + 0.25);
 	} else if (key == '-') {
 		// decrease "zoom"
-		_game->setZoomLevel(_game->getZoomLevel()-0.25);
+		_game->setZoomLevel(_game->getZoomLevel() - 0.25);
 	}
 
 }

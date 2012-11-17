@@ -7,8 +7,9 @@ class PinballBridgeInterface;
 class IPhysicsDelegate;
 class Game;
 
-struct cpBody;
 struct cpSpace;
+struct cpBody;
+struct cpArbiter;
 
 struct materialProperties;
 struct objectProperties;
@@ -21,17 +22,26 @@ using namespace std;
 class Physics
 {
 public:
+	
 	Physics(void);
 	~Physics(void);
-	void init(PinballBridgeInterface *bridgeInterface);
+	
+	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setDelegate(IPhysicsDelegate *delegate);
+	void init();
+
 	IPhysicsDelegate *getDelegate();
+	
 	cpSpace *getSpace();
-	void getLayoutItems(const layoutItem *items, int size);
-	const layoutItem *getBox();
-	const layoutItem *getBalls(layoutItem *balls, int size);
+	
+	map<string, layoutItem> *getLayoutItems();
+	
 	void updatePhysics();
-	void resetBallPosition(layoutItem *ball);
+	
+	void resetBallsToInitialPosition();
+	
+	int ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused);
+
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -50,11 +60,8 @@ private:
 	PinballBridgeInterface *_bridgeInterface;
 	IPhysicsDelegate *_delegate;
 	cpSpace *_space;
-	layoutItem *_box;
-	layoutItem *_balls[MAX_BALL_COUNT];
-	map<string, materialProperties> *_materials;
-	map<string, objectProperties> *_objects;
-	map<string, layoutItem> *_layoutItems;
-	int _ballCount;
+	map<string, materialProperties> _materials;
+	map<string, objectProperties> _objects;
+	map<string, layoutItem> _layoutItems;
 };
 

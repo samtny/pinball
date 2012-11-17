@@ -22,7 +22,8 @@ void PinballHost::init() {
 	bi->init();
 
 	Physics *p = new Physics();
-	p->init(bi);
+	p->setBridgeInterface(bi);
+	p->init();
 
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);

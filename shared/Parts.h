@@ -38,6 +38,7 @@ typedef struct layoutItem {
 	string n;
 	objectProperties o;
 	cpVect v[200];
+	float s;
 	int count;
 	cpBody *body;
 	float width;
