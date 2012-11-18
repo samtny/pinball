@@ -1,6 +1,9 @@
 
 #include "PhysicsDelegate.h"
 
+using namespace std;
+#include <vector>
+
 class PinballBridgeInterface;
 class Physics;
 class Renderer;
@@ -20,6 +23,7 @@ public:
 	void setCameraFollowsBall();
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
+	void addLuaTimer(float duration, string funcName, int arg);
 protected:
 	void loadRules();
 private:

@@ -1,5 +1,7 @@
 #include "PinballBridge.h"
 
+#include <GL/glut.h>
+
 #pragma comment(lib, "DevIL.lib")
 #pragma comment(lib, "ILU.lib")
 #pragma comment(lib, "ILUT.lib")
@@ -42,6 +44,11 @@ Texture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
 DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getDisplayProperties();
+}
+
+void PinballBridgeInterface::addTimer(float duration, int timerId) {
+	PinballBridge *instance = (PinballBridge *)_this;
+	instance->addTimer(duration, timerId);
 }
 
 PinballBridge::PinballBridge(void)
@@ -119,5 +126,16 @@ DisplayProperties *PinballBridge::getDisplayProperties() {
 	props->fontScale = 1;
 	return props;
 
+}
+
+static PinballBridge *currentInstance;
+
+static void timerCallback(int timerId) {
+	fprintf(stderr, "timer: %d\n", timerId);
+}
+
+void PinballBridge::addTimer(float duration, int timerId) {
+	currentInstance = this;
+	glutTimerFunc(duration * 1000, timerCallback, timerId);
 }
 

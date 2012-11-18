@@ -14,5 +14,6 @@ public:
 	Texture *createRGBATexture(void *textureFilename);
     DisplayProperties *getDisplayProperties();
 	void playSound(void * soundName);
+	void addTimer(float duration, int timerId);
 };
 

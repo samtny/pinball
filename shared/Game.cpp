@@ -55,6 +55,51 @@ static int lua_setCameraFollowsBall(lua_State *L) {
 
 }
 
+struct luaTimer {
+	int id;
+	float duration;
+	string funcName;
+	int arg;
+};
+
+static int sNextTimerId = 0;
+int nextTimerId() {
+	return ++sNextTimerId;
+}
+
+static vector<luaTimer> timers;
+
+static int lua_addTimer(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	float duration = lua_tonumber(L, 1);
+	string funcName = lua_tostring(L, 2);
+	int arg = -1;
+	if (!lua_isnil(L, 3)) {
+		arg = lua_tonumber(L, 2);
+	}
+
+	lua_currentInstance->addLuaTimer(duration, funcName, arg);
+
+	return 0;
+
+}
+
+void Game::addLuaTimer(float duration, string funcName, int arg) {
+
+	luaTimer t;
+	t.duration = duration;
+	t.funcName = funcName;
+	t.arg = arg;
+	t.id = nextTimerId();
+
+	timers.push_back(t);
+
+	_bridgeInterface->addTimer(t.duration, t.id);
+
+}
+
 void Game::loadRules(void) {
 	
 	lua_State *L = luaL_newstate();
@@ -71,6 +116,9 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_setCameraFollowsBall);
 		lua_setglobal(L, "setCameraFollowsBall");
+
+		lua_pushcfunction(L, lua_addTimer);
+		lua_setglobal(L, "addTimer");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));

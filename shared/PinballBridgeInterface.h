@@ -45,6 +45,8 @@ public:
 	
 	void playSound(void * soundName);
 
+	void addTimer(float duration, int id);
+
 private:
 #ifdef _WIN32
 	void *_this;

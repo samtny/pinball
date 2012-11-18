@@ -91,9 +91,14 @@ function startButtonPressed()
 	print "startButtonPressed"
 	
 	if gameInProgress == false then
+		addTimer(2.0, "setCameraFollowsBall", nil)
 		startGame()
 	end
 
+end
+
+function addTimer(duration, funcName, parameter)
+	-- C API stub
 end
 
 function startGame()
