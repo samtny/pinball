@@ -122,6 +122,7 @@
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
+    <ClInclude Include="..\..\shared\TimerDelegate.h" />
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
     <ClInclude Include=".\PinballBridge.h" />

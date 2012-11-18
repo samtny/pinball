@@ -23,6 +23,7 @@ Game::~Game(void) {
 
 void Game::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
+	_bridgeInterface->setTimerDelegate(this);
 }
 
 void Game::setPhysics(Physics *physics) {
@@ -73,11 +74,11 @@ static int lua_addTimer(lua_State *L) {
 
 	int count = lua_gettop(L);
 
-	float duration = lua_tonumber(L, 1);
+	float duration = (float)lua_tonumber(L, 1);
 	string funcName = lua_tostring(L, 2);
 	int arg = -1;
 	if (!lua_isnil(L, 3)) {
-		arg = lua_tonumber(L, 2);
+		arg = (int)lua_tonumber(L, 2);
 	}
 
 	lua_currentInstance->addLuaTimer(duration, funcName, arg);
@@ -97,6 +98,28 @@ void Game::addLuaTimer(float duration, string funcName, int arg) {
 	timers.push_back(t);
 
 	_bridgeInterface->addTimer(t.duration, t.id);
+
+}
+
+void Game::timerCallback(int timerId) {
+
+	// TODO: might not be lua timer...
+	vector<luaTimer>::iterator it;
+	for (it = timers.begin(); it != timers.end(); it++) {
+		if (it->id == timerId) {
+			luaTimer t = *it;
+			lua_getglobal(_rules, t.funcName.c_str());
+			// TODO: support all sorts of args...
+			if (t.arg != -1) {
+				lua_pushnumber(_rules, t.arg);
+				lua_call(_rules, 1, 0);
+			} else {
+				lua_call(_rules, 0, 0);
+			}
+			timers.erase(it);
+			break;
+		}
+	}
 
 }
 

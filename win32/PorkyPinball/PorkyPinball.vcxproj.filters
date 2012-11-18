@@ -194,6 +194,9 @@
     <ClInclude Include="..\..\shared\Parts.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\shared\TimerDelegate.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\config.lua">

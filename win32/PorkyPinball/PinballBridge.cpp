@@ -51,6 +51,11 @@ void PinballBridgeInterface::addTimer(float duration, int timerId) {
 	instance->addTimer(duration, timerId);
 }
 
+void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
+	PinballBridge *instance = (PinballBridge *)_this;
+	instance->setTimerDelegate(timerDelegate);
+}
+
 PinballBridge::PinballBridge(void)
 {
 }
@@ -132,10 +137,18 @@ static PinballBridge *currentInstance;
 
 static void timerCallback(int timerId) {
 	fprintf(stderr, "timer: %d\n", timerId);
+	currentInstance->getTimerDelegate()->timerCallback(timerId);
+}
+
+ITimerDelegate *PinballBridge::getTimerDelegate() {
+	return _timerDelegate;
+}
+
+void PinballBridge::setTimerDelegate(ITimerDelegate *timerDelegate) {
+	_timerDelegate = timerDelegate;
 }
 
 void PinballBridge::addTimer(float duration, int timerId) {
 	currentInstance = this;
 	glutTimerFunc(duration * 1000, timerCallback, timerId);
 }
-

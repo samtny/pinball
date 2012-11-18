@@ -15,5 +15,13 @@ public:
     DisplayProperties *getDisplayProperties();
 	void playSound(void * soundName);
 	void addTimer(float duration, int timerId);
+
+	ITimerDelegate *getTimerDelegate();
+	void setTimerDelegate(ITimerDelegate *timerDelegate);
+
+private:
+
+	ITimerDelegate *_timerDelegate;
+
 };
 

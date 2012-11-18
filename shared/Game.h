@@ -1,5 +1,6 @@
 
 #include "PhysicsDelegate.h"
+#include "TimerDelegate.h"
 
 using namespace std;
 #include <vector>
@@ -9,7 +10,7 @@ class Physics;
 class Renderer;
 struct lua_State;
 
-class Game : public IPhysicsDelegate {
+class Game : public IPhysicsDelegate, ITimerDelegate {
 public:
 	Game(void);
 	~Game(void);
@@ -24,6 +25,7 @@ public:
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
 	void addLuaTimer(float duration, string funcName, int arg);
+	void timerCallback(int timerId);
 protected:
 	void loadRules();
 private:
