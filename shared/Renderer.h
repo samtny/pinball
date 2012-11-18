@@ -5,13 +5,14 @@
 #include "PinballBridgeInterface.h"
 
 class Physics;
+class Camera;
+struct layoutItem;
+struct cpBody;
+
 namespace glfont
 {
 	class GLFont;	
 }
-
-struct Camera;
-struct layoutItemProperties;
 
 class Renderer
 {
@@ -24,12 +25,13 @@ public:
 	void loadTextures(void);
 	void loadFonts(void);
 	void draw(void);
-	void drawBall(layoutItemProperties layoutItem);
 	void drawPlayfield(void);
+	void drawObject(cpBody *body, void *data);
+	void drawBall(layoutItem *item);
 	void drawFonts(void);
 	void setCameraFollowsBall(void);
-protected:
-	void applyCameraTransform(void);
+	void setZoomLevel(float zoomLevel);
+	float getZoomLevel();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Physics *_physics;

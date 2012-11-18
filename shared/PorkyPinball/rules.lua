@@ -31,8 +31,9 @@ LOOP_INTERVAL_NONE = -1
 
 function handleSwitchClosed(switch)
 	print "handleSwitchClosed"
-	if ballInPlay == true or switch == troughSwitch then
-		if switch == troughSwitch then
+	print (switch)
+	if ballInPlay == true or switch == troughSwitch or switch == "troughSwitch" then -- TODO: decide int vs. strings plzz...
+		if switch == troughSwitch or switch == "troughSwitch" then
 			troughSwitchClosed()
 		elseif switch == target1 then
 			leftTargetBankHit(1)
@@ -81,25 +82,22 @@ function handleSwitchOpened(switch)
 end
 
 function troughSwitchClosed()
-	if ballInPlay == false then
-		ballInPlay = true -- unnecessary?
-	end
+	print "troughSwitchClosed"
+	gameInProgress = false; -- not how a trough switch works, of course...
 end
 
 function startButtonPressed()
 	
 	print "startButtonPressed"
-	-- TODO: switch on __PINBALL_DEBUG flag;
-	resetBallPosition()
-	setCameraFollowsBall()
-
+	
 	if gameInProgress == false then
+		addTimer(2.0, "setCameraFollowsBall", nil)
 		startGame()
 	end
 
 end
 
-function resetBallPosition()
+function addTimer(duration, funcName, parameter)
 	-- C API stub
 end
 
@@ -107,10 +105,15 @@ function startGame()
 
 	print "startGame"
 
+	-- TODO: switch on __PINBALL_DEBUG flag;
+	resetBallPosition()
+	setCameraFollowsBall()
+
 	resetAll()
 	serveBallToTrough()
 	playSound(gameStartMusic, 10)
 	gameInProgress = true
+
 end
 
 function playSound(sound, loopIntervalSeconds)
@@ -130,6 +133,10 @@ function resetScore()
 	bonus = startingBonus
 	scoreMult = startingScoreMult
 	bonusMult = startingBonusMult
+end
+
+function resetBallPosition()
+	-- C API stub
 end
 
 function resetAudio()

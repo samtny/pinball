@@ -1,10 +1,16 @@
 
+#include "PhysicsDelegate.h"
+#include "TimerDelegate.h"
+
+using namespace std;
+#include <vector>
+
 class PinballBridgeInterface;
 class Physics;
 class Renderer;
 struct lua_State;
 
-class Game {
+class Game : public IPhysicsDelegate, ITimerDelegate {
 public:
 	Game(void);
 	~Game(void);
@@ -12,9 +18,14 @@ public:
 	void setPhysics(Physics *physics);
 	void setRenderer(Renderer *renderer);
 	void init();
+	void switchClosed(const char *switchName);
 	void closeSwitch(int switchIndex);
 	void resetBallPosition();
 	void setCameraFollowsBall();
+	void setZoomLevel(float zoomLevel);
+	float getZoomLevel();
+	void addLuaTimer(float duration, string funcName, int arg);
+	void timerCallback(int timerId);
 protected:
 	void loadRules();
 private:
@@ -22,5 +33,8 @@ private:
 	Physics *_physics;
 	Renderer *_renderer;
 	lua_State *_rules;
+	int _zoomLevel;
+	int _maxZoomLevel;
+	int _min_ZoomLevel;
 };
 

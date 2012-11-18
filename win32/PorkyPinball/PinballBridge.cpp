@@ -1,5 +1,7 @@
 #include "PinballBridge.h"
 
+#include <GL/glut.h>
+
 #pragma comment(lib, "DevIL.lib")
 #pragma comment(lib, "ILU.lib")
 #pragma comment(lib, "ILUT.lib")
@@ -42,6 +44,16 @@ Texture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
 DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getDisplayProperties();
+}
+
+void PinballBridgeInterface::addTimer(float duration, int timerId) {
+	PinballBridge *instance = (PinballBridge *)_this;
+	instance->addTimer(duration, timerId);
+}
+
+void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
+	PinballBridge *instance = (PinballBridge *)_this;
+	instance->setTimerDelegate(timerDelegate);
 }
 
 PinballBridge::PinballBridge(void)
@@ -121,3 +133,22 @@ DisplayProperties *PinballBridge::getDisplayProperties() {
 
 }
 
+static PinballBridge *currentInstance;
+
+static void timerCallback(int timerId) {
+	fprintf(stderr, "timer: %d\n", timerId);
+	currentInstance->getTimerDelegate()->timerCallback(timerId);
+}
+
+ITimerDelegate *PinballBridge::getTimerDelegate() {
+	return _timerDelegate;
+}
+
+void PinballBridge::setTimerDelegate(ITimerDelegate *timerDelegate) {
+	_timerDelegate = timerDelegate;
+}
+
+void PinballBridge::addTimer(float duration, int timerId) {
+	currentInstance = this;
+	glutTimerFunc(duration * 1000, timerCallback, timerId);
+}

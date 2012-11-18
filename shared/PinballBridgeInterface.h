@@ -2,6 +2,8 @@
 #ifndef __PINBALLNATIVE_C_INTERFACE_H__
 #define __PINBALLNATIVE_C_INTERFACE_H__
 
+#include "TimerDelegate.h"
+
 #ifdef _WIN32
 	#include "windows.h"
 	#include "GL/gl.h"
@@ -45,12 +47,17 @@ public:
 	
 	void playSound(void * soundName);
 
+	void setTimerDelegate(ITimerDelegate *timerDelegate);
+
+	void addTimer(float duration, int id);
+
 private:
 #ifdef _WIN32
 	void *_this;
 #elif __APPLE__
     void *self;
 #endif
+	ITimerDelegate *_timerDelegate;
 };
 
 #endif

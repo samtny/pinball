@@ -1,5 +1,12 @@
 
 #include "Physics.h"
+
+#include "PinballBridgeInterface.h"
+
+#include "PhysicsDelegate.h"
+
+#include "Parts.h"
+
 #include "chipmunk/chipmunk.h"
 
 extern "C" {
@@ -8,7 +15,7 @@ extern "C" {
 #include "lualib.h"
 }
 
-#include "PinballBridgeInterface.h"
+static Physics *physics_currentInstance;
 
 static cpSpace *space;
 
@@ -16,12 +23,18 @@ static cpVect gravity = cpv(0.0, 9.80665f);
 
 static double timeStep = 1.0/180.0;
 
-static cpFloat scale = 37;
+static float scale = 37;
 
 enum shapeGroup {
 	shapeGroupBox,
     shapeGroupBall,
 	shapeGroupFlippers
+};
+
+enum CollisionType {
+	CollisionTypeNone,
+	CollisionTypeSwitch,
+	CollisionTypeBall
 };
 
 #ifdef _WIN32
@@ -64,11 +77,23 @@ static double absoluteTime() {
 
 Physics::Physics(void)
 {
-	
+	physics_currentInstance = this;
 }
 
 void Physics::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
-	this->_bridgeInterface = bridgeInterface;
+	_bridgeInterface = bridgeInterface;
+}
+
+void Physics::setDelegate(IPhysicsDelegate *delegate) {
+	_delegate = delegate;
+}
+
+IPhysicsDelegate * Physics::getDelegate() {
+	return _delegate;
+}
+
+map<string, layoutItem> *Physics::getLayoutItems() {
+	return &_layoutItems;
 }
 
 void Physics::init() {
@@ -81,59 +106,108 @@ void Physics::init() {
 
 	space = cpSpaceNew();
 	
-	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
-		layoutItemProperties *lprops = &(&*iterator)->second;
+	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
+		layoutItem *lprops = &(&*iterator)->second;
 		this->applyScale(lprops);
 		this->createObject(lprops);
 	}
+
 	/*
 	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
-		layoutItemProperties lprops = iterator->second;
+		layoutItem lprops = iterator->second;
 		this->applyScale(&lprops);
 		this->createObject(&lprops);
 	}
 	*/
+
+	this->initCollisionHandlers();
+
 	cpSpaceSetGravity(space, gravity);
 
 }
 
-float Physics::getBoxWidth() {
-	return _boxWidth;
+static int __ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	return physics_currentInstance->ballPreSolve(arb, space, unused);
+
+}
+
+int Physics::ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	materialProperties *mat = &_materials["steel"];
+
+	arb->e = mat->e;
+	arb->u = mat->f;
+
+	return 1;
+
+}
+
+static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	cpShape *a;
+	cpShape *b;
+	cpArbiterGetShapes(arb, &a, &b);
+
+	layoutItem *l = (layoutItem *)b->data;
+
+	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+
+	return 1;
+
+}
+
+static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
+
+
+
+}
+
+void Physics::initCollisionHandlers(void) {
+
+	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
+	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
+
 }
 
 cpSpace *Physics::getSpace() {
 	return space;
 }
 
-void Physics::applyScale(layoutItemProperties *iprops) {
+void Physics::applyScale(layoutItem *iprops) {
 
 	for (int i = 0; i < iprops->count; i++) {
 		iprops->v[i].x *= 1 / scale;
 		iprops->v[i].y *= 1 / scale;
 	}
 
-	iprops->o.r1 *= 1 / scale;
-	iprops->o.r2 *= 1 / scale;
+	float localScale = scale * 1 / iprops->s;
+
+	iprops->o.r1 *= 1 / localScale;
+	iprops->o.r2 *= 1 / localScale;
 	
 	//iprops->o.t.s *= 1 / scale;
 
 }
 
-void Physics::createObject(layoutItemProperties *layoutItem) {
+void Physics::createObject(layoutItem *layoutItem) {
 	
 	if (strcmp(layoutItem->o.s.c_str(), "box") == 0) {
-		this->createBox(layoutItem);
+		layoutItem->body = this->createBox(layoutItem);
+		layoutItem->width = (float)(layoutItem->v[3].x - layoutItem->v[0].x);
 	} else if (strcmp(layoutItem->o.s.c_str(), "segment") == 0) {
 		this->createSegment(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "flipper") == 0) {
-		this->createFlipper(layoutItem);
+		layoutItem->body = this->createFlipper(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "ball") == 0) {
         layoutItem->body = this->createBall(layoutItem);
-    }
+    } else if (strcmp(layoutItem->o.s.c_str(), "switch") == 0) {
+		this->createSwitch(layoutItem);
+	}
 
 }
 
-void Physics::createBox(layoutItemProperties *item) {
+cpBody *Physics::createBox(layoutItem *item) {
 
 	cpBody *body, *staticBody = cpSpaceGetStaticBody(space);
 	cpShape *shape;
@@ -180,13 +254,13 @@ void Physics::createBox(layoutItemProperties *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
-	//box = staticBody;
-	_box = body;
-	_boxWidth = item->v[3].x - item->v[0].x;
-	
+	return body;
+
 }
 
-cpBody *Physics::createBall(layoutItemProperties *item) {
+static int ballCollisionGroup = 2048;
+
+cpBody *Physics::createBall(layoutItem *item) {
     
     cpFloat area = (item->o.r1 * M_PI) * 2;
     cpFloat mass = area * item->o.m.d;
@@ -197,18 +271,18 @@ cpBody *Physics::createBall(layoutItemProperties *item) {
     cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));
     cpShapeSetElasticity(shape, item->o.m.e);
     cpShapeSetFriction(shape, item->o.m.f);
-	cpShapeSetGroup(shape, shapeGroupBall);
-    
+	cpShapeSetGroup(shape, shapeGroupBall + ballCollisionGroup); // TODO: ball shape group is kludged
+	cpShapeSetCollisionType(shape, CollisionTypeBall);
+
 	body->data = item;
 
-	// TODO: something elsewise;
-	_balls[0] = body;
+	ballCollisionGroup++;
 
 	return body;
 
 }
 
-void Physics::createFlipper(layoutItemProperties *item) {
+cpBody *Physics::createFlipper(layoutItem *item) {
 
 	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
 	cpFloat mass = area * item->o.m.d;
@@ -222,8 +296,10 @@ void Physics::createFlipper(layoutItemProperties *item) {
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
 	cpBodySetPos(body, item->v[0]);
 
-	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, _box, item->v[0]));
-	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, _box, flipAngle, 0.0f));
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+ 	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box->body, item->v[0]));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, flipAngle, 0.0f));
 
 	// lflipper base shape
 	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));
@@ -237,9 +313,20 @@ void Physics::createFlipper(layoutItemProperties *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
+	return body;
+
 }
 
-void Physics::createSegment(layoutItemProperties *layoutItem) {
+void Physics::createSwitch(layoutItem *item) {
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, item->v[0], item->v[1], item->o.r1));
+	cpShapeSetSensor(shape, true);
+	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
+	cpShapeSetUserData(shape, item);
+	
+}
+
+void Physics::createSegment(layoutItem *layoutItem) {
 
 	//...
 
@@ -270,7 +357,7 @@ void Physics::loadConfig() {
                         
 					} else if (strcmp("scale", key) == 0) {
 
-						scale = lua_tonumber(L, -1);
+						scale = (float)lua_tonumber(L, -1);
 
 					}
                     
@@ -333,7 +420,7 @@ void Physics::loadMaterials() {
 					lua_pop(L, 1);
 				}
 				
-				materials.insert(make_pair(name, props));
+				_materials.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}
@@ -371,7 +458,7 @@ void Physics::loadObjects() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				objectProperties props = { "", "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+				objectProperties props = { name, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -381,7 +468,7 @@ void Physics::loadObjects() {
 					if (strcmp("s", key) == 0) {
 						props.s = lua_tostring(L, -1);
 					} else if (strcmp("m", key) == 0) {
-						props.m = materials[lua_tostring(L, -1)];
+						props.m = _materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
 						props.r1 = (float)lua_tonumber(L, -1);
 					} else if (strcmp("r2", key) == 0) {
@@ -416,7 +503,7 @@ void Physics::loadObjects() {
 					lua_pop(L, 1);
 				}
 				
-				objects.insert(make_pair(name, props));
+				_objects.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}
@@ -454,7 +541,8 @@ void Physics::loadLayout() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				layoutItemProperties props = { "" };
+				layoutItem props = { name };
+				props.s = -1;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -463,7 +551,7 @@ void Physics::loadLayout() {
 
 					if (strcmp("o", key) == 0) {
 						
-						props.o = objects[lua_tostring(L, -1)];
+						props.o = _objects[lua_tostring(L, -1)];
 
 					} else if (strcmp("v", key) == 0) {
 						
@@ -499,12 +587,18 @@ void Physics::loadLayout() {
 
 						props.count = length;
 
+					} else if (strcmp("s", key) == 0) {
+						props.s = (float)lua_tonumber(L, -1);
 					}
 
 					lua_pop(L, 1);
 				}
 				
-				layoutItems.insert(make_pair(name, props));
+				if (props.s == -1) {
+					props.s = 1;
+				}
+
+				_layoutItems.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}
@@ -540,12 +634,8 @@ void Physics::loadForces() {
 			while(lua_next(L, -2) != 0) {
 				
 					const char *key = lua_tostring(L, -2);
-                    
-					if (strcmp("timeStep", key) == 0) {
-						
-                        timeStep = lua_tonumber(L, -1);
-                        
-					} else if (strcmp("gravity", key) == 0) {
+					
+					if (strcmp("gravity", key) == 0) {
 						
                         // get the first vertex
                         lua_rawgeti(L, -1, 1);
@@ -575,13 +665,6 @@ void Physics::loadForces() {
     
 }
 
-void Physics::resetBallPosition(int ballIndex) {
-	cpBody *ball = _balls[ballIndex];
-	cpBodyResetForces(ball);
-	// TODO: something way, way better;
-	cpBodySetPos(ball, cpv(0.1, 0.65));
-}
-
 Physics::~Physics(void)
 {
 	cpSpaceFree(space);
@@ -589,9 +672,6 @@ Physics::~Physics(void)
 
 double currentTime;
 double accumulator;
-
-cpBody *ballPrevious = cpBodyAlloc();
-cpBody *ballSlerped = cpBodyAlloc();
 
 void Physics::updatePhysics() {
 
@@ -605,23 +685,21 @@ void Physics::updatePhysics() {
     accumulator += fTime;
     
     while (accumulator >= timeStep) {
-		ballPrevious->p = _balls[0]->p;
-		ballPrevious->a = _balls[0]->a;
         cpSpaceStep(space, timeStep);
         accumulator -= timeStep;
     }
     
 	const double alpha = accumulator / timeStep;
 
-	ballSlerped->p = cpvlerp(ballPrevious->p, _balls[0]->p, alpha);
-	ballSlerped->a = _balls[0]->a * alpha + ballPrevious->a * (1.0 - alpha);
-
 }
 
-cpBody *Physics::getBallSlerped() {
-	return ballSlerped;
+void Physics::resetBallsToInitialPosition() {
+	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
+		layoutItem item = iterator->second;
+		if (strcmp("ball", item.o.n.c_str()) == 0) {
+			cpBody *body = item.body;
+			cpBodyResetForces(body);
+			cpBodySetPos(body, cpv(item.v[0].x, item.v[0].y));
+		}
+	}
 }
-
-
-
-

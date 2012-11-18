@@ -102,6 +102,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lundump.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c" />
+    <ClCompile Include="..\..\shared\Camera.cpp" />
     <ClCompile Include="..\..\shared\Game.cpp" />
     <ClCompile Include="..\..\shared\glfont2.cpp" />
     <ClCompile Include="..\..\shared\Physics.cpp" />
@@ -113,11 +114,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h" />
+    <ClInclude Include="..\..\shared\Camera.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
+    <ClInclude Include="..\..\shared\Parts.h" />
+    <ClInclude Include="..\..\shared\PhysicsDelegate.h" />
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
+    <ClInclude Include="..\..\shared\TimerDelegate.h" />
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
     <ClInclude Include=".\PinballBridge.h" />
