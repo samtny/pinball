@@ -36,6 +36,6 @@ private:
 	Camera *_camera;
 	glfont::GLFont *_glfont;
 	DisplayProperties *_displayProperties;
-	GLfloat _scale;
+	float _scale;
 };
 
