@@ -83,20 +83,13 @@ end
 
 function troughSwitchClosed()
 	print "troughSwitchClosed"
-	if ballInPlay == false then
-		ballInPlay = true -- unnecessary?
-	else
-		--resetBallPosition()
-	end
+	gameInProgress = false; -- not how a trough switch works, of course...
 end
 
 function startButtonPressed()
 	
 	print "startButtonPressed"
-	-- TODO: switch on __PINBALL_DEBUG flag;
-	resetBallPosition()
-	setCameraFollowsBall()
-
+	
 	if gameInProgress == false then
 		startGame()
 	end
@@ -107,10 +100,15 @@ function startGame()
 
 	print "startGame"
 
+	-- TODO: switch on __PINBALL_DEBUG flag;
+	resetBallPosition()
+	setCameraFollowsBall()
+
 	resetAll()
 	serveBallToTrough()
 	playSound(gameStartMusic, 10)
 	gameInProgress = true
+
 end
 
 function playSound(sound, loopIntervalSeconds)
