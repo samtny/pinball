@@ -75,6 +75,14 @@ void PinballBridgeInterface::playSound(void * soundName) {
     [(id)self playSound:soundName];
 }
 
+void PinballBridgeInterface::addTimer(float duration, int id) {
+    // TODO: something
+}
+
+void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
+    // TODO: something
+}
+
 -(const char *)getPathForScriptFileName:(void *)scriptFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)scriptFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)scriptFileName] pathExtension];

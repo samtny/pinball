@@ -57,6 +57,7 @@
 		4B170276164AB7CA007D4A2F /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170254164AB7CA007D4A2F /* lundump.c */; };
 		4B170277164AB7CA007D4A2F /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170255164AB7CA007D4A2F /* lvm.c */; };
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
+		4B21F228165933B400CE7493 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B21F223165933B400CE7493 /* Camera.cpp */; };
 		4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CB8891651818C00F860A4 /* glfont2.cpp */; };
 		4B6CB88F165181AD00F860A4 /* font.glf in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CB88E165181AD00F860A4 /* font.glf */; };
 		4B77E07716556C1F0065BE6E /* pinball.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B77E07616556C1F0065BE6E /* pinball.png */; };
@@ -127,6 +128,11 @@
 		4B170254164AB7CA007D4A2F /* lundump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lundump.c; path = "../../../../../../../src/lua/lua 5.2.1/lundump.c"; sourceTree = "<group>"; };
 		4B170255164AB7CA007D4A2F /* lvm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lvm.c; path = "../../../../../../../src/lua/lua 5.2.1/lvm.c"; sourceTree = "<group>"; };
 		4B170256164AB7CA007D4A2F /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lzio.c; path = "../../../../../../../src/lua/lua 5.2.1/lzio.c"; sourceTree = "<group>"; };
+		4B21F223165933B400CE7493 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = ../../../shared/Camera.cpp; sourceTree = "<group>"; };
+		4B21F224165933B400CE7493 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../shared/Camera.h; sourceTree = "<group>"; };
+		4B21F225165933B400CE7493 /* Parts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Parts.h; path = ../../../shared/Parts.h; sourceTree = "<group>"; };
+		4B21F226165933B400CE7493 /* PhysicsDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhysicsDelegate.h; path = ../../../shared/PhysicsDelegate.h; sourceTree = "<group>"; };
+		4B21F227165933B400CE7493 /* TimerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerDelegate.h; path = ../../../shared/TimerDelegate.h; sourceTree = "<group>"; };
 		4B6CB8891651818C00F860A4 /* glfont2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glfont2.cpp; path = ../../../shared/glfont2.cpp; sourceTree = "<group>"; };
 		4B6CB88A1651818C00F860A4 /* glfont2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont2.h; path = ../../../shared/glfont2.h; sourceTree = "<group>"; };
 		4B6CB88E165181AD00F860A4 /* font.glf */ = {isa = PBXFileReference; lastKnownFileType = file; path = font.glf; sourceTree = "<group>"; };
@@ -233,6 +239,11 @@
 				4B170220164AAF3F007D4A2F /* Physics.cpp */,
 				4B170229164AAF3F007D4A2F /* Renderer.h */,
 				4B170228164AAF3F007D4A2F /* Renderer.cpp */,
+				4B21F223165933B400CE7493 /* Camera.cpp */,
+				4B21F224165933B400CE7493 /* Camera.h */,
+				4B21F226165933B400CE7493 /* PhysicsDelegate.h */,
+				4B21F227165933B400CE7493 /* TimerDelegate.h */,
+				4B21F225165933B400CE7493 /* Parts.h */,
 				4B6CB88A1651818C00F860A4 /* glfont2.h */,
 				4B6CB8891651818C00F860A4 /* glfont2.cpp */,
 			);
@@ -418,6 +429,7 @@
 				4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */,
 				4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */,
 				4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */,
+				4B21F228165933B400CE7493 /* Camera.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

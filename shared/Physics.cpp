@@ -689,7 +689,7 @@ void Physics::updatePhysics() {
         accumulator -= timeStep;
     }
     
-	const double alpha = accumulator / timeStep;
+	//const double alpha = accumulator / timeStep;
 
 }
 

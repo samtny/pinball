@@ -14,6 +14,8 @@
 
 #import "Renderer.h"
 
+#import "Game.h"
+
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 // Uniform index.
@@ -91,9 +93,10 @@ GLfloat gCubeVertexData[216] =
     GLuint _vertexBuffer;
     
 @private
-    PinballBridgeInterface *bridgeInterface;
-    Physics *physics;
-    Renderer *renderer;
+    PinballBridgeInterface *_bridgeInterface;
+    Physics *_physics;
+    Renderer *_renderer;
+    Game *_game;
     
 }
 @property (strong, nonatomic) EAGLContext *context;
@@ -115,9 +118,10 @@ GLfloat gCubeVertexData[216] =
 
 - (void)dealloc
 {
-    delete renderer;
-    delete physics;
-    delete bridgeInterface;
+    delete _game;
+    delete _renderer;
+    delete _physics;
+    delete _bridgeInterface;
     [_context release];
     [_effect release];
     [super dealloc];
@@ -139,9 +143,16 @@ GLfloat gCubeVertexData[216] =
     r->setPhysics(p);
     //r->init();
     
-    bridgeInterface = bi;
-    physics = p;
-    renderer = r;
+    Game *g = new Game();
+    g->setBridgeInterface(bi);
+    g->init();
+    g->setPhysics(p);
+    g->setRenderer(r);
+    
+    _bridgeInterface = bi;
+    _physics = p;
+    _renderer = r;
+    _game = g;
     
     //self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
     self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1] autorelease];
@@ -189,7 +200,7 @@ GLfloat gCubeVertexData[216] =
 {
     [EAGLContext setCurrentContext:self.context];
     
-    renderer->init();
+    _renderer->init();
     
     return;
     
@@ -238,7 +249,7 @@ GLfloat gCubeVertexData[216] =
 - (void)update
 {
     
-    physics->updatePhysics();
+    _physics->updatePhysics();
     return;
     
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
@@ -271,7 +282,7 @@ GLfloat gCubeVertexData[216] =
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     
-    renderer->draw();
+    _renderer->draw();
     return;
     
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
@@ -443,6 +454,13 @@ GLfloat gCubeVertexData[216] =
     }
     
     return YES;
+}
+
+#pragma mark UI Callbacks
+
+-(IBAction)userDidTapStartButton:(id)sender {
+    // TODO: use dynamically set startButton id;
+    _game->closeSwitch(0);
 }
 
 @end

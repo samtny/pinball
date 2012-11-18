@@ -64,7 +64,7 @@ struct luaTimer {
 };
 
 static int sNextTimerId = 0;
-int nextTimerId() {
+static int nextTimerId() {
 	return ++sNextTimerId;
 }
 
@@ -72,8 +72,9 @@ static vector<luaTimer> timers;
 
 static int lua_addTimer(lua_State *L) {
 
-	int count = lua_gettop(L);
-
+    // TODO: consider incoming arguments;
+	//int count = lua_gettop(L);
+    
 	float duration = (float)lua_tonumber(L, 1);
 	string funcName = lua_tostring(L, 2);
 	int arg = -1;

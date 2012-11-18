@@ -11,4 +11,6 @@
 
 @interface ViewController : GLKViewController 
 
+-(IBAction)userDidTapStartButton:(id)sender;
+
 @end
