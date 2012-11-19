@@ -3,6 +3,9 @@ enum {
 	CAMERA_MODE_FOLLOW_BALL
 };
 
+// TODO: move out;
+#include "PinballBridgeInterface.h"
+
 class Renderer;
 class Physics;
 struct layoutItem;
@@ -17,6 +20,7 @@ public:
 	float marginY;
 	float minZoomLevel;
 	float maxZoomLevel;
+	void setDisplayProperties(DisplayProperties *displayProperties);
 	void setRenderer(Renderer *renderer);
 	void setPhysics(Physics *physics);
 	void setZoomLevel(float zoomLevel);
@@ -25,6 +29,7 @@ public:
 	void setModeFollowBall();
 	void applyTransform(void);
 private:
+	DisplayProperties *_displayProperties;
 	Renderer *_renderer;
 	Physics *_physics;
 	float _zoomLevel;

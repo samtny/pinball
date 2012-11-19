@@ -25,6 +25,10 @@ Camera::Camera() : mode(CAMERA_MODE_FOLLOW_BALL), _zoomLevel(1), maxZoomLevel(3)
 Camera::~Camera() {
 }
 
+void Camera::setDisplayProperties(DisplayProperties *displayProperties) {
+	_displayProperties = displayProperties;
+}
+
 void Camera::setRenderer(Renderer *renderer) {
 	_renderer = renderer;
 }
@@ -36,6 +40,7 @@ void Camera::setPhysics(Physics *physics) {
 void Camera::setZoomLevel(float zoomLevel) {
 	if (zoomLevel <= maxZoomLevel && zoomLevel >= minZoomLevel) {
 		_zoomLevel = zoomLevel;
+
 	}
 }
 
@@ -63,7 +68,13 @@ void Camera::setModeFollowBall() {
 	}
 
 	minY = box.v[0].y;
+	
+	// total height - (total height - visible height)
+	float diff = box.height - (box.height - _displayProperties->viewportHeight / _worldScale);
+
 	maxY = box.v[1].y;
+	//maxY = diff;
+
 	marginY = (box.v[1].y - box.v[0].y) * 0.15;
 
 }
@@ -101,9 +112,10 @@ void Camera::applyTransform(void) {
 
 		if (posY < minY) {
 			posY = minY;
-		} else if (posY > maxY * _zoomLevel) {
-			posY = maxY * _zoomLevel;
+		} else if (posY > maxY) {
+			posY = maxY;
 		}
+
 		posY *= _worldScale * _zoomLevel;
 
 		glTranslatef(0, -posY, 0);

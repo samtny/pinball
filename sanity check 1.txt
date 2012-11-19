@@ -24,13 +24,14 @@ so, to address;
 	
 	DONE write switch routines and test
 	think of 5 different things to do with camera and implement a camera system
-		follow 1 ball (this is same as next item)
-		follow lowest ball in multi-ball
+		DONE follow 1 ball (this is same as next item)
+		DONE follow lowest ball in multi-ball
 		DONE zoom level
 		"swirl in" to playfield on game start "effect"
 		fade-in / out ""
 		focus on single point w/ zoom
 	think of 3 different ways to present / position text and implement ""
+	
 	write sound engine
 	write target, pop bumper, slingshot, post, rubber/rail/guide
 	design a playfield with a couple of each

@@ -115,9 +115,13 @@ void Renderer::init(void) {
 	}
 
 	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
+	
+	// TODO: move to setter for "_displayProperties" instance??
 	_scale = _displayProperties->viewportWidth / box->width;
 
 	_camera = new Camera();
+	_camera->setWorldScale(_scale);
+	_camera->setDisplayProperties(_displayProperties);
 
 	_camera->setPhysics(_physics);
 
@@ -222,6 +226,7 @@ void Renderer::drawPlayfield() {
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
 
+	// this probably belongs to "camera"...
 	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
 	_scale = _displayProperties->viewportWidth / box->width;
 

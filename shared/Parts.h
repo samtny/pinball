@@ -42,6 +42,7 @@ typedef struct layoutItem {
 	int count;
 	cpBody *body;
 	float width;
+	float height;
 } layoutItem;
 typedef map<string, layoutItem>::iterator it_layoutItems;
 

@@ -195,6 +195,7 @@ void Physics::createObject(layoutItem *layoutItem) {
 	if (strcmp(layoutItem->o.s.c_str(), "box") == 0) {
 		layoutItem->body = this->createBox(layoutItem);
 		layoutItem->width = (float)(layoutItem->v[3].x - layoutItem->v[0].x);
+		layoutItem->height = (float)(layoutItem->v[1].y - layoutItem->v[0].y);
 	} else if (strcmp(layoutItem->o.s.c_str(), "segment") == 0) {
 		this->createSegment(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "flipper") == 0) {
