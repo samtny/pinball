@@ -20,6 +20,7 @@ void PinballHost::init() {
 
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
 	bi->init();
+	bi->setGameName("Waterfall");
 
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);

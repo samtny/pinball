@@ -6,6 +6,12 @@
 
 #include "Parts.h"
 
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 #ifdef __APPLE__
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
@@ -17,7 +23,18 @@
 	#include <GL/GLU.h>
 #endif
 
-Camera::Camera() : mode(CAMERA_MODE_FOLLOW_BALL), _zoomLevel(1), maxZoomLevel(3), minZoomLevel(0.25)
+#include <string>
+#include <map>
+
+typedef struct Point{float x,y;} Point;
+
+struct CameraMode {
+	string name;
+	CameraType t;
+	Point p;
+};
+
+Camera::Camera() : type(CAMERA_TYPE_FOLLOW_BALL), _zoomLevel(1), maxZoomLevel(1), minZoomLevel(1)
 {
 
 }
@@ -25,7 +42,62 @@ Camera::Camera() : mode(CAMERA_MODE_FOLLOW_BALL), _zoomLevel(1), maxZoomLevel(3)
 Camera::~Camera() {
 }
 
-void Camera::setDisplayProperties(DisplayProperties *displayProperties) {
+void Camera::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
+	_bridgeInterface = bridgeInterface;
+}
+
+void Camera::init() {
+	
+	this->loadConfig);
+
+}
+
+void Camera::loadConfig() {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"camera.lua");
+
+	int error = luaL_dofile(L, configFileName);
+	if (!error) {
+
+        lua_getglobal(L, "camera");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("timeStep", key) == 0) {
+						
+                        timeStep = lua_tonumber(L, -1);
+                        
+					} else if (strcmp("scale", key) == 0) {
+
+						scale = (float)lua_tonumber(L, -1);
+
+					}
+                    
+					lua_pop(L, 1);
+				}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Camera::setDisplayProperties(HostProperties *displayProperties) {
 	_displayProperties = displayProperties;
 }
 

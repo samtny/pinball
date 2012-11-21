@@ -15,7 +15,7 @@ typedef struct {
 	int viewportHeight;
 	int viewportWidth;
     float fontScale;
-} DisplayProperties;
+} HostProperties;
 
 typedef struct {
 	int bpp;
@@ -37,13 +37,15 @@ public:
 	bool init(void);
 #endif
 
+	void setGameName(const char *gameName);
+
 	const char * getPathForScriptFileName(void * scriptFileName);
 
 	const char *getPathForTextureFileName(void *textureFileName);
 
 	Texture *createRGBATexture(void *textureFileName);
 
-    DisplayProperties *getDisplayProperties();
+    HostProperties *getHostProperties();
 	
 	void playSound(void * soundName);
 

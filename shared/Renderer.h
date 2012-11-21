@@ -37,7 +37,7 @@ private:
 	Physics *_physics;
 	Camera *_camera;
 	glfont::GLFont *_glfont;
-	DisplayProperties *_displayProperties;
+	HostProperties *_displayProperties;
 	float _scale;
 };
 

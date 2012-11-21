@@ -138,11 +138,22 @@
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="..\..\shared\Waterfall\camera.lua" />
+    <None Include="..\..\shared\Waterfall\config.lua" />
+    <None Include="..\..\shared\Waterfall\forces.lua" />
+    <None Include="..\..\shared\Waterfall\layout.lua" />
+    <None Include="..\..\shared\Waterfall\materials.lua" />
+    <None Include="..\..\shared\Waterfall\objects.lua" />
+    <None Include="..\..\shared\Waterfall\rules.lua" />
+    <None Include="..\..\shared\Waterfall\textures.lua" />
+    <None Include="..\..\shared\Waterfall\textures\font.glf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="..\..\shared\Waterfall\textures\pinball.png" />
+    <Image Include="..\..\shared\Waterfall\textures\tiling.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -67,7 +67,7 @@ static int txIdFont = 101;
 
 void Renderer::init(void) {
 
-	_displayProperties = _bridgeInterface->getDisplayProperties();
+	_displayProperties = _bridgeInterface->getHostProperties();
 
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);

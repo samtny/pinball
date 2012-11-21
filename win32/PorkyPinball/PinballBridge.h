@@ -9,10 +9,11 @@ public:
 	~PinballBridge(void);
 	void init();
 
+	void setGameName(const char *gameName);
 	const char * getPathForScriptFileName(void * scriptFileName);
 	const char *getPathForTextureFilename(void * textureFilename);
 	Texture *createRGBATexture(void *textureFilename);
-    DisplayProperties *getDisplayProperties();
+    HostProperties *getHostProperties();
 	void playSound(void * soundName);
 	void addTimer(float duration, int timerId);
 
@@ -21,6 +22,7 @@ public:
 
 private:
 
+	const char *_gameName;
 	ITimerDelegate *_timerDelegate;
 
 };

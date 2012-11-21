@@ -26,6 +26,11 @@ void PinballBridgeInterface::init() {
 	b->init();
 }
 
+void PinballBridgeInterface::setGameName(const char *gameName) {
+	PinballBridge *instance = (PinballBridge *)_this;
+	instance ->setGameName(gameName);
+}
+
 const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getPathForScriptFileName(scriptFileName);
@@ -41,9 +46,9 @@ Texture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
 	return nativeInstance->createRGBATexture(textureFilename);
 }
 
-DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
+HostProperties * PinballBridgeInterface::getHostProperties() {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
-	return nativeInstance->getDisplayProperties();
+	return nativeInstance->getHostProperties();
 }
 
 void PinballBridgeInterface::addTimer(float duration, int timerId) {
@@ -69,18 +74,29 @@ void PinballBridge::init() {
 
 }
 
+void PinballBridge::setGameName(const char *gameName) {
+	_gameName = gameName;
+}
+
 void PinballBridgeInterface::playSound(void * soundName) {
 	// TODO: something
 }
 
 const char *PinballBridge::getPathForScriptFileName(void *scriptFileName) {
 	
-	const char *p = "..\\..\\shared\\PorkyPinball\\";
+	const char *p = "..\\..\\shared\\";
+	const char *g = _gameName;
+	const char *s = "\\";
 	const char *f = (const char *)scriptFileName;
-	// TODO: this is a leak;
-	char *concat = new char[strlen(p) + strlen(f) + 1];
+	
+	string path = "..\\..\\shared\\" + (string)_gameName + "\\" + (string)(const char *)scriptFileName;
+
+	char *concat = new char[strlen(p) + strlen(g) + strlen(s) + strlen(f) + 1];
 	strcpy(concat, p);
+	strcat(concat, g);
+	strcat(concat, s);
 	strcat(concat, f);
+
 	return concat;
 
 }
@@ -119,9 +135,9 @@ Texture *PinballBridge::createRGBATexture(void *textureFilename) {
 
 }
 
-DisplayProperties *PinballBridge::getDisplayProperties() {
+HostProperties *PinballBridge::getHostProperties() {
 
-	DisplayProperties *props = new DisplayProperties();
+	HostProperties *props = new HostProperties();
 
 	// TODO: vary by glut props;
 	props->viewportX = 0;

@@ -19,14 +19,20 @@
     <Filter Include="Header Files\shared">
       <UniqueIdentifier>{9359d279-644d-46d2-8d8a-124442f59160}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shared\script">
+    <Filter Include="Source Files\shared\PorkyPinball">
       <UniqueIdentifier>{3aea6403-6d62-4817-887f-59d28d468e4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shared\script\lua">
+    <Filter Include="Source Files\shared\lua">
       <UniqueIdentifier>{c975ce3f-f94a-4316-bd30-f7bdd79a5095}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shared\script\lua\src">
+    <Filter Include="Source Files\shared\lua\src">
       <UniqueIdentifier>{1451c41a-144f-4d29-8cd5-a3400d25390a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Waterfall">
+      <UniqueIdentifier>{f51c6fc1-e7da-41e2-8c1e-0ce465b1ef83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Waterfall\textures">
+      <UniqueIdentifier>{3955ad01-df93-445b-991d-9ad2454c433f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -37,100 +43,100 @@
       <Filter>Source Files\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lapi.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lauxlib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbaselib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lbitlib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcode.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lcorolib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lctype.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldblib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldebug.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldo.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ldump.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lfunc.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lgc.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\linit.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\liolib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\llex.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmathlib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lmem.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loadlib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lobject.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lopcodes.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\loslib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lparser.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstate.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstring.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lstrlib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltable.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltablib.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\ltm.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lundump.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c">
-      <Filter>Source Files\shared\script\lua\src</Filter>
+      <Filter>Source Files\shared\lua\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Game.cpp">
       <Filter>Source Files\shared</Filter>
@@ -200,33 +206,66 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\config.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\forces.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\layout.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\materials.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\objects.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\rules.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\textures.lua">
-      <Filter>Source Files\shared\script</Filter>
+      <Filter>Source Files\shared\PorkyPinball</Filter>
     </None>
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\config.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\forces.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\layout.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\materials.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\objects.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\rules.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\textures.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\textures\font.glf">
+      <Filter>Source Files\shared\Waterfall\textures</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall\camera.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\shared\Waterfall\textures\pinball.png">
+      <Filter>Source Files\shared\Waterfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Waterfall\textures\tiling.png">
+      <Filter>Source Files\shared\Waterfall\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>
