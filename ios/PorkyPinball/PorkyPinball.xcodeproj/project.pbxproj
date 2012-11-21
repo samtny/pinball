@@ -66,6 +66,12 @@
 		4BC180EF16502AC100D563AF /* config.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180ED16502AC100D563AF /* config.lua */; };
 		4BC180F016502AC100D563AF /* forces.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180EE16502AC100D563AF /* forces.lua */; };
 		4BC94FF3165C54FB00AF8A8E /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */; };
+		4BC94FFD165C5A3000AF8A8E /* MyOpenALSupport.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */; };
+		4BC94FFE165C5A3000AF8A8E /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FFB165C5A3000AF8A8E /* SoundManager.m */; };
+		4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */; };
+		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
+		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
+		4BC9500A165C68E500AF8A8E /* flip.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4BC95009165C68E400AF8A8E /* flip.caf */; };
 		4BE9DFD5164C101700599EB8 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD2164C101700599EB8 /* Game.cpp */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
 /* End PBXBuildFile section */
@@ -143,7 +149,16 @@
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
 		4BC180ED16502AC100D563AF /* config.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.lua; sourceTree = "<group>"; };
 		4BC180EE16502AC100D563AF /* forces.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = forces.lua; sourceTree = "<group>"; };
-		4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "../../../../../../lib/chipmunk/libChipmunk-iPhone.a"; sourceTree = "<group>"; };
+		4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "/lib/chipmunk/libChipmunk-iPhone.a"; sourceTree = "<absolute>"; };
+		4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MyOpenALSupport.c; sourceTree = "<group>"; };
+		4BC94FF9165C5A3000AF8A8E /* MyOpenALSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenALSupport.h; sourceTree = "<group>"; };
+		4BC94FFA165C5A3000AF8A8E /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
+		4BC94FFB165C5A3000AF8A8E /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
+		4BC94FFC165C5A3000AF8A8E /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthesizeSingleton.h; sourceTree = "<group>"; };
+		4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4BC95001165C5A6800AF8A8E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4BC95009165C68E400AF8A8E /* flip.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.caf; sourceTree = "<group>"; };
 		4BE9DFD2164C101700599EB8 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = ../../../shared/Game.cpp; sourceTree = "<group>"; };
 		4BE9DFD3164C101700599EB8 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = ../../../shared/Game.h; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
@@ -155,6 +170,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */,
+				4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */,
+				4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */,
 				4BC94FF3165C54FB00AF8A8E /* libChipmunk-iPhone.a in Frameworks */,
 				4B1701FB164AAC4F007D4A2F /* UIKit.framework in Frameworks */,
 				4B1701FD164AAC4F007D4A2F /* Foundation.framework in Frameworks */,
@@ -170,7 +188,9 @@
 		4B1701EB164AAC4E007D4A2F = {
 			isa = PBXGroup;
 			children = (
-				4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */,
+				4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */,
+				4BC95001165C5A6800AF8A8E /* OpenAL.framework */,
+				4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */,
 				4B170204164AAC50007D4A2F /* PorkyPinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
@@ -188,6 +208,7 @@
 		4B1701F9164AAC4F007D4A2F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */,
 				4B77E0791655729C0065BE6E /* libChipmunk-iPhone.a */,
 				4B1701FA164AAC4F007D4A2F /* UIKit.framework */,
 				4B1701FC164AAC4F007D4A2F /* Foundation.framework */,
@@ -201,6 +222,7 @@
 		4B170204164AAC50007D4A2F /* PorkyPinball */ = {
 			isa = PBXGroup;
 			children = (
+				4BC94FF7165C5A3000AF8A8E /* Audio */,
 				4B170234164AB786007D4A2F /* lua */,
 				4B17021F164AAEF3007D4A2F /* shared */,
 				4B17020D164AAC50007D4A2F /* AppDelegate.h */,
@@ -316,6 +338,19 @@
 			path = ../../../shared/PorkyPinball/textures;
 			sourceTree = "<group>";
 		};
+		4BC94FF7165C5A3000AF8A8E /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				4BC95009165C68E400AF8A8E /* flip.caf */,
+				4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */,
+				4BC94FF9165C5A3000AF8A8E /* MyOpenALSupport.h */,
+				4BC94FFA165C5A3000AF8A8E /* SoundManager.h */,
+				4BC94FFB165C5A3000AF8A8E /* SoundManager.m */,
+				4BC94FFC165C5A3000AF8A8E /* SynthesizeSingleton.h */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -380,6 +415,7 @@
 				4B6CB88F165181AD00F860A4 /* font.glf in Resources */,
 				4B77E07716556C1F0065BE6E /* pinball.png in Resources */,
 				4B77E07C165574390065BE6E /* textures.lua in Resources */,
+				4BC9500A165C68E500AF8A8E /* flip.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +468,8 @@
 				4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */,
 				4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */,
 				4B21F228165933B400CE7493 /* Camera.cpp in Sources */,
+				4BC94FFD165C5A3000AF8A8E /* MyOpenALSupport.c in Sources */,
+				4BC94FFE165C5A3000AF8A8E /* SoundManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -139,6 +139,8 @@ int Physics::ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 	arb->e = mat->e;
 	arb->u = mat->f;
 
+    _bridgeInterface->playSound((void *)"flip");
+    
 	return 1;
 
 }

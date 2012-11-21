@@ -88,6 +88,14 @@ static int lua_addTimer(lua_State *L) {
 
 }
 
+static int lua_playSound(lua_State *L) {
+    
+    // TODO: something...
+    
+    return 0;
+    
+}
+
 void Game::addLuaTimer(float duration, string funcName, int arg) {
 
 	luaTimer t;

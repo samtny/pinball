@@ -7,8 +7,11 @@
 //
 
 #import "PinballBridge.h"
+#import "SoundManager.h"
 
-@interface PinballBridge()
+@interface PinballBridge() {
+    SoundManager *_soundManager;
+}
 
 +(CGSize)windowCurrentSize;
 +(CGSize)windowSizeInOrientation:(UIInterfaceOrientation)orientation;
@@ -52,6 +55,18 @@ bool PinballBridgeInterface::init(void) {
 }
 
 -(void)initI {
+    
+    SoundManager *s = [[SoundManager alloc] init];
+    
+    [s loadSoundWithKey:@"flip" musicFile:@"flip.caf"];
+    
+    _soundManager = s;
+    
+}
+
+-(void)dealloc {
+    
+    [_soundManager release];
     
 }
 
@@ -141,13 +156,20 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     props->viewportHeight = size.height;
     props->viewportWidth = size.width;
     
-    props->fontScale = 0.40;
+    float scale = size.width / 800.0f;
+    props->fontScale = scale;
     
     return props;
 }
 
 -(void)playSound:(void *)soundName {
-    // TODO: something;
+    
+    NSLog(@"playSound:%@", soundName);
+    
+    NSString *name = [NSString stringWithCString:(const char *)soundName encoding:NSUTF8StringEncoding];
+    
+    [_soundManager playSoundWithKey:name gain:0 pitch:0 location:CGPointMake(0, 0) shouldLoop:NO sourceID:0];
+    
 }
 
 @end
