@@ -61,11 +61,11 @@
 		4B6CB88B1651818C00F860A4 /* glfont2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6CB8891651818C00F860A4 /* glfont2.cpp */; };
 		4B6CB88F165181AD00F860A4 /* font.glf in Resources */ = {isa = PBXBuildFile; fileRef = 4B6CB88E165181AD00F860A4 /* font.glf */; };
 		4B77E07716556C1F0065BE6E /* pinball.png in Resources */ = {isa = PBXBuildFile; fileRef = 4B77E07616556C1F0065BE6E /* pinball.png */; };
-		4B77E07A1655729C0065BE6E /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B77E0791655729C0065BE6E /* libChipmunk-iPhone.a */; };
 		4B77E07C165574390065BE6E /* textures.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4B77E07B165574390065BE6E /* textures.lua */; };
 		4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */; };
 		4BC180EF16502AC100D563AF /* config.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180ED16502AC100D563AF /* config.lua */; };
 		4BC180F016502AC100D563AF /* forces.lua in Resources */ = {isa = PBXBuildFile; fileRef = 4BC180EE16502AC100D563AF /* forces.lua */; };
+		4BC94FF3165C54FB00AF8A8E /* libChipmunk-iPhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */; };
 		4BE9DFD5164C101700599EB8 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD2164C101700599EB8 /* Game.cpp */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
 /* End PBXBuildFile section */
@@ -143,6 +143,7 @@
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
 		4BC180ED16502AC100D563AF /* config.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.lua; sourceTree = "<group>"; };
 		4BC180EE16502AC100D563AF /* forces.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = forces.lua; sourceTree = "<group>"; };
+		4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "../../../../../../lib/chipmunk/libChipmunk-iPhone.a"; sourceTree = "<group>"; };
 		4BE9DFD2164C101700599EB8 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = ../../../shared/Game.cpp; sourceTree = "<group>"; };
 		4BE9DFD3164C101700599EB8 /* Game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Game.h; path = ../../../shared/Game.h; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
@@ -154,7 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B77E07A1655729C0065BE6E /* libChipmunk-iPhone.a in Frameworks */,
+				4BC94FF3165C54FB00AF8A8E /* libChipmunk-iPhone.a in Frameworks */,
 				4B1701FB164AAC4F007D4A2F /* UIKit.framework in Frameworks */,
 				4B1701FD164AAC4F007D4A2F /* Foundation.framework in Frameworks */,
 				4B1701FF164AAC4F007D4A2F /* CoreGraphics.framework in Frameworks */,
@@ -169,6 +170,7 @@
 		4B1701EB164AAC4E007D4A2F = {
 			isa = PBXGroup;
 			children = (
+				4BC94FF2165C54FB00AF8A8E /* libChipmunk-iPhone.a */,
 				4B170204164AAC50007D4A2F /* PorkyPinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
@@ -511,7 +513,7 @@
 				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/lib/chipmunk/iphone simulator\"",
+					"\"/lib/chipmunk\"",
 					"\"/lib\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -528,7 +530,7 @@
 				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"/lib/chipmunk/iphone simulator\"",
+					"\"/lib/chipmunk\"",
 					"\"/lib\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

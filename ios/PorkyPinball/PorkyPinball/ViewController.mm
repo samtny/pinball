@@ -165,6 +165,8 @@ GLfloat gCubeVertexData[216] =
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    [self setPreferredFramesPerSecond:60];
+    
     [self setupGL];
 }
 
