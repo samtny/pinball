@@ -6,6 +6,8 @@
 
 #include "Renderer.h"
 
+#include "Camera.h"
+
 #include "Game.h"
 
 #include "GlutEngine.h"

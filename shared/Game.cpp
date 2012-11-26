@@ -49,9 +49,17 @@ static int lua_resetBallPosition(lua_State *L) {
 
 }
 
-static int lua_setCameraFollowsBall(lua_State *L) {
+static int lua_setCameraMode(lua_State *L) {
 
-	lua_currentInstance->setCameraFollowsBall();
+	int count = lua_gettop(L);
+
+	if (count == 1) {
+
+		string modeName = lua_tostring(L, 1);
+		lua_currentInstance->setCameraMode(modeName.c_str());
+
+	}
+
 	return 0;
 
 }
@@ -146,8 +154,8 @@ void Game::loadRules(void) {
 		lua_pushcfunction(L, lua_resetBallPosition);
 		lua_setglobal(L, "resetBallPosition");
 
-		lua_pushcfunction(L, lua_setCameraFollowsBall);
-		lua_setglobal(L, "setCameraFollowsBall");
+		lua_pushcfunction(L, lua_setCameraMode);
+		lua_setglobal(L, "setCameraMode");
 
 		lua_pushcfunction(L, lua_addTimer);
 		lua_setglobal(L, "addTimer");
@@ -185,10 +193,10 @@ void Game::resetBallPosition() {
 	_physics->resetBallsToInitialPosition();
 }
 
-void Game::setCameraFollowsBall() {
+void Game::setCameraMode(const char *modeName) {
 
-	fprintf(stderr, "%s\n", "setCameraFollowsBall");
-	_renderer->setCameraFollowsBall();	
+	fprintf(stderr, "%s\n", "setCameraMode");
+	_renderer->setCameraMode(modeName);	
 
 }
 

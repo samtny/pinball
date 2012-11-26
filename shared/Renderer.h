@@ -29,7 +29,7 @@ public:
 	void drawObject(cpBody *body, void *data);
 	void drawBall(layoutItem *item);
 	void drawFonts(void);
-	void setCameraFollowsBall(void);
+	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
 private:

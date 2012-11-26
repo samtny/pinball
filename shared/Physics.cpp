@@ -352,20 +352,20 @@ void Physics::loadConfig() {
 			lua_pushnil(L);
 			while(lua_next(L, -2) != 0) {
 				
-					const char *key = lua_tostring(L, -2);
+				const char *key = lua_tostring(L, -2);
                     
-					if (strcmp("timeStep", key) == 0) {
+				if (strcmp("timeStep", key) == 0) {
 						
-                        timeStep = lua_tonumber(L, -1);
+                    timeStep = lua_tonumber(L, -1);
                         
-					} else if (strcmp("scale", key) == 0) {
+				} else if (strcmp("scale", key) == 0) {
 
-						scale = (float)lua_tonumber(L, -1);
+					scale = (float)lua_tonumber(L, -1);
 
-					}
-                    
-					lua_pop(L, 1);
 				}
+                    
+				lua_pop(L, 1);
+			}
             
 		}
         

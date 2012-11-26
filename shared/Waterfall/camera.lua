@@ -3,10 +3,13 @@
 camera = {
 	centered = {
 		t = "fixed",
-		p = { 10.5, 20.5 }
+		z = 1.0,
+		c = { 10.5, 15.5 }
 	},
 	free = {
-		t = "follow"
+		t = "follow",
+		z = 1.0,
+		b = { 3.5, 3.5 }
 	}
 }
 

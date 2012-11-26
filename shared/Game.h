@@ -21,7 +21,7 @@ public:
 	void switchClosed(const char *switchName);
 	void closeSwitch(int switchIndex);
 	void resetBallPosition();
-	void setCameraFollowsBall();
+	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
 	void addLuaTimer(float duration, string funcName, int arg);

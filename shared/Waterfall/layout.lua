@@ -15,12 +15,12 @@ layout = {
 	ball1 = {
 		o = "ball",
 		v = { {6, 32} },
-		s = 2.0
+		s = 1.0
 	},
 	ball2 = {
 		o = "ball",
 		v = { {8, 28} },
-		s = 0.5
+		s = 1
 	},
 	ball3 = {
 		o = "ball",
@@ -29,12 +29,12 @@ layout = {
 	ball4 = {
 		o = "ball",
 		v = { {17, 15} },
-		s = 0.2
+		s = 1
 	},
 	ball5 = {
 		o = "ball",
 		v = { {10, 32} },
-		s = 5
+		s = 1
 	}
 }
 

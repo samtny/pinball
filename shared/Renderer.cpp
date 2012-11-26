@@ -120,13 +120,12 @@ void Renderer::init(void) {
 	_scale = _displayProperties->viewportWidth / box->width;
 
 	_camera = new Camera();
+	_camera->setBridgeInterface(_bridgeInterface);
 	_camera->setWorldScale(_scale);
 	_camera->setDisplayProperties(_displayProperties);
-
 	_camera->setPhysics(_physics);
-
-	this->setCameraFollowsBall();
-
+	_camera->init();
+	
 }
 
 void Renderer::loadTextures(void) {
@@ -335,9 +334,9 @@ void Renderer::drawFonts() {
     
 }
 
-void Renderer::setCameraFollowsBall(void) {
+void Renderer::setCameraMode(const char *modeName) {
 
-	_camera->setModeFollowBall();
+	_camera->setMode(modeName);
 
 }
 
