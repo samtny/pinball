@@ -51,7 +51,7 @@ void GlutEngine::init() {
 	glutKeyboardFunc(glut_keyboardCallback);
 	glutKeyboardUpFunc(glut_keyboardUpCallback);
 
-	_renderer->init();
+	//_renderer->init();
 
 }
 

@@ -38,8 +38,13 @@ void Game::setRenderer(Renderer *renderer) {
 static Game *lua_currentInstance;
 
 void Game::init(void) {
+
 	this->loadRules();
 	lua_currentInstance = this;
+	
+	lua_getglobal(_rules, "resetAll");
+	lua_call(_rules, 0, 0);
+
 }
 
 static int lua_resetBallPosition(lua_State *L) {

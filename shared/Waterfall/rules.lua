@@ -106,7 +106,7 @@ function startGame()
 
 	-- TODO: switch on __PINBALL_DEBUG flag;
 	resetBallPosition()
-	setCameraMode("centered");
+	setCameraMode("centered")
 
 	resetAll()
 	serveBallToTrough()
@@ -151,7 +151,7 @@ function resetLights()
 end
 
 function resetCamera()
-	setCameraFollowsBall()
+	setCameraMode("centered")
 end
 
 function serveBallToTrough()

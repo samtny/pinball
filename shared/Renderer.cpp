@@ -234,6 +234,7 @@ void Renderer::drawPlayfield() {
 	_camera->applyTransform();
 	glScalef(_scale, _scale, 1);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
+	ChipmunkDebugDrawConstraints(_physics->getSpace());
 	glPopMatrix();
 
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, NULL);

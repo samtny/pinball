@@ -229,7 +229,7 @@ cpBody *Physics::createBox(layoutItem *item) {
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[3]));
 	
 	// pin the box in place;
-	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpv( (item->v[3].x - item->v[0].x) / 2.0f , (item->v[1].y - item->v[0].y) * 0.85f ) ) );
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
 	
 	// hang the box shapes on the body;

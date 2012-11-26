@@ -24,6 +24,9 @@ void PinballHost::init() {
 	bi->init();
 	bi->setGameName("Waterfall");
 
+	GlutEngine *e = new GlutEngine();
+	e->init();
+	
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);
 	p->init();
@@ -31,20 +34,21 @@ void PinballHost::init() {
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
 	r->setPhysics(p);
-	//r->init();
+	r->init();
 	
 	Game *g = new Game();
 	g->setBridgeInterface(bi);
-	g->init();
 	g->setPhysics(p);
 	g->setRenderer(r);
-
-	GlutEngine *e = new GlutEngine();
+	g->init();
+	
 	e->setPhysics(p);
 	e->setRenderer(r);
 	e->setGame(g);
-	e->init();
 	_glutEngine = e;
+
+	// TODO: find factoring error;
+	//r->init();
 	
 }
 

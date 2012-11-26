@@ -237,12 +237,14 @@ void Camera::applyTransform(void) {
 	{
 	case CAMERA_TYPE_FIXED: {
 
-		float ty = _activeCameraMode.c.y * _worldScale * _activeCameraMode.z;
+		float tx = _activeCameraMode.c.x * _worldScale * _activeCameraMode.z - (_displayProperties->viewportWidth / 2.0f);
 
-		glTranslatef(0, -ty, 0);
+		float ty = _activeCameraMode.c.y * _worldScale * _activeCameraMode.z - (_displayProperties->viewportHeight / 2.0f);
 
-		glScalef(_activeCameraMode.z, _activeCameraMode.z, 0);
-		
+		glTranslatef(-tx, -ty, 0);
+
+		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
+
 		break;
 							}
 	case CAMERA_TYPE_FOLLOW_BALL:
@@ -285,7 +287,7 @@ void Camera::applyTransform(void) {
 
 		glTranslatef(0, -posY, 0);
 
-		glScalef(_activeCameraMode.z, _activeCameraMode.z, 0);
+		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
 		
 		break;
 	}
