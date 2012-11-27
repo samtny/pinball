@@ -15,6 +15,7 @@ typedef struct {
 	int viewportHeight;
 	int viewportWidth;
     float fontScale;
+	float overlayScale;
 } HostProperties;
 
 typedef struct {

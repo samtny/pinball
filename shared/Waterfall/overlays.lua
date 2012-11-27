@@ -6,7 +6,7 @@ overlays = {
 		l = "",
 		v = "0",
 		p = {0.5,0.92},
-		a = "center",
+		a = "c",
 		s = 1,
 		o = 1.0
 	},
@@ -15,17 +15,17 @@ overlays = {
 		l = "",
 		v = "AbCdEfGhIjKlMnOpQrStUvWxYz",
 		p = {0.5,0.08},
-		a = "center",
+		a = "c",
 		s = 1,
 		o = 1.0
 	},
 	logo = {
 		t = "image",
 		x = "logo",
-		p = {0.95, 0.92},
-		a = "right",
+		p = {0.98, 0.98},
+		a = "tr",
 		s = 1,
-		o = 0.9
+		o = 0.5
 	}
 }
 

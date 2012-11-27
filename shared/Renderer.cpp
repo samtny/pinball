@@ -444,19 +444,33 @@ void Renderer::drawOverlays() {
 
 			glPushMatrix();
 
-			float txX = props.p.x * _displayProperties->viewportWidth;
-			float txY = props.p.y * _displayProperties->viewportHeight;
+			float txX = 0;
+			float txY = 0;
+			const char *align = props.a.c_str();
+			if (strcmp(align, "bl") == 0) {
+				txX = props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5;
+				txY = props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5;
+			} else if (strcmp(align, "c") == 0) {
+				txX = props.p.x * _displayProperties->viewportWidth;
+				txY = props.p.y * _displayProperties->viewportHeight;
+			} else if (strcmp(align, "r") == 0) {
+				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5;
+				txY = props.p.y * _displayProperties->viewportHeight;
+			} else if (strcmp(align, "tr") == 0) {
+				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5;
+				txY = props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5;
+			}
 
 			glTranslatef(txX, txY, 0);
 
-			glScalef(t->w * props.s, t->h * props.s, 1);
+			glScalef(t->w * props.s * _displayProperties->overlayScale, t->h * props.s * _displayProperties->overlayScale, 1);
 
 			glBindTexture(GL_TEXTURE_2D, t->gl_index);
 
 			#ifdef __APPLE__
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 			#else
-				glColor3f(1.0f, 1.0f, 1.0f);
+				glColor3f(1, 1, 1);
 			#endif
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
