@@ -56,6 +56,7 @@ protected:
 	cpBody *createFlipper(layoutItem *iprops);
 	void createSwitch(layoutItem *iprops);
 	void createSegment(layoutItem *iprops);
+	void createCircle(layoutItem *iprops);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	IPhysicsDelegate *_delegate;

@@ -206,6 +206,8 @@ void Physics::createObject(layoutItem *layoutItem) {
         layoutItem->body = this->createBall(layoutItem);
     } else if (strcmp(layoutItem->o.s.c_str(), "switch") == 0) {
 		this->createSwitch(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "circle") == 0) {
+		this->createCircle(layoutItem);
 	}
 
 }
@@ -332,6 +334,15 @@ void Physics::createSwitch(layoutItem *item) {
 void Physics::createSegment(layoutItem *layoutItem) {
 
 	//...
+
+}
+
+void Physics::createCircle(layoutItem *item) {
+
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(space->staticBody, item->o.r1, item->v[0]));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetUserData(shape, item);
 
 }
 
