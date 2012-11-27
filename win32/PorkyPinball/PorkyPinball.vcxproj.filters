@@ -256,6 +256,9 @@
     <None Include="..\..\shared\Waterfall\camera.lua">
       <Filter>Source Files\shared\Waterfall</Filter>
     </None>
+    <None Include="..\..\shared\Waterfall\overlays.lua">
+      <Filter>Source Files\shared\Waterfall</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">

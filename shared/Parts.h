@@ -7,6 +7,8 @@ using namespace std;
 
 #include "chipmunk/chipmunk.h"
 
+typedef struct Coord2{float x,y;} Coord2;
+
 typedef struct materialProperties {
 	string n;
 	float e;
@@ -45,5 +47,27 @@ typedef struct layoutItem {
 	float height;
 } layoutItem;
 typedef map<string, layoutItem>::iterator it_layoutItems;
+
+typedef struct textureProperties {
+	string name;
+	string filename;
+	GLuint gl_index;
+	int w;
+	int h;
+} textureProperties;
+typedef map<string, textureProperties>::iterator it_textureProperties;
+
+struct overlayProperties {
+	string n;
+	string t;
+	string l;
+	string v;
+	string x;
+	Coord2 p;
+	string a;
+	float s;
+	float o;
+};
+typedef map<string, overlayProperties>::iterator it_overlayProperties;
 
 #endif

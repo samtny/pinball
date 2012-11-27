@@ -109,6 +109,26 @@ static int lua_playSound(lua_State *L) {
     
 }
 
+static int lua_updateOverlayText(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	if (count == 2) {
+		const char *key = lua_tostring(L, 1);
+		const char *val = lua_tostring(L, 2); // changes lua stack value to string, btw...
+		lua_currentInstance->updateOverlayText(key, val);
+	}
+
+	return 0;
+
+}
+
+void Game::updateOverlayText(const char *key, const char *val) {
+
+	_renderer->setOverlayText(key, val);
+
+}
+
 void Game::addLuaTimer(float duration, string funcName, int arg) {
 
 	luaTimer t;
@@ -164,6 +184,9 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_addTimer);
 		lua_setglobal(L, "addTimer");
+
+		lua_pushcfunction(L, lua_updateOverlayText);
+		lua_setglobal(L, "updateOverlayText");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));

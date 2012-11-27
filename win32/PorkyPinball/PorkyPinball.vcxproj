@@ -144,6 +144,7 @@
     <None Include="..\..\shared\Waterfall\layout.lua" />
     <None Include="..\..\shared\Waterfall\materials.lua" />
     <None Include="..\..\shared\Waterfall\objects.lua" />
+    <None Include="..\..\shared\Waterfall\overlays.lua" />
     <None Include="..\..\shared\Waterfall\rules.lua" />
     <None Include="..\..\shared\Waterfall\textures.lua" />
     <None Include="..\..\shared\Waterfall\textures\font.glf" />

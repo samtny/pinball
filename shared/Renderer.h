@@ -3,6 +3,10 @@
 
 // TODO: move typedefs out to new header and move folowing to implementation file
 #include "PinballBridgeInterface.h"
+#include "Parts.h"
+
+#include <string>
+#include <map>
 
 class Physics;
 class Camera;
@@ -24,13 +28,15 @@ public:
 	void init(void);
 	void loadTextures(void);
 	void loadFonts(void);
+	void loadOverlays(void);
 	void draw(void);
 	void drawPlayfield(void);
 	void drawObject(cpBody *body, void *data);
 	void drawBall(layoutItem *item);
-	void drawFonts(void);
+	void drawOverlays(void);
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
+	void setOverlayText(const char *overlayName, const char *text);
 	float getZoomLevel();
 private:
 	PinballBridgeInterface *_bridgeInterface;
@@ -38,6 +44,8 @@ private:
 	Camera *_camera;
 	glfont::GLFont *_glfont;
 	HostProperties *_displayProperties;
+	map<string, textureProperties> _textures;
+	map<string, overlayProperties> _overlays;
 	float _scale;
 };
 

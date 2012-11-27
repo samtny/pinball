@@ -36,6 +36,7 @@ layout = {
 		v = { {13, 36} },
 		s = 1
 	},
+
 	post0 = {
 		o = "post",
 		v = { {10, 20} }
@@ -44,6 +45,17 @@ layout = {
 		o = "post",
 		v = { {10, 23} }
 	},
+
+	waterfallSwitch0 = {
+		o = "switch",
+		v = { {5.5, 22.5}, {5.5, 21.5} }
+	},
+
+	waterfallSwitch1 = {
+		o = "switch",
+		v = { {11.5, 22.5}, {11.5, 21.5} }
+	},
+
 	post2 = {
 		o = "post",
 		v = { {13, 21.5} }

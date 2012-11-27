@@ -18,9 +18,11 @@ bonusMultIncrement = 1.0
 
 switches = {}
 
+waterfallSwitchValue = 100
+
 targetStateLit = 0
 targetStateUnlit = 1
-leftTargetBankStates = {}
+leftTargetBankStates = {0,0,0,0,0}
 leftTargetBankTargetCount = 5
 
 leftTargetBankScoreUnlit = 1000
@@ -40,7 +42,19 @@ function handleSwitchClosed(switch)
 		end
 	elseif switch == "startButton" then
 		startButtonPressed()
+	elseif switch == "waterfallSwitch0" or switch == "waterfallSwitch1" then
+		addToScore(waterfallSwitchValue)
 	end
+end
+
+function addToScore(points)
+	score = score + points
+	updateOverlayText("score", score)
+end
+
+function updateOverlayText(key, val)
+	-- C API stub
+	print (val)
 end
 
 function leftTargetBankHit(index)
@@ -129,6 +143,7 @@ end
 
 function resetScore()
 	score = startingScore
+	updateOverlayText("score", score)
 	bonus = startingBonus
 	scoreMult = startingScoreMult
 	bonusMult = startingBonusMult

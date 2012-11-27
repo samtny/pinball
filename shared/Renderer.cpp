@@ -31,16 +31,6 @@ extern "C" {
 
 using namespace std;
 
-typedef struct textureProperties {
-	string name;
-	string filename;
-	GLuint gl_index;
-	int w;
-	int h;
-} textureProperties;
-map<string, textureProperties> textures;
-typedef map<string, textureProperties>::iterator it_textureProperties;
-
 static Renderer *renderer_CurrentInstance;
 
 Renderer::Renderer(void)
@@ -86,8 +76,9 @@ void Renderer::init(void) {
 
 	this->loadTextures();
 	this->loadFonts();
+	this->loadOverlays();
 
-	for (it_textureProperties iterator = textures.begin(); iterator != textures.end(); iterator++) {
+	for (it_textureProperties iterator = _textures.begin(); iterator != _textures.end(); iterator++) {
 
 		string name = (&*iterator)->first;
 		textureProperties *props = &(&*iterator)->second;
@@ -128,6 +119,88 @@ void Renderer::init(void) {
 	
 }
 
+void Renderer::loadOverlays(void) {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *overlaysFilename = _bridgeInterface->getPathForScriptFileName((void *)"overlays.lua");
+
+	int error = luaL_dofile(L, overlaysFilename);
+	if (!error) {
+
+		lua_getglobal(L, "overlays");
+
+		if (lua_istable(L, -1)) {
+
+			lua_pushnil(L);
+			while (lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+
+				overlayProperties props;
+				props.n = name;
+
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+
+					if (strcmp(key, "t") == 0) {
+						props.t = lua_tostring(L, -1);
+					} else if (strcmp(key, "l") == 0) {
+						props.l = lua_tostring(L, -1);
+					} else if (strcmp(key, "v") == 0) {
+						props.v = lua_tostring(L, -1);
+					} else if (strcmp(key, "p") == 0) {
+						
+						Coord2 coord;
+
+						lua_pushnil(L);
+
+						lua_next(L, -2);
+						coord.x = (float)lua_tonumber(L, -1);
+						lua_pop(L, 1);
+						lua_next(L, -2);
+						coord.y = (float)lua_tonumber(L, -1);
+						lua_pop(L, 1);
+
+						lua_pop(L, 1);
+
+						props.p = coord;
+
+					} else if (strcmp(key, "a") == 0) {
+						props.a = lua_tostring(L, -1);
+					} else if (strcmp(key, "s") == 0) {
+						props.s = (float)lua_tonumber(L, -1);
+					} else if (strcmp(key, "o") == 0) {
+						props.o = (float)lua_tonumber(L, -1);
+					} else if (strcmp(key, "x") == 0) {
+						props.x = lua_tostring(L, -1);
+					}
+
+					lua_pop(L, 1);
+				}
+
+				lua_pop(L, 1);
+
+				_overlays[name] = props;
+
+			}
+
+		}
+
+		lua_pop(L, 1); // pop overlays table
+
+	} else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
 void Renderer::loadTextures(void) {
 
 	lua_State *L = luaL_newstate();
@@ -164,7 +237,7 @@ void Renderer::loadTextures(void) {
 					lua_pop(L, 1);
 				}
 
-				textures.insert(make_pair(name, props));
+				_textures.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 
@@ -196,7 +269,7 @@ void Renderer::draw(void) {
 	//glEnable(GL_DEPTH_TEST);
 
 	this->drawPlayfield();
-	this->drawFonts();
+	this->drawOverlays();
 	
 	int err = glGetError();
 	if (err != GL_NO_ERROR) {
@@ -230,11 +303,14 @@ void Renderer::drawPlayfield() {
 	_scale = _displayProperties->viewportWidth / box->width;
 
 	glPushMatrix();
+
 	_camera->setWorldScale(_scale);
 	_camera->applyTransform();
+
 	glScalef(_scale, _scale, 1);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
+
 	glPopMatrix();
 
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, NULL);
@@ -272,9 +348,8 @@ void Renderer::drawBall(layoutItem *item) {
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
 	cpBody *ball = item->body;
-	textureProperties *t = &textures[item->o.t.n];
+	textureProperties *t = &_textures[item->o.t.n];
 
-	// lerp
 	float posX = (float)ball->p.x * _scale;
 	float posY = (float)ball->p.y * _scale;
 
@@ -296,7 +371,14 @@ void Renderer::drawBall(layoutItem *item) {
 
 }
 
-void Renderer::drawFonts() {
+void Renderer::setOverlayText(const char *overlayName, const char *text) {
+
+	overlayProperties *props = &_overlays[overlayName];
+	props->v = text;
+
+}
+
+void Renderer::drawOverlays() {
 
 	// font;
 
@@ -312,25 +394,78 @@ void Renderer::drawFonts() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-#ifdef __APPLE__
-    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-#else
-	glColor3f(0.0f, 0.0f, 1.0f);
-#endif
-
 	glEnable(GL_TEXTURE_2D);
-	_glfont->Begin();
-	pair<int, int> texSize;
-	_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
-    
-	float txX = (float)(_displayProperties->viewportWidth * 0.5 - texSize.first / 2.0 * _displayProperties->fontScale);
-	float txY = (float)(_displayProperties->viewportHeight * 0.95 + texSize.second / 2.0 * _displayProperties->fontScale);
 
-    glTranslatef(txX, txY, 0);
-    glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
-    
-	_glfont->DrawString("abcdefghijklmnopqrstuvwxyz", 0, 0);
-    
+	for (it_overlayProperties it = _overlays.begin(); it != _overlays.end(); it++) {
+
+		overlayProperties props = it->second;
+
+		if (strcmp(props.t.c_str(), "text") == 0) {
+		
+			_glfont->Begin();
+			pair<int, int> texSize;
+			//_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
+			_glfont->GetStringSize((props.l + props.v).c_str(), &texSize);
+
+			float txX = (float)(_displayProperties->viewportWidth * props.p.x - texSize.first / 2.0 * _displayProperties->fontScale);
+			float txY = (float)(_displayProperties->viewportHeight * props.p.y + texSize.second / 2.0 * _displayProperties->fontScale);
+
+			glPushMatrix();
+			glTranslatef(txX, txY, 0);
+			glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
+			#ifdef __APPLE__
+				glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+			#else
+				glColor3f(0.0f, 0.0f, 1.0f);
+			#endif
+			_glfont->DrawString((props.l + props.v).c_str(), 0, 0);
+			glPopMatrix();
+
+		} else if (strcmp(props.t.c_str(), "image") == 0) {
+
+			static const GLfloat verts[] = {
+				-0.5, -0.5,
+				-0.5, 0.5,
+				0.5, -0.5,
+				0.5, 0.5
+			};
+
+			static const GLfloat tex[] = {
+				0, 0,
+				0, 1,
+				1, 0,
+				1, 1
+			};
+
+			glVertexPointer(2, GL_FLOAT, 0, verts);
+			glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+			textureProperties *t = &_textures[props.x];
+
+			glPushMatrix();
+
+			float txX = props.p.x * _displayProperties->viewportWidth;
+			float txY = props.p.y * _displayProperties->viewportHeight;
+
+			glTranslatef(txX, txY, 0);
+
+			glScalef(t->w * props.s, t->h * props.s, 1);
+
+			glBindTexture(GL_TEXTURE_2D, t->gl_index);
+
+			#ifdef __APPLE__
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			#else
+				glColor3f(1.0f, 1.0f, 1.0f);
+			#endif
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			glPopMatrix();
+
+		}
+
+	}
+
 	glDisable(GL_TEXTURE_2D);
     
 }
