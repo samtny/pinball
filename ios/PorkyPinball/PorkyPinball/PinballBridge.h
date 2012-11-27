@@ -12,10 +12,11 @@
 @interface PinballBridge : NSObject
 
 -(void)initI;
+-(void)setGameName:(const char *)gameName;
 -(const char *)getPathForScriptFileName:(void *)scriptFileName;
 -(const char *)getPathForTextureFileName:(void *)textureFileName;
 -(Texture *)createRGBATexture:(void *)textureFileName;
--(DisplayProperties *)getDisplayProperties;
--(void)playSound:(void *)soundName;
+-(HostProperties *)getHostProperties;
+-(void)playSound:(const char *)soundName;
 
 @end

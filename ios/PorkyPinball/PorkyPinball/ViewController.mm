@@ -131,29 +131,6 @@ GLfloat gCubeVertexData[216] =
 {
     [super viewDidLoad];
     
-    PinballBridgeInterface *bi = new PinballBridgeInterface();
-    bi->init();
-    
-    Physics *p = new Physics();
-    p->setBridgeInterface(bi);
-    p->init();
-    
-    Renderer *r = new Renderer();
-    r->setBridgeInterface(bi);
-    r->setPhysics(p);
-    //r->init();
-    
-    Game *g = new Game();
-    g->setBridgeInterface(bi);
-    g->init();
-    g->setPhysics(p);
-    g->setRenderer(r);
-    
-    _bridgeInterface = bi;
-    _physics = p;
-    _renderer = r;
-    _game = g;
-    
     //self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2] autorelease];
     self.context = [[[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1] autorelease];
     
@@ -168,6 +145,31 @@ GLfloat gCubeVertexData[216] =
     [self setPreferredFramesPerSecond:60];
     
     [self setupGL];
+    
+    PinballBridgeInterface *bi = new PinballBridgeInterface();
+    bi->init();
+    bi->setGameName("Waterfall");
+    
+    Physics *p = new Physics();
+    p->setBridgeInterface(bi);
+    p->init();
+    
+    Renderer *r = new Renderer();
+    r->setBridgeInterface(bi);
+    r->setPhysics(p);
+    r->init();
+    
+    Game *g = new Game();
+    g->setBridgeInterface(bi);
+    g->setPhysics(p);
+    g->setRenderer(r);
+    g->init();
+    
+    _bridgeInterface = bi;
+    _physics = p;
+    _renderer = r;
+    _game = g;
+    
 }
 
 - (void)viewDidUnload
@@ -202,7 +204,7 @@ GLfloat gCubeVertexData[216] =
 {
     [EAGLContext setCurrentContext:self.context];
     
-    _renderer->init();
+    //_renderer->init();
     
     return;
     

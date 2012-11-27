@@ -26,13 +26,13 @@ extern "C" {
 #include <string>
 #include <map>
 
-typedef struct Point{float x,y;} Point;
+typedef struct Coord2d{float x,y;} Coord2d;
 
 struct CameraMode {
 	string name;
 	CameraType t;
-	Point c;
-	Point b; // buffer / border
+	Coord2d c;
+	Coord2d b; // buffer / border
 	float z;
 };
 map<string, CameraMode> _cameraModes;

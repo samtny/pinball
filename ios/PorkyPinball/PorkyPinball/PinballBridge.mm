@@ -11,6 +11,7 @@
 
 @interface PinballBridge() {
     SoundManager *_soundManager;
+    const char *_gameName;
 }
 
 +(CGSize)windowCurrentSize;
@@ -56,11 +57,13 @@ bool PinballBridgeInterface::init(void) {
 
 -(void)initI {
     
+#ifndef TARGET_IPHONE_SIMULATOR
     SoundManager *s = [[SoundManager alloc] init];
     
     [s loadSoundWithKey:@"flip" musicFile:@"flip.caf"];
     
     _soundManager = s;
+#endif
     
 }
 
@@ -68,6 +71,10 @@ bool PinballBridgeInterface::init(void) {
     
     [_soundManager release];
     
+}
+
+void PinballBridgeInterface::setGameName(const char *gameName) {
+    [(id)self setGameName:gameName];
 }
 
 const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
@@ -82,12 +89,12 @@ Texture * PinballBridgeInterface::createRGBATexture(void *textureFileName) {
     return [(id)self createRGBATexture:textureFileName];
 }
 
-DisplayProperties * PinballBridgeInterface::getDisplayProperties() {
-    return [(id)self getDisplayProperties];
+HostProperties * PinballBridgeInterface::getHostProperties() {
+    return [(id)self getHostProperties];
 }
 
 void PinballBridgeInterface::playSound(void * soundName) {
-    [(id)self playSound:soundName];
+    [(id)self playSound:(const char *)soundName];
 }
 
 void PinballBridgeInterface::addTimer(float duration, int id) {
@@ -98,10 +105,18 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     // TODO: something
 }
 
+-(void)setGameName:(const char *)gameName {
+    
+    delete(_gameName);
+    _gameName = gameName;
+    
+}
+
 -(const char *)getPathForScriptFileName:(void *)scriptFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)scriptFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)scriptFileName] pathExtension];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix];
+    NSString *dir = [NSString stringWithUTF8String:_gameName];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
     const char *path = [filePath UTF8String];
     return path;
 }
@@ -109,7 +124,8 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
 -(const char *)getPathForTextureFileName:(void *)textureFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)textureFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)textureFileName] pathExtension];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix];
+    NSString *dir = [[NSString stringWithUTF8String:_gameName] stringByAppendingPathComponent:@"textures"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
     const char *path = [filePath UTF8String];
     return path;
 }
@@ -145,8 +161,8 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     
 }
 
--(DisplayProperties *)getDisplayProperties {
-    DisplayProperties *props = new DisplayProperties();
+-(HostProperties *)getHostProperties {
+    HostProperties *props = new HostProperties();
     
     props->viewportX = 0;
     props->viewportY = 0;
@@ -162,9 +178,9 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     return props;
 }
 
--(void)playSound:(void *)soundName {
+-(void)playSound:(const char *)soundName {
     
-    NSLog(@"playSound:%@", soundName);
+    NSLog(@"playSound:%@", [NSString stringWithUTF8String:soundName]);
     
     NSString *name = [NSString stringWithCString:(const char *)soundName encoding:NSUTF8StringEncoding];
     

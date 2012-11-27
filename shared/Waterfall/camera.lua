@@ -4,7 +4,7 @@ camera = {
 	centered = {
 		t = "fixed",
 		z = 1.10,
-		c = { 10, 15.5 }
+		c = { 10, 22 }
 	},
 	free = {
 		t = "follow",
