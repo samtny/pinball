@@ -51,7 +51,7 @@ typedef map<string, layoutItem>::iterator it_layoutItems;
 typedef struct textureProperties {
 	string name;
 	string filename;
-	GLuint gl_index;
+	uint gl_index;
 	int w;
 	int h;
 } textureProperties;

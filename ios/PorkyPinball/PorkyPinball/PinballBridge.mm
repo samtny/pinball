@@ -175,6 +175,8 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     float scale = size.width / 800.0f;
     props->fontScale = scale;
     
+    props->overlayScale = 0.5;
+    
     return props;
 }
 
