@@ -180,7 +180,7 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
 
 -(void)playSound:(const char *)soundName {
     
-    NSLog(@"playSound:%@", [NSString stringWithUTF8String:soundName]);
+    //NSLog(@"playSound:%@", [NSString stringWithUTF8String:soundName]);
     
     NSString *name = [NSString stringWithCString:(const char *)soundName encoding:NSUTF8StringEncoding];
     
