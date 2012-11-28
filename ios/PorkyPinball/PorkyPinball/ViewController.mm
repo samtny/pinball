@@ -148,7 +148,7 @@ GLfloat gCubeVertexData[216] =
     
     PinballBridgeInterface *bi = new PinballBridgeInterface();
     bi->init();
-    bi->setGameName("Waterfall");
+    bi->setGameName("Waterfall2");
     
     Physics *p = new Physics();
     p->setBridgeInterface(bi);
