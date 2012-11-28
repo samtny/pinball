@@ -22,7 +22,7 @@ void PinballHost::init() {
 
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
 	bi->init();
-	bi->setGameName("Waterfall");
+	bi->setGameName("Waterfall2");
 
 	GlutEngine *e = new GlutEngine();
 	e->init();

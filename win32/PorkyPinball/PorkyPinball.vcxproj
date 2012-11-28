@@ -138,6 +138,16 @@
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="..\..\shared\Waterfall2\camera.lua" />
+    <None Include="..\..\shared\Waterfall2\config.lua" />
+    <None Include="..\..\shared\Waterfall2\forces.lua" />
+    <None Include="..\..\shared\Waterfall2\layout.lua" />
+    <None Include="..\..\shared\Waterfall2\materials.lua" />
+    <None Include="..\..\shared\Waterfall2\objects.lua" />
+    <None Include="..\..\shared\Waterfall2\overlays.lua" />
+    <None Include="..\..\shared\Waterfall2\rules.lua" />
+    <None Include="..\..\shared\Waterfall2\textures.lua" />
+    <None Include="..\..\shared\Waterfall2\textures\font.glf" />
     <None Include="..\..\shared\Waterfall\camera.lua" />
     <None Include="..\..\shared\Waterfall\config.lua" />
     <None Include="..\..\shared\Waterfall\forces.lua" />
@@ -153,6 +163,8 @@
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="..\..\shared\Waterfall2\textures\pinball.png" />
+    <Image Include="..\..\shared\Waterfall2\textures\tiling.png" />
     <Image Include="..\..\shared\Waterfall\textures\pinball.png" />
     <Image Include="..\..\shared\Waterfall\textures\tiling.png" />
   </ItemGroup>

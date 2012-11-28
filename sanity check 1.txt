@@ -29,7 +29,7 @@ so, to address;
 		DONE zoom level
 		"swirl in" to playfield on game start "effect"
 		fade-in / out ""
-		focus on single point w/ zoom
+		DONE focus on single point w/ zoom
 	DONE think of 3 different ways to present / position text and implement ""
 	
 	DONE write sound engine

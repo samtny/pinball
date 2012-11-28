@@ -21,6 +21,10 @@ static cpSpace *space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
+static float _targetRestLength = 0;
+static float _targetStiffness = 0;
+static float _targetDamping = 0;
+
 static double timeStep = 1.0/180.0;
 
 static float scale = 37;
@@ -28,13 +32,15 @@ static float scale = 37;
 enum shapeGroup {
 	shapeGroupBox,
     shapeGroupBall,
-	shapeGroupFlippers
+	shapeGroupFlippers,
+	shapeGroupTargets
 };
 
 enum CollisionType {
 	CollisionTypeNone,
 	CollisionTypeSwitch,
-	CollisionTypeBall
+	CollisionTypeBall,
+	CollisionTypeTarget
 };
 
 #ifdef _WIN32
@@ -208,6 +214,8 @@ void Physics::createObject(layoutItem *layoutItem) {
 		this->createSwitch(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "circle") == 0) {
 		this->createCircle(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "target") == 0) {
+		layoutItem->body = this->createTarget(layoutItem);
 	}
 
 }
@@ -324,7 +332,9 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 
 void Physics::createSwitch(layoutItem *item) {
 
-	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, item->v[0], item->v[1], item->o.r1));
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, item->v[0], item->v[1], item->o.r1));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
 	cpShapeSetUserData(shape, item);
@@ -339,10 +349,50 @@ void Physics::createSegment(layoutItem *layoutItem) {
 
 void Physics::createCircle(layoutItem *item) {
 
-	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(space->staticBody, item->o.r1, item->v[0]));
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, item->o.r1, item->v[0]));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
+
+}
+
+cpBody *Physics::createTarget(layoutItem *item) {
+
+	cpVect a = cpv(item->v[0].x, item->v[0].y);
+	cpVect b = cpv(item->v[1].x, item->v[1].y);
+	cpVect mid = cpvmult(cpvadd(a, b), 0.5);
+
+	cpFloat length = cpvdist(a, b);
+
+	cpFloat area = (item->o.r1 * M_PI) * 2;
+	cpFloat mass = area * item->o.m.d;
+
+	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
+	cpBodySetPos(body, mid);
+		
+	// target surface normal;
+	cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
+
+	// groove
+	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
+	cpVect grooveB = body->p;
+
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, grooveA, grooveB, cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, grooveA, cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetCollisionType(shape, CollisionTypeTarget);
+	cpShapeSetGroup(shape, shapeGroupTargets);
+	cpShapeSetUserData(shape, item);
+
+	return body;
 
 }
 
@@ -661,6 +711,12 @@ void Physics::loadForces() {
                         gravity.y = (float)lua_tonumber(L, -1);
                         lua_pop(L, 1);
                                                 
+					} else if (strcmp("targetStiffness", key) == 0) {
+						_targetStiffness = (float)lua_tonumber(L, -1);
+					} else if (strcmp("targetDamping", key) == 0) {
+						_targetDamping = (float)lua_tonumber(L, -1);
+					} else if (strcmp("targetRestLength", key) == 0) {
+						_targetRestLength = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);

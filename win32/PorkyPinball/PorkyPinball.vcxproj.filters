@@ -28,6 +28,12 @@
     <Filter Include="Source Files\shared\lua\src">
       <UniqueIdentifier>{1451c41a-144f-4d29-8cd5-a3400d25390a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shared\Waterfall2">
+      <UniqueIdentifier>{471f9af4-855f-473c-b350-c5ede5beb048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Waterfall2\textures">
+      <UniqueIdentifier>{b246a807-592e-40fe-835e-bc8c040d74cf}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\shared\Waterfall">
       <UniqueIdentifier>{f51c6fc1-e7da-41e2-8c1e-0ce465b1ef83}</UniqueIdentifier>
     </Filter>
@@ -259,6 +265,36 @@
     <None Include="..\..\shared\Waterfall\overlays.lua">
       <Filter>Source Files\shared\Waterfall</Filter>
     </None>
+    <None Include="..\..\shared\Waterfall2\overlays.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\rules.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\textures.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\layout.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\camera.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\forces.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\config.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\materials.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\objects.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
+    <None Include="..\..\shared\Waterfall2\textures\font.glf">
+      <Filter>Source Files\shared\Waterfall2\textures</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
@@ -269,6 +305,12 @@
     </Image>
     <Image Include="..\..\shared\Waterfall\textures\tiling.png">
       <Filter>Source Files\shared\Waterfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Waterfall2\textures\pinball.png">
+      <Filter>Source Files\shared\Waterfall2\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Waterfall2\textures\tiling.png">
+      <Filter>Source Files\shared\Waterfall2\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>

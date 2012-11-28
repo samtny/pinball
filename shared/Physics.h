@@ -54,6 +54,7 @@ protected:
 	cpBody *createBox(layoutItem *iprops);
     cpBody *createBall(layoutItem *iprops);
 	cpBody *createFlipper(layoutItem *iprops);
+	cpBody *createTarget(layoutItem *iprops);
 	void createSwitch(layoutItem *iprops);
 	void createSegment(layoutItem *iprops);
 	void createCircle(layoutItem *iprops);
