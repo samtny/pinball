@@ -7,8 +7,8 @@ forces = {
 	flipForce = 0.5,
 	unflipImpulse = 1.0,
 	unflipForce = 0.5,
-	targetStiffness = 90.0, -- glass == 90
-	targetDamping = 0.5,
+	targetStiffness = 10.0, -- glass == 90
+	targetDamping = 0.2,
 	targetRestLength = 0.0125
 }
 

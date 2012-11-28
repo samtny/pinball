@@ -113,6 +113,11 @@ layout = {
 	target1 = {
 		o = "target",
 		v = { {14, 16} , {15, 17} }
+	},
+
+	pop0 = {
+		o = "popbumper",
+		v = { {10, 26} }
 	}
 
 }

@@ -33,14 +33,16 @@ enum shapeGroup {
 	shapeGroupBox,
     shapeGroupBall,
 	shapeGroupFlippers,
-	shapeGroupTargets
+	shapeGroupTargets,
+	shapeGroupPopbumpers
 };
 
 enum CollisionType {
 	CollisionTypeNone,
 	CollisionTypeSwitch,
 	CollisionTypeBall,
-	CollisionTypeTarget
+	CollisionTypeTarget,
+	CollisionTypePopbumper
 };
 
 #ifdef _WIN32
@@ -216,6 +218,8 @@ void Physics::createObject(layoutItem *layoutItem) {
 		this->createCircle(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "target") == 0) {
 		layoutItem->body = this->createTarget(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "popbumper") == 0) {
+		layoutItem->body = this->createPopbumper(layoutItem);
 	}
 
 }
@@ -275,7 +279,7 @@ static int ballCollisionGroup = 2048;
 
 cpBody *Physics::createBall(layoutItem *item) {
     
-    cpFloat area = (item->o.r1 * item->o.r1 * M_PI) * 2;
+    cpFloat area = (item->o.r1 * item->o.r1 * M_PI);
     cpFloat mass = area * item->o.m.d;
     
     cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
@@ -366,12 +370,12 @@ cpBody *Physics::createTarget(layoutItem *item) {
 
 	cpFloat length = cpvdist(a, b);
 
-	cpFloat area = (item->o.r1 * M_PI) * 2;
+	cpFloat area = (item->o.r1 * length) * 2;
 	cpFloat mass = area * item->o.m.d;
 
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
 	cpBodySetPos(body, mid);
-		
+	
 	// target surface normal;
 	cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
 
@@ -391,6 +395,30 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypeTarget);
 	cpShapeSetGroup(shape, shapeGroupTargets);
 	cpShapeSetUserData(shape, item);
+
+	return body;
+
+}
+
+cpBody *Physics::createPopbumper(layoutItem *item) {
+
+	cpFloat area = (item->o.r1 * item->o.r1 * M_PI);
+	cpFloat mass = area * item->o.m.d;
+
+	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
+	cpBodySetPos(body, cpv(item->v[0].x, item->v[0].y));
+
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetCollisionType(shape, CollisionTypePopbumper);
+	cpShapeSetGroup(shape, shapeGroupPopbumpers);
+	cpShapeSetUserData(shape, item);
+
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(box->body, body, body->p));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(box->body, body, 0.0f, 0.0f));
 
 	return body;
 
