@@ -275,7 +275,7 @@ static int ballCollisionGroup = 2048;
 
 cpBody *Physics::createBall(layoutItem *item) {
     
-    cpFloat area = (item->o.r1 * M_PI) * 2;
+    cpFloat area = (item->o.r1 * item->o.r1 * M_PI) * 2;
     cpFloat mass = area * item->o.m.d;
     
     cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
