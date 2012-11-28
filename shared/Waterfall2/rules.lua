@@ -20,6 +20,8 @@ switches = {}
 
 waterfallSwitchValue = 100
 
+popBumperValue = 10
+
 targetStateLit = 0
 targetStateUnlit = 1
 leftTargetBankStates = {0,0,0,0,0}
@@ -44,6 +46,8 @@ function handleSwitchClosed(switch)
 		startButtonPressed()
 	elseif switch == "waterfallSwitch0" or switch == "waterfallSwitch1" then
 		addToScore(waterfallSwitchValue)
+	elseif switch == "pop0" then
+		addToScore(popBumperValue)
 	end
 end
 

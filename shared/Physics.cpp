@@ -25,6 +25,9 @@ static float _targetRestLength = 0;
 static float _targetStiffness = 0;
 static float _targetDamping = 0;
 
+static float _popBumperThreshold = 0.005;
+static float _popBumperImpulse = 0.04;
+
 static double timeStep = 1.0/180.0;
 
 static float scale = 37;
@@ -175,10 +178,34 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
+static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	if (!cpArbiterIsFirstContact(arb)) return;
+
+	cpVect impulse = cpArbiterTotalImpulse(arb);
+	
+	if (cpvlength(impulse) >= _popBumperThreshold) {
+		
+		cpBody *ball, *pop;
+		cpArbiterGetBodies(arb, &ball, &pop);
+
+		cpVect normal = cpArbiterGetNormal(arb, 0);
+
+		cpBodyApplyImpulse(ball, cpvmult(normal, _popBumperImpulse), cpvzero);
+
+		layoutItem *l = (layoutItem *)pop->data;
+
+		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+
+	}
+
+}
+
 void Physics::initCollisionHandlers(void) {
 
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
+	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
 
 }
 
@@ -455,6 +482,8 @@ cpBody *Physics::createPopbumper(layoutItem *item) {
 
 	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(box->body, body, body->p));
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(box->body, body, 0.0f, 0.0f));
+
+	body->data = item;
 
 	return body;
 
