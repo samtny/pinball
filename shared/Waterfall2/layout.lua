@@ -2,7 +2,7 @@
 layout = {
 	box = {
 		o = "box",
-		v = { {0,0} , {0,40} , {20,40} , {20,0} }
+		v = { {-10,0} , {-10,40} , {30,40} , {30,0} }
 	},
 	troughSwitch = {
 		o = "switch",
@@ -117,8 +117,29 @@ layout = {
 
 	pop0 = {
 		o = "popbumper",
-		v = { {10, 26} }
+		v = { {10, 28.5} }
+	},
+
+	wireguide0 = {
+		o = "wireGuide",
+		v = { {-2,29}, {0,0} }
+	},
+
+	wireguide1 = {
+		o = "wireGuide",
+		v = { {22,29}, {20,0} }
+	},
+
+	lslingshot = {
+		o = "slingshot",
+		v = { {2, 14}, {5, 7} }
+	},
+
+	rslingshot = {
+		o = "slingshot",
+		v = { {18, 14}, {15, 7} }
 	}
+
 
 }
 

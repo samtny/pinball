@@ -34,7 +34,8 @@ enum shapeGroup {
     shapeGroupBall,
 	shapeGroupFlippers,
 	shapeGroupTargets,
-	shapeGroupPopbumpers
+	shapeGroupPopbumpers,
+	shapeGroupSlingshots
 };
 
 enum CollisionType {
@@ -42,7 +43,8 @@ enum CollisionType {
 	CollisionTypeSwitch,
 	CollisionTypeBall,
 	CollisionTypeTarget,
-	CollisionTypePopbumper
+	CollisionTypePopbumper,
+	CollisionTypeSlingshot
 };
 
 #ifdef _WIN32
@@ -220,6 +222,8 @@ void Physics::createObject(layoutItem *layoutItem) {
 		layoutItem->body = this->createTarget(layoutItem);
 	} else if (strcmp(layoutItem->o.s.c_str(), "popbumper") == 0) {
 		layoutItem->body = this->createPopbumper(layoutItem);
+	} else if (strcmp(layoutItem->o.s.c_str(), "slingshot") == 0) {
+		layoutItem->body = this->createSlingshot(layoutItem);
 	}
 
 }
@@ -345,9 +349,41 @@ void Physics::createSwitch(layoutItem *item) {
 	
 }
 
-void Physics::createSegment(layoutItem *layoutItem) {
+void Physics::createSegment(layoutItem *item) {
 
-	//...
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, item->v[0], item->v[1], item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetUserData(shape, item);
+
+}
+
+cpBody *Physics::createSlingshot(layoutItem *item) {
+
+	cpVect mid = cpvmult(cpvadd(item->v[0], item->v[1]), 0.5);
+
+	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
+	cpFloat mass = area * item->o.m.d;
+
+	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForSegment(mass, item->v[0], item->v[1])));
+	cpBodySetPos(body, mid);
+
+	layoutItem *box = &_layoutItems.find("box")->second;
+
+ 	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box->body, cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
+
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r1));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetGroup(shape, shapeGroupSlingshots);
+	cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
+
+	cpShapeSetUserData(shape, item);
+
+	return body;
 
 }
 
