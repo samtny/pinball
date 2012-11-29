@@ -103,12 +103,17 @@ const char *PinballBridge::getPathForScriptFileName(void *scriptFileName) {
 
 const char *PinballBridge::getPathForTextureFilename(void *textureFilename) {
 	
-	const char *p = "..\\..\\shared\\PorkyPinball\\textures\\";
+	const char *p = "..\\..\\shared\\";
+	const char *g = _gameName;
+	const char *s = "\\textures\\";
 	const char *f = (const char *)textureFilename;
-	// TODO: this is a leak;
-	char *concat = new char[strlen(p) + strlen(f) + 1];
+	
+	char *concat = new char[strlen(p) + strlen(g) + strlen(s) + strlen(f) + 1];
 	strcpy(concat, p);
+	strcat(concat, g);
+	strcat(concat, s);
 	strcat(concat, f);
+
 	return concat;
 
 }

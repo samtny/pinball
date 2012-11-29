@@ -10,10 +10,19 @@ forces = {
 	unflipImpulse = 1.0,
 	unflipForce = 0.5,
 
+	slingshotRestLength = 0.6,
+	slingshotSwitchGap = 0.25,
+	slingshotStiffness = 35.0,
+	slingshotDamping = 0.15,
+	slingshotImpulse = 0.05,
+
 	targetStiffness = 35.0, -- glass == 90
-	targetDamping = 0.05,
+	targetDamping = 0.15,
 	targetRestLength = 0.5,
-	targetSwitchGap = 0.25
+	targetSwitchGap = 0.25,
+
+	popBumperThreshold = 0.005,
+	popBumperImpulse = 0.02
 
 }
 

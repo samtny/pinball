@@ -42,6 +42,10 @@ public:
 	
 	int ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused);
 
+	void setPaused(bool paused);
+
+	bool getPaused();
+
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -67,5 +71,6 @@ private:
 	map<string, materialProperties> _materials;
 	map<string, objectProperties> _objects;
 	map<string, layoutItem> _layoutItems;
+	bool _paused;
 };
 

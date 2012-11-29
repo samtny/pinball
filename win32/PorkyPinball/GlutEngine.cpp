@@ -75,10 +75,14 @@ void GlutEngine::start() {
 }
 
 void GlutEngine::timerFunc(int value) {
+
 	glutTimerFunc(SLEEP_TICKS, glut_timerFunc, 0);
-	// TODO: for loop...
-	this->_physics->updatePhysics();
-	glutPostRedisplay();
+	
+	if  (!_game->getPaused()) {
+		this->_physics->updatePhysics();
+		glutPostRedisplay();
+	}
+	
 }
 
 void GlutEngine::displayFunc() {
@@ -99,6 +103,8 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 	} else if (key == '-') {
 		// decrease "zoom"
 		_game->setZoomLevel(_game->getZoomLevel() - 0.25);
+	} else if (key == 'p') {
+		_game->setPaused(!_game->getPaused());
 	}
 
 }

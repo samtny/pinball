@@ -13,9 +13,9 @@ layout = {
         v = { {2.5,35} }
     },
 	ball1 = {
-		o = "ball",
+		o = "duck",
 		v = { {5, 37} },
-		s = 1.0
+		s = 1.2
 	},
 	ball2 = {
 		o = "ball",
@@ -27,14 +27,14 @@ layout = {
 		v = { {9, 38} }
 	},
 	ball4 = {
-		o = "ball",
+		o = "butterfly",
 		v = { {11.5, 35.5} },
-		s = 1
+		s = 1.2
 	},
 	ball5 = {
-		o = "ball",
+		o = "pinwheel",
 		v = { {13, 36} },
-		s = 1
+		s = 2.0
 	},
 
 	post0 = {
@@ -137,7 +137,7 @@ layout = {
 
 	rslingshot = {
 		o = "slingshot",
-		v = { {18, 14}, {15, 7} }
+		v = { {15, 7}, {18, 14} }
 	}
 
 

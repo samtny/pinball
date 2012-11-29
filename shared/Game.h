@@ -27,6 +27,8 @@ public:
 	void addLuaTimer(float duration, string funcName, int arg);
 	void timerCallback(int timerId);
 	void updateOverlayText(const char *key, const char *val);
+	void setPaused(bool paused);
+	bool getPaused();
 protected:
 	void loadRules();
 private:
@@ -37,5 +39,6 @@ private:
 	int _zoomLevel;
 	int _maxZoomLevel;
 	int _min_ZoomLevel;
+	bool _paused;
 };
 

@@ -26,6 +26,12 @@ static float _targetSwitchGap = 0;
 static float _targetStiffness = 0;
 static float _targetDamping = 0;
 
+static float _slingshotRestLength = 0.6;
+static float _slingshotSwitchGap = 0.25;
+static float _slingshotStiffness = 35.0;
+static float _slingshotDamping = 0.05;
+static float _slingshotImpulse = 0.02;
+
 static float _popBumperThreshold = 0.005;
 static float _popBumperImpulse = 0.04;
 
@@ -49,7 +55,8 @@ enum CollisionType {
 	CollisionTypeTarget,
 	CollisionTypeTargetSwitch,
 	CollisionTypePopbumper,
-	CollisionTypeSlingshot
+	CollisionTypeSlingshot,
+	CollisionTypeSlingshotSwitch
 };
 
 #ifdef _WIN32
@@ -93,6 +100,7 @@ static double absoluteTime() {
 Physics::Physics(void)
 {
 	physics_currentInstance = this;
+	_paused = false;
 }
 
 void Physics::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
@@ -124,6 +132,8 @@ void Physics::init() {
 	// TODO: move to properties of item/object;
 	_targetRestLength *= 1 / scale;
 	_targetSwitchGap *= 1 / scale;
+	_slingshotRestLength *= 1 / scale;
+	_slingshotSwitchGap *= 1 / scale;
 
 	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
 		layoutItem *lprops = &(&*iterator)->second;
@@ -197,8 +207,8 @@ static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
 		cpVect normal = cpArbiterGetNormal(arb, 0);
 
-		cpBodyApplyImpulse(ball, cpvmult(normal, _popBumperImpulse), cpvzero);
-
+		cpBodyApplyImpulse(ball, cpvmult(normal, -_popBumperImpulse), cpvzero);
+		
 		layoutItem *l = (layoutItem *)pop->data;
 
 		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
@@ -221,12 +231,31 @@ static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
+static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	cpBody *slingshot, *sw;
+	cpArbiterGetBodies(arb, &slingshot, &sw);
+
+	cpVect normal = cpArbiterGetNormal(arb, 0);
+
+	cpBodyApplyImpulse(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);
+		
+	/*
+	layoutItem *l = (layoutItem *)slingshot->data;
+
+	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+	*/
+	return 1;
+
+}
+
 void Physics::initCollisionHandlers(void) {
 
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
+	cpSpaceAddCollisionHandler(space, CollisionTypeSlingshot, CollisionTypeSlingshotSwitch, slingshotSwitchBegin, NULL, NULL, NULL, NULL);
 
 }
 
@@ -420,7 +449,15 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
- 	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box->body, cpvzero));
+ 	// target surface normal;
+	cpVect normal = cpvnormalize(cpvperp(cpvsub(item->v[0], item->v[1])));
+
+	// groove
+	cpVect grooveA = cpvadd(body->p, cpvmult(normal, _slingshotRestLength));
+	cpVect grooveB = body->p;
+
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, grooveA, grooveB, cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, grooveA, cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
 
 	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r1));
@@ -428,8 +465,12 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupSlingshots);
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
-
 	cpShapeSetUserData(shape, item);
+
+	// switch
+	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, grooveA));
+	cpShapeSetSensor(shape, true);
+	cpShapeSetCollisionType(shape, CollisionTypeSlingshotSwitch);
 
 	return body;
 
@@ -838,6 +879,20 @@ void Physics::loadForces() {
 						_targetRestLength = (float)lua_tonumber(L, -1);
 					} else if (strcmp("targetSwitchGap", key) == 0) {
 						_targetSwitchGap = (float)lua_tonumber(L, -1);
+					} else if (strcmp("popBumperImpulse", key) == 0) {
+						_popBumperImpulse = (float)lua_tonumber(L, -1);
+					} else if (strcmp("popBumperThreshold", key) == 0) {
+						_popBumperThreshold = (float)lua_tonumber(L, -1);
+					} else if (strcmp("slingshotRestLength", key) == 0) {
+						_slingshotRestLength = (float)lua_tonumber(L, -1);
+					} else if (strcmp("slingshotSwitchGap", key) == 0) {
+						_slingshotSwitchGap = (float)lua_tonumber(L, -1);
+					} else if (strcmp("slingshotStiffness", key) == 0) {
+						_slingshotStiffness = (float)lua_tonumber(L, -1);
+					} else if (strcmp("slingshotDamping", key) == 0) {
+						_slingshotDamping = (float)lua_tonumber(L, -1);
+					} else if (strcmp("slingshotImpulse", key) == 0) {
+						_slingshotImpulse = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);
@@ -884,10 +939,21 @@ void Physics::updatePhysics() {
 
 }
 
+void Physics::setPaused(bool paused) {
+	_paused = paused;
+	if (!_paused) {
+		currentTime = absoluteTime();
+	}
+}
+
+bool Physics::getPaused() {
+	return _paused;
+}
+
 void Physics::resetBallsToInitialPosition() {
 	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
 		layoutItem item = iterator->second;
-		if (strcmp("ball", item.o.n.c_str()) == 0) {
+		if (strcmp("ball", item.o.s.c_str()) == 0) {
 			cpBody *body = item.body;
 			cpBodyResetForces(body);
 			cpBodySetPos(body, cpv(item.v[0].x, item.v[0].y));

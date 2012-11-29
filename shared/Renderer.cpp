@@ -338,10 +338,10 @@ void Renderer::drawBall(layoutItem *item) {
 	};
 
 	static const GLfloat tex[] = {
-		0, 0,
 		0, 1,
-		1, 0,
-		1, 1
+		0, 0,
+		1, 1,
+		1, 0
 	};
 
 	glVertexPointer(2, GL_FLOAT, 0, verts);

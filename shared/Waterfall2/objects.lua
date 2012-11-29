@@ -1,7 +1,7 @@
 
 objects = {
 	ball = {
-		s = "ball", -- "ball" shape defined internally - is in shape group "ballShapeGroup"
+		s = "ball",
 		m = "ball",
 		r1 = 0.93,
 		t = {
@@ -10,6 +10,45 @@ objects = {
 			y = 0,
 			w = 64,
 			h = 64,
+			a = 0.0
+		}
+	},
+	duck = {
+		s = "ball",
+		m = "ball",
+		r1 = 0.93,
+		t = {
+			n = "duck",
+			x = 0,
+			y = 0,
+			w = 256,
+			h = 256,
+			a = 0.0
+		}
+	},
+	butterfly = {
+		s = "ball",
+		m = "ball",
+		r1 = 0.93,
+		t = {
+			n = "butterfly",
+			x = 0,
+			y = 0,
+			w = 256,
+			h = 256,
+			a = 0.0
+		}
+	},
+	pinwheel = {
+		s = "ball",
+		m = "ball",
+		r1 = 0.93,
+		t = {
+			n = "pinwheel",
+			x = 0,
+			y = 0,
+			w = 256,
+			h = 256,
 			a = 0.0
 		}
 	},

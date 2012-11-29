@@ -14,7 +14,7 @@ extern "C" {
 }
 
 Game::Game(void) {
-
+	_paused = false;
 }
 
 Game::~Game(void) {
@@ -234,5 +234,14 @@ void Game::setZoomLevel(float zoomLevel) {
 
 float Game::getZoomLevel() {
 	return _renderer->getZoomLevel();
+}
+
+void Game::setPaused(bool paused) {
+	_paused = paused;
+	_physics->setPaused(_paused);
+}
+
+bool Game::getPaused() {
+	return _paused;
 }
 
