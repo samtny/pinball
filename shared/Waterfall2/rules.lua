@@ -22,6 +22,8 @@ waterfallSwitchValue = 100
 
 popBumperValue = 10
 
+targetValue = 201
+
 targetStateLit = 0
 targetStateUnlit = 1
 leftTargetBankStates = {0,0,0,0,0}
@@ -48,6 +50,8 @@ function handleSwitchClosed(switch)
 		addToScore(waterfallSwitchValue)
 	elseif switch == "pop0" then
 		addToScore(popBumperValue)
+	elseif switch == "target0" or switch == "target1" then
+		addToScore(targetValue)
 	end
 end
 

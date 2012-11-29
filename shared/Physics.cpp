@@ -22,6 +22,7 @@ static cpSpace *space;
 static cpVect gravity = cpv(0.0, 9.80665f);
 
 static float _targetRestLength = 0;
+static float _targetSwitchGap = 0;
 static float _targetStiffness = 0;
 static float _targetDamping = 0;
 
@@ -46,6 +47,7 @@ enum CollisionType {
 	CollisionTypeSwitch,
 	CollisionTypeBall,
 	CollisionTypeTarget,
+	CollisionTypeTargetSwitch,
 	CollisionTypePopbumper,
 	CollisionTypeSlingshot
 };
@@ -119,6 +121,10 @@ void Physics::init() {
 
 	space = cpSpaceNew();
 	
+	// TODO: move to properties of item/object;
+	_targetRestLength *= 1 / scale;
+	_targetSwitchGap *= 1 / scale;
+
 	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
 		layoutItem *lprops = &(&*iterator)->second;
 		this->applyScale(lprops);
@@ -201,11 +207,26 @@ static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
+static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+
+	cpShape *target, *sw;
+	cpArbiterGetShapes(arb, &target, &sw);
+
+	layoutItem *l = (layoutItem *)target->data;
+
+	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+
+	// we don't need more information from this
+	return 0;
+
+}
+
 void Physics::initCollisionHandlers(void) {
 
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
 	cpSpaceAddCollisionHandler(space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
+	cpSpaceAddCollisionHandler(space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
 
 }
 
@@ -226,7 +247,7 @@ void Physics::applyScale(layoutItem *iprops) {
 	iprops->o.r2 *= 1 / localScale;
 	
 	//iprops->o.t.s *= 1 / scale;
-
+	
 }
 
 void Physics::createObject(layoutItem *layoutItem) {
@@ -458,6 +479,11 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypeTarget);
 	cpShapeSetGroup(shape, shapeGroupTargets);
 	cpShapeSetUserData(shape, item);
+
+	// switch
+	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, grooveA));
+	cpShapeSetSensor(shape, true);
+	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
 
 	return body;
 
@@ -810,6 +836,8 @@ void Physics::loadForces() {
 						_targetDamping = (float)lua_tonumber(L, -1);
 					} else if (strcmp("targetRestLength", key) == 0) {
 						_targetRestLength = (float)lua_tonumber(L, -1);
+					} else if (strcmp("targetSwitchGap", key) == 0) {
+						_targetSwitchGap = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);
