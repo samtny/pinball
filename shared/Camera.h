@@ -34,6 +34,7 @@ public:
 protected:
 	void loadConfig();
 	void loadCamera();
+	void loadEffects();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	HostProperties *_displayProperties;

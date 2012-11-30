@@ -304,6 +304,9 @@
     <None Include="..\..\shared\Waterfall2\textures\font.glf">
       <Filter>Source Files\shared\Waterfall2\textures</Filter>
     </None>
+    <None Include="..\..\shared\Waterfall2\effects.lua">
+      <Filter>Source Files\shared\Waterfall2</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">

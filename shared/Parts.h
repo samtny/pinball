@@ -72,7 +72,7 @@ typedef map<string, overlayProperties>::iterator it_overlayProperties;
 
 struct cameraEffect {
 	string n;	
-	float duration;
+	float d;
 	float aStart;
 	float aEnd;
 };

@@ -57,6 +57,7 @@ void Camera::init() {
 	
 	this->loadConfig();
 	this->loadCamera();
+	this->loadEffects();
 
 	for (it_cameraModes iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
 		CameraMode *mode = &(&*iterator)->second;
@@ -189,6 +190,92 @@ void Camera::loadCamera() {
 		lua_pop(L, 1); // pop table
 
     } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Camera::loadEffects() {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *effectsFileName = _bridgeInterface->getPathForScriptFileName((void *)"effects.lua");
+
+	int error = luaL_dofile(L, effectsFileName);
+	if (!error) {
+
+        lua_getglobal(L, "effects");
+
+		if (lua_istable(L, -1)) {
+
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+                    
+				cameraEffect effect;
+				effect.n = name;
+
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+
+					if (strcmp(key, "d") == 0) {
+						effect.d = (float)lua_tonumber(L, -1);
+					} else if (strcmp(key, "start") == 0) {
+
+						lua_pushnil(L);
+						while (lua_next(L, -2) != 0) {
+
+							const char *subkey = lua_tostring(L, -2);
+
+							if (strcmp(subkey, "a") == 0) {
+								effect.aStart = (float)lua_tonumber(L, -1);
+							}
+
+							lua_pop(L, 1);
+							
+						}
+
+					} else if (strcmp(key, "finish") == 0) {
+
+
+						lua_pushnil(L);
+						while (lua_next(L, -2) != 0) {
+
+							const char *subkey = lua_tostring(L, -2);
+
+							if (strcmp(subkey, "a") == 0) {
+								effect.aEnd = (float)lua_tonumber(L, -1);
+							}
+
+							lua_pop(L, 1);
+							
+						}
+
+
+					}
+
+					lua_pop(L, 1);
+					
+				}
+
+				_effects[name] = effect;
+				
+				lua_pop(L, 1);
+
+			}
+
+		}
+
+		lua_pop(L, 1);
+
+	} else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));
         lua_pop(L, 1);  // pop err from lua stack
 	}

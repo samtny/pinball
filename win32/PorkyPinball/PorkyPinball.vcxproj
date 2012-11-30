@@ -143,6 +143,7 @@
     </None>
     <None Include="..\..\shared\Waterfall2\camera.lua" />
     <None Include="..\..\shared\Waterfall2\config.lua" />
+    <None Include="..\..\shared\Waterfall2\effects.lua" />
     <None Include="..\..\shared\Waterfall2\forces.lua" />
     <None Include="..\..\shared\Waterfall2\layout.lua" />
     <None Include="..\..\shared\Waterfall2\materials.lua" />
