@@ -129,6 +129,7 @@ function startGame()
 	-- TODO: switch on __PINBALL_DEBUG flag;
 	resetBallPosition()
 	setCameraMode("centered")
+	doCameraEffect("swirlin")
 
 	resetAll()
 	serveBallToTrough()
@@ -138,6 +139,10 @@ function startGame()
 end
 
 function playSound(sound, loopIntervalSeconds)
+	-- C API stub
+end
+
+function doCameraEffect(effectName)
 	-- C API stub
 end
 

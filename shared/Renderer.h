@@ -37,6 +37,7 @@ public:
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
 	void setOverlayText(const char *overlayName, const char *text);
+	void doCameraEffect(const char *effectName);
 	float getZoomLevel();
 private:
 	PinballBridgeInterface *_bridgeInterface;

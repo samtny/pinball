@@ -6,6 +6,8 @@
 
 #include "Parts.h"
 
+#include "Util.h"
+
 extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
@@ -292,3 +294,8 @@ void Camera::applyTransform(void) {
 
 }
 
+void Camera::doEffect(const char *effectName) {
+
+
+
+}
