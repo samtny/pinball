@@ -6,10 +6,13 @@ typedef enum CameraType {
 
 // TODO: move out;
 #include "PinballBridgeInterface.h"
+#include "Parts.h"
+
+#include <string>
+#include <map>
 
 class Renderer;
 class Physics;
-struct layoutItem;
 
 class Camera {
 public:
@@ -27,6 +30,7 @@ public:
 	void setWorldScale(float worldScale);
 	void setMode(const char *modeName);
 	void applyTransform(void);
+	void doEffect(const char *effectName);
 protected:
 	void loadConfig();
 	void loadCamera();
@@ -36,5 +40,6 @@ private:
 	Physics *_physics;
 	float _worldScale;
 	void initModes();
+	map<string, cameraEffect> _effects;
 };
 

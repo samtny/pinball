@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\shared\glfont2.cpp" />
     <ClCompile Include="..\..\shared\Physics.cpp" />
     <ClCompile Include="..\..\shared\Renderer.cpp" />
+    <ClCompile Include="..\..\shared\Util.cpp" />
     <ClCompile Include=".\main.cpp" />
     <ClCompile Include="GlutEngine.cpp" />
     <ClCompile Include="PinballHost.cpp" />
@@ -123,9 +124,11 @@
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
     <ClInclude Include="..\..\shared\TimerDelegate.h" />
+    <ClInclude Include="..\..\shared\Util.h" />
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
     <ClInclude Include=".\PinballBridge.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\config.lua" />

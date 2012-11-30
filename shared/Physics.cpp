@@ -7,6 +7,8 @@
 
 #include "Parts.h"
 
+#include "Util.h"
+
 #include "chipmunk/chipmunk.h"
 
 extern "C" {
@@ -58,44 +60,6 @@ enum CollisionType {
 	CollisionTypeSlingshot,
 	CollisionTypeSlingshotSwitch
 };
-
-#ifdef _WIN32
-
-static double absoluteTime() {
-    //return timeGetTime() / (double) 1000;
-	// hi-res timer courtesy gafferongames.com;
-	static __int64 start = 0;
-    static __int64 frequency = 0;
-
-    if (start==0)
-    {
-        QueryPerformanceCounter((LARGE_INTEGER*)&start);
-        QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-        return 0.0f;
-    }
-
-    __int64 counter = 0;
-    QueryPerformanceCounter((LARGE_INTEGER*)&counter);
-    return (float) ((counter - start) / double(frequency));
-}
-
-#elif __APPLE__
-
-#import <mach/mach_time.h>
-
-static double absoluteTime() {
-    static double sysTimebaseMult = -1;
-    if (sysTimebaseMult == -1) {
-        mach_timebase_info_data_t info;
-        kern_return_t err = mach_timebase_info(&info);
-        if (err == 0) {
-            sysTimebaseMult = 1e-9 * (double) info.numer / (double) info.denom;
-        }
-    }
-    return mach_absolute_time() * sysTimebaseMult;
-}
-
-#endif
 
 Physics::Physics(void)
 {

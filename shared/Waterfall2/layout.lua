@@ -15,7 +15,7 @@ layout = {
 	ball1 = {
 		o = "duck",
 		v = { {5, 37} },
-		s = 1.2
+		s = 2.0
 	},
 	ball2 = {
 		o = "ball",

@@ -263,7 +263,7 @@ void Renderer::loadFonts(void) {
 
 void Renderer::draw(void) {
 
-	glClearColor(0.9f, 0.9f, 0.80f, 1.0f);
+	glClearColor(0.0156862745098039f, 0.207843137254902f, 0.4235294117647059f, 1.0f);
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT);
 	//glEnable(GL_DEPTH_TEST);
@@ -375,6 +375,12 @@ void Renderer::setOverlayText(const char *overlayName, const char *text) {
 
 	overlayProperties *props = &_overlays[overlayName];
 	props->v = text;
+
+}
+
+void Renderer::doCameraEffect(const char *effectName) {
+
+	_camera->doEffect(effectName);
 
 }
 

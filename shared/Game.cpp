@@ -123,6 +123,24 @@ static int lua_updateOverlayText(lua_State *L) {
 
 }
 
+static int lua_doCameraEffect(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	if (count == 1) {
+		const char *effectName = lua_tostring(L, 1);
+		lua_currentInstance->doCameraEffect(effectName);
+	}
+
+	return 0;
+}
+
+void Game::doCameraEffect(const char *effectName) {
+
+	_renderer->doCameraEffect(effectName);
+
+}
+
 void Game::updateOverlayText(const char *key, const char *val) {
 
 	_renderer->setOverlayText(key, val);
@@ -187,6 +205,9 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_updateOverlayText);
 		lua_setglobal(L, "updateOverlayText");
+
+		lua_pushcfunction(L, lua_doCameraEffect);
+		lua_setglobal(L, "doCameraEffect");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));

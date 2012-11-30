@@ -27,6 +27,7 @@ public:
 	void addLuaTimer(float duration, string funcName, int arg);
 	void timerCallback(int timerId);
 	void updateOverlayText(const char *key, const char *val);
+	void doCameraEffect(const char *effectName);
 	void setPaused(bool paused);
 	bool getPaused();
 protected:
