@@ -23,8 +23,9 @@ layout = {
 		s = 1
 	},
 	ball3 = {
-		o = "ball",
-		v = { {9, 38} }
+		o = "pinwheel",
+		v = { {9, 38} },
+		s = 2.0
 	},
 	ball4 = {
 		o = "butterfly",
@@ -32,7 +33,7 @@ layout = {
 		s = 1.2
 	},
 	ball5 = {
-		o = "pinwheel",
+		o = "pinwheel2",
 		v = { {13, 36} },
 		s = 2.0
 	},

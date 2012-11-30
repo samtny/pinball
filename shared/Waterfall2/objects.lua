@@ -52,6 +52,19 @@ objects = {
 			a = 0.0
 		}
 	},
+	pinwheel2 = {
+		s = "ball",
+		m = "ball",
+		r1 = 0.93,
+		t = {
+			n = "pinwheel2",
+			x = 0,
+			y = 0,
+			w = 256,
+			h = 256,
+			a = 0.0
+		}
+	},
 	post = {
 		s = "circle",
 		m = "rubber",

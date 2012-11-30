@@ -14,6 +14,9 @@ textures = {
 	},
 	pinwheel = {
 		filename = "origami_pinwheel001.png"
+	},
+	pinwheel2 = {
+		filename = "origami_pinwheel002.png"
 	}
 }
 
