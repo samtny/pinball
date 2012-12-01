@@ -15,7 +15,7 @@ layout = {
 	ball1 = {
 		o = "duck",
 		v = { {5, 37} },
-		s = 2.0
+		s = 1.0
 	},
 	ball2 = {
 		o = "ball",
@@ -25,17 +25,17 @@ layout = {
 	ball3 = {
 		o = "pinwheel",
 		v = { {9, 38} },
-		s = 2.0
+		s = 1.0
 	},
 	ball4 = {
 		o = "butterfly",
 		v = { {11.5, 35.5} },
-		s = 1.2
+		s = 1.0
 	},
 	ball5 = {
 		o = "pinwheel2",
 		v = { {13, 36} },
-		s = 2.0
+		s = 1.0
 	},
 
 	post0 = {

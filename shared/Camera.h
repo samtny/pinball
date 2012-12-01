@@ -9,6 +9,7 @@ typedef enum CameraType {
 #include "Parts.h"
 
 #include <string>
+#include <vector>
 #include <map>
 
 class Renderer;
@@ -31,6 +32,7 @@ public:
 	void setMode(const char *modeName);
 	void applyTransform(void);
 	void doEffect(const char *effectName);
+	void applyEffectsTransforms(void);
 protected:
 	void loadConfig();
 	void loadCamera();
@@ -42,5 +44,6 @@ private:
 	float _worldScale;
 	void initModes();
 	map<string, cameraEffect> _effects;
+	vector<cameraEffect> _activeEffects;
 };
 

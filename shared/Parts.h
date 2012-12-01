@@ -75,6 +75,8 @@ struct cameraEffect {
 	float d;
 	float aStart;
 	float aEnd;
+	float aCurrent;
+	double startTime;
 };
 
 #endif

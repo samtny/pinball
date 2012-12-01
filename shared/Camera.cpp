@@ -330,6 +330,8 @@ void Camera::applyTransform(void) {
 
 		glTranslatef(-tx, -ty, 0);
 
+		this->applyEffectsTransforms();
+
 		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
 
 		break;
@@ -379,10 +381,34 @@ void Camera::applyTransform(void) {
 		break;
 	}
 
+	
+
+}
+
+void Camera::applyEffectsTransforms() {
+
+	double curTime = absoluteTime();
+
+	for (int i = 0; i < _activeEffects.size(); i++) {
+		
+		glRotatef(_activeEffects[i].aCurrent, 0, 0, 1);
+
+		double delta = curTime - _activeEffects[i].startTime;
+
+		_activeEffects[i].aCurrent = _activeEffects[i].aStart - (_activeEffects[i].aStart * delta / _activeEffects[i].d);
+
+	}
+	
 }
 
 void Camera::doEffect(const char *effectName) {
 
+	cameraEffect effect = _effects[effectName];
 
+	effect.aCurrent = effect.aStart;
+
+	effect.startTime = absoluteTime();
+
+	_activeEffects.push_back(effect);
 
 }
