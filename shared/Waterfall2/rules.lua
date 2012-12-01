@@ -32,6 +32,10 @@ leftTargetBankTargetCount = 5
 leftTargetBankScoreUnlit = 1000
 leftTargetBankScoreLit = 100
 
+ballsInPlay = 0
+
+gameRestartDelay = 5
+
 -- audio defines;
 LOOP_INTERVAL_NONE = -1
 
@@ -98,14 +102,27 @@ function leftTargetBankHit(index)
 end
 
 function handleSwitchOpened(switch)
-	if switch == troughSwitch then
-		--just an example
+	if switch == "troughSwitch" then
+		troughSwitchOpened()
 	end
 end
 
 function troughSwitchClosed()
 	print "troughSwitchClosed"
-	gameInProgress = false; -- not how a trough switch works, of course...
+	if gameInProgress == true then
+		ballsInPlay = ballsInPlay - 1
+		print (ballsInPlay)
+		if ballsInPlay <= 0 then
+			endGame()
+		end
+	end
+end
+
+function troughSwitchOpened()
+	print "troughSwitchOpened"
+	if gameInProgress == true then
+		ballsInPlay = ballsInPlay + 1
+	end
 end
 
 function startButtonPressed()
@@ -134,8 +151,19 @@ function startGame()
 	resetAll()
 	serveBallToTrough()
 	playSound(gameStartMusic, 10)
+
+	ballsInPlay = 0 -- yeah, not how this works...
+
 	gameInProgress = true
 
+end
+
+function endGame()
+	print "endGame"
+
+	gameInProgress = false
+
+	addTimer(gameRestartDelay, "startGame", nil)
 end
 
 function playSound(sound, loopIntervalSeconds)

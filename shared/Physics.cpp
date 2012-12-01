@@ -154,7 +154,13 @@ static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 
+	cpShape *a;
+	cpShape *b;
+	cpArbiterGetShapes(arb, &a, &b);
 
+	layoutItem *l = (layoutItem *)b->data;
+
+	physics_currentInstance->getDelegate()->switchOpened(l->n.c_str());
 
 }
 
@@ -291,7 +297,7 @@ cpBody *Physics::createBox(layoutItem *item) {
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[3]));
 	
 	// pin the box in place;
-	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpvzero) );
+	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpvmult(cpvadd(item->v[0], item->v[2]), 0.5)) );
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
 	
 	// hang the box shapes on the body;

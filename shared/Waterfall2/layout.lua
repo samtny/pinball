@@ -6,7 +6,7 @@ layout = {
 	},
 	troughSwitch = {
 		o = "switch",
-		v = { {0.5,0.5} , {19.5,0.5} }
+		v = { {-9.5,0.5} , {29.5,0.5} }
 	},
     ball0 = {
         o = "ball",

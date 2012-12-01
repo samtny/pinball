@@ -19,6 +19,7 @@ public:
 	void setRenderer(Renderer *renderer);
 	void init();
 	void switchClosed(const char *switchName);
+	void switchOpened(const char *switchName);
 	void closeSwitch(int switchIndex);
 	void resetBallPosition();
 	void setCameraMode(const char *modeName);

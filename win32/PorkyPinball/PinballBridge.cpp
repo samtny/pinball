@@ -147,7 +147,7 @@ HostProperties *PinballBridge::getHostProperties() {
 	// TODO: vary by glut props;
 	props->viewportX = 0;
 	props->viewportY = 0;
-	props->viewportHeight = 600;
+	props->viewportHeight = 800;
 	props->viewportWidth = 800;
 	props->fontScale = 1;
 	props->overlayScale = 1;

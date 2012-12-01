@@ -226,6 +226,12 @@ void Game::switchClosed(const char *switchName) {
 	lua_call(_rules, 1, 0);
 }
 
+void Game::switchOpened(const char *switchName) {
+	lua_getglobal(_rules, "handleSwitchOpened");
+	lua_pushstring(_rules, switchName);
+	lua_call(_rules, 1, 0);
+}
+
 // TODO: this is redundant (legacy) method;
 void Game::closeSwitch(int switchIndex) {
 

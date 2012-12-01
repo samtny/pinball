@@ -43,7 +43,7 @@ void GlutEngine::init() {
 	
 	//glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 50);
 	glutCreateWindow("Porky Pinball");
 
