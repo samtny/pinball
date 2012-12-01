@@ -17,6 +17,9 @@ textures = {
 	},
 	pinwheel2 = {
 		filename = "origami_pinwheel002.png"
+	},
+	background = {
+		filename = "ToyFactory_Multi-texturing_hardwood.png"
 	}
 }
 

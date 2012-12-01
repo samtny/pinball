@@ -330,12 +330,12 @@ void Camera::applyTransform(void) {
 
 		glTranslatef(-tx, -ty, 0);
 
-		this->applyEffectsTransforms();
+		//this->applyEffectsTransforms();
 
 		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
 
 		break;
-							}
+	}
 	case CAMERA_TYPE_FOLLOW_BALL:
 	default:
 		

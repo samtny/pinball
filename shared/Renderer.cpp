@@ -302,6 +302,9 @@ void Renderer::drawPlayfield() {
 	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
 	_scale = _displayProperties->viewportWidth / box->width;
 
+	// TODO: separate "drawBackgrounds" method plzz...
+	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
+
 	glPushMatrix();
 
 	_camera->setWorldScale(_scale);
@@ -313,18 +316,68 @@ void Renderer::drawPlayfield() {
 
 	glPopMatrix();
 
-	cpSpaceEachBody(_physics->getSpace(), _drawObject, NULL);
+	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
 	
 }
 
 void Renderer::drawObject(cpBody *body, void *data) {
 
-	if (body->data) {
+	bool background = (bool)data;
+
+	if (body->data && data) {
+		layoutItem *item = (layoutItem *)body->data;
+		if (strcmp(item->o.s.c_str(), "box") == 0) {
+			this->drawBox(item);
+		}
+	} else if (body->data) {
 		layoutItem *item = (layoutItem *)body->data;
 		if (strcmp(item->o.s.c_str(), "ball") == 0) {
 			this->drawBall(item);
 		}
 	}
+
+}
+
+void Renderer::drawBox(layoutItem *item) {
+
+	static const GLfloat verts[] = {
+		-0.5, -0.5,
+		-0.5, 0.5,
+		0.5, -0.5,
+		0.5, 0.5
+	};
+
+	static const GLfloat tex[] = {
+		0, 1,
+		0, 0,
+		1, 1,
+		1, 0
+	};
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	cpBody *ball = item->body;
+	textureProperties *t = &_textures[item->o.t.n];
+
+	float posX = (item->v[3].x- item->v[0].x) / 4.0f * _scale;
+	float posY = (item->v[1].y - item->v[0].y) / 2.0f * _scale;
+
+	glPushMatrix();
+	_camera->applyTransform();
+	glTranslatef(posX, posY, 0);
+	glScalef((item->v[3].x - item->v[0].x) * _scale, (item->v[1].y - item->v[0].y) * _scale, 0);
+	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, t->gl_index);
+	
+	glColor4f(1, 1, 1, 1);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	
+	glDisable(GL_TEXTURE_2D);
+	
+	glPopMatrix();
 
 }
 

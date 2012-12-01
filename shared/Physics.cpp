@@ -280,6 +280,9 @@ cpBody *Physics::createBox(layoutItem *item) {
 
 	// create body on which to hang the "box";
 	body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item->v, cpvzero)));
+
+	// TODO: i think everything is in the wrong spot bcuz this was omitted;
+	//cpBodySetPos(body, cpvsub(item->v[2], item->v[0]));
 	
 	// pin the box body at the four corners;
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[0]));
@@ -288,7 +291,7 @@ cpBody *Physics::createBox(layoutItem *item) {
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[3]));
 	
 	// pin the box in place;
-	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpv( (item->v[3].x - item->v[0].x) / 2.0f , (item->v[1].y - item->v[0].y) * 0.85f ) ) );
+	constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, cpvzero) );
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
 	
 	// hang the box shapes on the body;
@@ -315,6 +318,8 @@ cpBody *Physics::createBox(layoutItem *item) {
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
+
+	cpBodySetUserData(body, item);
 
 	return body;
 

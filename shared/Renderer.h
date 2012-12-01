@@ -33,6 +33,7 @@ public:
 	void drawPlayfield(void);
 	void drawObject(cpBody *body, void *data);
 	void drawBall(layoutItem *item);
+	void drawBox(layoutItem *item);
 	void drawOverlays(void);
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);

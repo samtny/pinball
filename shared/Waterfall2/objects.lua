@@ -92,7 +92,15 @@ objects = {
 	box = {
 		s = "box", -- "box" shape defined internally - internal winding is clockwise from blh
 		m = "wood",
-		r1 = 0.25
+		r1 = 0.25,
+		t = {
+			n = "background",
+			x = 0,
+			y = 0,
+			w = 512,
+			h = 512,
+			a = 0.0
+		}
 	},
 	flipper = {
 		s = "flipper", -- "flipper" shape defined internally
