@@ -51,6 +51,7 @@
 		4B170276164AB7CA007D4A2F /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170254164AB7CA007D4A2F /* lundump.c */; };
 		4B170277164AB7CA007D4A2F /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170255164AB7CA007D4A2F /* lvm.c */; };
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
+		4B2890D5166B03DB00F3A92C /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B2890D3166B03DB00F3A92C /* Util.cpp */; };
 		4B2F787E1665CD2F0037FE71 /* Waterfall2 in Resources */ = {isa = PBXBuildFile; fileRef = 4B2F787D1665CD2F0037FE71 /* Waterfall2 */; };
 		4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */; };
 		4BBF7C2F1664284900957DA4 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF7C071664284900957DA4 /* Camera.cpp */; };
@@ -119,6 +120,8 @@
 		4B170254164AB7CA007D4A2F /* lundump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lundump.c; path = "../../../../../../../src/lua/lua 5.2.1/lundump.c"; sourceTree = "<group>"; };
 		4B170255164AB7CA007D4A2F /* lvm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lvm.c; path = "../../../../../../../src/lua/lua 5.2.1/lvm.c"; sourceTree = "<group>"; };
 		4B170256164AB7CA007D4A2F /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lzio.c; path = "../../../../../../../src/lua/lua 5.2.1/lzio.c"; sourceTree = "<group>"; };
+		4B2890D3166B03DB00F3A92C /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
+		4B2890D4166B03DB00F3A92C /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		4B2F787D1665CD2F0037FE71 /* Waterfall2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Waterfall2; sourceTree = "<group>"; };
 		4B77E0791655729C0065BE6E /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "/lib/chipmunk/iphone simulator/libChipmunk-iPhone.a"; sourceTree = "<absolute>"; };
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				4BBF7C121664284900957DA4 /* PinballBridgeInterface.h */,
 				4BBF7C1F1664284900957DA4 /* Renderer.cpp */,
 				4BBF7C201664284900957DA4 /* Renderer.h */,
+				4B2890D3166B03DB00F3A92C /* Util.cpp */,
+				4B2890D4166B03DB00F3A92C /* Util.h */,
 				4BBF7C211664284900957DA4 /* TimerDelegate.h */,
 			);
 			name = shared;
@@ -425,6 +430,7 @@
 				4BBF7C311664284900957DA4 /* glfont2.cpp in Sources */,
 				4BBF7C321664284900957DA4 /* Physics.cpp in Sources */,
 				4BBF7C3E1664284900957DA4 /* Renderer.cpp in Sources */,
+				4B2890D5166B03DB00F3A92C /* Util.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
