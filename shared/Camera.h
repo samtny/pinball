@@ -28,7 +28,6 @@ public:
 	void setPhysics(Physics *physics);
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
-	void setWorldScale(float worldScale);
 	void setMode(const char *modeName);
 	void applyTransform(void);
 	void doEffect(const char *effectName);
@@ -41,7 +40,7 @@ private:
 	PinballBridgeInterface *_bridgeInterface;
 	HostProperties *_displayProperties;
 	Physics *_physics;
-	float _worldScale;
+	float _scale;
 	void initModes();
 	map<string, cameraEffect> _effects;
 	vector<cameraEffect> _activeEffects;

@@ -112,7 +112,6 @@ void Renderer::init(void) {
 
 	_camera = new Camera();
 	_camera->setBridgeInterface(_bridgeInterface);
-	_camera->setWorldScale(_scale);
 	_camera->setDisplayProperties(_displayProperties);
 	_camera->setPhysics(_physics);
 	_camera->init();
@@ -296,28 +295,20 @@ void Renderer::drawPlayfield() {
     
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0.375, 0.375, 0.0);
+	//glTranslatef(0.375, 0.375, 0.0);
 
-	// this probably belongs to "camera"...
-	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
-	_scale = _displayProperties->viewportWidth / box->width;
-
-	// TODO: separate "drawBackgrounds" method plzz...
-	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
-
-	glPushMatrix();
-
-	_camera->setWorldScale(_scale);
 	_camera->applyTransform();
 
-	glScalef(_scale, _scale, 1);
+	// TODO: separate "drawBackgrounds" method plzz...
+	glEnable(GL_TEXTURE_2D);
+	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
+	glDisable(GL_TEXTURE_2D);
 	ChipmunkDebugDrawShapes(_physics->getSpace());
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
-
-	glPopMatrix();
-
+	glEnable(GL_TEXTURE_2D);
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
-	
+	glDisable(GL_TEXTURE_2D);
+
 }
 
 void Renderer::drawObject(cpBody *body, void *data) {
@@ -360,22 +351,22 @@ void Renderer::drawBox(layoutItem *item) {
 	cpBody *ball = item->body;
 	textureProperties *t = &_textures[item->o.t.n];
 
-	float posX = (item->v[3].x- item->v[0].x) / 4.0f * _scale;
-	float posY = (item->v[1].y - item->v[0].y) / 2.0f * _scale;
+	float posX = (item->v[3].x- item->v[0].x) / 4.0f;
+	float posY = (item->v[1].y - item->v[0].y) / 2.0f;
 
 	glPushMatrix();
-	_camera->applyTransform();
+	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef((item->v[3].x - item->v[0].x) * _scale, (item->v[1].y - item->v[0].y) * _scale, 0);
+	glScalef((item->v[3].x - item->v[0].x), (item->v[1].y - item->v[0].y), 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, t->gl_index);
 	
 	glColor4f(1, 1, 1, 1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 	
 	glPopMatrix();
 
@@ -403,22 +394,22 @@ void Renderer::drawBall(layoutItem *item) {
 	cpBody *ball = item->body;
 	textureProperties *t = &_textures[item->o.t.n];
 
-	float posX = (float)ball->p.x * _scale;
-	float posY = (float)ball->p.y * _scale;
+	float posX = (float)ball->p.x;
+	float posY = (float)ball->p.y;
 
 	glPushMatrix();
-	_camera->applyTransform();
+	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef(item->o.r1 * 2 * _scale, item->o.r1 * 2 * _scale, 0);
+	glScalef(item->o.r1 * 2, item->o.r1 * 2, 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, t->gl_index);
 	
 	glColor4f(1, 1, 1, 1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 	
 	glPopMatrix();
 

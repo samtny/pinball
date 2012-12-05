@@ -32,6 +32,7 @@ struct CameraMode {
 	string name;
 	CameraType t;
 	Coord2 c;
+	float w;
 	Coord2 b; // buffer / border
 	float z;
 };
@@ -65,6 +66,7 @@ void Camera::init() {
 		mode->b.y *= 1 / scale;
 		mode->c.x *= 1 / scale;
 		mode->c.y *= 1 / scale;
+		mode->w *= 1 / scale;
 	}
 
 }
@@ -172,6 +174,10 @@ void Camera::loadCamera() {
 						lua_pop(L, 1);
 
 						lua_pop(L, 1);
+
+					} else if (strcmp(key, "w") == 0) {
+
+						mode.w = (float)lua_tonumber(L, -1);
 
 					}
 
@@ -302,10 +308,6 @@ float Camera::getZoomLevel() {
 	return _activeCameraMode.z;
 }
 
-void Camera::setWorldScale(float worldScale) {
-	_worldScale = worldScale;
-}
-
 void Camera::setMode(const char *modeName) {
 
 	for (it_cameraModes iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
@@ -320,19 +322,21 @@ void Camera::setMode(const char *modeName) {
 
 void Camera::applyTransform(void) {
 
+	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;
+
 	switch (_activeCameraMode.t)
 	{
 	case CAMERA_TYPE_FIXED: {
 
-		float tx = _activeCameraMode.c.x * _worldScale * _activeCameraMode.z - (_displayProperties->viewportWidth / 2.0f);
+		float tx = _activeCameraMode.c.x * _scale - (_displayProperties->viewportWidth / 2.0f);
 
-		float ty = _activeCameraMode.c.y * _worldScale * _activeCameraMode.z - (_displayProperties->viewportHeight / 2.0f);
+		float ty = _activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f);
 
 		glTranslatef(-tx, -ty, 0);
 
 		//this->applyEffectsTransforms();
 
-		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
+		glScalef(_scale, _scale, 1);
 
 		break;
 	}
@@ -372,7 +376,7 @@ void Camera::applyTransform(void) {
 			posY = maxY;
 		}
 
-		posY *= _worldScale * _activeCameraMode.z;
+		posY *= _scale * _activeCameraMode.z;
 
 		glTranslatef(0, -posY, 0);
 
