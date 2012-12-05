@@ -39,6 +39,8 @@ static float _popBumperImpulse = 0.04;
 
 static double timeStep = 1.0/180.0;
 
+static int iterations = 10;
+
 static float scale = 37;
 
 enum shapeGroup {
@@ -92,6 +94,7 @@ void Physics::init() {
     this->loadForces();
 
 	space = cpSpaceNew();
+	cpSpaceSetIterations(space, iterations);
 	
 	// TODO: move to properties of item/object;
 	_targetRestLength *= 1 / scale;
@@ -557,6 +560,10 @@ void Physics::loadConfig() {
 				} else if (strcmp("scale", key) == 0) {
 
 					scale = (float)lua_tonumber(L, -1);
+
+				} else if (strcmp("iterations", key) == 0) {
+
+					iterations = (int)lua_tonumber(L, -1);
 
 				}
                     
