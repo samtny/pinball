@@ -42,7 +42,7 @@ void glut_keyboardUpCallback(unsigned char key, int x, int y) {
 void GlutEngine::init() {
 	
 	//glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 50);
 	glutCreateWindow("Porky Pinball");
@@ -87,9 +87,7 @@ void GlutEngine::timerFunc(int value) {
 
 void GlutEngine::displayFunc() {
 
-	this->_renderer->draw();
-
-	/*
+	
 	static int time = 0;
 	static int frame = 0;
 	static int timebase = 0;
@@ -102,7 +100,9 @@ void GlutEngine::displayFunc() {
 		timebase = time;
 		frame = 0;
 	}
-	*/
+	
+
+	this->_renderer->draw();
 
 	glutSwapBuffers();
 
