@@ -123,12 +123,12 @@ layout = {
 
 	wireguide0 = {
 		o = "wireGuide",
-		v = { {-2,29}, {0,0} }
+		v = { {-9,29}, {0,25} }
 	},
 
 	wireguide1 = {
 		o = "wireGuide",
-		v = { {22,29}, {20,0} }
+		v = { {29,29}, {20,25} }
 	},
 
 	lslingshot = {
