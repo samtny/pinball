@@ -363,10 +363,13 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
 	cpFloat mass = area * item->o.m.d;
 
-	cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : -1; // rotate clockwise for right-facing flipper...
+	cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
 
 	cpFloat length = cpvdist(item->v[0], item->v[1]);
 	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item->v[1],item->v[0])), cpvnormalize(cpvsub(item->v[2],item->v[0]))));
+
+	cpFloat flipStart = flipAngle > 0 ? 0 : flipAngle;
+	cpFloat flipEnd = flipAngle > 0 ? flipAngle : 0;
 
 	// flipper body is round centered at base of flipper, and for this implementation has radius == flipper length;
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
@@ -375,7 +378,8 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	layoutItem *box = &_layoutItems.find("box")->second;
 
  	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box->body, item->v[0]));
-	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, flipAngle, 0.0f));
+
+	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, flipStart, flipEnd));
 
 	// lflipper base shape
 	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, item->o.r1, cpvzero));

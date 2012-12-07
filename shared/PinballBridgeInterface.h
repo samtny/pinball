@@ -39,6 +39,7 @@ public:
 #endif
 
 	void setGameName(const char *gameName);
+	const char * getGameName();
 
 	const char * getPathForScriptFileName(void * scriptFileName);
 

@@ -31,6 +31,7 @@ public:
 	void doCameraEffect(const char *effectName);
 	void setPaused(bool paused);
 	bool getPaused();
+	const char *getGameName();
 protected:
 	void loadRules();
 private:

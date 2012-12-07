@@ -45,14 +45,14 @@ void GlutEngine::init() {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 50);
-	glutCreateWindow("Porky Pinball");
+	glutCreateWindow("");
 
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(glut_keyboardCallback);
 	glutKeyboardUpFunc(glut_keyboardUpCallback);
 
 	//_renderer->init();
-
+	
 }
 
 
@@ -67,6 +67,8 @@ void glut_displayFunc()
 }
 
 void GlutEngine::start() {
+
+	glutSetWindowTitle(_game->getGameName());
 
 	glutTimerFunc(SLEEP_TICKS, glut_timerFunc, 0);
 	glutDisplayFunc(glut_displayFunc);

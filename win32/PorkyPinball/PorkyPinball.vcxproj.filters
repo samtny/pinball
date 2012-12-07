@@ -40,6 +40,12 @@
     <Filter Include="Source Files\shared\Waterfall\textures">
       <UniqueIdentifier>{3955ad01-df93-445b-991d-9ad2454c433f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shared\Flipperfall">
+      <UniqueIdentifier>{bbfd53a8-0056-42ba-8cdf-addfab47ef3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Flipperfall\textures">
+      <UniqueIdentifier>{5ca58425-665a-4aab-96dd-702d03757255}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\shared\Physics.cpp">
@@ -185,9 +191,6 @@
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\glfont2.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
@@ -216,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Util.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\ChipmunkDebugDraw.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
@@ -307,6 +313,39 @@
     <None Include="..\..\shared\Waterfall2\effects.lua">
       <Filter>Source Files\shared\Waterfall2</Filter>
     </None>
+    <None Include="..\..\shared\Flipperfall\camera.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\config.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\effects.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\forces.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\layout.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\materials.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\objects.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\overlays.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\rules.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\textures.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\textures\font.glf">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
@@ -323,6 +362,30 @@
     </Image>
     <Image Include="..\..\shared\Waterfall2\textures\tiling.png">
       <Filter>Source Files\shared\Waterfall2\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_butterfly001.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_duck001.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_duck002.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_pinwheel001.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_pinwheel002.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\pinball.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\tiling.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Flipperfall\textures\ToyFactory_Multi-texturing_hardwood.png">
+      <Filter>Source Files\shared\Flipperfall\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>

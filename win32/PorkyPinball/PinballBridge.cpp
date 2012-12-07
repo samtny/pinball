@@ -31,6 +31,11 @@ void PinballBridgeInterface::setGameName(const char *gameName) {
 	instance ->setGameName(gameName);
 }
 
+const char *PinballBridgeInterface::getGameName() {
+	PinballBridge *instance = (PinballBridge *)_this;
+	return instance->getGameName();
+}
+
 const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->getPathForScriptFileName(scriptFileName);
@@ -76,6 +81,10 @@ void PinballBridge::init() {
 
 void PinballBridge::setGameName(const char *gameName) {
 	_gameName = gameName;
+}
+
+const char *PinballBridge::getGameName() {
+	return _gameName;
 }
 
 void PinballBridgeInterface::playSound(void * soundName) {

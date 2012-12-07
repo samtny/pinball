@@ -272,3 +272,6 @@ bool Game::getPaused() {
 	return _paused;
 }
 
+const char *Game::getGameName() {
+	return _bridgeInterface->getGameName();
+}

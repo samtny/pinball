@@ -10,6 +10,7 @@ public:
 	void init();
 
 	void setGameName(const char *gameName);
+	const char *getGameName();
 	const char * getPathForScriptFileName(void * scriptFileName);
 	const char *getPathForTextureFilename(void * textureFilename);
 	Texture *createRGBATexture(void *textureFilename);

@@ -45,6 +45,10 @@
     <LibraryPath>C:\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\include\lua;C:\include;C:\Users\sam\Documents\pinball\shared;C:\Users\samtny\Documents\pinball\shared;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\include\lua;C:\include;C:\Users\sam\Documents\pinball\shared;C:\Users\samtny\Documents\pinball\shared;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>C:\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -66,6 +70,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>chipmunk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -114,7 +119,7 @@
     <ClCompile Include=".\PinballBridge.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\debugdraw\ChipmunkDebugDraw.h" />
+    <ClInclude Include="..\..\..\..\..\..\include\chipmunk\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Camera.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
@@ -131,6 +136,17 @@
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\shared\Flipperfall\camera.lua" />
+    <None Include="..\..\shared\Flipperfall\config.lua" />
+    <None Include="..\..\shared\Flipperfall\effects.lua" />
+    <None Include="..\..\shared\Flipperfall\forces.lua" />
+    <None Include="..\..\shared\Flipperfall\layout.lua" />
+    <None Include="..\..\shared\Flipperfall\materials.lua" />
+    <None Include="..\..\shared\Flipperfall\objects.lua" />
+    <None Include="..\..\shared\Flipperfall\overlays.lua" />
+    <None Include="..\..\shared\Flipperfall\rules.lua" />
+    <None Include="..\..\shared\Flipperfall\textures.lua" />
+    <None Include="..\..\shared\Flipperfall\textures\font.glf" />
     <None Include="..\..\shared\PorkyPinball\config.lua" />
     <None Include="..\..\shared\PorkyPinball\layout.lua" />
     <None Include="..\..\shared\PorkyPinball\materials.lua" />
@@ -164,6 +180,14 @@
     <None Include="..\..\shared\Waterfall\textures\font.glf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\shared\Flipperfall\textures\origami_butterfly001.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\origami_duck001.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\origami_duck002.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\origami_pinwheel001.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\origami_pinwheel002.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\pinball.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\tiling.png" />
+    <Image Include="..\..\shared\Flipperfall\textures\ToyFactory_Multi-texturing_hardwood.png" />
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
