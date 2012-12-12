@@ -10,6 +10,8 @@
 
 #include "Game.h"
 
+#include "Editor.h"
+
 #include "GlutEngine.h"
 
 PinballHost::PinballHost() {
@@ -31,9 +33,16 @@ void PinballHost::init() {
 	p->setBridgeInterface(bi);
 	p->init();
 
+	Camera *c = new Camera();
+	c->setBridgeInterface(bi);
+	c->setDisplayProperties(bi->getHostProperties());
+	c->setPhysics(p);
+	c->init();
+
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
 	r->setPhysics(p);
+	r->setCamera(c);
 	r->init();
 	
 	Game *g = new Game();
@@ -42,9 +51,16 @@ void PinballHost::init() {
 	g->setRenderer(r);
 	g->init();
 	
+	Editor *t = new Editor();
+	t->setBridgeInterface(bi);
+	t->setGame(g);
+	t->setPhysics(p);
+	t->setCamera(c);
+
 	e->setPhysics(p);
 	e->setRenderer(r);
 	e->setGame(g);
+	e->setEditor(t);
 	_glutEngine = e;
 
 	// TODO: find factoring error;

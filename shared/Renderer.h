@@ -25,6 +25,7 @@ public:
 	~Renderer(void);
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setPhysics(Physics *physics);
+	void setCamera(Camera *camera);
 	void init(void);
 	void loadTextures(void);
 	void loadFonts(void);
@@ -32,6 +33,7 @@ public:
 	void draw(void);
 	void drawPlayfield(void);
 	void drawObject(cpBody *body, void *data);
+	void drawAnchors(layoutItem *item);
 	void drawBall(layoutItem *item);
 	void drawBox(layoutItem *item);
 	void drawOverlays(void);

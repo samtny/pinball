@@ -34,6 +34,8 @@ public:
 	
 	cpSpace *getSpace();
 	
+	float getScale();
+
 	map<string, layoutItem> *getLayoutItems();
 	
 	void updatePhysics();

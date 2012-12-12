@@ -320,6 +320,19 @@ void Camera::setMode(const char *modeName) {
 
 }
 
+Coord2 Camera::transform(Coord2 coord) {
+
+	float _activeCameraModeH = _activeCameraMode.w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
+
+	float tx = coord.x * 1 / _scale + _activeCameraMode.c.x - (_activeCameraMode.w / 2.0f);
+	float ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode.c.y - (_activeCameraModeH / 2.0f);
+
+	Coord2 transformed = {tx, ty};
+
+	return transformed;
+
+}
+
 void Camera::applyTransform(void) {
 
 	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;

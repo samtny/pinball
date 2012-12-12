@@ -29,6 +29,7 @@ public:
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
 	void setMode(const char *modeName);
+	Coord2 transform(Coord2 coord);
 	void applyTransform(void);
 	void doEffect(const char *effectName);
 	void applyEffectsTransforms(void);

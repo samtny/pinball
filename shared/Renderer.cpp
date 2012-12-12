@@ -110,12 +110,6 @@ void Renderer::init(void) {
 	// TODO: move to setter for "_displayProperties" instance??
 	_scale = _displayProperties->viewportWidth / box->width;
 
-	_camera = new Camera();
-	_camera->setBridgeInterface(_bridgeInterface);
-	_camera->setDisplayProperties(_displayProperties);
-	_camera->setPhysics(_physics);
-	_camera->init();
-	
 }
 
 void Renderer::loadOverlays(void) {
@@ -281,6 +275,15 @@ static void _drawObject(cpBody *body, void *data) {
 	renderer_CurrentInstance->drawObject(body, data);
 }
 
+static void _drawAnchors(cpBody *body, void *data) {
+	if (body->data) {
+		layoutItem *item = (layoutItem *)body->data;
+		if (item->editing == true) {
+			renderer_CurrentInstance->drawAnchors(item);
+		}
+	}
+}
+
 void Renderer::drawPlayfield() {
 	
 	glViewport(0, 0, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
@@ -303,19 +306,24 @@ void Renderer::drawPlayfield() {
 	glEnable(GL_TEXTURE_2D);
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
 	glDisable(GL_TEXTURE_2D);
+
 	ChipmunkDebugDrawShapes(_physics->getSpace());
+	
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
+
 	glEnable(GL_TEXTURE_2D);
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
 	glDisable(GL_TEXTURE_2D);
 
+	cpSpaceEachBody(_physics->getSpace(), _drawAnchors, NULL);
+	
 }
 
-void Renderer::drawObject(cpBody *body, void *data) {
+void Renderer::drawObject(cpBody *body, void *bground) {
 
-	bool background = (bool)data;
+	bool background = (bool)bground;
 
-	if (body->data && data) {
+	if (body->data && bground) {
 		layoutItem *item = (layoutItem *)body->data;
 		if (strcmp(item->o.s.c_str(), "box") == 0) {
 			this->drawBox(item);
@@ -326,6 +334,22 @@ void Renderer::drawObject(cpBody *body, void *data) {
 			this->drawBall(item);
 		}
 	}
+
+}
+
+void Renderer::drawAnchors(layoutItem *item) {
+
+	glVertexPointer(2, GL_FLOAT, 0, item->v);
+
+	glPointSize(3);
+
+	glColor4f(1, 1, 1, 1);
+	
+	glBegin(GL_POINTS); {
+		for (int i = 0; i < item->count; i++) {
+			glVertex2f(item->v[i].x, item->v[i].y);
+		}
+	} glEnd();
 
 }
 
@@ -532,6 +556,10 @@ void Renderer::drawOverlays() {
 
 	glDisable(GL_TEXTURE_2D);
     
+}
+
+void Renderer::setCamera(Camera *camera) {
+	_camera = camera;
 }
 
 void Renderer::setCameraMode(const char *modeName) {

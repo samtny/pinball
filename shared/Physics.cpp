@@ -252,6 +252,10 @@ void Physics::applyScale(layoutItem *iprops) {
 	
 }
 
+float Physics::getScale() {
+	return scale;
+}
+
 void Physics::createObject(layoutItem *layoutItem) {
 	
 	if (strcmp(layoutItem->o.s.c_str(), "box") == 0) {
@@ -392,6 +396,8 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
+
+	cpBodySetUserData(body, item);
 
 	return body;
 
@@ -753,6 +759,7 @@ void Physics::loadLayout() {
 
 				layoutItem props = { name };
 				props.s = -1;
+				props.editing = false;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {

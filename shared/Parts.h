@@ -8,6 +8,7 @@ using namespace std;
 #include "chipmunk/chipmunk.h"
 
 typedef struct Coord2{float x,y;} Coord2;
+typedef struct Rect{Coord2 begin, end;} Rect;
 
 typedef struct materialProperties {
 	string n;
@@ -45,6 +46,7 @@ typedef struct layoutItem {
 	cpBody *body;
 	float width;
 	float height;
+	bool editing;
 } layoutItem;
 typedef map<string, layoutItem>::iterator it_layoutItems;
 
