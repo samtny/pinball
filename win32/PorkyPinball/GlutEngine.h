@@ -19,6 +19,7 @@ public:
 	void keyboardCallback(unsigned char key);
 	void keyboardUpCallback(unsigned char key);
 	void mouseCallback(int button, int state, int x, int y);
+	void motionCallback(int x, int y);
 	void menuCallback(int value);
 private:
 	Physics *_physics;

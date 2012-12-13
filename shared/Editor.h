@@ -13,7 +13,8 @@ typedef enum EditMode {
 } EditMode;
 
 typedef struct EditParams {
-	Rect selectRect;
+	Coord2 selectionStart;
+	Coord2 selectionEnd;
 	EditMode editMode;
 } EditParams;
 

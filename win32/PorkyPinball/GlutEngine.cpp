@@ -83,6 +83,19 @@ void GlutEngine::menuCallback(int value) {
 
 }
 
+void glut_motionCallback(int x, int y) {
+	glut_currentInstance->motionCallback(x, y);
+}
+
+void GlutEngine::motionCallback(int x, int y) {
+	selectionEnd.x = x;
+	selectionEnd.y = y;
+	if (_currentEditMode == EDIT_MODE_MOVE) {
+		EditParams p = { selectionStart, selectionEnd, EDIT_MODE_MOVE };
+		_editor->edit(p);
+	}
+}
+
 void GlutEngine::init() {
 	
 	//glutInit(&argc, argv);
@@ -97,6 +110,7 @@ void GlutEngine::init() {
 	//glutSpecialFunc(
 
 	glutMouseFunc(glut_mouseCallback);
+	glutMotionFunc(glut_motionCallback);
 
 	//_renderer->init();
 
@@ -190,17 +204,12 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 		switch (state)
 		{
 		case GLUT_DOWN:
-			if (_currentEditMode == EDIT_MODE_SELECT) {
-				selectionStart.x = x;
-				selectionStart.y = y;
-			}
+			selectionStart.x = x;
+			selectionStart.y = y;
 			break;
 		case GLUT_UP: {
 			if (_currentEditMode == EDIT_MODE_SELECT) {
-				selectionEnd.x = x;
-				selectionEnd.y = y;
-				Rect r = {selectionStart, selectionEnd};
-				EditParams p = {r, glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE};
+				EditParams p = {selectionStart, selectionEnd, glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE};
 				_editor->edit(p);
 			}
 			break;

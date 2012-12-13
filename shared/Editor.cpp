@@ -29,21 +29,28 @@ void Editor::setCamera(Camera *camera) {
 static void edit(cpShape *shape, void *data) {
 
 	layoutItem *item = (layoutItem *)shape->data;
+	cpBody *b = cpShapeGetBody(shape);
 	if (!item) {
-		cpBody *b = cpShapeGetBody(shape);
 		item = (layoutItem *)b->data;
 	}
 
 	if (item) {
-			
+		
 		EditParams *params = (EditParams *)data;
 
-		if (item->v[0].x > min(params->selectRect.begin.x, params->selectRect.end.x) && item->v[0].x < max(params->selectRect.begin.x, params->selectRect.end.x)
-			&& item->v[0].y > min(params->selectRect.begin.y, params->selectRect.end.y) && item->v[0].y < max(params->selectRect.begin.y, params->selectRect.end.y)) {
-			fprintf(stderr, "%s\n", item->n.c_str());
-			item->editing = true;
-		} else if (params->editMode == EDIT_MODE_SELECT_EXCLUSIVE) {
-			item->editing = false;
+		if (params->editMode == EDIT_MODE_SELECT || params->editMode == EDIT_MODE_SELECT_MANY || params->editMode == EDIT_MODE_SELECT_EXCLUSIVE) {
+			if (item->v[0].x > min(params->selectionStart.x, params->selectionEnd.x) && item->v[0].x < max(params->selectionStart.x, params->selectionEnd.x)
+				&& item->v[0].y > min(params->selectionStart.y, params->selectionEnd.y) && item->v[0].y < max(params->selectionStart.y, params->selectionEnd.y)) {
+				fprintf(stderr, "%s\n", item->n.c_str());
+				item->editing = true;
+			} else if (params->editMode == EDIT_MODE_SELECT_EXCLUSIVE) {
+				item->editing = false;
+			}
+		} else if (params->editMode == EDIT_MODE_MOVE) {
+			if (item->editing == true && b) {
+				cpBodyResetForces(b);
+				cpBodySetPos(b, cpv(params->selectionEnd.x, params->selectionEnd.y));
+			}
 		}
 
 	}
@@ -52,8 +59,8 @@ static void edit(cpShape *shape, void *data) {
 
 void Editor::edit(EditParams params) {
 
-	params.selectRect.begin = _camera->transform(params.selectRect.begin);
-	params.selectRect.end = _camera->transform(params.selectRect.end);
+	params.selectionStart = _camera->transform(params.selectionStart);
+	params.selectionEnd = _camera->transform(params.selectionEnd);
 
 	cpSpace *space = _physics->getSpace();
 
