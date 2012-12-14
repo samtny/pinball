@@ -294,8 +294,8 @@ cpBody *Physics::createBox(layoutItem *item) {
 	// create body on which to hang the "box";
 	body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item->v, cpvzero)));
 
-	// TODO: i think everything is in the wrong spot bcuz this was omitted;
-	//cpBodySetPos(body, cpvsub(item->v[2], item->v[0]));
+	// the implications of attaching all playfield objects to this non-zero-indexed body are not inconsequential...
+	cpBodySetPos(body, cpvmult(cpvadd(item->v[2], item->v[0]), 0.5f));
 	
 	// pin the box body at the four corners;
 	//constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, staticBody, boxVerts[0]));
@@ -309,25 +309,25 @@ cpBody *Physics::createBox(layoutItem *item) {
 	
 	// hang the box shapes on the body;
 	// left
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[0], item->v[1], item->o.r1));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[0]), cpBodyWorld2Local(body, item->v[1]), item->o.r1));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// top
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[1], item->v[2], item->o.r1));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[1]), cpBodyWorld2Local(body, item->v[2]), item->o.r1));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// right
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[2], item->v[3], item->o.r1));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[2]), cpBodyWorld2Local(body, item->v[3]), item->o.r1));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// bottom
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, item->v[3], item->v[0], item->o.r1));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[3]), cpBodyWorld2Local(body, item->v[0]), item->o.r1));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupBox);
@@ -382,7 +382,6 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	layoutItem *box = &_layoutItems.find("box")->second;
 
  	cpConstraint *constraint = cpSpaceAddConstraint(space, cpPivotJointNew(body, box->body, item->v[0]));
-
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, flipStart, flipEnd));
 
 	// lflipper base shape
@@ -407,7 +406,7 @@ void Physics::createSwitch(layoutItem *item) {
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, item->v[0], item->v[1], item->o.r1));
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, cpBodyWorld2Local(box->body, item->v[0]), cpBodyWorld2Local(box->body, item->v[1]), item->o.r1));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
 	cpShapeSetUserData(shape, item);
@@ -418,7 +417,7 @@ void Physics::createSegment(layoutItem *item) {
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, item->v[0], item->v[1], item->o.r1));
+	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(box->body, cpBodyWorld2Local(box->body, item->v[0]), cpBodyWorld2Local(box->body, item->v[1]), item->o.r1));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
@@ -444,8 +443,8 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpVect grooveA = cpvadd(body->p, cpvmult(normal, _slingshotRestLength));
 	cpVect grooveB = body->p;
 
-	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, grooveA, grooveB, cpvzero));
-	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, grooveA, cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpBodyWorld2Local(box->body, grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
 
 	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r1));
@@ -456,7 +455,7 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	// switch
-	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, grooveA));
+	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshotSwitch);
 
@@ -468,7 +467,7 @@ void Physics::createCircle(layoutItem *item) {
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, item->o.r1, item->v[0]));
+	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, item->o.r1, cpBodyWorld2Local(box->body, item->v[0])));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
@@ -498,8 +497,8 @@ cpBody *Physics::createTarget(layoutItem *item) {
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
-	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, grooveA, grooveB, cpvzero));
-	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, grooveA, cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+	cpConstraint *constraint = cpSpaceAddConstraint(space, cpGrooveJointNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpBodyWorld2Local(box->body, grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(space, cpDampedSpringNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
 	constraint = cpSpaceAddConstraint(space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
 
 	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o.r1));
@@ -510,7 +509,7 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	// switch
-	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, grooveA));
+	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
 
