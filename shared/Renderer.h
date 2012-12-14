@@ -50,6 +50,7 @@ private:
 	HostProperties *_displayProperties;
 	map<string, textureProperties> _textures;
 	map<string, overlayProperties> _overlays;
+	map<string, layoutItem> *_layoutItems;
 	float _scale;
 };
 

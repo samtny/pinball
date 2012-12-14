@@ -180,6 +180,9 @@
     <ClCompile Include="..\..\shared\Editor.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\shared\Drawing.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\shared\Physics.h">
@@ -228,6 +231,9 @@
       <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Editor.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Drawing.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>

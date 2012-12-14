@@ -6,6 +6,8 @@
 
 #include "Parts.h"
 
+#include "Drawing.h"
+
 extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
@@ -50,6 +52,8 @@ void Renderer::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 
 void Renderer::setPhysics(Physics *physics) {
 	_physics = physics;
+	// TODO: big refactor coming up (game objects all stored in "delegate" class of some kind);
+	_layoutItems = _physics->getLayoutItems();
 }
 
 // TODO: this may exist, but other non-font textures will be dynamically assigned gl ids at script load time...
@@ -307,8 +311,28 @@ void Renderer::drawPlayfield() {
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
 	glDisable(GL_TEXTURE_2D);
 
-	ChipmunkDebugDrawShapes(_physics->getSpace());
+	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
+	// TODO: refactor with tex/drawObject methods, etc., re-order, etc.;
+	for (it_layoutItems it = _layoutItems->begin(); it != _layoutItems->end(); it++) {
+		
+		layoutItem item = it->second;
+
+		if (strcmp(item.o.s.c_str(), "circle") == 0) {
+
+			Coord2 center = {item.v[0].x, item.v[0].y};
+			DrawCircle(center, 0, item.o.r1, LINE_COLOR, FILL_COLOR);
+
+		} else if (strcmp(item.o.s.c_str(), "segment") == 0) {
+
+			Coord2 a = {item.v[0].x, item.v[0].y};
+			Coord2 b = {item.v[1].x, item.v[1].y};
+			DrawFatSegment(a, b, item.o.r1, LINE_COLOR, FILL_COLOR);
+
+		}
+
+	}
+
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
 
 	glEnable(GL_TEXTURE_2D);

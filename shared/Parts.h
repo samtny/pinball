@@ -8,6 +8,27 @@ using namespace std;
 #include "chipmunk/chipmunk.h"
 
 typedef struct Coord2{float x,y;} Coord2;
+/// Convenience constructor for Coord2 structs.
+static inline Coord2 coord(const float x, const float y)
+{
+	Coord2 v = {x, y};
+	return v;
+}
+/// Subtract two vectors.
+static inline Coord2 coordsub(const Coord2 v1, const Coord2 v2)
+{
+	return coord(v1.x - v2.x, v1.y - v2.y);
+}
+/// Scalar multiplication.
+static inline Coord2 coordmult(const Coord2 v, const float s)
+{
+	return coord(v.x*s, v.y*s);
+}
+/// Vector length
+static inline float coordlen(const Coord2 v) {
+	return sqrt(v.x * v.x + v.y * v.y);
+}
+
 typedef struct Rect{Coord2 begin, end;} Rect;
 
 typedef struct materialProperties {
@@ -44,6 +65,7 @@ typedef struct layoutItem {
 	float s;
 	int count;
 	cpBody *body;
+	cpShape *shape;
 	float width;
 	float height;
 	bool editing;

@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lvm.c" />
     <ClCompile Include="..\..\..\..\..\..\src\lua\lua 5.2.1\lzio.c" />
     <ClCompile Include="..\..\shared\Camera.cpp" />
+    <ClCompile Include="..\..\shared\Drawing.cpp" />
     <ClCompile Include="..\..\shared\Editor.cpp" />
     <ClCompile Include="..\..\shared\Game.cpp" />
     <ClCompile Include="..\..\shared\glfont2.cpp" />
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Camera.h" />
+    <ClInclude Include="..\..\shared\Drawing.h" />
     <ClInclude Include="..\..\shared\Editor.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />

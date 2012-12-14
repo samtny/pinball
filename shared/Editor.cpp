@@ -26,6 +26,23 @@ void Editor::setCamera(Camera *camera) {
 	_camera = camera;
 }
 
+static void removeConstraintPostStep (cpSpace *space, void *constraint, void *unused) {
+
+	cpSpace *s = cpConstraintGetSpace((cpConstraint *)constraint);
+	if (s == space) {
+		cpSpaceRemoveConstraint(space, (cpConstraint *)constraint);
+	}
+
+}
+
+static void removeConstraint(cpBody *body, cpConstraint *constraint, void *unused) {
+
+	
+	cpSpaceAddPostStepCallback(cpBodyGetSpace(body), removeConstraintPostStep, constraint, NULL);
+	
+
+}
+
 static void edit(cpShape *shape, void *data) {
 
 	layoutItem *item = (layoutItem *)shape->data;
@@ -46,10 +63,21 @@ static void edit(cpShape *shape, void *data) {
 			} else if (params->editMode == EDIT_MODE_SELECT_EXCLUSIVE) {
 				item->editing = false;
 			}
+		} else if (params->editMode == EDIT_MODE_MOVE_BEGIN) {
+			if (item->editing == true && b) {
+				cpBodyResetForces(b);
+				cpBodyEachConstraint(b, removeConstraint, NULL);
+			}
 		} else if (params->editMode == EDIT_MODE_MOVE) {
 			if (item->editing == true && b) {
 				cpBodyResetForces(b);
 				cpBodySetPos(b, cpv(params->selectionEnd.x, params->selectionEnd.y));
+			}
+		} else if (params->editMode == EDIT_MODE_MOVE_COMMIT) {
+			if (item->editing == true && b) {
+				//cpBodyEachShape(b, removeShapes, NULL);
+				//cpBodyDestroy(b);
+				
 			}
 		}
 

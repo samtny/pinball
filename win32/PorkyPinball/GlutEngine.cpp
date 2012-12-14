@@ -147,8 +147,9 @@ void GlutEngine::timerFunc(int value) {
 	
 	if  (!_game->getPaused()) {
 		this->_physics->updatePhysics();
-		glutPostRedisplay();
 	}
+
+	glutPostRedisplay();
 	
 }
 
@@ -206,11 +207,17 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 		case GLUT_DOWN:
 			selectionStart.x = x;
 			selectionStart.y = y;
+			if (_currentEditMode == EDIT_MODE_MOVE) {
+				EditParams p = {selectionStart, selectionEnd, EDIT_MODE_MOVE_BEGIN};
+				_editor->edit(p);
+			}
 			break;
 		case GLUT_UP: {
 			if (_currentEditMode == EDIT_MODE_SELECT) {
 				EditParams p = {selectionStart, selectionEnd, glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE};
 				_editor->edit(p);
+			} else if (_currentEditMode == EDIT_MODE_MOVE) {
+				EditParams p = {selectionStart, selectionEnd, EDIT_MODE_MOVE_COMMIT};
 			}
 			break;
 			}
