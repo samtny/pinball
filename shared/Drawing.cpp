@@ -20,6 +20,30 @@ glColor_from_color(Color color){
 	glColor4fv((GLfloat *)&color);
 }
 
+void DrawShape(cpShape *shape, void *data) {
+
+	cpBody *body = shape->body;
+
+	switch (shape->klass_private->type) {
+	case CP_CIRCLE_SHAPE: {
+		cpCircleShape *circle = (cpCircleShape *)shape;
+		Coord2 tc = {circle->tc.x, circle->tc.y};
+		DrawCircle(tc, body->a, circle->r, LINE_COLOR, FILL_COLOR);
+		break;
+		}
+	case CP_SEGMENT_SHAPE: {
+		cpSegmentShape *segment = (cpSegmentShape *)shape;
+		Coord2 ta = {segment->ta.x, segment->ta.y};
+		Coord2 tb = {segment->tb.x, segment->tb.y};
+		DrawFatSegment(ta, tb, segment->r, LINE_COLOR, FILL_COLOR);
+		break;
+		}
+	default:
+		break;
+	}
+
+}
+
 void DrawCircle(Coord2 center, float angle, float radius, Color lineColor, Color fillColor) {
 
 	glVertexPointer(2, GL_FLOAT, 0, circleVAR);

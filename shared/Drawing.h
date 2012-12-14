@@ -13,6 +13,8 @@ typedef struct Color {
 const Color LINE_COLOR = {0, 0, 0, 1};
 const Color FILL_COLOR = {0.75, 0.75, 1, 1};
 
+void DrawShape(cpShape *shape, void *data);
+
 static const GLfloat circleVAR[] = {
 	 0.0000f,  1.0000f,
 	 0.2588f,  0.9659f,

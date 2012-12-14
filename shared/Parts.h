@@ -3,6 +3,7 @@
 
 using namespace std;
 #include <string>
+#include <vector>
 #include <map>
 
 #include "chipmunk/chipmunk.h"

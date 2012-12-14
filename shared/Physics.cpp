@@ -422,6 +422,8 @@ void Physics::createSegment(layoutItem *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
 
+	item->shape = shape;
+
 }
 
 cpBody *Physics::createSlingshot(layoutItem *item) {
@@ -454,6 +456,8 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
 	cpShapeSetUserData(shape, item);
 
+	item->shape = shape;
+
 	// switch
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
@@ -471,6 +475,9 @@ void Physics::createCircle(layoutItem *item) {
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
+
+	item->body = box->body;
+	item->shape = shape;
 
 }
 
@@ -508,6 +515,8 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpShapeSetGroup(shape, shapeGroupTargets);
 	cpShapeSetUserData(shape, item);
 
+	item->shape = shape;
+
 	// switch
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
@@ -531,6 +540,8 @@ cpBody *Physics::createPopbumper(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypePopbumper);
 	cpShapeSetGroup(shape, shapeGroupPopbumpers);
 	cpShapeSetUserData(shape, item);
+
+	item->shape = shape;
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
