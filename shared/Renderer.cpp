@@ -422,10 +422,11 @@ void Renderer::drawPlayfield() {
 			Coord2 b = {item.v[1].x, item.v[1].y};
 			Coord2 c = {item.v[2].x, item.v[2].y};
 			Coord2 d = {item.v[3].x, item.v[3].y};
-			Coord2 ref = a;
-			Coord2 p = {item.body->p.x, item.body->p.y};
 
+			Coord2 ref = coordmult(coordadd(a, c), 0.5f);
+			Coord2 p = {item.body->p.x, item.body->p.y};
 			Coord2 diff = coordsub(p, ref);
+			
 			float angle = item.body->a;
 
 			glTranslatef(diff.x, diff.y, 0.0f);
