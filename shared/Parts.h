@@ -14,6 +14,10 @@ static inline Coord2 coord(const float x, const float y)
 	Coord2 v = {x, y};
 	return v;
 }
+/// Add two vectors.
+static inline Coord2 coordadd(const Coord2 v1, const Coord2 v2) {
+	return coord(v1.x + v2.x, v1.y + v2.y);
+}
 /// Subtract two vectors.
 static inline Coord2 coordsub(const Coord2 v1, const Coord2 v2)
 {
