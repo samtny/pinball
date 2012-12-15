@@ -74,6 +74,7 @@ typedef struct layoutItem {
 	float width;
 	float height;
 	bool editing;
+	cpVect c;
 } layoutItem;
 typedef map<string, layoutItem>::iterator it_layoutItems;
 

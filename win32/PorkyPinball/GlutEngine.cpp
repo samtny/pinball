@@ -218,6 +218,7 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 				_editor->edit(p);
 			} else if (_currentEditMode == EDIT_MODE_MOVE) {
 				EditParams p = {selectionStart, selectionEnd, EDIT_MODE_MOVE_COMMIT};
+				_editor->edit(p);
 			}
 			break;
 			}

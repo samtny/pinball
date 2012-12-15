@@ -48,6 +48,9 @@ public:
 
 	bool getPaused();
 
+	void createObject(layoutItem *iprops);
+	void destroyBody(cpBody *body);
+
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -56,7 +59,6 @@ protected:
     void loadForces();
 	void initCollisionHandlers();
 	void applyScale(layoutItem *iprops);
-	void createObject(layoutItem *iprops);
 	cpBody *createBox(layoutItem *iprops);
     cpBody *createBall(layoutItem *iprops);
 	cpBody *createFlipper(layoutItem *iprops);

@@ -22,6 +22,8 @@ typedef struct EditParams {
 
 class Editor {
 public:
+	Editor(void);
+	~Editor(void);
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setGame(Game *game);
 	void setPhysics(Physics *physics);
