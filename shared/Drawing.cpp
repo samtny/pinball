@@ -97,3 +97,20 @@ void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fil
 	}
 
 }
+
+void DrawPoints(float size, int count, cpVect *verts, Color color)
+{
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+
+	glPointSize(3);
+
+	glColor4f(color.r, color.g, color.b, color.a);
+	
+	glBegin(GL_POINTS); {
+		for (int i = 0; i < count; i++) {
+			glVertex2f(verts[i].x, verts[i].y);
+		}
+	} glEnd();
+
+}

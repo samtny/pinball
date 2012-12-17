@@ -12,6 +12,7 @@ typedef struct Color {
 
 const Color LINE_COLOR = {0, 0, 0, 1};
 const Color FILL_COLOR = {0.75, 0.75, 1, 1};
+const Color EDIT_COLOR = {1, 1, 1, 1};
 
 void DrawShape(cpShape *shape, void *data);
 
@@ -79,6 +80,8 @@ static const GLfloat pillVAR[] = {
 static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
 
 void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fillColor);
+
+void DrawPoints(float size, int count, cpVect *verts, Color color);
 
 #endif
 

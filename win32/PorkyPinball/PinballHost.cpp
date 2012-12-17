@@ -39,10 +39,16 @@ void PinballHost::init() {
 	c->setPhysics(p);
 	c->init();
 
+	Editor *t = new Editor();
+	t->setBridgeInterface(bi);
+	t->setCamera(c);
+	t->setPhysics(p);
+
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
 	r->setPhysics(p);
 	r->setCamera(c);
+	r->setEditor(t);
 	r->init();
 	
 	Game *g = new Game();
@@ -51,12 +57,6 @@ void PinballHost::init() {
 	g->setRenderer(r);
 	g->init();
 	
-	Editor *t = new Editor();
-	t->setBridgeInterface(bi);
-	t->setGame(g);
-	t->setPhysics(p);
-	t->setCamera(c);
-
 	e->setPhysics(p);
 	e->setRenderer(r);
 	e->setGame(g);

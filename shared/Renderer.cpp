@@ -4,6 +4,8 @@
 
 #include "Camera.h"
 
+#include "Editor.h"
+
 #include "Parts.h"
 
 #include "Drawing.h"
@@ -54,6 +56,10 @@ void Renderer::setPhysics(Physics *physics) {
 	_physics = physics;
 	// TODO: big refactor coming up (game objects all stored in "delegate" class of some kind);
 	_layoutItems = _physics->getLayoutItems();
+}
+
+void Renderer::setEditor(Editor *editor) {
+	_editor = editor;
 }
 
 // TODO: this may exist, but other non-font textures will be dynamically assigned gl ids at script load time...
@@ -314,6 +320,22 @@ void Renderer::drawPlayfield() {
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
 	cpSpaceEachShape(_physics->getSpace(), DrawShape, NULL);
+
+	const EditorState *s = _editor->getState();
+	if (s->editMode != EDIT_MODE_NONE) {
+		map<string, layoutItem> *items = _physics->getLayoutItems();
+		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+			layoutItem item = it->second;
+
+			if (item.editing == true) {
+
+				DrawPoints(20, item.count, item.v, EDIT_COLOR);
+
+			}
+
+		}
+	}
 	
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
 
@@ -321,8 +343,6 @@ void Renderer::drawPlayfield() {
 	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
 	glDisable(GL_TEXTURE_2D);
 
-	cpSpaceEachBody(_physics->getSpace(), _drawAnchors, NULL);
-	
 }
 
 void Renderer::drawObject(cpBody *body, void *bground) {
@@ -340,22 +360,6 @@ void Renderer::drawObject(cpBody *body, void *bground) {
 			this->drawBall(item);
 		}
 	}
-
-}
-
-void Renderer::drawAnchors(layoutItem *item) {
-
-	glVertexPointer(2, GL_FLOAT, 0, item->v);
-
-	glPointSize(3);
-
-	glColor4f(1, 1, 1, 1);
-	
-	glBegin(GL_POINTS); {
-		for (int i = 0; i < item->count; i++) {
-			glVertex2f(item->v[i].x, item->v[i].y);
-		}
-	} glEnd();
 
 }
 

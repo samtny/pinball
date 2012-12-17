@@ -6,6 +6,7 @@ class Physics;
 class Camera;
 
 typedef enum EditMode {
+	EDIT_MODE_NONE,
 	EDIT_MODE_SELECT,
 	EDIT_MODE_SELECT_EXCLUSIVE,
 	EDIT_MODE_SELECT_MANY,
@@ -14,11 +15,11 @@ typedef enum EditMode {
 	EDIT_MODE_MOVE_COMMIT
 } EditMode;
 
-typedef struct EditParams {
+typedef struct EditorState {
+	EditMode editMode;
 	Coord2 selectionStart;
 	Coord2 selectionEnd;
-	EditMode editMode;
-} EditParams;
+} EditorState;
 
 class Editor {
 public:
@@ -28,11 +29,14 @@ public:
 	void setGame(Game *game);
 	void setPhysics(Physics *physics);
 	void setCamera(Camera *camera);
-	void edit(EditParams params);
+	const EditorState *getState();
+	void setState(EditorState state);
+	void selectItems();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Game *_game;
 	Physics *_physics;
 	Camera *_camera;
+	EditorState _state;
 };
 

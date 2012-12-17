@@ -87,15 +87,6 @@ void glut_motionCallback(int x, int y) {
 	glut_currentInstance->motionCallback(x, y);
 }
 
-void GlutEngine::motionCallback(int x, int y) {
-	selectionEnd.x = x;
-	selectionEnd.y = y;
-	if (_currentEditMode == EDIT_MODE_MOVE) {
-		EditParams p = { selectionStart, selectionEnd, EDIT_MODE_MOVE };
-		_editor->edit(p);
-	}
-}
-
 void GlutEngine::init() {
 	
 	//glutInit(&argc, argv);
@@ -197,6 +188,20 @@ void GlutEngine::keyboardUpCallback(unsigned char key) {
 
 }
 
+void GlutEngine::motionCallback(int x, int y) {
+	
+	if (_currentEditMode == EDIT_MODE_SELECT) {
+		const EditorState *s = _editor->getState();
+		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		_editor->setState(newState);
+	} else if (_currentEditMode == EDIT_MODE_MOVE) {
+		const EditorState *s = _editor->getState();
+		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		_editor->setState(newState);
+	}
+
+}
+
 void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 
 	switch (button)
@@ -205,20 +210,23 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 		switch (state)
 		{
 		case GLUT_DOWN:
-			selectionStart.x = x;
-			selectionStart.y = y;
-			if (_currentEditMode == EDIT_MODE_MOVE) {
-				EditParams p = {selectionStart, selectionEnd, EDIT_MODE_MOVE_BEGIN};
-				_editor->edit(p);
+			if (_currentEditMode == EDIT_MODE_SELECT) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE, { x, y }, { x, y } };
+				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_MOVE) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_MOVE_BEGIN, { x, y }, { x, y } };
+				_editor->setState(newState);
 			}
 			break;
 		case GLUT_UP: {
 			if (_currentEditMode == EDIT_MODE_SELECT) {
-				EditParams p = {selectionStart, selectionEnd, glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE};
-				_editor->edit(p);
+				// do nothing
 			} else if (_currentEditMode == EDIT_MODE_MOVE) {
-				EditParams p = {selectionStart, selectionEnd, EDIT_MODE_MOVE_COMMIT};
-				_editor->edit(p);
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_MOVE_COMMIT, s->selectionStart, s->selectionEnd };
+				_editor->setState(newState);
 			}
 			break;
 			}
@@ -231,3 +239,5 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 	}
 
 }
+
+

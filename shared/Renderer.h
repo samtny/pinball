@@ -10,6 +10,7 @@
 
 class Physics;
 class Camera;
+class Editor;
 struct layoutItem;
 struct cpBody;
 
@@ -26,6 +27,7 @@ public:
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setPhysics(Physics *physics);
 	void setCamera(Camera *camera);
+	void setEditor(Editor *editor);
 	void init(void);
 	void loadTextures(void);
 	void loadFonts(void);
@@ -46,6 +48,7 @@ private:
 	PinballBridgeInterface *_bridgeInterface;
 	Physics *_physics;
 	Camera *_camera;
+	Editor *_editor;
 	glfont::GLFont *_glfont;
 	HostProperties *_displayProperties;
 	map<string, textureProperties> _textures;
