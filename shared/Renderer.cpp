@@ -323,13 +323,21 @@ void Renderer::drawPlayfield() {
 
 	const EditorState *s = _editor->getState();
 	if (s->editMode != EDIT_MODE_NONE) {
-		glPushMatrix();
+		
+		float tx = 0;
+		float ty = 0;
+		float rot = 0;
 		if (s->editMode == EDIT_MODE_MOVE) {
 			Coord2 start = _camera->transform(s->selectionStart);
 			Coord2 end = _camera->transform(s->selectionEnd);
-			float tx = end.x - start.x;
-			float ty = end.y - start.y;
-			glTranslatef(tx, ty, 0);
+			tx = end.x - start.x;
+			ty = end.y - start.y;
+			//glTranslatef(tx, ty, 0);
+		} else if (s->editMode == EDIT_MODE_ROTATE) {
+			Coord2 start = s->selectionStart;
+			Coord2 end = s->selectionEnd;
+			rot = 360 * (((int)(start.x - end.x) % 100) / 100.0f);
+			//glRotatef(rot, 0, 0, 1);
 		}
 		map<string, layoutItem> *items = _physics->getLayoutItems();
 		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
@@ -337,13 +345,36 @@ void Renderer::drawPlayfield() {
 			layoutItem item = it->second;
 
 			if (item.editing == true) {
+				
+				glPushMatrix();
+				glLoadIdentity();
+				//_camera->applyTransform();
+				if (rot != 0) {
+					// find center
+					cpVect c = cpvmult(cpvadd(item.v[0], item.v[1]), 0.5f);
+
+					// translate to 0
+					glTranslatef(-c.x, -c.y, 0);
+
+					// rotate
+					glRotatef(rot, 0, 0, 1);
+
+					// translate back
+					glTranslatef(c.x, c.y, 0);
+				}
+
+				//glTranslatef(tx, ty, 0);
+
+				//_camera->applyTransform();
 
 				DrawPoints(20, item.count, item.v, EDIT_COLOR);
+				
+				glPopMatrix();
 
 			}
 
 		}
-		glPopMatrix();
+		
 	}
 	
 	ChipmunkDebugDrawConstraints(_physics->getSpace());

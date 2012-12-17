@@ -12,7 +12,8 @@ typedef enum EditMode {
 	EDIT_MODE_SELECT_MANY,
 	EDIT_MODE_MOVE_BEGIN,
 	EDIT_MODE_MOVE,
-	EDIT_MODE_MOVE_COMMIT
+	EDIT_MODE_MOVE_COMMIT,
+	EDIT_MODE_ROTATE
 } EditMode;
 
 typedef struct EditorState {
@@ -33,6 +34,7 @@ public:
 	void setState(EditorState state);
 	void selectItems();
 	void moveItems();
+	void rotateItems();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Game *_game;

@@ -65,7 +65,8 @@ void glut_menuFunc(int value) {
 
 typedef enum Menu {
 	MENU_SELECT,
-	MENU_MOVE
+	MENU_MOVE,
+	MENU_ROTATE
 } Menu;
 
 void GlutEngine::menuCallback(int value) {
@@ -77,6 +78,9 @@ void GlutEngine::menuCallback(int value) {
 		break;
 	case MENU_MOVE:
 		_currentEditMode = EDIT_MODE_MOVE;
+		break;
+	case MENU_ROTATE:
+		_currentEditMode = EDIT_MODE_ROTATE;
 	default:
 		break;
 	}
@@ -108,6 +112,7 @@ void GlutEngine::init() {
 	glutCreateMenu(glut_menuFunc);
 	glutAddMenuEntry("Select", MENU_SELECT);
 	glutAddMenuEntry("Move", MENU_MOVE);
+	glutAddMenuEntry("Rotate", MENU_ROTATE);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 }
@@ -198,6 +203,10 @@ void GlutEngine::motionCallback(int x, int y) {
 		const EditorState *s = _editor->getState();
 		EditorState newState = { EDIT_MODE_MOVE, s->selectionStart, { x, y } };
 		_editor->setState(newState);
+	} else if (_currentEditMode == EDIT_MODE_ROTATE) {
+		const EditorState *s = _editor->getState();
+		EditorState newState = { EDIT_MODE_ROTATE, s->selectionStart, { x, y } };
+		_editor->setState(newState);
 	}
 
 }
@@ -217,6 +226,10 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 			} else if (_currentEditMode == EDIT_MODE_MOVE) {
 				const EditorState *s = _editor->getState();
 				EditorState newState = { EDIT_MODE_MOVE_BEGIN, { x, y }, { x, y } };
+				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_ROTATE) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_ROTATE, { x, y }, { x, y } };
 				_editor->setState(newState);
 			}
 			break;

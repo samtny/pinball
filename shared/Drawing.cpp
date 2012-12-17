@@ -103,7 +103,7 @@ void DrawPoints(float size, int count, cpVect *verts, Color color)
 
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 
-	glPointSize(3);
+	glPointSize(4);
 
 	glColor4f(color.r, color.g, color.b, color.a);
 	

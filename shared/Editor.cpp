@@ -59,6 +59,10 @@ void Editor::setState(EditorState state) {
 	case EDIT_MODE_MOVE_BEGIN:
 	case EDIT_MODE_MOVE_COMMIT:
 		moveItems();
+		break;
+	case EDIT_MODE_ROTATE:
+		rotateItems();
+		break;
 	default:
 		break;
 	}
@@ -139,5 +143,9 @@ void Editor::moveItems() {
 
 }
 
+void Editor::rotateItems() {
 
+
+
+}
 

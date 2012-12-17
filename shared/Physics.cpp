@@ -279,11 +279,11 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 		cpBodyEachShape(item->body, destroyShape, NULL);
 		cpSpaceRemoveBody(space, item->body);
 		cpBodyFree(item->body);
-	} else {
-		if (item->shape) {
-			cpSpaceRemoveShape(space, item->shape);
-			cpShapeFree(item->shape);
-		}
+	}
+
+	if (item->shape) {
+		cpSpaceRemoveShape(space, item->shape);
+		cpShapeFree(item->shape);
 	}
 
 }
@@ -452,6 +452,8 @@ void Physics::createSwitch(layoutItem *item) {
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
 	cpShapeSetUserData(shape, item);
+
+	item->shape = shape;
 	
 }
 
@@ -498,12 +500,12 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
 	cpShapeSetUserData(shape, item);
 
-	item->shape = shape;
-
 	// switch
 	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshotSwitch);
+
+	item->shape = shape;
 
 	return body;
 
@@ -518,7 +520,6 @@ void Physics::createCircle(layoutItem *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetUserData(shape, item);
 
-	item->body = box->body;
 	item->shape = shape;
 
 }
@@ -557,12 +558,12 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpShapeSetGroup(shape, shapeGroupTargets);
 	cpShapeSetUserData(shape, item);
 
-	item->shape = shape;
-
 	// switch
 	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
+
+	item->shape = shape;
 
 	return body;
 
@@ -582,8 +583,6 @@ cpBody *Physics::createPopbumper(layoutItem *item) {
 	cpShapeSetCollisionType(shape, CollisionTypePopbumper);
 	cpShapeSetGroup(shape, shapeGroupPopbumpers);
 	cpShapeSetUserData(shape, item);
-
-	item->shape = shape;
 
 	layoutItem *box = &_layoutItems.find("box")->second;
 
