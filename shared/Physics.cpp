@@ -257,7 +257,8 @@ float Physics::getScale() {
 }
 
 static void destroyConstraint(cpBody *body, cpConstraint *constraint, void *data) {
-	cpSpaceRemoveConstraint(_space, constraint);
+	cpSpace *space = cpBodyGetSpace(body);
+	cpSpaceRemoveConstraint(space, constraint);
 	cpConstraintFree(constraint);
 }
 
@@ -267,20 +268,33 @@ static void destroyShape(cpBody *body, cpShape *shape, void *data) {
 	cpShapeFree(shape);
 }
 
-static void destroyBody (cpSpace *space, void *obj, void *unused) {
+void destroyObject(cpSpace *space, void *itm, void *unused) {
 
-	cpBody *b = (cpBody *)obj;
+	layoutItem *item = (layoutItem *)itm;
 
-	cpBodyEachConstraint(b, ::destroyConstraint, NULL);
-	cpBodyEachShape(b, ::destroyShape, NULL);
-	cpSpaceRemoveBody(space, b);
-	cpBodyFree(b);
+	layoutItem box = physics_currentInstance->getLayoutItems()->find("box")->second;
+
+	if (item->body && item->body != box.body) {
+		cpBodyEachConstraint(item->body, destroyConstraint, NULL);
+		cpBodyEachShape(item->body, destroyShape, NULL);
+		cpSpaceRemoveBody(space, item->body);
+		cpBodyFree(item->body);
+	} else {
+		if (item->shape) {
+			cpSpaceRemoveShape(space, item->shape);
+			cpShapeFree(item->shape);
+		}
+	}
 
 }
 
-void Physics::destroyBody(cpBody *body) {
+void Physics::destroyObject(layoutItem *item) {
 
-	cpSpaceAddPostStepCallback(_space, ::destroyBody, body, NULL);
+	if (cpSpaceIsLocked(_space)) {
+		cpSpaceAddPostStepCallback(_space, ::destroyObject, item, NULL);
+	} else {
+		::destroyObject(_space, item, NULL);
+	}
 
 }
 

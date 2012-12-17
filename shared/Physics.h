@@ -49,6 +49,7 @@ public:
 	bool getPaused();
 
 	void createObject(layoutItem *iprops);
+	void destroyObject(layoutItem *iprops);
 	void destroyBody(cpBody *body);
 
 protected:

@@ -196,7 +196,7 @@ void GlutEngine::motionCallback(int x, int y) {
 		_editor->setState(newState);
 	} else if (_currentEditMode == EDIT_MODE_MOVE) {
 		const EditorState *s = _editor->getState();
-		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		EditorState newState = { EDIT_MODE_MOVE, s->selectionStart, { x, y } };
 		_editor->setState(newState);
 	}
 

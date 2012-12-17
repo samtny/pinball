@@ -55,12 +55,15 @@ void Editor::setState(EditorState state) {
 	case EDIT_MODE_SELECT_MANY:
 		selectItems();
 		break;
+	case EDIT_MODE_MOVE:
+	case EDIT_MODE_MOVE_BEGIN:
+	case EDIT_MODE_MOVE_COMMIT:
+		moveItems();
 	default:
 		break;
 	}
 	
 }
-
 
 void Editor::selectItems() {
 
@@ -99,7 +102,42 @@ void Editor::selectItems() {
 
 }
 
+void Editor::moveItems() {
 
+	if (
+		_state.editMode == EDIT_MODE_MOVE_COMMIT &&
+		(_state.selectionStart.x != _state.selectionEnd.x  ||
+		_state.selectionStart.x != _state.selectionEnd.y)
+		) 
+	{
+
+		map<string, layoutItem> *items = _physics->getLayoutItems();
+
+		Coord2 start = _camera->transform(_state.selectionStart);
+		Coord2 end = _camera->transform(_state.selectionEnd);
+
+		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	
+			layoutItem *item = &(&*it)->second;
+
+			if (item->editing == true) {
+
+				_physics->destroyObject(item);
+
+				for (int i = 0; i < item->count; i++) {
+					item->v[i].x = item->v[i].x - (start.x - end.x);
+					item->v[i].y = item->v[i].y - (start.y - end.y);
+				}
+
+				_physics->createObject(item);
+
+			}
+
+		}
+
+	}
+
+}
 
 
 

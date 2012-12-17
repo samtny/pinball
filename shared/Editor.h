@@ -32,6 +32,7 @@ public:
 	const EditorState *getState();
 	void setState(EditorState state);
 	void selectItems();
+	void moveItems();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Game *_game;

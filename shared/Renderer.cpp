@@ -323,6 +323,14 @@ void Renderer::drawPlayfield() {
 
 	const EditorState *s = _editor->getState();
 	if (s->editMode != EDIT_MODE_NONE) {
+		glPushMatrix();
+		if (s->editMode == EDIT_MODE_MOVE) {
+			Coord2 start = _camera->transform(s->selectionStart);
+			Coord2 end = _camera->transform(s->selectionEnd);
+			float tx = end.x - start.x;
+			float ty = end.y - start.y;
+			glTranslatef(tx, ty, 0);
+		}
 		map<string, layoutItem> *items = _physics->getLayoutItems();
 		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
 
@@ -335,6 +343,7 @@ void Renderer::drawPlayfield() {
 			}
 
 		}
+		glPopMatrix();
 	}
 	
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
