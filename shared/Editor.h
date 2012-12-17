@@ -13,7 +13,8 @@ typedef enum EditMode {
 	EDIT_MODE_MOVE_BEGIN,
 	EDIT_MODE_MOVE,
 	EDIT_MODE_MOVE_COMMIT,
-	EDIT_MODE_ROTATE
+	EDIT_MODE_ROTATE,
+	EDIT_MODE_ROTATE_COMMIT
 } EditMode;
 
 typedef struct EditorState {

@@ -347,25 +347,29 @@ void Renderer::drawPlayfield() {
 			if (item.editing == true) {
 				
 				glPushMatrix();
-				glLoadIdentity();
-				//_camera->applyTransform();
+				
 				if (rot != 0) {
+					
 					// find center
-					cpVect c = cpvmult(cpvadd(item.v[0], item.v[1]), 0.5f);
+					Coord2 c = { 0, 0 };
+					for (int i = 0; i < item.count; i++) {
+						Coord2 t = { item.v[i].x, item.v[i].y };
+						c = coordadd(c, t);
+					}
+					c = coordmult(c, 1 / (float)item.count);
 
-					// translate to 0
-					glTranslatef(-c.x, -c.y, 0);
+					// translate to origin
+					glTranslatef(c.x, c.y, 0);
 
 					// rotate
 					glRotatef(rot, 0, 0, 1);
 
 					// translate back
-					glTranslatef(c.x, c.y, 0);
+					glTranslatef(-c.x, -c.y, 0);
+
 				}
 
-				//glTranslatef(tx, ty, 0);
-
-				//_camera->applyTransform();
+				glTranslatef(tx, ty, 0);
 
 				DrawPoints(20, item.count, item.v, EDIT_COLOR);
 				

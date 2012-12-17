@@ -240,6 +240,10 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 				const EditorState *s = _editor->getState();
 				EditorState newState = { EDIT_MODE_MOVE_COMMIT, s->selectionStart, s->selectionEnd };
 				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_ROTATE) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_ROTATE_COMMIT, s->selectionStart, s->selectionEnd };
+				_editor->setState(newState);
 			}
 			break;
 			}

@@ -61,6 +61,7 @@ void Editor::setState(EditorState state) {
 		moveItems();
 		break;
 	case EDIT_MODE_ROTATE:
+	case EDIT_MODE_ROTATE_COMMIT:
 		rotateItems();
 		break;
 	default:
@@ -144,8 +145,63 @@ void Editor::moveItems() {
 }
 
 void Editor::rotateItems() {
+	
+	if (
+		_state.editMode == EDIT_MODE_ROTATE_COMMIT &&
+		_state.selectionStart.x != _state.selectionEnd.x
+		) 
+	{
 
+		map<string, layoutItem> *items = _physics->getLayoutItems();
 
+		Coord2 start = _state.selectionStart;
+		Coord2 end = _state.selectionEnd;
+		float rot = 360 * (((int)(start.x - end.x) % 100) / 100.0f);
+		Coord2 rotvect = { tan(rot * M_PI / 180.0f), cos(rot * M_PI / 180.0f) };
 
+		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+			
+			layoutItem *item = &(&*it)->second;
+
+			if (item->editing == true) {
+
+				_physics->destroyObject(item);
+
+				// find center
+				Coord2 c = { 0, 0 };
+				for (int i = 0; i < item->count; i++) {
+					Coord2 t = { item->v[i].x, item->v[i].y };
+					c = coordadd(c, t);
+				}
+				c = coordmult(c, 1 / (float)item->count);
+				
+				// rotate all points around c
+				for (int i = 0; i < item->count; i++) {
+					
+					// current vertex
+					Coord2 v = { item->v[i].x, item->v[i].y };
+
+					// relative to center
+					Coord2 vrel = coordsub(c, v);
+
+					// transform by rotvect
+					Coord2 vt = {vrel.x * rotvect.x - vrel.y * rotvect.y, vrel.x * rotvect.y + vrel.y * rotvect.x};
+
+					// add back center
+					Coord2 vfinal = coordadd(c, vt);
+
+					item->v[i].x = vfinal.x;
+					item->v[i].y = vfinal.y;
+
+				}
+
+				_physics->createObject(item);
+
+			}
+
+		}
+
+	}
+	
 }
 
