@@ -336,7 +336,9 @@ void Renderer::drawPlayfield() {
 		} else if (s->editMode == EDIT_MODE_ROTATE) {
 			Coord2 start = s->selectionStart;
 			Coord2 end = s->selectionEnd;
-			rot = 360 * (((int)(start.x - end.x) % 100) / 100.0f);
+
+			
+
 			//glRotatef(rot, 0, 0, 1);
 		}
 		map<string, layoutItem> *items = _physics->getLayoutItems();
@@ -348,7 +350,7 @@ void Renderer::drawPlayfield() {
 				
 				glPushMatrix();
 				
-				if (rot != 0) {
+				if (s->editMode == EDIT_MODE_ROTATE) {
 					
 					// find center
 					Coord2 c = { 0, 0 };
@@ -360,6 +362,15 @@ void Renderer::drawPlayfield() {
 
 					// translate to origin
 					glTranslatef(c.x, c.y, 0);
+
+					// mouse position
+					Coord2 m = _camera->transform(s->selectionEnd);
+
+					// rotvec
+					Coord2 rotvec = coordsub(m, c);
+
+					// rot
+					rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
 
 					// rotate
 					glRotatef(rot, 0, 0, 1);

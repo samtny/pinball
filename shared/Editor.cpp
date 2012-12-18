@@ -148,7 +148,8 @@ void Editor::rotateItems() {
 	
 	if (
 		_state.editMode == EDIT_MODE_ROTATE_COMMIT &&
-		_state.selectionStart.x != _state.selectionEnd.x
+		(_state.selectionStart.x != _state.selectionEnd.x ||
+		_state.selectionStart.y != _state.selectionEnd.y)
 		) 
 	{
 
@@ -156,8 +157,6 @@ void Editor::rotateItems() {
 
 		Coord2 start = _state.selectionStart;
 		Coord2 end = _state.selectionEnd;
-		float rot = 360 * (((int)(start.x - end.x) % 100) / 100.0f);
-		Coord2 rotvect = { cos(rot * M_PI / 180.0f), sin(rot * M_PI / 180.0f) };
 
 		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
 			
@@ -175,6 +174,15 @@ void Editor::rotateItems() {
 				}
 				c = coordmult(c, 1 / (float)item->count);
 				
+				// mouse position
+				Coord2 m = _camera->transform(end);
+
+				// rotvec
+				Coord2 rotvec = coordsub(m, c);
+
+				// rot
+				float rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
+
 				// rotate all points around c
 				for (int i = 0; i < item->count; i++) {
 					
@@ -183,15 +191,28 @@ void Editor::rotateItems() {
 
 					// relative to center
 					Coord2 vrel = coordsub(v, c);
+					
+					if (vrel.x != 0 || vrel.y != 0) {
 
-					// transform by rotvect
-					Coord2 vt = {vrel.x * rotvect.x - vrel.y * rotvect.y, vrel.x * rotvect.y + vrel.y * rotvect.x};
+						// normalized
+						Coord2 vreln = coordnormalize(vrel);
+					
+						// transform normalized vector by rotvect
+						Coord2 vrelnt = coordrotate(vreln, rotvec);
+					
+						// normalize result
+						Coord2 vrelntn = coordnormalize(vrelnt);
 
-					// add back center
-					Coord2 vfinal = coordadd(c, vt);
+						// multiply by length of original center-relative vector
+						Coord2 vt = coordmult(vrelntn, coordlen(vrel));
 
-					item->v[i].x = vfinal.x;
-					item->v[i].y = vfinal.y;
+						// add back center
+						Coord2 vfinal = coordadd(c, vt);
+
+						item->v[i].x = vfinal.x;
+						item->v[i].y = vfinal.y;
+
+					}
 
 				}
 
