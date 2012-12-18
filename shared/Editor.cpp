@@ -157,7 +157,7 @@ void Editor::rotateItems() {
 		Coord2 start = _state.selectionStart;
 		Coord2 end = _state.selectionEnd;
 		float rot = 360 * (((int)(start.x - end.x) % 100) / 100.0f);
-		Coord2 rotvect = { tan(rot * M_PI / 180.0f), cos(rot * M_PI / 180.0f) };
+		Coord2 rotvect = { cos(rot * M_PI / 180.0f), sin(rot * M_PI / 180.0f) };
 
 		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
 			
@@ -182,7 +182,7 @@ void Editor::rotateItems() {
 					Coord2 v = { item->v[i].x, item->v[i].y };
 
 					// relative to center
-					Coord2 vrel = coordsub(c, v);
+					Coord2 vrel = coordsub(v, c);
 
 					// transform by rotvect
 					Coord2 vt = {vrel.x * rotvect.x - vrel.y * rotvect.y, vrel.x * rotvect.y + vrel.y * rotvect.x};
