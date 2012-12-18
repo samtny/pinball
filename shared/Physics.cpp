@@ -23,6 +23,12 @@ static cpSpace *_space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
+static float flipImpulse = 0.01f;
+static float unflipImpulse = 0.01f;
+
+static float flipForce = 0.2;
+static float unflipForce = 0.2f;
+
 static float _targetRestLength = 0;
 static float _targetSwitchGap = 0;
 static float _targetStiffness = 0;
@@ -609,6 +615,68 @@ cpBody *Physics::createPopbumper(layoutItem *item) {
 	body->data = item;
 
 	return body;
+
+}
+
+void Physics::activateMech(const char *mechName) {
+
+	layoutItem item = _layoutItems.find(mechName)->second;
+
+	if (strcmp(item.o.s.c_str(), "flipper") == 0) {
+		flip(&item);
+	}
+
+}
+
+void Physics::deactivateMech(const char *mechName) {
+
+	layoutItem item = _layoutItems.find(mechName)->second;
+
+	if (strcmp(item.o.s.c_str(), "flipper") == 0) {
+		unflip(&item);
+	}
+
+}
+
+void Physics::flip(layoutItem *flipper) {
+
+	cpBodyResetForces(flipper->body);
+
+	float dir = flipper->v[0].x < flipper->v[1].x ? 1 : -1;
+
+	// TODO: precompute
+	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
+
+	cpVect anchor = cpvadd(flipper->body->p, cpvmult(cpv(1, 0), offset));
+
+	cpBodyApplyImpulse(flipper->body, cpv(0, flipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->body, cpv(0, flipForce * dir), anchor);
+
+	anchor = cpvadd(flipper->body->p, cpvmult(cpv(-1, 0), offset));
+
+	cpBodyApplyImpulse(flipper->body, cpv(0, -flipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->body, cpv(0, -flipForce * dir), anchor);
+
+}
+
+void Physics::unflip(layoutItem *flipper) {
+
+	cpBodyResetForces(flipper->body);
+
+	float dir = flipper->v[0].x < flipper->v[1].x ? -1 : 1;
+
+	// TODO: precompute
+	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
+
+	cpVect anchor = cpvadd(flipper->body->p, cpvmult(cpv(1, 0), offset));
+
+	cpBodyApplyImpulse(flipper->body, cpv(0, unflipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->body, cpv(0, unflipForce * dir), anchor);
+
+	anchor = cpvadd(flipper->body->p, cpvmult(cpv(-1, 0), offset));
+
+	cpBodyApplyImpulse(flipper->body, cpv(0, -unflipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->body, cpv(0, -unflipForce * dir), anchor);
 
 }
 

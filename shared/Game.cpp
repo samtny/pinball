@@ -135,6 +135,44 @@ static int lua_doCameraEffect(lua_State *L) {
 	return 0;
 }
 
+static int lua_activateMech(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	if (count == 1) {
+		const char *mechName = lua_tostring(L, 1);
+		lua_currentInstance->activateMech(mechName);
+	}
+
+	return 0;
+
+}
+
+static int lua_deactivateMech(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	if (count == 1) {
+		const char *mechName = lua_tostring(L, 1);
+		lua_currentInstance->deactivateMech(mechName);
+	}
+
+	return 0;
+
+}
+
+void Game::deactivateMech(const char *mechName) {
+	
+	_physics->deactivateMech(mechName);
+
+}
+
+void Game::activateMech(const char *mechName) {
+
+	_physics->activateMech(mechName);
+
+}
+
 void Game::doCameraEffect(const char *effectName) {
 
 	_renderer->doCameraEffect(effectName);
@@ -208,6 +246,12 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_doCameraEffect);
 		lua_setglobal(L, "doCameraEffect");
+
+		lua_pushcfunction(L, lua_activateMech);
+		lua_setglobal(L, "activateMech");
+
+		lua_pushcfunction(L, lua_deactivateMech);
+		lua_setglobal(L, "deactivateMech");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));

@@ -52,6 +52,9 @@ public:
 	void destroyObject(layoutItem *iprops);
 	void destroyBody(cpBody *body);
 
+	void activateMech(const char *mechName);
+	void deactivateMech(const char *mechName);
+
 protected:
 	void loadConfig();
 	void loadMaterials();
@@ -69,6 +72,8 @@ protected:
 	void createSwitch(layoutItem *iprops);
 	void createSegment(layoutItem *iprops);
 	void createCircle(layoutItem *iprops);
+	void flip(layoutItem *flipper);
+	void unflip(layoutItem *flipper);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	IPhysicsDelegate *_delegate;

@@ -29,6 +29,8 @@ public:
 	void timerCallback(int timerId);
 	void updateOverlayText(const char *key, const char *val);
 	void doCameraEffect(const char *effectName);
+	void activateMech(const char *mechName);
+	void deactivateMech(const char *mechName);
 	void setPaused(bool paused);
 	bool getPaused();
 	const char *getGameName();

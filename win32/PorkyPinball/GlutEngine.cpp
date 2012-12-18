@@ -185,11 +185,21 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 		_game->setZoomLevel(_game->getZoomLevel() - 0.25);
 	} else if (key == 'p') {
 		_game->setPaused(!_game->getPaused());
+	} else if (key == '/') {
+		_game->switchClosed("rbutton");
+	} else if (key == 'z') {
+		_game->switchClosed("lbutton");
 	}
 
 }
 
 void GlutEngine::keyboardUpCallback(unsigned char key) {
+
+	if (key == '/') {
+		_game->switchOpened("rbutton");
+	} else if (key == 'z') {
+		_game->switchOpened("lbutton");
+	}
 
 }
 

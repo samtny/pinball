@@ -56,6 +56,10 @@ function handleSwitchClosed(switch)
 		addToScore(popBumperValue)
 	elseif switch == "target0" or switch == "target1" then
 		addToScore(targetValue)
+	elseif switch == "lbutton" then
+		activateMech("lflipper")
+	elseif switch == "rbutton" then
+		activateMech("rflipper")
 	end
 end
 
@@ -104,6 +108,10 @@ end
 function handleSwitchOpened(switch)
 	if switch == "troughSwitch" then
 		troughSwitchOpened()
+	elseif switch == "lbutton" then
+		deactivateMech("lflipper")
+	elseif switch == "rbutton" then
+		deactivateMech("rflipper")
 	end
 end
 
@@ -219,6 +227,16 @@ function setCameraFollowsBall()
 end
 
 function setCameraMode(modeName)
+	-- C API stub
+end
+
+function activateMech(mechName)
+	print ("activateMech", " ", mechName)
+	-- C API stub
+end
+
+function deactivateMech(mechName)
+	print ("deactivateMech", " ", mechName)
 	-- C API stub
 end
 

@@ -196,13 +196,13 @@ void Editor::rotateItems() {
 
 						// normalized
 						Coord2 vreln = coordnormalize(vrel);
-					
+						
 						// transform normalized vector by rotvect
 						Coord2 vrelnt = coordrotate(vreln, rotvec);
-					
+						
 						// normalize result
 						Coord2 vrelntn = coordnormalize(vrelnt);
-
+						
 						// multiply by length of original center-relative vector
 						Coord2 vt = coordmult(vrelntn, coordlen(vrel));
 
