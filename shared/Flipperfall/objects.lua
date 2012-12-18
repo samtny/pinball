@@ -106,7 +106,7 @@ objects = {
 		s = "flipper", -- "flipper" shape defined internally
 		m = "flipper",
 		r1 = 0.75,
-		r2 = 0.35
+		r2 = 0.45
 	},
 	slingshot = {
 		s = "slingshot", -- "slingshot" shape defined internally

@@ -432,8 +432,25 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
-	// lflipper face shape
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r2));
+	float diff = item->o.r1 - item->o.r2; // r1-prime
+	float loft = atan2f(diff, length);
+	float facelen = diff / sin(loft);
+	cpVect p2p1 = cpvsub(item->v[0], item->v[1]);
+	cpVect p2p1n = cpvnormalize(p2p1);
+	cpVect p3n = cpvrotate(p2p1n, cpvforangle(loft));
+	cpVect p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
+
+	// lflipper face shapes
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o.r2));
+	cpShapeSetElasticity(shape, item->o.m.e);
+	cpShapeSetFriction(shape, item->o.m.f);
+	cpShapeSetGroup(shape, shapeGroupFlippers);
+
+	loft = -atan2f(diff, length);
+	p3n = cpvrotate(p2p1n, cpvforangle(loft));
+	p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
+
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o.r2));
 	cpShapeSetElasticity(shape, item->o.m.e);
 	cpShapeSetFriction(shape, item->o.m.f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
