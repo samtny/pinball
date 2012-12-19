@@ -23,10 +23,10 @@ static cpSpace *_space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
-static float flipImpulse = 0.01f;
-static float unflipImpulse = 0.01f;
+static float flipImpulse = 0.02f;
+static float unflipImpulse = 0.02f;
 
-static float flipForce = 0.2;
+static float flipForce = 0.2f;
 static float unflipForce = 0.2f;
 
 static float _targetRestLength = 0;
