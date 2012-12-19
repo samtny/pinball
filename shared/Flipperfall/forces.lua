@@ -16,7 +16,7 @@ forces = {
 	slingshotDamping = 0.9,
 	slingshotImpulse = 0.05,
 
-	targetStiffness = 35.0, -- glass == 90
+	targetStiffness = 40.0, -- glass == 90
 	targetDamping = 0.15,
 	targetRestLength = 0.5,
 	targetSwitchGap = 0.25,

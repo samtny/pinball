@@ -39,9 +39,10 @@ public:
 #endif
 
 	void setGameName(const char *gameName);
-	const char * getGameName();
 
-	const char * getPathForScriptFileName(void * scriptFileName);
+	const char *getGameName();
+
+	const char *getPathForScriptFileName(void *scriptFileName);
 
 	const char *getPathForTextureFileName(void *textureFileName);
 
@@ -49,7 +50,7 @@ public:
 
     HostProperties *getHostProperties();
 	
-	void playSound(void * soundName);
+	void playSound(void *soundName);
 
 	void setTimerDelegate(ITimerDelegate *timerDelegate);
 
