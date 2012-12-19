@@ -1,0 +1,10 @@
+pinball sanity check 2
+12/19/2012
+sam thompson
+
+nearing completion, we have following areas to complete for "very simple" game design platform;
+
+1) playfield design, "tagging", export to layout.lua
+2) pshop import wireframe, export prettiness
+3) grab + munge sound fx
+
