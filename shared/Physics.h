@@ -48,9 +48,13 @@ public:
 
 	bool getPaused();
 
+	// TODO: refactor veriously...
+	void applyScale(layoutItem *iprops);
 	void createObject(layoutItem *iprops);
 	void destroyObject(layoutItem *iprops);
 	void destroyBody(cpBody *body);
+
+	void addLayoutItem(layoutItem item);
 
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
@@ -62,7 +66,6 @@ protected:
 	void loadLayout();
     void loadForces();
 	void initCollisionHandlers();
-	void applyScale(layoutItem *iprops);
 	cpBody *createBox(layoutItem *iprops);
     cpBody *createBall(layoutItem *iprops);
 	cpBody *createFlipper(layoutItem *iprops);

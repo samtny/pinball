@@ -63,6 +63,7 @@ typedef struct objectTextureProperties {
 
 typedef struct objectProperties {
 	string n;
+	int v;
 	string s;
 	float r1;
 	float r2;

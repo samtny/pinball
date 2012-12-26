@@ -45,6 +45,9 @@ void GlutEngine::setGame(Game *game) {
 
 void GlutEngine::setEditor(Editor *editor) {
 	_editor = editor;
+
+	this->updateMenuEditorItems();
+
 }
 
 void glut_keyboardCallback(unsigned char key, int x, int y) {
@@ -94,9 +97,15 @@ void GlutEngine::menuCallback(int value) {
 
 }
 
-void GlutEngine::menuCallbackInsert(int value) {
+void GlutEngine::menuCallbackInsert(int index) {
 
-	// TODO...
+	vector<string> names = _editor->getObjectNames();
+	
+	const EditorState *s = _editor->getState();
+	EditorState newState = { EDIT_MODE_INSERT_BEGIN, s->selectionStart, s->selectionEnd, names[index] };
+	_editor->setState(newState);
+
+	_currentEditMode = EDIT_MODE_INSERT;
 
 }
 
@@ -124,7 +133,7 @@ void GlutEngine::init() {
 
 	// insert menu
 	glutCreateMenu(glut_menuFuncInsert);
-	glutAddMenuEntry("__yep", NULL);
+	//glutAddMenuEntry("__yep", NULL);
 	_menuInsert = glutGetMenu();
 
 	// main menu
@@ -136,7 +145,17 @@ void GlutEngine::init() {
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	_menuMain = glutGetMenu();
 
-	
+}
+
+void GlutEngine::updateMenuEditorItems() {
+
+	glutSetMenu(_menuInsert);
+
+	vector<string> names = _editor->getObjectNames();
+
+	for (int i = 0; i < names.size(); i++) {
+		glutAddMenuEntry(names[i].c_str(), i);
+	}
 
 }
 
@@ -264,6 +283,10 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 				const EditorState *s = _editor->getState();
 				EditorState newState = { EDIT_MODE_ROTATE, { x, y }, { x, y } };
 				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_INSERT) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_INSERT, { x, y }, { x, y } };
+				_editor->setState(newState);
 			}
 			break;
 		case GLUT_UP: {
@@ -277,6 +300,8 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 				const EditorState *s = _editor->getState();
 				EditorState newState = { EDIT_MODE_ROTATE_COMMIT, s->selectionStart, s->selectionEnd };
 				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_INSERT) {
+				_editor->insertItems();
 			}
 			break;
 			}

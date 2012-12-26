@@ -477,6 +477,8 @@ void Physics::createSwitch(layoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shape = shape;
+
+	item->body = box->body;
 	
 }
 
@@ -490,6 +492,8 @@ void Physics::createSegment(layoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shape = shape;
+
+	item->body = box->body;
 
 }
 
@@ -544,6 +548,8 @@ void Physics::createCircle(layoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shape = shape;
+
+	item->body = box->body;
 
 }
 
@@ -810,7 +816,7 @@ void Physics::loadObjects() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				objectProperties props = { name, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+				objectProperties props = { name, -1, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -966,6 +972,19 @@ void Physics::loadLayout() {
 	}
 
 	lua_close(L);
+
+}
+
+void Physics::addLayoutItem(layoutItem item) {
+
+	_layoutItems.insert(make_pair(item.n, item));
+
+	for (it_layoutItems it = _layoutItems.begin(); it != _layoutItems.end(); it++) {
+		layoutItem *lprops = &(&*it)->second;
+		if (lprops->n == item.n) {
+			this->createObject(lprops);
+		}
+	}
 
 }
 

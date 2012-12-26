@@ -332,14 +332,9 @@ void Renderer::drawPlayfield() {
 			Coord2 end = _camera->transform(s->selectionEnd);
 			tx = end.x - start.x;
 			ty = end.y - start.y;
-			//glTranslatef(tx, ty, 0);
 		} else if (s->editMode == EDIT_MODE_ROTATE) {
 			Coord2 start = s->selectionStart;
 			Coord2 end = s->selectionEnd;
-
-			
-
-			//glRotatef(rot, 0, 0, 1);
 		}
 		map<string, layoutItem> *items = _physics->getLayoutItems();
 		for (it_layoutItems it = items->begin(); it != items->end(); it++) {

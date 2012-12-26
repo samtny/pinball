@@ -6,8 +6,15 @@ nearing completion, we have following areas to complete for "very simple" game d
 
 1) playfield design, "tagging", export to layout.lua
 	-"insert" new object
+		- problem of "scaling" window -> physics model
+			- camera does it by taking windowW / activeCameraMode.w
+				- but acm.w is pre-scaled here...
+					- scale which is loaded from config.lua...
+						- ok...
+		
 	-"copy" existing object
 	-"undo"
+	-export to layout.lua
 2) pshop import wireframe, export prettiness
 3) grab + munge sound fx
 

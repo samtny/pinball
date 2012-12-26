@@ -18,6 +18,8 @@ extern "C" {
 
 static Editor *_editorCurrentInstance;
 
+static float _scale = 37;
+
 Editor::Editor(void) {
 	_editorCurrentInstance = this;
 	_state.editMode = EDIT_MODE_NONE;
@@ -25,6 +27,7 @@ Editor::Editor(void) {
 	_state.selectionStart.y = 0;
 	_state.selectionEnd.x = 0;
 	_state.selectionEnd.y = 0;
+	_currentEditObjectName = 0;
 }
 
 Editor::~Editor(void) {
@@ -32,6 +35,7 @@ Editor::~Editor(void) {
 }
 
 void Editor::init() {
+	this->loadConfig();
 	this->loadMaterials();
 	this->loadObjects();
 }
@@ -75,10 +79,112 @@ void Editor::setState(EditorState state) {
 	case EDIT_MODE_ROTATE_COMMIT:
 		rotateItems();
 		break;
+	case EDIT_MODE_INSERT_BEGIN:
+		insertItems();
+		break;
 	default:
 		break;
 	}
 	
+}
+
+void Editor::insertItems() {
+
+	switch (_state.editMode) {
+	case EDIT_MODE_INSERT_BEGIN:
+		{
+			EditObject obj;
+			obj.object = _objects[_state.editObjectName];
+			obj.vCurrent = 0;
+			_currentEditObject = obj;
+		}
+		break;
+	case EDIT_MODE_INSERT:
+		{
+			Coord2 v = { _state.selectionStart.x, _state.selectionStart.y };
+			_currentEditObject.verts[_currentEditObject.vCurrent] = v;
+			_currentEditObject.vCurrent++;
+
+			if (_currentEditObject.vCurrent == _currentEditObject.object.v) {
+				
+				layoutItem l;
+				l.o = _currentEditObject.object;
+
+				l.s = 1;
+
+				float localScale = _scale * 1 / l.s;
+
+				l.o.r1 *= 1 / localScale;
+				l.o.r2 *= 1 / localScale;
+
+				char num[21];
+				sprintf(num, "%d", _currentEditObjectName);
+				l.n = "_" + _currentEditObject.object.n + num;
+				_currentEditObjectName++;
+
+				l.count = _currentEditObject.object.v;
+				l.editing = false;
+				
+				for (int i = 0; i < _currentEditObject.object.v; i++) {
+					_currentEditObject.verts[i] = _camera->transform(_currentEditObject.verts[i]);
+					l.v[i].x = _currentEditObject.verts[i].x;
+					l.v[i].y = _currentEditObject.verts[i].y;
+				}
+				
+				_physics->addLayoutItem(l);
+				
+				// reset;
+				_currentEditObject.vCurrent = 0;
+
+			}
+
+		}
+		break;
+	default:
+		break;
+	}
+
+}
+
+void Editor::loadConfig() {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+
+	int error = luaL_dofile(L, configFileName);
+	if (!error) {
+
+        lua_getglobal(L, "config");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *key = lua_tostring(L, -2);
+                    
+				if (strcmp("scale", key) == 0) {
+
+					_scale = (float)lua_tonumber(L, -1);
+
+				}
+				   
+				lua_pop(L, 1);
+			}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
 }
 
 void Editor::loadMaterials() {
@@ -163,7 +269,7 @@ void Editor::loadObjects() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				objectProperties props = { name, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+				objectProperties props = { name, -1, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -172,6 +278,8 @@ void Editor::loadObjects() {
 
 					if (strcmp("s", key) == 0) {
 						props.s = lua_tostring(L, -1);
+					} else if (strcmp("v", key) == 0) {
+						props.v = (int)lua_tonumber(L, -1);
 					} else if (strcmp("m", key) == 0) {
 						props.m = _materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {

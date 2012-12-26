@@ -22,6 +22,7 @@ public:
 	void motionCallback(int x, int y);
 	void menuCallback(int value);
 	void menuCallbackInsert(int value);
+	void updateMenuEditorItems();
 private:
 	Physics *_physics;
 	Renderer *_renderer;

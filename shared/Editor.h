@@ -14,13 +14,22 @@ typedef enum EditMode {
 	EDIT_MODE_MOVE,
 	EDIT_MODE_MOVE_COMMIT,
 	EDIT_MODE_ROTATE,
-	EDIT_MODE_ROTATE_COMMIT
+	EDIT_MODE_ROTATE_COMMIT,
+	EDIT_MODE_INSERT,
+	EDIT_MODE_INSERT_BEGIN
 } EditMode;
+
+typedef struct EditObject {
+	objectProperties object;
+	Coord2 verts[200];
+	int vCurrent;
+} EditObject;
 
 typedef struct EditorState {
 	EditMode editMode;
 	Coord2 selectionStart;
 	Coord2 selectionEnd;
+	string editObjectName;
 } EditorState;
 
 class Editor {
@@ -33,10 +42,13 @@ public:
 	void setPhysics(Physics *physics);
 	void setCamera(Camera *camera);
 	const EditorState *getState();
+	const EditObject *getCurrentEditObject();
 	void setState(EditorState state);
 	void selectItems();
 	void moveItems();
 	void rotateItems();
+	void insertItems();
+	void loadConfig();
 	void loadMaterials();
 	void loadObjects();
 	vector<string> getObjectNames();
@@ -48,5 +60,7 @@ private:
 	EditorState _state;
 	map<string, materialProperties> _materials;
 	map<string, objectProperties> _objects;
+	EditObject _currentEditObject;
+	int _currentEditObjectName;
 };
 
