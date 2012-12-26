@@ -21,6 +21,7 @@ public:
 	void mouseCallback(int button, int state, int x, int y);
 	void motionCallback(int x, int y);
 	void menuCallback(int value);
+	void menuCallbackInsert(int value);
 private:
 	Physics *_physics;
 	Renderer *_renderer;

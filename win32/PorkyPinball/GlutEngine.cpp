@@ -21,6 +21,9 @@ static Coord2 selectionEnd = { 0, 0 };
 
 static EditMode _currentEditMode = EDIT_MODE_SELECT;
 
+static int _menuMain;
+static int _menuInsert;
+
 GlutEngine::GlutEngine() {
 	glut_currentInstance = this;
 }
@@ -63,6 +66,10 @@ void glut_menuFunc(int value) {
 	glut_currentInstance->menuCallback(value);
 }
 
+void glut_menuFuncInsert(int value) {
+	glut_currentInstance->menuCallbackInsert(value);
+}
+
 typedef enum Menu {
 	MENU_SELECT,
 	MENU_MOVE,
@@ -84,6 +91,12 @@ void GlutEngine::menuCallback(int value) {
 	default:
 		break;
 	}
+
+}
+
+void GlutEngine::menuCallbackInsert(int value) {
+
+	// TODO...
 
 }
 
@@ -109,11 +122,21 @@ void GlutEngine::init() {
 
 	//_renderer->init();
 
+	// insert menu
+	glutCreateMenu(glut_menuFuncInsert);
+	glutAddMenuEntry("__yep", NULL);
+	_menuInsert = glutGetMenu();
+
+	// main menu
 	glutCreateMenu(glut_menuFunc);
 	glutAddMenuEntry("Select", MENU_SELECT);
 	glutAddMenuEntry("Move", MENU_MOVE);
 	glutAddMenuEntry("Rotate", MENU_ROTATE);
+	glutAddSubMenu("Insert", _menuInsert);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	_menuMain = glutGetMenu();
+
+	
 
 }
 

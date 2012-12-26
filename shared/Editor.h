@@ -27,6 +27,7 @@ class Editor {
 public:
 	Editor(void);
 	~Editor(void);
+	void init();
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setGame(Game *game);
 	void setPhysics(Physics *physics);
@@ -36,11 +37,16 @@ public:
 	void selectItems();
 	void moveItems();
 	void rotateItems();
+	void loadMaterials();
+	void loadObjects();
+	vector<string> getObjectNames();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Game *_game;
 	Physics *_physics;
 	Camera *_camera;
 	EditorState _state;
+	map<string, materialProperties> _materials;
+	map<string, objectProperties> _objects;
 };
 

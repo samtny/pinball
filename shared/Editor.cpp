@@ -10,6 +10,12 @@
 
 #include "Camera.h"
 
+extern "C" {
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 static Editor *_editorCurrentInstance;
 
 Editor::Editor(void) {
@@ -23,6 +29,11 @@ Editor::Editor(void) {
 
 Editor::~Editor(void) {
 
+}
+
+void Editor::init() {
+	this->loadMaterials();
+	this->loadObjects();
 }
 
 void Editor::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
@@ -70,6 +81,151 @@ void Editor::setState(EditorState state) {
 	
 }
 
+void Editor::loadMaterials() {
+	
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *materialsFileName = _bridgeInterface->getPathForScriptFileName((void *)"materials.lua");
+
+	int error = luaL_dofile(L, materialsFileName);
+	if (!error) {
+
+        lua_getglobal(L, "materials");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				// key;
+				const char *name = lua_tostring(L, -2);
+
+				materialProperties props = { "", -1, -1, -1 };
+
+				// "value" is properties table;
+				lua_pushnil(L);
+				while(lua_next(L, -2) != 0) {
+
+					// property name
+					const char *key = lua_tostring(L, -2);
+
+					// property value
+					float val = (float)lua_tonumber(L, -1);
+
+					if (strcmp("e", key) == 0) {
+						props.e = val;
+					} else if (strcmp("f", key) == 0) {
+						props.f = val;
+					} else if (strcmp("d", key) == 0) {
+						props.d = val;
+					}
+
+					lua_pop(L, 1);
+				}
+				
+				_materials.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+			}
+
+		}
+
+		lua_pop(L, 1); // pop materials table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+
+void Editor::loadObjects() {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"objects.lua");
+
+	int error = luaL_dofile(L, objectsPath);
+	if (!error) {
+
+        lua_getglobal(L, "objects");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				// key;
+				const char *name = lua_tostring(L, -2);
+
+				objectProperties props = { name, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+
+				lua_pushnil(L);
+				while(lua_next(L, -2) != 0) {
+					
+					const char *key = lua_tostring(L, -2);
+
+					if (strcmp("s", key) == 0) {
+						props.s = lua_tostring(L, -1);
+					} else if (strcmp("m", key) == 0) {
+						props.m = _materials[lua_tostring(L, -1)];
+					} else if (strcmp("r1", key) == 0) {
+						props.r1 = (float)lua_tonumber(L, -1);
+					} else if (strcmp("r2", key) == 0) {
+						props.r2 = (float)lua_tonumber(L, -1);
+					} else if (strcmp("t", key) == 0) {
+
+						lua_pushnil(L);
+						while(lua_next(L, -2) != 0) {
+							
+							const char *tkey = lua_tostring(L, -2);
+
+							if (strcmp("n", tkey) == 0) {
+								props.t.n = lua_tostring(L, -1);
+							} else if (strcmp("x", tkey) == 0) {
+								props.t.x = (int)lua_tonumber(L, -1);
+							} else if (strcmp("y", tkey) == 0) {
+								props.t.y = (int)lua_tonumber(L, -1);
+							} else if (strcmp("w", tkey) == 0) {
+								props.t.w = (int)lua_tonumber(L, -1);
+							} else if (strcmp("h", tkey) == 0) {
+								props.t.h = (int)lua_tonumber(L, -1);
+							} else if (strcmp("a", tkey) == 0) {
+								props.t.a = (float)lua_tonumber(L, -1);
+							}
+
+							lua_pop(L, 1);
+
+						}
+
+					}
+
+					lua_pop(L, 1);
+				}
+				
+				_objects.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+			}
+
+		}
+
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
 void Editor::selectItems() {
 
 	map<string, layoutItem> *items = _physics->getLayoutItems();
@@ -104,6 +260,22 @@ void Editor::selectItems() {
 		}
 
 	}
+
+}
+
+vector<string> Editor::getObjectNames() {
+
+	vector<string> names;
+
+	for (it_objectProps it = _objects.begin(); it != _objects.end(); it++) {
+
+		objectProperties object = it->second;
+
+		names.push_back(object.n);
+
+	}
+
+	return names;
 
 }
 

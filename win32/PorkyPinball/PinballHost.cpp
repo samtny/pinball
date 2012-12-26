@@ -26,9 +26,6 @@ void PinballHost::init() {
 	bi->init();
 	bi->setGameName("Flipperfall");
 
-	GlutEngine *e = new GlutEngine();
-	e->init();
-	
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);
 	p->init();
@@ -43,6 +40,10 @@ void PinballHost::init() {
 	t->setBridgeInterface(bi);
 	t->setCamera(c);
 	t->setPhysics(p);
+	t->init();
+
+	GlutEngine *e = new GlutEngine();
+	e->init();
 
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
@@ -57,10 +58,12 @@ void PinballHost::init() {
 	g->setRenderer(r);
 	g->init();
 	
+	
 	e->setPhysics(p);
 	e->setRenderer(r);
 	e->setGame(g);
 	e->setEditor(t);
+	
 	_glutEngine = e;
 
 	// TODO: find factoring error;
