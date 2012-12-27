@@ -141,7 +141,7 @@ void GlutEngine::init() {
 	glutAddMenuEntry("Select", MENU_SELECT);
 	glutAddMenuEntry("Move", MENU_MOVE);
 	glutAddMenuEntry("Rotate", MENU_ROTATE);
-	glutAddSubMenu("Insert", _menuInsert);
+	glutAddSubMenu("New", _menuInsert);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	_menuMain = glutGetMenu();
 

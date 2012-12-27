@@ -324,6 +324,22 @@ void Renderer::drawPlayfield() {
 	const EditorState *s = _editor->getState();
 	if (s->editMode != EDIT_MODE_NONE) {
 		
+		// new / inserted 
+		if (s->editMode == EDIT_MODE_INSERT) {
+			const EditObject *o = _editor->getCurrentEditObject();
+
+			if (o->vCurrent > 0) {
+				cpVect verts[200];
+				for (int i = 0; i < o->vCurrent; i++) {
+					verts[i].x = o->verts[i].x;
+					verts[i].y = o->verts[i].y;
+				}
+				DrawPoints(20, o->vCurrent, verts, EDIT_COLOR);
+			}
+
+		}
+
+		// alter existing
 		float tx = 0;
 		float ty = 0;
 		float rot = 0;

@@ -88,6 +88,10 @@ void Editor::setState(EditorState state) {
 	
 }
 
+const EditObject *Editor::getCurrentEditObject() {
+	return &_currentEditObject;
+}
+
 void Editor::insertItems() {
 
 	switch (_state.editMode) {
@@ -102,7 +106,7 @@ void Editor::insertItems() {
 	case EDIT_MODE_INSERT:
 		{
 			Coord2 v = { _state.selectionStart.x, _state.selectionStart.y };
-			_currentEditObject.verts[_currentEditObject.vCurrent] = v;
+			_currentEditObject.verts[_currentEditObject.vCurrent] = _camera->transform(v);
 			_currentEditObject.vCurrent++;
 
 			if (_currentEditObject.vCurrent == _currentEditObject.object.v) {
@@ -126,7 +130,6 @@ void Editor::insertItems() {
 				l.editing = false;
 				
 				for (int i = 0; i < _currentEditObject.object.v; i++) {
-					_currentEditObject.verts[i] = _camera->transform(_currentEditObject.verts[i]);
 					l.v[i].x = _currentEditObject.verts[i].x;
 					l.v[i].y = _currentEditObject.verts[i].y;
 				}
