@@ -12,7 +12,7 @@ nearing completion, we have following areas to complete for "very simple" game d
 					- scale which is loaded from config.lua...
 						- ok...
 		
-	-"copy" existing object
+	-DONE "copy" existing object
 	-"undo"
 	-export to layout.lua
 2) pshop import wireframe, export prettiness

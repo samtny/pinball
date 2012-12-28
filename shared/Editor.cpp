@@ -82,6 +82,9 @@ void Editor::setState(EditorState state) {
 	case EDIT_MODE_INSERT_BEGIN:
 		insertItems();
 		break;
+	case EDIT_MODE_DUPE:
+		dupeItems();
+		break;
 	default:
 		break;
 	}
@@ -90,6 +93,64 @@ void Editor::setState(EditorState state) {
 
 const EditObject *Editor::getCurrentEditObject() {
 	return &_currentEditObject;
+}
+
+void Editor::dupeItems() {
+
+	map<string, layoutItem> *items = _physics->getLayoutItems();
+
+	map<string, layoutItem> toDupe;
+
+	float minOffset = 65535;
+
+	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+		layoutItem item = it->second;
+
+		if (item.editing == true) {
+			
+			toDupe[item.n] = item;
+			layoutItem *orig = &(&*it)->second;
+			orig->editing = false;
+
+			float offset = abs(item.v[0].x - item.v[item.count-1].x);
+
+			if (offset == 0) {
+				offset = item.o.r1 * 2;
+			}
+
+			if (offset < minOffset) {
+				minOffset = offset;
+			}
+
+		}
+
+	}
+
+	for (it_layoutItems it = toDupe.begin(); it != toDupe.end(); it++) {
+	
+		layoutItem item = it->second;
+
+		if (item.editing == true) {
+
+			for (int i = 0; i < item.count; i++) {
+				item.v[i].x += minOffset;
+			}
+
+			// rename;
+			char num[21];
+			sprintf(num, "%d", _currentEditObjectName);
+			item.n = "_" + item.o.n + num;
+			_currentEditObjectName++;
+
+			item.editing = true;
+
+			_physics->addLayoutItem(item);
+
+		}
+
+	}
+
 }
 
 void Editor::insertItems() {

@@ -76,7 +76,8 @@ void glut_menuFuncInsert(int value) {
 typedef enum Menu {
 	MENU_SELECT,
 	MENU_MOVE,
-	MENU_ROTATE
+	MENU_ROTATE,
+	MENU_DUPE
 } Menu;
 
 void GlutEngine::menuCallback(int value) {
@@ -91,6 +92,14 @@ void GlutEngine::menuCallback(int value) {
 		break;
 	case MENU_ROTATE:
 		_currentEditMode = EDIT_MODE_ROTATE;
+		break;
+	case MENU_DUPE: {
+			const EditorState *s = _editor->getState();
+			EditorState newState = { EDIT_MODE_DUPE, s->selectionStart, s->selectionEnd };
+			_editor->setState(newState);
+			_currentEditMode = EDIT_MODE_MOVE;
+		}
+		break;
 	default:
 		break;
 	}
@@ -141,6 +150,7 @@ void GlutEngine::init() {
 	glutAddMenuEntry("Select", MENU_SELECT);
 	glutAddMenuEntry("Move", MENU_MOVE);
 	glutAddMenuEntry("Rotate", MENU_ROTATE);
+	glutAddMenuEntry("Dupe", MENU_DUPE);
 	glutAddSubMenu("New", _menuInsert);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	_menuMain = glutGetMenu();

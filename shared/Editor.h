@@ -16,7 +16,8 @@ typedef enum EditMode {
 	EDIT_MODE_ROTATE,
 	EDIT_MODE_ROTATE_COMMIT,
 	EDIT_MODE_INSERT,
-	EDIT_MODE_INSERT_BEGIN
+	EDIT_MODE_INSERT_BEGIN,
+	EDIT_MODE_DUPE
 } EditMode;
 
 typedef struct EditObject {
@@ -48,6 +49,7 @@ public:
 	void moveItems();
 	void rotateItems();
 	void insertItems();
+	void dupeItems();
 	void loadConfig();
 	void loadMaterials();
 	void loadObjects();
