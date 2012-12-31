@@ -280,14 +280,12 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 
 	layoutItem box = physics_currentInstance->getLayoutItems()->find("box")->second;
 
-	if (item->body && item->body != box.body) {
+	if (item->body && (strcmp(item->n.c_str(), "box") == 0 || item->body != box.body)) {
 		cpBodyEachConstraint(item->body, destroyConstraint, NULL);
 		cpBodyEachShape(item->body, destroyShape, NULL);
 		cpSpaceRemoveBody(space, item->body);
 		cpBodyFree(item->body);
-	}
-
-	if (item->shape) {
+	} else if (item->shape) {
 		cpSpaceRemoveShape(space, item->shape);
 		cpShapeFree(item->shape);
 	}

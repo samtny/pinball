@@ -153,6 +153,59 @@ void Editor::dupeItems() {
 
 }
 
+void Editor::undo() {
+
+	// TODO: this is a complete hack job...
+	if (_history.size() > 1) {
+
+		map<string, layoutItem> *items = _physics->getLayoutItems();
+
+		layoutItem box;
+
+		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+			layoutItem item = it->second;
+
+			if (strcmp(item.n.c_str(), "box") != 0) {
+
+				_physics->destroyObject(&item);
+
+			} else {
+				box = item;
+			}
+
+		}
+
+		if (box.n == "box") {
+			_physics->destroyObject(&box);
+		}
+
+		items->clear();
+		
+		_history.pop_back();
+
+		EditorState *state = &_history.back();
+
+		layoutItem *newBox = &state->items["box"];
+
+		_physics->createObject(newBox);
+		items->insert(make_pair("box", *newBox));
+
+		for (it_layoutItems it = state->items.begin(); it != state->items.end(); it++) {
+
+			layoutItem *item = &(&*it)->second;
+
+			if (strcmp(item->n.c_str(), "box") != 0) {
+				_physics->createObject(item);
+				items->insert(make_pair(item->n, *item));
+			}
+
+		}
+
+	}
+
+}
+
 void Editor::insertItems() {
 
 	switch (_state.editMode) {
@@ -172,6 +225,11 @@ void Editor::insertItems() {
 
 			if (_currentEditObject.vCurrent == _currentEditObject.object.v) {
 				
+				// add current editor state to history;
+				map<string, layoutItem> items = *_physics->getLayoutItems();
+				_state.items = items;
+				_history.push_back(_state);
+
 				layoutItem l;
 				l.o = _currentEditObject.object;
 

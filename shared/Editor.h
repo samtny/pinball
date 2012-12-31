@@ -31,6 +31,7 @@ typedef struct EditorState {
 	Coord2 selectionStart;
 	Coord2 selectionEnd;
 	string editObjectName;
+	map<string, layoutItem> items;
 } EditorState;
 
 class Editor {
@@ -50,6 +51,7 @@ public:
 	void rotateItems();
 	void insertItems();
 	void dupeItems();
+	void undo();
 	void loadConfig();
 	void loadMaterials();
 	void loadObjects();
@@ -60,6 +62,7 @@ private:
 	Physics *_physics;
 	Camera *_camera;
 	EditorState _state;
+	vector<EditorState> _history;
 	map<string, materialProperties> _materials;
 	map<string, objectProperties> _objects;
 	EditObject _currentEditObject;

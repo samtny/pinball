@@ -241,6 +241,8 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 		_game->switchClosed("rbutton");
 	} else if (key == 'z') {
 		_game->switchClosed("lbutton");
+	} else if (key == 26) {
+		_editor->undo();
 	}
 
 }
