@@ -46,11 +46,13 @@ public:
 	const EditorState *getState();
 	const EditObject *getCurrentEditObject();
 	void setState(EditorState state);
+	void pushState();
 	void selectItems();
 	void moveItems();
 	void rotateItems();
 	void insertItems();
 	void dupeItems();
+	void deleteItems();
 	void undo();
 	void save();
 	void load();

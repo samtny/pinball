@@ -1,0 +1,40 @@
+correct pinball object factoring
+sam thompson
+12/31/2012
+
+Happy New Year!
+
+Problem;
+	objects / pointers to objects / create/destroy / object loading / physical realization of objects are all over the place
+
+Solution;
+
+	can we get away with 1 copy of "objects"?
+		what is appropriate "parent"?
+			i would say "game"...
+				but perhaps it is "game->playfield"?
+				does editor get its own "stack" of playfields?
+					can still operate directly on "game" playfield as well...
+				
+	lua is in here somewhere...
+	
+	scaling is in here somewhere (scale in / out of engine should be transparent thru... ? object ? )
+	
+	so, it would be;
+	
+		init Playfield at top (just after Bridge)
+		assign to "Physics"
+		assign to "Camera" (?? whys??)
+		assign to "Editor"
+		assign to "Renderer"
+		assign to "Game"
+		
+		away you go...
+	
+	what do we need lua for otherwise?
+		- load Physics constants
+		- load camera constants
+		- load Editor constants (scale...?)
+		- so perhaps keep "loadConfig()" around for a while here, look at later...
+
+

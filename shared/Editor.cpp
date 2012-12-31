@@ -53,6 +53,8 @@ void Editor::setGame(Game *game) {
 
 void Editor::setPhysics(Physics *physics) {
 	_physics = physics;
+	// TODO: this is a small hack...
+	this->pushState();
 }
 
 void Editor::setCamera(Camera *camera) {
@@ -130,6 +132,8 @@ void Editor::dupeItems() {
 
 	}
 
+	if (toDupe.size() > 0) this->pushState();
+
 	for (it_layoutItems it = toDupe.begin(); it != toDupe.end(); it++) {
 	
 		layoutItem item = it->second;
@@ -151,6 +155,54 @@ void Editor::dupeItems() {
 			_physics->addLayoutItem(item);
 
 		}
+
+	}
+
+}
+
+void Editor::deleteItems() {
+
+	map<string, layoutItem> *items = _physics->getLayoutItems();
+	vector<string> toRemove;
+
+	layoutItem box;
+
+	bool found = false;
+
+	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+		layoutItem item = it->second;
+
+		if (item.editing == true && strcmp(item.n.c_str(), "box") != 0) {
+
+			if (found == false) {
+				this->pushState();
+				found == true;
+			}
+
+			_physics->destroyObject(&item);
+			toRemove.push_back(item.n);
+
+		} else {
+			box = item;
+		}
+
+	}
+
+	if (box.editing == true && box.n == "box") {
+
+		if (found == false) {
+			this->pushState();
+			found == true;
+		}
+
+		_physics->destroyObject(&box);
+		toRemove.push_back(box.n);
+	}
+
+	for (int i = 0; i < toRemove.size(); i++) {
+
+		items->erase(items->find(toRemove[i]));
 
 	}
 
@@ -326,6 +378,15 @@ void Editor::load() {
 
 }
 
+void Editor::pushState() {
+
+	// add current editor state to history;
+	map<string, layoutItem> items = *_physics->getLayoutItems();
+	_state.items = items;
+	_history.push_back(_state);
+
+}
+
 void Editor::insertItems() {
 
 	switch (_state.editMode) {
@@ -345,10 +406,7 @@ void Editor::insertItems() {
 
 			if (_currentEditObject.vCurrent == _currentEditObject.object.v) {
 				
-				// add current editor state to history;
-				map<string, layoutItem> items = *_physics->getLayoutItems();
-				_state.items = items;
-				_history.push_back(_state);
+				this->pushState();
 
 				layoutItem l;
 				l.o = _currentEditObject.object;
@@ -734,6 +792,8 @@ void Editor::moveItems() {
 		) 
 	{
 
+		this->pushState();
+
 		map<string, layoutItem> *items = _physics->getLayoutItems();
 
 		Coord2 start = _camera->transform(_state.selectionStart);
@@ -770,6 +830,8 @@ void Editor::rotateItems() {
 		_state.selectionStart.y != _state.selectionEnd.y)
 		) 
 	{
+
+		this->pushState();
 
 		map<string, layoutItem> *items = _physics->getLayoutItems();
 

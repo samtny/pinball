@@ -254,6 +254,8 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 		_game->switchClosed("lbutton");
 	} else if (key == 26) {
 		_editor->undo();
+	} else if (key == 127) {
+		_editor->deleteItems();
 	}
 
 }
