@@ -248,6 +248,9 @@
     <ClInclude Include="..\..\shared\CameraEffect.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\shared\LayoutItem.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">

@@ -129,6 +129,7 @@
     <ClInclude Include="..\..\shared\Editor.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
+    <ClInclude Include="..\..\shared\LayoutItem.h" />
     <ClInclude Include="..\..\shared\Material.h" />
     <ClInclude Include="..\..\shared\Overlay.h" />
     <ClInclude Include="..\..\shared\Part.h" />
