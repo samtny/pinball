@@ -16,6 +16,9 @@ extern "C" {
 #include "lualib.h"
 }
 
+#include <iostream>
+#include <fstream>
+
 static Editor *_editorCurrentInstance;
 
 static float _scale = 37;
@@ -200,6 +203,123 @@ void Editor::undo() {
 				items->insert(make_pair(item->n, *item));
 			}
 
+		}
+
+	}
+
+}
+
+void Editor::save() {
+
+	map<string, layoutItem> *items = _physics->getLayoutItems();
+
+	const char *savePath = _bridgeInterface->getPathForScriptFileName("user.layout.lua");
+
+	ofstream layout;
+	layout.open(savePath);
+	layout.precision(6);
+
+	layout << "layout = {\n";
+
+	int count = 0;
+	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+		layoutItem item = it->second;
+
+		if (count > 0) layout << ",\n";
+
+		layout << "\t" << item.n << " = {\n";
+
+		layout << "\t\t" << "o = \"" << item.o.n << "\"";
+
+		if (item.count > 0) {
+
+			layout << ",\n";
+
+			layout << "\t\t" << "v = {";
+
+			for (int i = 0; i < item.count; i++) {
+
+				if (i > 0) layout << " ,";
+
+				layout << " {" << item.v[i].x * _scale;
+				layout << ",";
+				layout << item.v[i].y * _scale;
+				layout << "}";
+
+			}
+			
+			layout << " }";
+
+		}
+
+		if (item.s != 1) {
+			layout << ",\n";
+			layout << "\t\t" << "s = " << item.s << "\n";
+		} else {
+			layout << "\n";
+		}
+
+		layout << "\t}";
+
+		count++;
+
+	}
+
+	layout << "\n}\n";
+
+	layout.close();
+
+}
+
+void Editor::load() {
+
+	// TODO: not be a complete hack job
+
+	map<string, layoutItem> *items = _physics->getLayoutItems();
+
+	layoutItem box;
+
+	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+
+		layoutItem item = it->second;
+
+		if (strcmp(item.n.c_str(), "box") != 0) {
+
+			_physics->destroyObject(&item);
+
+		} else {
+			box = item;
+		}
+
+	}
+
+	if (box.n == "box") {
+		_physics->destroyObject(&box);
+	}
+
+	items->clear();
+
+	_layout.clear();
+	this->loadLayout();
+
+
+
+	layoutItem *newBox = &_layout["box"];
+
+	_physics->applyScale(newBox);
+	_physics->createObject(newBox);
+
+	items->insert(make_pair("box", *newBox));
+
+	for (it_layoutItems it = _layout.begin(); it != _layout.end(); it++) {
+
+		layoutItem *item = &(&*it)->second;
+
+		if (strcmp(item->n.c_str(), "box") != 0) {
+			_physics->applyScale(item);
+			_physics->createObject(item);
+			items->insert(make_pair(item->n, *item));
 		}
 
 	}
@@ -439,6 +559,102 @@ void Editor::loadObjects() {
 				}
 				
 				_objects.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+			}
+
+		}
+
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Editor::loadLayout() {
+	
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"layout.lua");
+
+	int error = luaL_dofile(L, layoutPath);
+	if (!error) {
+
+        lua_getglobal(L, "layout");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				// key;
+				const char *name = lua_tostring(L, -2);
+
+				layoutItem props = { name };
+				props.s = -1;
+				props.editing = false;
+
+				lua_pushnil(L);
+				while(lua_next(L, -2) != 0) {
+					
+					const char *key = lua_tostring(L, -2);
+
+					if (strcmp("o", key) == 0) {
+						
+						props.o = _objects[lua_tostring(L, -1)];
+
+					} else if (strcmp("v", key) == 0) {
+						
+						int length = lua_rawlen(L, -1);
+						
+						// traverse 2d vects
+						for (int i = 1; i <= length; i++)
+						{
+
+							// init vect object
+							cpVect v;
+
+							// get the 2d table
+							lua_rawgeti(L, -1, i);
+
+							// get the first vertex
+							lua_rawgeti(L, -1, 1);
+							v.x = (float)lua_tonumber(L, -1);
+							lua_pop(L, 1);
+
+							// get the second vertex
+							lua_rawgeti(L, -1, 2);
+							v.y = (float)lua_tonumber(L, -1);
+							lua_pop(L, 1);
+							
+							// pop the table;
+							lua_pop(L, 1);
+							
+							// assign vect to array
+							props.v[i-1] = v;
+
+						}
+
+						props.count = length;
+
+					} else if (strcmp("s", key) == 0) {
+						props.s = (float)lua_tonumber(L, -1);
+					}
+
+					lua_pop(L, 1);
+				}
+				
+				if (props.s == -1) {
+					props.s = 1;
+				}
+
+				_layout.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}

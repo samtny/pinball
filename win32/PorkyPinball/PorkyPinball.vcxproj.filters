@@ -19,32 +19,23 @@
     <Filter Include="Header Files\shared">
       <UniqueIdentifier>{9359d279-644d-46d2-8d8a-124442f59160}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shared\PorkyPinball">
-      <UniqueIdentifier>{3aea6403-6d62-4817-887f-59d28d468e4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\shared\lua">
       <UniqueIdentifier>{c975ce3f-f94a-4316-bd30-f7bdd79a5095}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\shared\lua\src">
       <UniqueIdentifier>{1451c41a-144f-4d29-8cd5-a3400d25390a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shared\Waterfall2">
-      <UniqueIdentifier>{471f9af4-855f-473c-b350-c5ede5beb048}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\shared\Waterfall2\textures">
-      <UniqueIdentifier>{b246a807-592e-40fe-835e-bc8c040d74cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\shared\Waterfall">
-      <UniqueIdentifier>{f51c6fc1-e7da-41e2-8c1e-0ce465b1ef83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\shared\Waterfall\textures">
-      <UniqueIdentifier>{3955ad01-df93-445b-991d-9ad2454c433f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\shared\Flipperfall">
       <UniqueIdentifier>{bbfd53a8-0056-42ba-8cdf-addfab47ef3d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\shared\Flipperfall\textures">
       <UniqueIdentifier>{5ca58425-665a-4aab-96dd-702d03757255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Pinferno">
+      <UniqueIdentifier>{54779bf5-a8f5-4a0d-b619-ed05f7b353d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Pinferno\textures">
+      <UniqueIdentifier>{917224af-89b6-4c15-bd14-af79eed172a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -238,92 +229,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\shared\PorkyPinball\config.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\forces.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\layout.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\materials.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\objects.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\rules.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
-    <None Include="..\..\shared\PorkyPinball\textures.lua">
-      <Filter>Source Files\shared\PorkyPinball</Filter>
-    </None>
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\config.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\forces.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\layout.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\materials.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\objects.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\rules.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\textures.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\textures\font.glf">
-      <Filter>Source Files\shared\Waterfall\textures</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\camera.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall\overlays.lua">
-      <Filter>Source Files\shared\Waterfall</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\overlays.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\rules.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\textures.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\layout.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\camera.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\forces.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\config.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\materials.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\objects.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\textures\font.glf">
-      <Filter>Source Files\shared\Waterfall2\textures</Filter>
-    </None>
-    <None Include="..\..\shared\Waterfall2\effects.lua">
-      <Filter>Source Files\shared\Waterfall2</Filter>
     </None>
     <None Include="..\..\shared\Flipperfall\camera.lua">
       <Filter>Source Files\shared\Flipperfall</Filter>
@@ -358,22 +265,46 @@
     <None Include="..\..\shared\Flipperfall\textures\font.glf">
       <Filter>Source Files\shared\Flipperfall\textures</Filter>
     </None>
+    <None Include="..\..\shared\Pinferno\textures\font.glf">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\camera.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\config.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\effects.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\forces.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\layout.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\materials.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\objects.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\overlays.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\rules.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\textures.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\user.layout.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\shared\Waterfall\textures\pinball.png">
-      <Filter>Source Files\shared\Waterfall\textures</Filter>
-    </Image>
-    <Image Include="..\..\shared\Waterfall\textures\tiling.png">
-      <Filter>Source Files\shared\Waterfall\textures</Filter>
-    </Image>
-    <Image Include="..\..\shared\Waterfall2\textures\pinball.png">
-      <Filter>Source Files\shared\Waterfall2\textures</Filter>
-    </Image>
-    <Image Include="..\..\shared\Waterfall2\textures\tiling.png">
-      <Filter>Source Files\shared\Waterfall2\textures</Filter>
     </Image>
     <Image Include="..\..\shared\Flipperfall\textures\origami_butterfly001.png">
       <Filter>Source Files\shared\Flipperfall\textures</Filter>
@@ -398,6 +329,36 @@
     </Image>
     <Image Include="..\..\shared\Flipperfall\textures\ToyFactory_Multi-texturing_hardwood.png">
       <Filter>Source Files\shared\Flipperfall\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\origami_butterfly001.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\origami_duck001.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\origami_duck002.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\origami_pinwheel001.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\origami_pinwheel002.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\pinball.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\Pinferno7.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\tiling.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\ToyFactory_Multi-texturing_hardwood.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Pinferno\textures\Pinferno7-Ball.png">
+      <Filter>Source Files\shared\Pinferno\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>

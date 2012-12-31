@@ -10,34 +10,9 @@ layout = {
 	},
     ball0 = {
         o = "ball",
-        v = { {2.5,35} }
+        v = { {10,35} },
+		s = 3.5
     },
-	ball1 = {
-		o = "duck",
-		v = { {5, 37} },
-		s = 1.1
-	},
-	ball2 = {
-		o = "ball",
-		v = { {7.5, 34} },
-		s = 1
-	},
-	ball3 = {
-		o = "pinwheel",
-		v = { {9, 38} },
-		s = 1.0
-	},
-	ball4 = {
-		o = "butterfly",
-		v = { {11.5, 35.5} },
-		s = 1.0
-	},
-	ball5 = {
-		o = "pinwheel2",
-		v = { {13, 36} },
-		s = 1.0
-	},
-
 	post0 = {
 		o = "post",
 		v = { {10, 20} }

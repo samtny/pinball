@@ -13,8 +13,9 @@ nearing completion, we have following areas to complete for "very simple" game d
 						- ok...
 		
 	-DONE "copy" existing object
-	-"undo"
-	-export to layout.lua
+	-DONE "undo"
+	-"delete"
+	-DONE export to layout.lua
 2) pshop import wireframe, export prettiness
 3) grab + munge sound fx
 

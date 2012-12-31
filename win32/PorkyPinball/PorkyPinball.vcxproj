@@ -151,37 +151,21 @@
     <None Include="..\..\shared\Flipperfall\rules.lua" />
     <None Include="..\..\shared\Flipperfall\textures.lua" />
     <None Include="..\..\shared\Flipperfall\textures\font.glf" />
-    <None Include="..\..\shared\PorkyPinball\config.lua" />
-    <None Include="..\..\shared\PorkyPinball\layout.lua" />
-    <None Include="..\..\shared\PorkyPinball\materials.lua" />
-    <None Include="..\..\shared\PorkyPinball\objects.lua" />
-    <None Include="..\..\shared\PorkyPinball\forces.lua" />
-    <None Include="..\..\shared\PorkyPinball\rules.lua" />
-    <None Include="..\..\shared\PorkyPinball\textures.lua" />
+    <None Include="..\..\shared\Pinferno\camera.lua" />
+    <None Include="..\..\shared\Pinferno\config.lua" />
+    <None Include="..\..\shared\Pinferno\effects.lua" />
+    <None Include="..\..\shared\Pinferno\forces.lua" />
+    <None Include="..\..\shared\Pinferno\layout.lua" />
+    <None Include="..\..\shared\Pinferno\materials.lua" />
+    <None Include="..\..\shared\Pinferno\objects.lua" />
+    <None Include="..\..\shared\Pinferno\overlays.lua" />
+    <None Include="..\..\shared\Pinferno\rules.lua" />
+    <None Include="..\..\shared\Pinferno\textures.lua" />
+    <None Include="..\..\shared\Pinferno\textures\font.glf" />
+    <None Include="..\..\shared\Pinferno\user.layout.lua" />
     <None Include="..\..\shared\PorkyPinball\textures\font.glf">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="..\..\shared\Waterfall2\camera.lua" />
-    <None Include="..\..\shared\Waterfall2\config.lua" />
-    <None Include="..\..\shared\Waterfall2\effects.lua" />
-    <None Include="..\..\shared\Waterfall2\forces.lua" />
-    <None Include="..\..\shared\Waterfall2\layout.lua" />
-    <None Include="..\..\shared\Waterfall2\materials.lua" />
-    <None Include="..\..\shared\Waterfall2\objects.lua" />
-    <None Include="..\..\shared\Waterfall2\overlays.lua" />
-    <None Include="..\..\shared\Waterfall2\rules.lua" />
-    <None Include="..\..\shared\Waterfall2\textures.lua" />
-    <None Include="..\..\shared\Waterfall2\textures\font.glf" />
-    <None Include="..\..\shared\Waterfall\camera.lua" />
-    <None Include="..\..\shared\Waterfall\config.lua" />
-    <None Include="..\..\shared\Waterfall\forces.lua" />
-    <None Include="..\..\shared\Waterfall\layout.lua" />
-    <None Include="..\..\shared\Waterfall\materials.lua" />
-    <None Include="..\..\shared\Waterfall\objects.lua" />
-    <None Include="..\..\shared\Waterfall\overlays.lua" />
-    <None Include="..\..\shared\Waterfall\rules.lua" />
-    <None Include="..\..\shared\Waterfall\textures.lua" />
-    <None Include="..\..\shared\Waterfall\textures\font.glf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\Flipperfall\textures\origami_butterfly001.png" />
@@ -192,13 +176,19 @@
     <Image Include="..\..\shared\Flipperfall\textures\pinball.png" />
     <Image Include="..\..\shared\Flipperfall\textures\tiling.png" />
     <Image Include="..\..\shared\Flipperfall\textures\ToyFactory_Multi-texturing_hardwood.png" />
+    <Image Include="..\..\shared\Pinferno\textures\origami_butterfly001.png" />
+    <Image Include="..\..\shared\Pinferno\textures\origami_duck001.png" />
+    <Image Include="..\..\shared\Pinferno\textures\origami_duck002.png" />
+    <Image Include="..\..\shared\Pinferno\textures\origami_pinwheel001.png" />
+    <Image Include="..\..\shared\Pinferno\textures\origami_pinwheel002.png" />
+    <Image Include="..\..\shared\Pinferno\textures\pinball.png" />
+    <Image Include="..\..\shared\Pinferno\textures\Pinferno7-Ball.png" />
+    <Image Include="..\..\shared\Pinferno\textures\Pinferno7.png" />
+    <Image Include="..\..\shared\Pinferno\textures\tiling.png" />
+    <Image Include="..\..\shared\Pinferno\textures\ToyFactory_Multi-texturing_hardwood.png" />
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="..\..\shared\Waterfall2\textures\pinball.png" />
-    <Image Include="..\..\shared\Waterfall2\textures\tiling.png" />
-    <Image Include="..\..\shared\Waterfall\textures\pinball.png" />
-    <Image Include="..\..\shared\Waterfall\textures\tiling.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

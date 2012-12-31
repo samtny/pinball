@@ -52,9 +52,12 @@ public:
 	void insertItems();
 	void dupeItems();
 	void undo();
+	void save();
+	void load();
 	void loadConfig();
 	void loadMaterials();
 	void loadObjects();
+	void loadLayout();
 	vector<string> getObjectNames();
 private:
 	PinballBridgeInterface *_bridgeInterface;
@@ -65,6 +68,7 @@ private:
 	vector<EditorState> _history;
 	map<string, materialProperties> _materials;
 	map<string, objectProperties> _objects;
+	map<string, layoutItem> _layout;
 	EditObject _currentEditObject;
 	int _currentEditObjectName;
 };

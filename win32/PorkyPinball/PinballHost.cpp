@@ -24,7 +24,7 @@ void PinballHost::init() {
 
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
 	bi->init();
-	bi->setGameName("Flipperfall");
+	bi->setGameName("Pinferno");
 
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);
