@@ -174,6 +174,9 @@
     <ClCompile Include="..\..\shared\Drawing.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\shared\Playfield.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\shared\Physics.h">
@@ -206,9 +209,6 @@
     <ClInclude Include="..\..\shared\Camera.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Parts.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\TimerDelegate.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
@@ -225,6 +225,27 @@
       <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Drawing.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Playfield.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Material.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Types.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Texture.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Part.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\Overlay.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\shared\CameraEffect.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>
@@ -286,9 +307,6 @@
     <None Include="..\..\shared\Pinferno\materials.lua">
       <Filter>Source Files\shared\Pinferno</Filter>
     </None>
-    <None Include="..\..\shared\Pinferno\objects.lua">
-      <Filter>Source Files\shared\Pinferno</Filter>
-    </None>
     <None Include="..\..\shared\Pinferno\overlays.lua">
       <Filter>Source Files\shared\Pinferno</Filter>
     </None>
@@ -299,6 +317,9 @@
       <Filter>Source Files\shared\Pinferno</Filter>
     </None>
     <None Include="..\..\shared\Pinferno\user.layout.lua">
+      <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Pinferno\parts.lua">
       <Filter>Source Files\shared\Pinferno</Filter>
     </None>
   </ItemGroup>

@@ -2,6 +2,8 @@
 
 #include "PinballBridgeInterface.h"
 
+#include "Playfield.h"
+
 #include "Physics.h"
 
 #include "Renderer.h"
@@ -25,6 +27,10 @@ void PinballHost::init() {
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
 	bi->init();
 	bi->setGameName("Pinferno");
+
+	Playfield *f = new Playfield();
+	f->setBridgeInterface(bi);
+	f->init();
 
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);

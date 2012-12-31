@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\shared\Game.cpp" />
     <ClCompile Include="..\..\shared\glfont2.cpp" />
     <ClCompile Include="..\..\shared\Physics.cpp" />
+    <ClCompile Include="..\..\shared\Playfield.cpp" />
     <ClCompile Include="..\..\shared\Renderer.cpp" />
     <ClCompile Include="..\..\shared\Util.cpp" />
     <ClCompile Include=".\main.cpp" />
@@ -123,16 +124,22 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\include\chipmunk\ChipmunkDebugDraw.h" />
     <ClInclude Include="..\..\shared\Camera.h" />
+    <ClInclude Include="..\..\shared\CameraEffect.h" />
     <ClInclude Include="..\..\shared\Drawing.h" />
     <ClInclude Include="..\..\shared\Editor.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
-    <ClInclude Include="..\..\shared\Parts.h" />
+    <ClInclude Include="..\..\shared\Material.h" />
+    <ClInclude Include="..\..\shared\Overlay.h" />
+    <ClInclude Include="..\..\shared\Part.h" />
     <ClInclude Include="..\..\shared\PhysicsDelegate.h" />
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
+    <ClInclude Include="..\..\shared\Playfield.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
+    <ClInclude Include="..\..\shared\Texture.h" />
     <ClInclude Include="..\..\shared\TimerDelegate.h" />
+    <ClInclude Include="..\..\shared\Types.h" />
     <ClInclude Include="..\..\shared\Util.h" />
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
@@ -157,7 +164,7 @@
     <None Include="..\..\shared\Pinferno\forces.lua" />
     <None Include="..\..\shared\Pinferno\layout.lua" />
     <None Include="..\..\shared\Pinferno\materials.lua" />
-    <None Include="..\..\shared\Pinferno\objects.lua" />
+    <None Include="..\..\shared\Pinferno\parts.lua" />
     <None Include="..\..\shared\Pinferno\overlays.lua" />
     <None Include="..\..\shared\Pinferno\rules.lua" />
     <None Include="..\..\shared\Pinferno\textures.lua" />
