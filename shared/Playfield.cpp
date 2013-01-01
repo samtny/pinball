@@ -3,7 +3,7 @@
 
 #include "PinballBridgeInterface.h"
 
-#include "Types.h"
+#include "Parts.h"
 
 extern "C" {
 #include "lua.h"
@@ -15,10 +15,19 @@ void Playfield::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
 }
 
+map<string, Material> *Playfield::getMaterials() {
+	return &_materials;
+}
+
+map<string, LayoutItem> *Playfield::getLayout() {
+	return &_layout;
+}
+
 void Playfield::init(void) {
 
 	this->loadConfig();
 	this->loadMaterials();
+	this->loadTextures();
 	this->loadParts();
 	this->loadLayout();
 
@@ -91,6 +100,61 @@ void Playfield::loadMaterials(void) {
 
 }
 
+void Playfield::loadTextures(void) {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
+
+	int error = luaL_dofile(L, texturesFileName);
+	if (!error) {
+
+        lua_getglobal(L, "textures");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+
+				Texture props;
+				props.n = name;
+				
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("filename", key) == 0) {
+						
+						props.filename = lua_tostring(L, -1);
+                        
+					}
+                    
+					lua_pop(L, 1);
+				}
+
+				_textures.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+
+			}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
 void Playfield::loadParts(void) {
 
 	lua_State *L = luaL_newstate();
@@ -111,7 +175,7 @@ void Playfield::loadParts(void) {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				Part props = { name, -1, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+				Part props;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -121,7 +185,7 @@ void Playfield::loadParts(void) {
 					if (strcmp("s", key) == 0) {
 						props.s = lua_tostring(L, -1);
 					} else if (strcmp("m", key) == 0) {
-						props.m = _materials[lua_tostring(L, -1)];
+						props.m = &_materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
 						props.r1 = (float)lua_tonumber(L, -1);
 					} else if (strcmp("r2", key) == 0) {
@@ -134,7 +198,7 @@ void Playfield::loadParts(void) {
 							const char *tkey = lua_tostring(L, -2);
 
 							if (strcmp("n", tkey) == 0) {
-								props.t.n = lua_tostring(L, -1);
+								props.t.t = &_textures[lua_tostring(L, -1)];
 							} else if (strcmp("x", tkey) == 0) {
 								props.t.x = (int)lua_tonumber(L, -1);
 							} else if (strcmp("y", tkey) == 0) {
@@ -156,7 +220,7 @@ void Playfield::loadParts(void) {
 					lua_pop(L, 1);
 				}
 				
-				_objects.insert(make_pair(name, props));
+				_parts.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}
@@ -194,9 +258,9 @@ void Playfield::loadLayout(void) {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				layoutItem props = { name };
+				LayoutItem props;
+				props.n = name;
 				props.s = -1;
-				props.editing = false;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -205,7 +269,7 @@ void Playfield::loadLayout(void) {
 
 					if (strcmp("o", key) == 0) {
 						
-						props.o = _objects[lua_tostring(L, -1)];
+						props.o = &_parts[lua_tostring(L, -1)];
 
 					} else if (strcmp("v", key) == 0) {
 						
@@ -216,7 +280,7 @@ void Playfield::loadLayout(void) {
 						{
 
 							// init vect object
-							cpVect v;
+							Coord2 v;
 
 							// get the 2d table
 							lua_rawgeti(L, -1, i);
@@ -252,7 +316,7 @@ void Playfield::loadLayout(void) {
 					props.s = 1;
 				}
 
-				_layoutItems.insert(make_pair(name, props));
+				_layout.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}

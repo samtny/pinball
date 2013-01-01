@@ -1,12 +1,11 @@
 
-#include "Material.h"
-#include "Texture.h"
-#include "Part.h"
-#include "LayoutItem.h"
-#include "Overlay.h"
-
 using namespace std;
 #include <math.h>
+
+#include "chipmunk/chipmunk.h"
+
+typedef cpBody Body;
+typedef cpShape Shape;
 
 typedef struct Coord2{float x,y;} Coord2;
 /// Convenience constructor for Coord2 structs.

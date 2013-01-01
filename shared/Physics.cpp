@@ -5,6 +5,8 @@
 
 #include "PhysicsDelegate.h"
 
+#include "Playfield.h"
+
 #include "Parts.h"
 
 #include "Util.h"
@@ -19,7 +21,7 @@ extern "C" {
 
 static Physics *physics_currentInstance;
 
-static cpSpace *_space;
+//static cpSpace *_space;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
@@ -87,16 +89,13 @@ IPhysicsDelegate * Physics::getDelegate() {
 	return _delegate;
 }
 
-map<string, layoutItem> *Physics::getLayoutItems() {
-	return &_layoutItems;
+void Physics::setPlayfield(Playfield *playfield) {
+	_playfield = playfield;
 }
 
 void Physics::init() {
 
 	this->loadConfig();
-	this->loadMaterials();
-	this->loadObjects();
-	this->loadLayout();
     this->loadForces();
 
 	_space = cpSpaceNew();
@@ -108,9 +107,9 @@ void Physics::init() {
 	_slingshotRestLength *= 1 / scale;
 	_slingshotSwitchGap *= 1 / scale;
 
-	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
-		layoutItem *lprops = &(&*iterator)->second;
-		this->applyScale(lprops);
+	for (it_LayoutItem iterator = _playfield->getLayout()->begin(); iterator != _playfield->getLayout()->end(); iterator++) {
+		LayoutItem *lprops = &(&*iterator)->second;
+		//this->applyScale(lprops);
 		this->createObject(lprops);
 	}
 
@@ -136,13 +135,14 @@ static int __ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
 int Physics::ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
-	materialProperties *mat = &_materials["steel"];
+	// TODO: move to local var;
+	map<string, Material> mats = *_playfield->getMaterials();
 
-	arb->e = mat->e;
-	arb->u = mat->f;
+	Material mat = mats["steel"];
 
-    _bridgeInterface->playSound((void *)"flip");
-    
+	arb->e = mat.e;
+	arb->u = mat.f;
+
 	return 1;
 
 }

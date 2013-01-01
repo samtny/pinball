@@ -23,7 +23,7 @@ typedef struct {
 	int width;
 	int height;
 	void *data;
-} Texture;
+} GLTexture;
 
 class PinballBridgeInterface
 {
@@ -46,7 +46,7 @@ public:
 
 	const char *getPathForTextureFileName(void *textureFileName);
 
-	Texture *createRGBATexture(void *textureFileName);
+	GLTexture *createRGBATexture(void *textureFileName);
 
     HostProperties *getHostProperties();
 	

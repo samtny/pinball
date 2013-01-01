@@ -7,13 +7,12 @@ class PinballBridgeInterface;
 class IPhysicsDelegate;
 class Game;
 
+class Playfield;
+struct LayoutItem;
+
 struct cpSpace;
 struct cpBody;
 struct cpArbiter;
-
-struct materialProperties;
-struct objectProperties;
-struct layoutItem;
 
 using namespace std;
 #include <string>
@@ -28,6 +27,7 @@ public:
 	
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void setDelegate(IPhysicsDelegate *delegate);
+	void setPlayfield(Playfield *playfield);
 	void init();
 
 	IPhysicsDelegate *getDelegate();
@@ -36,8 +36,6 @@ public:
 	
 	float getScale();
 
-	map<string, layoutItem> *getLayoutItems();
-	
 	void updatePhysics();
 	
 	void resetBallsToInitialPosition();
@@ -48,42 +46,35 @@ public:
 
 	bool getPaused();
 
-	// TODO: refactor veriously...
-	void applyScale(layoutItem *iprops);
-	void createObject(layoutItem *iprops);
-	void destroyObject(layoutItem *iprops);
+	// TODO: refactor variously...
+	void applyScale(LayoutItem *iprops);
+	void createObject(LayoutItem *iprops);
+	void destroyObject(LayoutItem *iprops);
 	void destroyBody(cpBody *body);
-
-	void addLayoutItem(layoutItem item);
 
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
 
 protected:
 	void loadConfig();
-	void loadMaterials();
-	void loadObjects();
-	void loadLayout();
     void loadForces();
 	void initCollisionHandlers();
-	cpBody *createBox(layoutItem *iprops);
-    cpBody *createBall(layoutItem *iprops);
-	cpBody *createFlipper(layoutItem *iprops);
-	cpBody *createTarget(layoutItem *iprops);
-	cpBody *createPopbumper(layoutItem *iprops);
-	cpBody *createSlingshot(layoutItem *iprops);
-	void createSwitch(layoutItem *iprops);
-	void createSegment(layoutItem *iprops);
-	void createCircle(layoutItem *iprops);
-	void flip(layoutItem *flipper);
-	void unflip(layoutItem *flipper);
+	cpBody *createBox(LayoutItem *iprops);
+    cpBody *createBall(LayoutItem *iprops);
+	cpBody *createFlipper(LayoutItem *iprops);
+	cpBody *createTarget(LayoutItem *iprops);
+	cpBody *createPopbumper(LayoutItem *iprops);
+	cpBody *createSlingshot(LayoutItem *iprops);
+	void createSwitch(LayoutItem *iprops);
+	void createSegment(LayoutItem *iprops);
+	void createCircle(LayoutItem *iprops);
+	void flip(LayoutItem *flipper);
+	void unflip(LayoutItem *flipper);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	IPhysicsDelegate *_delegate;
+	Playfield *_playfield;
 	cpSpace *_space;
-	map<string, materialProperties> _materials;
-	map<string, objectProperties> _objects;
-	map<string, layoutItem> _layoutItems;
 	bool _paused;
 };
 

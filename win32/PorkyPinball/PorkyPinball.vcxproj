@@ -129,16 +129,12 @@
     <ClInclude Include="..\..\shared\Editor.h" />
     <ClInclude Include="..\..\shared\Game.h" />
     <ClInclude Include="..\..\shared\glfont2.h" />
-    <ClInclude Include="..\..\shared\LayoutItem.h" />
-    <ClInclude Include="..\..\shared\Material.h" />
-    <ClInclude Include="..\..\shared\Overlay.h" />
-    <ClInclude Include="..\..\shared\Part.h" />
+    <ClInclude Include="..\..\shared\Parts.h" />
     <ClInclude Include="..\..\shared\PhysicsDelegate.h" />
     <ClInclude Include="..\..\shared\PinballBridgeInterface.h" />
     <ClInclude Include="..\..\shared\Physics.h" />
     <ClInclude Include="..\..\shared\Playfield.h" />
     <ClInclude Include="..\..\shared\Renderer.h" />
-    <ClInclude Include="..\..\shared\Texture.h" />
     <ClInclude Include="..\..\shared\TimerDelegate.h" />
     <ClInclude Include="..\..\shared\Types.h" />
     <ClInclude Include="..\..\shared\Util.h" />

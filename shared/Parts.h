@@ -1,102 +1,64 @@
-#ifndef __PARTS__
-#define __PARTS__
 
 using namespace std;
 #include <string>
 #include <vector>
 #include <map>
+#include <stdint.h>
 
-#include "chipmunk/chipmunk.h"
+#include "Types.h"
 
-typedef struct Coord2{float x,y;} Coord2;
-/// Convenience constructor for Coord2 structs.
-static inline Coord2 coord(const float x, const float y)
-{
-	Coord2 v = {x, y};
-	return v;
-}
-/// Add two vectors.
-static inline Coord2 coordadd(const Coord2 v1, const Coord2 v2) {
-	return coord(v1.x + v2.x, v1.y + v2.y);
-}
-/// Subtract two vectors.
-static inline Coord2 coordsub(const Coord2 v1, const Coord2 v2)
-{
-	return coord(v1.x - v2.x, v1.y - v2.y);
-}
-/// Scalar multiplication.
-static inline Coord2 coordmult(const Coord2 v, const float s)
-{
-	return coord(v.x*s, v.y*s);
-}
-/// Vector length
-static inline float coordlen(const Coord2 v) {
-	return sqrt(v.x * v.x + v.y * v.y);
-}
-/// Rotate vector 1 by vector 2
-static inline Coord2 coordrotate(const Coord2 v1, const Coord2 v2) {
-	return coord(v1.x * v2.x - v1.y * v2.y, v1.x * v2.y + v1.y * v2.x);
-}
-/// Normalize vector
-static inline Coord2 coordnormalize(const Coord2 v) {
-	return coordmult(v, 1.0f/coordlen(v));
-}
-
-typedef struct Rect{Coord2 begin, end;} Rect;
-
-typedef struct materialProperties {
+typedef struct Material {
 	string n;
 	float e;
 	float f;
 	float d;
-} materialProperties;
-typedef map<string, materialProperties>::iterator it_materialProperties;
+} Material;
+typedef map<string, Material>::iterator it_Material;
 
-typedef struct objectTextureProperties {
+typedef struct Texture {
 	string n;
+	string filename;
+	uint32_t gl_index;
+	int w;
+	int h;
+} Texture;
+
+typedef struct TextureInfo {
+	Texture *t;
 	int x;
 	int y;
 	int w;
 	int h;
 	float a;
-} objectTextureProperties;
+} TextureInfo;
 
-typedef struct objectProperties {
+typedef struct Part {
 	string n;
 	int v;
 	string s;
 	float r1;
 	float r2;
-	materialProperties m;
-	objectTextureProperties t;
-} objectProperties;
-typedef map<string, objectProperties>::iterator it_objectProps;
+	Material *m;
+	TextureInfo t;
+} Part;
+typedef map<string, Part>::iterator it_Part;
 
-typedef struct layoutItem {
+typedef struct LayoutItem {
 	string n;
-	objectProperties o;
-	cpVect v[200];
+	Part *o;
+	vector<Coord2> v;
 	float s;
 	int count;
-	cpBody *body;
-	cpShape *shape;
+	vector<Body *> bodies;
+	vector<Shape *> shapes;
 	float width;
 	float height;
 	bool editing;
-	cpVect c;
-} layoutItem;
-typedef map<string, layoutItem>::iterator it_layoutItems;
+	Coord2 c;
+} LayoutItem;
+typedef map<string, LayoutItem>::iterator it_LayoutItem;
 
-typedef struct textureProperties {
-	string name;
-	string filename;
-	uint32_t gl_index;
-	int w;
-	int h;
-} textureProperties;
-typedef map<string, textureProperties>::iterator it_textureProperties;
-
-struct overlayProperties {
+struct Overlay {
 	string n;
 	string t;
 	string l;
@@ -107,16 +69,5 @@ struct overlayProperties {
 	float s;
 	float o;
 };
-typedef map<string, overlayProperties>::iterator it_overlayProperties;
-
-struct cameraEffect {
-	string n;	
-	float d;
-	float aStart;
-	float aEnd;
-	float aCurrent;
-	double startTime;
-};
-
-#endif
+typedef map<string, Overlay>::iterator it_Overlay;
 

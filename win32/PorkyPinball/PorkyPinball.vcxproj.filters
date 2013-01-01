@@ -230,25 +230,13 @@
     <ClInclude Include="..\..\shared\Playfield.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Material.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Types.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Texture.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Part.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Overlay.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\CameraEffect.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\LayoutItem.h">
+    <ClInclude Include="..\..\shared\Parts.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
   </ItemGroup>

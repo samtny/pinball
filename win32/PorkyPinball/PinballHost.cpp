@@ -34,6 +34,7 @@ void PinballHost::init() {
 
 	Physics *p = new Physics();
 	p->setBridgeInterface(bi);
+	p->setPlayfield(f);
 	p->init();
 
 	Camera *c = new Camera();
