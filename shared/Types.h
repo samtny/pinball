@@ -1,4 +1,7 @@
 
+#ifndef __PINBALL_TYPES__
+#define __PINBALL_TYPES__
+
 using namespace std;
 #include <math.h>
 
@@ -49,4 +52,6 @@ static inline Coord2 coordnormalize(const Coord2 v) {
 typedef struct Rect{
 	Coord2 begin, end;
 } Rect;
+
+#endif
 

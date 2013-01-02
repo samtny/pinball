@@ -233,9 +233,6 @@
     <ClInclude Include="..\..\shared\Types.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\CameraEffect.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Parts.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>

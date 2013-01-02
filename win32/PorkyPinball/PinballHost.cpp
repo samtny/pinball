@@ -39,8 +39,7 @@ void PinballHost::init() {
 
 	Camera *c = new Camera();
 	c->setBridgeInterface(bi);
-	c->setDisplayProperties(bi->getHostProperties());
-	c->setPhysics(p);
+	c->setPlayfield(f);
 	c->init();
 
 	Editor *t = new Editor();

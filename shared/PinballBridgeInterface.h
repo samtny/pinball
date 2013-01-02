@@ -9,7 +9,7 @@
 	#include "GL/gl.h"
 #endif
 
-typedef struct {
+typedef struct HostProperties {
 	int viewportX;
 	int viewportY;
 	int viewportHeight;
@@ -18,7 +18,7 @@ typedef struct {
 	float overlayScale;
 } HostProperties;
 
-typedef struct {
+typedef struct GLTexture {
 	int bpp;
 	int width;
 	int height;

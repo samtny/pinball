@@ -1,49 +1,66 @@
 
+using namespace std;
+#include <string>
+#include <vector>
+#include <map>
+
+class PinballBridgeInterface;
+struct HostProperties;
+class Playfield;
+struct Coord2;
+
 typedef enum CameraType {
 	CAMERA_TYPE_FOLLOW_BALL,
 	CAMERA_TYPE_FIXED
 } CameraType;
 
-// TODO: move out;
-#include "PinballBridgeInterface.h"
-#include "Parts.h"
+typedef struct CameraEffect {
+	string n;	
+	float d;
+	float aStart;
+	float aEnd;
+	double aCurrent;
+	double startTime;
+} CameraEffect;
 
-#include <string>
-#include <vector>
-#include <map>
-
-class Renderer;
-class Physics;
+struct CameraMode;
 
 class Camera {
 public:
 	Camera();
 	~Camera();
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	void setPlayfield(Playfield *playfield);
 	void init();
-	CameraType type;
-	float minZoomLevel;
-	float maxZoomLevel;
-	void setDisplayProperties(HostProperties *displayProperties);
-	void setPhysics(Physics *physics);
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
 	void setMode(const char *modeName);
+	
 	Coord2 transform(Coord2 coord);
+
 	void applyTransform(void);
+
 	void doEffect(const char *effectName);
+
 	void applyEffectsTransforms(void);
+
 protected:
 	void loadConfig();
 	void loadCamera();
 	void loadEffects();
+	void initModes();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	HostProperties *_displayProperties;
-	Physics *_physics;
+	Playfield *_playfield;
 	float _scale;
-	void initModes();
-	map<string, cameraEffect> _effects;
-	vector<cameraEffect> _activeEffects;
+	float _minZoomLevel;
+	float _maxZoomLevel;
+	map<string, CameraEffect> _effects;
+	vector<CameraEffect> _activeEffects;
+	CameraType _type;
+	map<string, CameraMode> _cameraModes;
+	CameraMode *_activeCameraMode;
 };
+
 

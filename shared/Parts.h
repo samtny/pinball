@@ -1,4 +1,7 @@
 
+#ifndef __PINBALL_PARTS__
+#define __PINBALL_PARTS__
+
 using namespace std;
 #include <string>
 #include <vector>
@@ -71,3 +74,4 @@ struct Overlay {
 };
 typedef map<string, Overlay>::iterator it_Overlay;
 
+#endif

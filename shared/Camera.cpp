@@ -1,8 +1,10 @@
 #include "Camera.h"
 
-#include "Renderer.h"
+#include "PinballBridgeInterface.h"
 
-#include "Physics.h"
+#include "Types.h"
+
+#include "Playfield.h"
 
 #include "Parts.h"
 
@@ -15,8 +17,8 @@ extern "C" {
 }
 
 #ifdef __APPLE__
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
+	#include <OpenGLES/ES1/gl.h>
+	#include <OpenGLES/ES1/glext.h>
 #else
 	#ifdef _WIN32
 		#include <windows.h>
@@ -25,22 +27,15 @@ extern "C" {
 	#include <GL/GLU.h>
 #endif
 
-#include <string>
-#include <map>
-
-struct CameraMode {
+typedef struct CameraMode {
 	string name;
 	CameraType t;
 	Coord2 c;
 	float w;
 	Coord2 b; // buffer / border
 	float z;
-};
-map<string, CameraMode> _cameraModes;
-typedef map<string, CameraMode>::iterator it_cameraModes;
-CameraMode _activeCameraMode;
-
-static float scale = 37;
+} CameraMode;
+typedef map<string, CameraMode>::iterator it_CameraMode;
 
 Camera::Camera()
 {
@@ -56,17 +51,19 @@ void Camera::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 
 void Camera::init() {
 	
+	_displayProperties = _bridgeInterface->getHostProperties();
+
 	this->loadConfig();
 	this->loadCamera();
 	this->loadEffects();
 
-	for (it_cameraModes iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
+	for (it_CameraMode iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
 		CameraMode *mode = &(&*iterator)->second;
-		mode->b.x *= 1 / scale;
-		mode->b.y *= 1 / scale;
-		mode->c.x *= 1 / scale;
-		mode->c.y *= 1 / scale;
-		mode->w *= 1 / scale;
+		mode->b.x *= 1 / _scale;
+		mode->b.y *= 1 / _scale;
+		mode->c.x *= 1 / _scale;
+		mode->c.y *= 1 / _scale;
+		mode->w *= 1 / _scale;
 	}
 
 }
@@ -92,7 +89,7 @@ void Camera::loadConfig() {
                     
 				if (strcmp("scale", key) == 0) {
 
-					scale = (float)lua_tonumber(L, -1);
+					_scale = (float)lua_tonumber(L, -1);
 
 				}
                     
@@ -223,7 +220,7 @@ void Camera::loadEffects() {
 				
 				const char *name = lua_tostring(L, -2);
                     
-				cameraEffect effect;
+				CameraEffect effect;
 				effect.n = name;
 
 				lua_pushnil(L);
@@ -290,30 +287,26 @@ void Camera::loadEffects() {
 
 }
 
-void Camera::setDisplayProperties(HostProperties *displayProperties) {
-	_displayProperties = displayProperties;
-}
-
-void Camera::setPhysics(Physics *physics) {
-	_physics = physics;
+void Camera::setPlayfield(Playfield *playfield) {
+	_playfield = playfield;
 }
 
 void Camera::setZoomLevel(float zoomLevel) {
-	if (_activeCameraMode.z <= maxZoomLevel && zoomLevel >= minZoomLevel) {
-		_activeCameraMode.z = zoomLevel;
+	if (_activeCameraMode->z <= _maxZoomLevel && zoomLevel >= _minZoomLevel) {
+		_activeCameraMode->z = zoomLevel;
 	}
 }
 
 float Camera::getZoomLevel() {
-	return _activeCameraMode.z;
+	return _activeCameraMode->z;
 }
 
 void Camera::setMode(const char *modeName) {
 
-	for (it_cameraModes iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
+	for (it_CameraMode iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
 		CameraMode mode = iterator->second;
 		if (strcmp(modeName, mode.name.c_str()) == 0) {
-			_activeCameraMode = mode;
+			_activeCameraMode = &mode;
 			break;
 		}
 	}
@@ -322,10 +315,10 @@ void Camera::setMode(const char *modeName) {
 
 Coord2 Camera::transform(Coord2 coord) {
 
-	float _activeCameraModeH = _activeCameraMode.w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
+	float _activeCameraModeH = _activeCameraMode->w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
 
-	float tx = coord.x * 1 / _scale + _activeCameraMode.c.x - (_activeCameraMode.w / 2.0f);
-	float ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode.c.y - (_activeCameraModeH / 2.0f);
+	float tx = coord.x * 1 / _scale + _activeCameraMode->c.x - (_activeCameraMode->w / 2.0f);
+	float ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode->c.y - (_activeCameraModeH / 2.0f);
 
 	Coord2 transformed = {tx, ty};
 
@@ -335,15 +328,15 @@ Coord2 Camera::transform(Coord2 coord) {
 
 void Camera::applyTransform(void) {
 
-	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;
+	_scale = (_displayProperties->viewportWidth / _activeCameraMode->w) * _activeCameraMode->z;
 
-	switch (_activeCameraMode.t)
+	switch (_activeCameraMode->t)
 	{
 	case CAMERA_TYPE_FIXED: {
 
-		float tx = _activeCameraMode.c.x * _scale - (_displayProperties->viewportWidth / 2.0f);
+		float tx = _activeCameraMode->c.x * _scale - (_displayProperties->viewportWidth / 2.0f);
 
-		float ty = _activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f);
+		float ty = _activeCameraMode->c.y * _scale - (_displayProperties->viewportHeight / 2.0f);
 
 		glTranslatef(-tx, -ty, 0);
 
@@ -356,16 +349,16 @@ void Camera::applyTransform(void) {
 	case CAMERA_TYPE_FOLLOW_BALL:
 	default:
 		
-		map<string, layoutItem> *items = _physics->getLayoutItems();
+		map<string, LayoutItem> *items = _playfield->getLayout();
 		
-		layoutItem box;
-		layoutItem lowBall;
+		LayoutItem box;
+		LayoutItem lowBall;
 		lowBall.width = -1;
 		
-		for (it_layoutItems iterator = items->begin(); iterator != items->end(); iterator++) {
-			layoutItem item = iterator->second;
-			if (strcmp("ball", item.o.n.c_str()) == 0) {
-				if (lowBall.width == -1 || item.body->p.y < lowBall.body->p.y) {
+		for (it_LayoutItem iterator = items->begin(); iterator != items->end(); iterator++) {
+			LayoutItem item = iterator->second;
+			if (strcmp("ball", item.o->n.c_str()) == 0) {
+				if (lowBall.width == -1 || item.bodies[0]->p.y < lowBall.bodies[0]->p.y) {
 					lowBall = item;
 				}
 			} else if (strcmp("box", item.n.c_str()) == 0) {
@@ -373,15 +366,15 @@ void Camera::applyTransform(void) {
 			}
 		}
 
-		GLfloat minY = box.v[0].y;
-		GLfloat maxY = box.v[1].y;
+		float minY = box.v[0].y;
+		float maxY = box.v[1].y;
 
-		GLfloat posY = 0;
+		float posY = 0;
 
-		posY = lowBall.body->p.y;
-		posY -= lowBall.o.r1;
+		posY = (float)lowBall.bodies[0]->p.y;
+		posY -= lowBall.o->r1;
 
-		posY -= _activeCameraMode.b.y; // margin
+		posY -= _activeCameraMode->b.y; // margin
 
 		if (posY < minY) {
 			posY = minY;
@@ -389,11 +382,11 @@ void Camera::applyTransform(void) {
 			posY = maxY;
 		}
 
-		posY *= _scale * _activeCameraMode.z;
+		posY *= _scale * _activeCameraMode->z;
 
 		glTranslatef(0, -posY, 0);
 
-		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
+		glScalef(_activeCameraMode->z, _activeCameraMode->z, 1);
 		
 		break;
 	}
@@ -406,9 +399,9 @@ void Camera::applyEffectsTransforms() {
 
 	double curTime = absoluteTime();
 
-	for (int i = 0; i < _activeEffects.size(); i++) {
+	for (int i = 0; i < (int)_activeEffects.size(); i++) {
 		
-		glRotatef(_activeEffects[i].aCurrent, 0, 0, 1);
+		glRotatef((float)_activeEffects[i].aCurrent, 0, 0, 1);
 
 		double delta = curTime - _activeEffects[i].startTime;
 
@@ -420,7 +413,7 @@ void Camera::applyEffectsTransforms() {
 
 void Camera::doEffect(const char *effectName) {
 
-	cameraEffect effect = _effects[effectName];
+	CameraEffect effect = _effects[effectName];
 
 	effect.aCurrent = effect.aStart;
 
