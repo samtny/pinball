@@ -25,25 +25,25 @@ static Physics *physics_currentInstance;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
-static float flipImpulse = 0.02f;
-static float unflipImpulse = 0.02f;
+static double flipImpulse = 0.02f;
+static double unflipImpulse = 0.02f;
 
-static float flipForce = 0.2f;
-static float unflipForce = 0.2f;
+static double flipForce = 0.2f;
+static double unflipForce = 0.2f;
 
-static float _targetRestLength = 0;
-static float _targetSwitchGap = 0;
-static float _targetStiffness = 0;
-static float _targetDamping = 0;
+static double _targetRestLength = 0;
+static double _targetSwitchGap = 0;
+static double _targetStiffness = 0;
+static double _targetDamping = 0;
 
-static float _slingshotRestLength = 0.6;
-static float _slingshotSwitchGap = 0.25;
-static float _slingshotStiffness = 35.0;
-static float _slingshotDamping = 0.05;
-static float _slingshotImpulse = 0.02;
+static double _slingshotRestLength = 0.6;
+static double _slingshotSwitchGap = 0.25;
+static double _slingshotStiffness = 35.0;
+static double _slingshotDamping = 0.05;
+static double _slingshotImpulse = 0.02;
 
-static float _popBumperThreshold = 0.005;
-static float _popBumperImpulse = 0.04;
+static double _popBumperThreshold = 0.005;
+static double _popBumperImpulse = 0.04;
 
 static double timeStep = 1.0/180.0;
 
@@ -153,7 +153,7 @@ static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	layoutItem *l = (layoutItem *)b->data;
+	LayoutItem *l = (LayoutItem *)b->data;
 
 	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
 
@@ -167,7 +167,7 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	layoutItem *l = (layoutItem *)b->data;
+	LayoutItem *l = (LayoutItem *)b->data;
 
 	physics_currentInstance->getDelegate()->switchOpened(l->n.c_str());
 
@@ -188,7 +188,7 @@ static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
 		cpBodyApplyImpulse(ball, cpvmult(normal, -_popBumperImpulse), cpvzero);
 		
-		layoutItem *l = (layoutItem *)pop->data;
+		LayoutItem *l = (LayoutItem *)pop->data;
 
 		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
 
@@ -201,7 +201,7 @@ static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *target, *sw;
 	cpArbiterGetShapes(arb, &target, &sw);
 
-	layoutItem *l = (layoutItem *)target->data;
+	LayoutItem *l = (LayoutItem *)target->data;
 
 	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
 
@@ -220,7 +220,7 @@ static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpBodyApplyImpulse(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);
 		
 	/*
-	layoutItem *l = (layoutItem *)slingshot->data;
+	LayoutItem *l = (LayoutItem *)slingshot->data;
 
 	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
 	*/
@@ -242,7 +242,8 @@ cpSpace *Physics::getSpace() {
 	return _space;
 }
 
-void Physics::applyScale(layoutItem *iprops) {
+/*
+void Physics::applyScale(LayoutItem *iprops) {
 
 	for (int i = 0; i < iprops->count; i++) {
 		iprops->v[i].x *= 1 / scale;
@@ -257,6 +258,7 @@ void Physics::applyScale(layoutItem *iprops) {
 	//iprops->o.t.s *= 1 / scale;
 	
 }
+*/
 
 float Physics::getScale() {
 	return scale;
@@ -275,10 +277,11 @@ static void destroyShape(cpBody *body, cpShape *shape, void *data) {
 }
 
 void destroyObject(cpSpace *space, void *itm, void *unused) {
+	// TODO: yep
+	/*
+	LayoutItem *item = (LayoutItem *)itm;
 
-	layoutItem *item = (layoutItem *)itm;
-
-	layoutItem box = physics_currentInstance->getLayoutItems()->find("box")->second;
+	LayoutItem box = physics_currentInstance->getLayoutItems()->find("box")->second;
 
 	if (item->body && (strcmp(item->n.c_str(), "box") == 0 || item->body != box.body)) {
 		cpBodyEachConstraint(item->body, destroyConstraint, NULL);
@@ -289,10 +292,10 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 		cpSpaceRemoveShape(space, item->shape);
 		cpShapeFree(item->shape);
 	}
-
+	*/
 }
 
-void Physics::destroyObject(layoutItem *item) {
+void Physics::destroyObject(LayoutItem *item) {
 
 	if (cpSpaceIsLocked(_space)) {
 		cpSpaceAddPostStepCallback(_space, ::destroyObject, item, NULL);
@@ -302,44 +305,45 @@ void Physics::destroyObject(layoutItem *item) {
 
 }
 
-void Physics::createObject(layoutItem *layoutItem) {
+void Physics::createObject(LayoutItem *item) {
 	
-	if (strcmp(layoutItem->o.s.c_str(), "box") == 0) {
-		layoutItem->body = this->createBox(layoutItem);
-		layoutItem->width = (float)(layoutItem->v[3].x - layoutItem->v[0].x);
-		layoutItem->height = (float)(layoutItem->v[1].y - layoutItem->v[0].y);
-	} else if (strcmp(layoutItem->o.s.c_str(), "segment") == 0) {
-		this->createSegment(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "flipper") == 0) {
-		layoutItem->body = this->createFlipper(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "ball") == 0) {
-        layoutItem->body = this->createBall(layoutItem);
-    } else if (strcmp(layoutItem->o.s.c_str(), "switch") == 0) {
-		this->createSwitch(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "circle") == 0) {
-		this->createCircle(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "target") == 0) {
-		layoutItem->body = this->createTarget(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "popbumper") == 0) {
-		layoutItem->body = this->createPopbumper(layoutItem);
-	} else if (strcmp(layoutItem->o.s.c_str(), "slingshot") == 0) {
-		layoutItem->body = this->createSlingshot(layoutItem);
+	if (strcmp(item->o->s.c_str(), "box") == 0) {
+		this->createBox(item);
+		// TODO: goeth elsewhere;
+		item->width = (float)(item->v[3].x - item->v[0].x);
+		item->height = (float)(item->v[1].y - item->v[0].y);
+	} else if (strcmp(item->o->s.c_str(), "segment") == 0) {
+		this->createSegment(item);
+	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
+		this->createFlipper(item);
+	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
+        this->createBall(item);
+    } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
+		this->createSwitch(item);
+	} else if (strcmp(item->o->s.c_str(), "circle") == 0) {
+		this->createCircle(item);
+	} else if (strcmp(item->o->s.c_str(), "target") == 0) {
+		this->createTarget(item);
+	} else if (strcmp(item->o->s.c_str(), "popbumper") == 0) {
+		this->createPopbumper(item);
+	} else if (strcmp(item->o->s.c_str(), "slingshot") == 0) {
+		this->createSlingshot(item);
 	}
 
 }
 
-cpBody *Physics::createBox(layoutItem *item) {
+void Physics::createBox(LayoutItem *item) {
 
 	cpBody *body, *staticBody = cpSpaceGetStaticBody(_space);
 	cpShape *shape;
 	cpConstraint *constraint;
 
 	cpFloat area = (item->v[1].y - item->v[0].y) * (item->v[3].x - item->v[0].x);
-	cpFloat mass = area * item->o.m.d;
-
+	cpFloat mass = area * item->o->m->d;
+	
 	// create body on which to hang the "box";
-	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, item->v, cpvzero)));
-
+	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, (const cpVect *)&item->v.front(), cpvzero)));
+	
 	// the implications of attaching all playfield objects to this non-zero-indexed body are not inconsequential...
 	cpBodySetPos(body, cpvmult(cpvadd(item->v[2], item->v[0]), 0.5f));
 	
@@ -355,48 +359,48 @@ cpBody *Physics::createBox(layoutItem *item) {
 	
 	// hang the box shapes on the body;
 	// left
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[0]), cpBodyWorld2Local(body, item->v[1]), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[0]), cpBodyWorld2Local(body, item->v[1]), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// top
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[1]), cpBodyWorld2Local(body, item->v[2]), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[1]), cpBodyWorld2Local(body, item->v[2]), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// right
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[2]), cpBodyWorld2Local(body, item->v[3]), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[2]), cpBodyWorld2Local(body, item->v[3]), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	// bottom
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[3]), cpBodyWorld2Local(body, item->v[0]), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[3]), cpBodyWorld2Local(body, item->v[0]), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBox);
 
 	cpBodySetUserData(body, item);
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
 static int ballCollisionGroup = 2048;
 
-cpBody *Physics::createBall(layoutItem *item) {
+void Physics::createBall(LayoutItem *item) {
     
-    cpFloat area = (item->o.r1 * item->o.r1 * M_PI);
-    cpFloat mass = area * item->o.m.d;
+    cpFloat area = (item->o->r1 * item->o->r1 * M_PI);
+    cpFloat mass = area * item->o->m->d;
     
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
+    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
     cpBodySetPos(body, item->v[0]);
     
-    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o.r1, cpvzero));
-    cpShapeSetElasticity(shape, item->o.m.e);
-    cpShapeSetFriction(shape, item->o.m.f);
+    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
+    cpShapeSetElasticity(shape, item->o->m->e);
+    cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBall + ballCollisionGroup); // TODO: ball shape group is kludged
 	cpShapeSetCollisionType(shape, CollisionTypeBall);
 
@@ -404,14 +408,14 @@ cpBody *Physics::createBall(layoutItem *item) {
 
 	ballCollisionGroup++;
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
-cpBody *Physics::createFlipper(layoutItem *item) {
+void Physics::createFlipper(LayoutItem *item) {
 
-	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
-	cpFloat mass = area * item->o.m.d;
+	cpFloat area = (item->o->r1 * M_PI) * 2; // approx
+	cpFloat mass = area * item->o->m->d;
 
 	cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
 
@@ -425,18 +429,18 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
 	cpBodySetPos(body, item->v[0]);
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
- 	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, box->body, item->v[0]));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->body, flipStart, flipEnd));
+ 	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, box->bodies[0], item->v[0]));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], flipStart, flipEnd));
 
 	// lflipper base shape
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o.r1, cpvzero));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
-	float diff = item->o.r1 - item->o.r2; // r1-prime
+	float diff = item->o->r1 - item->o->r2; // r1-prime
 	float loft = atan2f(diff, length);
 	float facelen = diff / sin(loft);
 	cpVect p2p1 = cpvsub(item->v[0], item->v[1]);
@@ -445,67 +449,68 @@ cpBody *Physics::createFlipper(layoutItem *item) {
 	cpVect p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
 
 	// lflipper face shapes
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o.r2));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
 	loft = -atan2f(diff, length);
 	p3n = cpvrotate(p2p1n, cpvforangle(loft));
 	p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
 
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o.r2));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
 	cpBodySetUserData(body, item);
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
-void Physics::createSwitch(layoutItem *item) {
+void Physics::createSwitch(LayoutItem *item) {
 
-	layoutItem *box = &_layoutItems.find("box")->second;
-
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->body, cpBodyWorld2Local(box->body, item->v[0]), cpBodyWorld2Local(box->body, item->v[1]), item->o.r1));
+	// TODO: meh
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
+	
+	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[0]), cpBodyWorld2Local(box->bodies[0], item->v[1]), item->o->r1));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
 	cpShapeSetUserData(shape, item);
 
-	item->shape = shape;
+	item->shapes.push_back(shape);
 
-	item->body = box->body;
+	//item->bodies.push_back(box->bodies[0]);
 	
 }
 
-void Physics::createSegment(layoutItem *item) {
+void Physics::createSegment(LayoutItem *item) {
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->body, cpBodyWorld2Local(box->body, item->v[0]), cpBodyWorld2Local(box->body, item->v[1]), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[0]), cpBodyWorld2Local(box->bodies[0], item->v[1]), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetUserData(shape, item);
 
-	item->shape = shape;
+	item->shapes.push_back(shape);
 
-	item->body = box->body;
+	item->bodies.push_back(box->bodies[0]);
 
 }
 
-cpBody *Physics::createSlingshot(layoutItem *item) {
+void Physics::createSlingshot(LayoutItem *item) {
 
 	cpVect mid = cpvmult(cpvadd(item->v[0], item->v[1]), 0.5);
 
-	cpFloat area = (item->o.r1 * M_PI) * 2; // approx
-	cpFloat mass = area * item->o.m.d;
+	cpFloat area = (item->o->r1 * M_PI) * 2; // approx
+	cpFloat mass = area * item->o->m->d;
 
 	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, item->v[0], item->v[1])));
 	cpBodySetPos(body, mid);
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
  	// target surface normal;
 	cpVect normal = cpvnormalize(cpvperp(cpvsub(item->v[0], item->v[1])));
@@ -514,44 +519,44 @@ cpBody *Physics::createSlingshot(layoutItem *item) {
 	cpVect grooveA = cpvadd(body->p, cpvmult(normal, _slingshotRestLength));
 	cpVect grooveB = body->p;
 
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpBodyWorld2Local(box->body, grooveB), cpvzero));
-	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
+	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpBodyWorld2Local(box->bodies[0], grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], 0.0f, 0.0f));
 
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupSlingshots);
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
 	cpShapeSetUserData(shape, item);
 
 	// switch
-	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->body, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
+	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(box->bodies[0], grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeSlingshotSwitch);
 
-	item->shape = shape;
+	item->shapes.push_back(shape);
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
-void Physics::createCircle(layoutItem *item) {
+void Physics::createCircle(LayoutItem *item) {
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->body, item->o.r1, cpBodyWorld2Local(box->body, item->v[0])));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], item->o->r1, cpBodyWorld2Local(box->bodies[0], item->v[0])));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetUserData(shape, item);
 
-	item->shape = shape;
+	item->shapes.push_back(shape);
 
-	item->body = box->body;
+	item->bodies.push_back(box->bodies[0]);
 
 }
 
-cpBody *Physics::createTarget(layoutItem *item) {
+void Physics::createTarget(LayoutItem *item) {
 
 	cpVect a = cpv(item->v[0].x, item->v[0].y);
 	cpVect b = cpv(item->v[1].x, item->v[1].y);
@@ -559,8 +564,8 @@ cpBody *Physics::createTarget(layoutItem *item) {
 
 	cpFloat length = cpvdist(a, b);
 
-	cpFloat area = (item->o.r1 * length) * 2;
-	cpFloat mass = area * item->o.m.d;
+	cpFloat area = (item->o->r1 * length) * 2;
+	cpFloat mass = area * item->o->m->d;
 
 	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
 	cpBodySetPos(body, mid);
@@ -572,115 +577,115 @@ cpBody *Physics::createTarget(layoutItem *item) {
 	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
 	cpVect grooveB = body->p;
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpBodyWorld2Local(box->body, grooveB), cpvzero));
-	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->body, body, cpBodyWorld2Local(box->body, grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->body, 0.0f, 0.0f));
+	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpBodyWorld2Local(box->bodies[0], grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], 0.0f, 0.0f));
 
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o.r1));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetCollisionType(shape, CollisionTypeTarget);
 	cpShapeSetGroup(shape, shapeGroupTargets);
 	cpShapeSetUserData(shape, item);
 
 	// switch
-	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->body, _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->body, grooveA)));
+	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->bodies[0], grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
 
-	item->shape = shape;
+	item->shapes.push_back(shape);
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
-cpBody *Physics::createPopbumper(layoutItem *item) {
+void Physics::createPopbumper(LayoutItem *item) {
 
-	cpFloat area = (item->o.r1 * item->o.r1 * M_PI);
-	cpFloat mass = area * item->o.m.d;
+	cpFloat area = (item->o->r1 * item->o->r1 * M_PI);
+	cpFloat mass = area * item->o->m->d;
 
-	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o.r1, cpvzero)));
+	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
 	cpBodySetPos(body, cpv(item->v[0].x, item->v[0].y));
 
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o.r1, cpvzero));
-	cpShapeSetElasticity(shape, item->o.m.e);
-	cpShapeSetFriction(shape, item->o.m.f);
+	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetCollisionType(shape, CollisionTypePopbumper);
 	cpShapeSetGroup(shape, shapeGroupPopbumpers);
 	cpShapeSetUserData(shape, item);
 
-	layoutItem *box = &_layoutItems.find("box")->second;
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(box->body, body, body->p));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->body, body, 0.0f, 0.0f));
+	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(box->bodies[0], body, body->p));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
 
 	body->data = item;
 
-	return body;
+	item->bodies.push_back(body);
 
 }
 
 void Physics::activateMech(const char *mechName) {
 
-	layoutItem item = _layoutItems.find(mechName)->second;
+	LayoutItem *item = &_playfield->getLayout()->find(mechName)->second;
 
-	if (strcmp(item.o.s.c_str(), "flipper") == 0) {
-		flip(&item);
+	if (strcmp(item->o->s.c_str(), "flipper") == 0) {
+		flip(item);
 	}
 
 }
 
 void Physics::deactivateMech(const char *mechName) {
 
-	layoutItem item = _layoutItems.find(mechName)->second;
+	LayoutItem *item = &_playfield->getLayout()->find(mechName)->second;
 
-	if (strcmp(item.o.s.c_str(), "flipper") == 0) {
-		unflip(&item);
+	if (strcmp(item->o->s.c_str(), "flipper") == 0) {
+		unflip(item);
 	}
 
 }
 
-void Physics::flip(layoutItem *flipper) {
+void Physics::flip(LayoutItem *flipper) {
 
-	cpBodyResetForces(flipper->body);
+	cpBodyResetForces(flipper->bodies[0]);
 
 	float dir = flipper->v[0].x < flipper->v[1].x ? 1 : -1;
 
 	// TODO: precompute
 	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
 
-	cpVect anchor = cpvadd(flipper->body->p, cpvmult(cpv(1, 0), offset));
+	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
 
-	cpBodyApplyImpulse(flipper->body, cpv(0, flipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->body, cpv(0, flipForce * dir), anchor);
+	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, flipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->bodies[0], cpv(0, flipForce * dir), anchor);
 
-	anchor = cpvadd(flipper->body->p, cpvmult(cpv(-1, 0), offset));
+	anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), offset));
 
-	cpBodyApplyImpulse(flipper->body, cpv(0, -flipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->body, cpv(0, -flipForce * dir), anchor);
+	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -flipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->bodies[0], cpv(0, -flipForce * dir), anchor);
 
 }
 
-void Physics::unflip(layoutItem *flipper) {
+void Physics::unflip(LayoutItem *flipper) {
 
-	cpBodyResetForces(flipper->body);
+	cpBodyResetForces(flipper->bodies[0]);
 
 	float dir = flipper->v[0].x < flipper->v[1].x ? -1 : 1;
 
 	// TODO: precompute
 	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
 
-	cpVect anchor = cpvadd(flipper->body->p, cpvmult(cpv(1, 0), offset));
+	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
 
-	cpBodyApplyImpulse(flipper->body, cpv(0, unflipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->body, cpv(0, unflipForce * dir), anchor);
+	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, unflipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->bodies[0], cpv(0, unflipForce * dir), anchor);
 
-	anchor = cpvadd(flipper->body->p, cpvmult(cpv(-1, 0), offset));
+	anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), offset));
 
-	cpBodyApplyImpulse(flipper->body, cpv(0, -unflipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->body, cpv(0, -unflipForce * dir), anchor);
+	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -unflipImpulse * dir), anchor);
+	cpBodyApplyForce(flipper->bodies[0], cpv(0, -unflipForce * dir), anchor);
 
 }
 
@@ -732,20 +737,20 @@ void Physics::loadConfig() {
 	lua_close(L);
 
 }
-
+/*
 void Physics::addLayoutItem(layoutItem item) {
 
 	_layoutItems.insert(make_pair(item.n, item));
 
 	for (it_layoutItems it = _layoutItems.begin(); it != _layoutItems.end(); it++) {
-		layoutItem *lprops = &(&*it)->second;
+		LayoutItem *lprops = &(&*it)->second;
 		if (lprops->n == item.n) {
 			this->createObject(lprops);
 		}
 	}
 
 }
-
+*/
 void Physics::loadForces() {
     
     lua_State *L = luaL_newstate();
@@ -857,12 +862,13 @@ bool Physics::getPaused() {
 }
 
 void Physics::resetBallsToInitialPosition() {
-	for (it_layoutItems iterator = _layoutItems.begin(); iterator != _layoutItems.end(); iterator++) {
-		layoutItem item = iterator->second;
-		if (strcmp("ball", item.o.s.c_str()) == 0) {
-			cpBody *body = item.body;
+	for (it_LayoutItem iterator = _playfield->getLayout()->begin(); iterator != _playfield->getLayout()->end(); iterator++) {
+		LayoutItem item = iterator->second;
+		if (strcmp("ball", item.o->s.c_str()) == 0) {
+			cpBody *body = item.bodies[0];
 			cpBodyResetForces(body);
 			cpBodySetPos(body, cpv(item.v[0].x, item.v[0].y));
 		}
 	}
 }
+

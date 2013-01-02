@@ -59,12 +59,12 @@ protected:
 	void loadConfig();
     void loadForces();
 	void initCollisionHandlers();
-	cpBody *createBox(LayoutItem *iprops);
-    cpBody *createBall(LayoutItem *iprops);
-	cpBody *createFlipper(LayoutItem *iprops);
-	cpBody *createTarget(LayoutItem *iprops);
-	cpBody *createPopbumper(LayoutItem *iprops);
-	cpBody *createSlingshot(LayoutItem *iprops);
+	void createBox(LayoutItem *iprops);
+    void createBall(LayoutItem *iprops);
+	void createFlipper(LayoutItem *iprops);
+	void createTarget(LayoutItem *iprops);
+	void createPopbumper(LayoutItem *iprops);
+	void createSlingshot(LayoutItem *iprops);
 	void createSwitch(LayoutItem *iprops);
 	void createSegment(LayoutItem *iprops);
 	void createCircle(LayoutItem *iprops);

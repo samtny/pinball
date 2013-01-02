@@ -7,7 +7,12 @@ using namespace std;
 typedef cpBody Body;
 typedef cpShape Shape;
 
-typedef struct Coord2{float x,y;} Coord2;
+typedef struct Coord2{
+	float x,y;
+	operator cpVect() {
+		return cpv(x, y);
+	};
+} Coord2;
 /// Convenience constructor for Coord2 structs.
 static inline Coord2 coord(const float x, const float y)
 {
