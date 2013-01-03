@@ -441,7 +441,7 @@ void Physics::createFlipper(LayoutItem *item) {
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
 	float diff = item->o->r1 - item->o->r2; // r1-prime
-	float loft = atan2f(diff, length);
+	float loft = atan2f(diff, (float)length);
 	float facelen = diff / sin(loft);
 	cpVect p2p1 = cpvsub(item->v[0], item->v[1]);
 	cpVect p2p1n = cpvnormalize(p2p1);
@@ -454,7 +454,7 @@ void Physics::createFlipper(LayoutItem *item) {
 	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupFlippers);
 
-	loft = -atan2f(diff, length);
+	loft = -atan2f(diff, (float)length);
 	p3n = cpvrotate(p2p1n, cpvforangle(loft));
 	p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
 
@@ -651,10 +651,10 @@ void Physics::flip(LayoutItem *flipper) {
 
 	cpBodyResetForces(flipper->bodies[0]);
 
-	float dir = flipper->v[0].x < flipper->v[1].x ? 1 : -1;
+	float dir = (float)(flipper->v[0].x < flipper->v[1].x ? 1 : -1);
 
 	// TODO: precompute
-	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
+	float offset = (float)cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
 
 	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
 
@@ -672,10 +672,10 @@ void Physics::unflip(LayoutItem *flipper) {
 
 	cpBodyResetForces(flipper->bodies[0]);
 
-	float dir = flipper->v[0].x < flipper->v[1].x ? -1 : 1;
+	float dir = (float)(flipper->v[0].x < flipper->v[1].x ? -1 : 1);
 
 	// TODO: precompute
-	float offset = cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
+	float offset = (float)cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
 
 	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
 

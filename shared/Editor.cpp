@@ -1,14 +1,18 @@
 #include "Editor.h"
 
-#include "chipmunk/chipmunk.h"
-
 #include "PinballBridgeInterface.h"
+
+#include "Playfield.h"
+
+#include "Parts.h"
 
 #include "Game.h"
 
 #include "Physics.h"
 
 #include "Camera.h"
+
+#include "chipmunk/chipmunk.h"
 
 extern "C" {
 #include "lua.h"
@@ -19,12 +23,7 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 
-static Editor *_editorCurrentInstance;
-
-static float _scale = 37;
-
 Editor::Editor(void) {
-	_editorCurrentInstance = this;
 	_state.editMode = EDIT_MODE_NONE;
 	_state.selectionStart.x = 0;
 	_state.selectionStart.y = 0;
@@ -45,6 +44,10 @@ void Editor::init() {
 
 void Editor::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
+}
+
+void Editor::setPlayfield(Playfield *playfield) {
+	_playfield = playfield;
 }
 
 void Editor::setGame(Game *game) {
@@ -102,26 +105,26 @@ const EditObject *Editor::getCurrentEditObject() {
 
 void Editor::dupeItems() {
 
-	map<string, layoutItem> *items = _physics->getLayoutItems();
+	map<string, LayoutItem> *items = _playfield->getLayout();
 
-	map<string, layoutItem> toDupe;
+	map<string, LayoutItem> toDupe;
 
 	float minOffset = 65535;
 
-	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-		layoutItem item = it->second;
+		LayoutItem item = it->second;
 
 		if (item.editing == true) {
 			
 			toDupe[item.n] = item;
-			layoutItem *orig = &(&*it)->second;
+			LayoutItem *orig = &(&*it)->second;
 			orig->editing = false;
 
 			float offset = abs(item.v[0].x - item.v[item.count-1].x);
 
 			if (offset == 0) {
-				offset = item.o.r1 * 2;
+				offset = item.o->r1 * 2;
 			}
 
 			if (offset < minOffset) {
@@ -134,9 +137,9 @@ void Editor::dupeItems() {
 
 	if (toDupe.size() > 0) this->pushState();
 
-	for (it_layoutItems it = toDupe.begin(); it != toDupe.end(); it++) {
+	for (it_LayoutItem it = toDupe.begin(); it != toDupe.end(); it++) {
 	
-		layoutItem item = it->second;
+		LayoutItem item = it->second;
 
 		if (item.editing == true) {
 
@@ -146,13 +149,14 @@ void Editor::dupeItems() {
 
 			// rename;
 			char num[21];
-			sprintf(num, "%d", _currentEditObjectName);
-			item.n = "_" + item.o.n + num;
+			sprintf_s(num, "%d", _currentEditObjectName);
+			item.n = "_" + item.o->n + num;
 			_currentEditObjectName++;
-
+			
 			item.editing = true;
 
-			_physics->addLayoutItem(item);
+			//_physics->addLayoutItem(item);
+			_playfield->getLayout()->insert(make_pair(item.n, item));
 
 		}
 
@@ -162,22 +166,22 @@ void Editor::dupeItems() {
 
 void Editor::deleteItems() {
 
-	map<string, layoutItem> *items = _physics->getLayoutItems();
+	map<string, LayoutItem> *items = _playfield->getLayout();
 	vector<string> toRemove;
 
-	layoutItem box;
+	LayoutItem box;
 
 	bool found = false;
 
-	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-		layoutItem item = it->second;
+		LayoutItem item = it->second;
 
 		if (item.editing == true && strcmp(item.n.c_str(), "box") != 0) {
 
 			if (found == false) {
 				this->pushState();
-				found == true;
+				found = true;
 			}
 
 			_physics->destroyObject(&item);
@@ -193,14 +197,14 @@ void Editor::deleteItems() {
 
 		if (found == false) {
 			this->pushState();
-			found == true;
+			found = true;
 		}
 
 		_physics->destroyObject(&box);
 		toRemove.push_back(box.n);
 	}
 
-	for (int i = 0; i < toRemove.size(); i++) {
+	for (int i = 0; i < (int)toRemove.size(); i++) {
 
 		items->erase(items->find(toRemove[i]));
 
@@ -213,13 +217,13 @@ void Editor::undo() {
 	// TODO: this is a complete hack job...
 	if (_history.size() > 1) {
 
-		map<string, layoutItem> *items = _physics->getLayoutItems();
+		map<string, LayoutItem> *items = _playfield->getLayout();
 
-		layoutItem box;
+		LayoutItem box;
 
-		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-			layoutItem item = it->second;
+			LayoutItem item = it->second;
 
 			if (strcmp(item.n.c_str(), "box") != 0) {
 
@@ -241,14 +245,14 @@ void Editor::undo() {
 
 		EditorState *state = &_history.back();
 
-		layoutItem *newBox = &state->items["box"];
+		LayoutItem *newBox = &state->items["box"];
 
 		_physics->createObject(newBox);
 		items->insert(make_pair("box", *newBox));
 
-		for (it_layoutItems it = state->items.begin(); it != state->items.end(); it++) {
+		for (it_LayoutItem it = state->items.begin(); it != state->items.end(); it++) {
 
-			layoutItem *item = &(&*it)->second;
+			LayoutItem *item = &(&*it)->second;
 
 			if (strcmp(item->n.c_str(), "box") != 0) {
 				_physics->createObject(item);
@@ -263,7 +267,7 @@ void Editor::undo() {
 
 void Editor::save() {
 
-	map<string, layoutItem> *items = _physics->getLayoutItems();
+	map<string, LayoutItem> *items = _playfield->getLayout();
 
 	const char *savePath = _bridgeInterface->getPathForScriptFileName("user.layout.lua");
 
@@ -274,15 +278,15 @@ void Editor::save() {
 	layout << "layout = {\n";
 
 	int count = 0;
-	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-		layoutItem item = it->second;
+		LayoutItem item = it->second;
 
 		if (count > 0) layout << ",\n";
 
 		layout << "\t" << item.n << " = {\n";
 
-		layout << "\t\t" << "o = \"" << item.o.n << "\"";
+		layout << "\t\t" << "o = \"" << item.o->n << "\"";
 
 		if (item.count > 0) {
 
@@ -328,13 +332,13 @@ void Editor::load() {
 
 	// TODO: not be a complete hack job
 
-	map<string, layoutItem> *items = _physics->getLayoutItems();
+	map<string, LayoutItem> *items = _playfield->getLayout();
 
-	layoutItem box;
+	LayoutItem box;
 
-	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-		layoutItem item = it->second;
+		LayoutItem item = it->second;
 
 		if (strcmp(item.n.c_str(), "box") != 0) {
 
@@ -357,16 +361,16 @@ void Editor::load() {
 
 
 
-	layoutItem *newBox = &_layout["box"];
+	LayoutItem *newBox = &_layout["box"];
 
 	_physics->applyScale(newBox);
 	_physics->createObject(newBox);
 
 	items->insert(make_pair("box", *newBox));
 
-	for (it_layoutItems it = _layout.begin(); it != _layout.end(); it++) {
+	for (it_LayoutItem it = _layout.begin(); it != _layout.end(); it++) {
 
-		layoutItem *item = &(&*it)->second;
+		LayoutItem *item = &(&*it)->second;
 
 		if (strcmp(item->n.c_str(), "box") != 0) {
 			_physics->applyScale(item);
@@ -381,7 +385,7 @@ void Editor::load() {
 void Editor::pushState() {
 
 	// add current editor state to history;
-	map<string, layoutItem> items = *_physics->getLayoutItems();
+	map<string, LayoutItem> items = *_playfield->getLayout();
 	_state.items = items;
 	_history.push_back(_state);
 
@@ -393,7 +397,7 @@ void Editor::insertItems() {
 	case EDIT_MODE_INSERT_BEGIN:
 		{
 			EditObject obj;
-			obj.object = _objects[_state.editObjectName];
+			obj.object = &_parts[_state.editObjectName];
 			obj.vCurrent = 0;
 			_currentEditObject = obj;
 		}
@@ -404,35 +408,36 @@ void Editor::insertItems() {
 			_currentEditObject.verts[_currentEditObject.vCurrent] = _camera->transform(v);
 			_currentEditObject.vCurrent++;
 
-			if (_currentEditObject.vCurrent == _currentEditObject.object.v) {
+			if (_currentEditObject.vCurrent == _currentEditObject.object->v) {
 				
 				this->pushState();
 
-				layoutItem l;
+				LayoutItem l;
 				l.o = _currentEditObject.object;
 
 				l.s = 1;
 
-				float localScale = _scale * 1 / l.s;
+				double localScale = _scale * 1 / l.s;
 
-				l.o.r1 *= 1 / localScale;
-				l.o.r2 *= 1 / localScale;
+				l.o->r1 *= 1 / (float)localScale;
+				l.o->r2 *= 1 / (float)localScale;
 
 				char num[21];
-				sprintf(num, "%d", _currentEditObjectName);
-				l.n = "_" + _currentEditObject.object.n + num;
+				sprintf_s(num, "%d", _currentEditObjectName);
+				l.n = "_" + _currentEditObject.object->n + num;
 				_currentEditObjectName++;
 
-				l.count = _currentEditObject.object.v;
+				l.count = _currentEditObject.object->v;
 				l.editing = false;
 				
-				for (int i = 0; i < _currentEditObject.object.v; i++) {
+				for (int i = 0; i < _currentEditObject.object->v; i++) {
 					l.v[i].x = _currentEditObject.verts[i].x;
 					l.v[i].y = _currentEditObject.verts[i].y;
 				}
 				
-				_physics->addLayoutItem(l);
-				
+				//_physics->addLayoutItem(l);
+				_playfield->getLayout()->insert(make_pair(l.n, l));
+
 				// reset;
 				_currentEditObject.vCurrent = 0;
 
@@ -507,7 +512,7 @@ void Editor::loadMaterials() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				materialProperties props = { "", -1, -1, -1 };
+				Material props = { "", -1, -1, -1 };
 
 				// "value" is properties table;
 				lua_pushnil(L);
@@ -548,18 +553,72 @@ void Editor::loadMaterials() {
 
 }
 
-
-void Editor::loadObjects() {
+void Playfield::loadTextures(void) {
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"objects.lua");
+	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
+
+	int error = luaL_dofile(L, texturesFileName);
+	if (!error) {
+
+        lua_getglobal(L, "textures");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+
+				Texture props;
+				props.n = name;
+				
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+                    
+					if (strcmp("filename", key) == 0) {
+						
+						props.filename = lua_tostring(L, -1);
+                        
+					}
+                    
+					lua_pop(L, 1);
+				}
+
+				_textures.insert(make_pair(name, props));
+
+				lua_pop(L, 1);
+
+			}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Playfield::loadParts(void) {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"parts.lua");
 
 	int error = luaL_dofile(L, objectsPath);
 	if (!error) {
 
-        lua_getglobal(L, "objects");
+        lua_getglobal(L, "parts");
 
 		if (lua_istable(L, -1)) {
 			
@@ -569,7 +628,7 @@ void Editor::loadObjects() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				objectProperties props = { name, -1, "", -1, -1, { "", -1, -1, -1, }, { "", -1, -1, -1, -1 } };
+				Part props;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -578,10 +637,8 @@ void Editor::loadObjects() {
 
 					if (strcmp("s", key) == 0) {
 						props.s = lua_tostring(L, -1);
-					} else if (strcmp("v", key) == 0) {
-						props.v = (int)lua_tonumber(L, -1);
 					} else if (strcmp("m", key) == 0) {
-						props.m = _materials[lua_tostring(L, -1)];
+						props.m = &_materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
 						props.r1 = (float)lua_tonumber(L, -1);
 					} else if (strcmp("r2", key) == 0) {
@@ -594,7 +651,7 @@ void Editor::loadObjects() {
 							const char *tkey = lua_tostring(L, -2);
 
 							if (strcmp("n", tkey) == 0) {
-								props.t.n = lua_tostring(L, -1);
+								props.t.t = &_textures[lua_tostring(L, -1)];
 							} else if (strcmp("x", tkey) == 0) {
 								props.t.x = (int)lua_tonumber(L, -1);
 							} else if (strcmp("y", tkey) == 0) {
@@ -616,7 +673,7 @@ void Editor::loadObjects() {
 					lua_pop(L, 1);
 				}
 				
-				_objects.insert(make_pair(name, props));
+				_parts.insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 			}
@@ -654,7 +711,7 @@ void Editor::loadLayout() {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				layoutItem props = { name };
+				LayoutItem props = { name };
 				props.s = -1;
 				props.editing = false;
 
@@ -665,7 +722,7 @@ void Editor::loadLayout() {
 
 					if (strcmp("o", key) == 0) {
 						
-						props.o = _objects[lua_tostring(L, -1)];
+						props.o = &_parts[lua_tostring(L, -1)];
 
 					} else if (strcmp("v", key) == 0) {
 						
@@ -676,7 +733,7 @@ void Editor::loadLayout() {
 						{
 
 							// init vect object
-							cpVect v;
+							Coord2 v;
 
 							// get the 2d table
 							lua_rawgeti(L, -1, i);
@@ -696,7 +753,7 @@ void Editor::loadLayout() {
 							
 							// assign vect to array
 							props.v[i-1] = v;
-
+							
 						}
 
 						props.count = length;
@@ -732,14 +789,14 @@ void Editor::loadLayout() {
 
 void Editor::selectItems() {
 
-	map<string, layoutItem> *items = _physics->getLayoutItems();
+	map<string, LayoutItem> *items = _playfield->getLayout();
 
 	Coord2 start = _camera->transform(_state.selectionStart);
 	Coord2 end = _camera->transform(_state.selectionEnd);
 
-	for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 	
-		layoutItem *item = &(&*it)->second;
+		LayoutItem *item = &(&*it)->second;
 
 		
 		bool inside = false;
@@ -771,9 +828,9 @@ vector<string> Editor::getObjectNames() {
 
 	vector<string> names;
 
-	for (it_objectProps it = _objects.begin(); it != _objects.end(); it++) {
+	for (it_Part it = _parts.begin(); it != _parts.end(); it++) {
 
-		objectProperties object = it->second;
+		Part object = it->second;
 
 		names.push_back(object.n);
 
@@ -794,14 +851,14 @@ void Editor::moveItems() {
 
 		this->pushState();
 
-		map<string, layoutItem> *items = _physics->getLayoutItems();
+		map<string, LayoutItem> *items = _playfield->getLayout();
 
 		Coord2 start = _camera->transform(_state.selectionStart);
 		Coord2 end = _camera->transform(_state.selectionEnd);
 
-		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 	
-			layoutItem *item = &(&*it)->second;
+			LayoutItem *item = &(&*it)->second;
 
 			if (item->editing == true) {
 
@@ -833,14 +890,14 @@ void Editor::rotateItems() {
 
 		this->pushState();
 
-		map<string, layoutItem> *items = _physics->getLayoutItems();
+		map<string, LayoutItem> *items = _playfield->getLayout();
 
 		Coord2 start = _state.selectionStart;
 		Coord2 end = _state.selectionEnd;
 
-		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 			
-			layoutItem *item = &(&*it)->second;
+			LayoutItem *item = &(&*it)->second;
 
 			if (item->editing == true) {
 
@@ -861,7 +918,7 @@ void Editor::rotateItems() {
 				Coord2 rotvec = coordsub(m, c);
 
 				// rot
-				float rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
+				double rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
 
 				// rotate all points around c
 				for (int i = 0; i < item->count; i++) {
