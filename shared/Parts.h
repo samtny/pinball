@@ -25,6 +25,7 @@ typedef struct Texture {
 	int w;
 	int h;
 } Texture;
+typedef map<string, Texture>::iterator it_Texture;
 
 typedef struct TextureInfo {
 	Texture *t;

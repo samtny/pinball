@@ -81,7 +81,7 @@ static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
 
 void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fillColor);
 
-void DrawPoints(float size, int count, cpVect *verts, Color color);
+void DrawPoints(float size, int count, Coord2 *verts, Color color);
 
 #endif
 

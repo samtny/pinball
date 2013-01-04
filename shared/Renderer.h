@@ -1,18 +1,18 @@
 
-#pragma once
+#ifndef __PINBALL_RENDERER__
+#define __PINBALL_RENDERER__
 
-// TODO: move typedefs out to new header and move folowing to implementation file
-#include "PinballBridgeInterface.h"
-#include "Parts.h"
-
+using namespace std;
 #include <string>
 #include <map>
 
+class PinballBridgeInterface;
 class Physics;
+class Playfield;
 class Camera;
 class Editor;
-struct layoutItem;
-struct cpBody;
+struct LayoutItem;
+struct Overlay;
 
 namespace glfont
 {
@@ -25,6 +25,7 @@ public:
 	Renderer(void);
 	~Renderer(void);
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	void setPlayfield(Playfield *playfield);
 	void setPhysics(Physics *physics);
 	void setCamera(Camera *camera);
 	void setEditor(Editor *editor);
@@ -35,9 +36,9 @@ public:
 	void draw(void);
 	void drawPlayfield(void);
 	void drawObject(cpBody *body, void *data);
-	void drawAnchors(layoutItem *item);
-	void drawBall(layoutItem *item);
-	void drawBox(layoutItem *item);
+	void drawAnchors(LayoutItem *item);
+	void drawBall(LayoutItem *item);
+	void drawBox(LayoutItem *item);
 	void drawOverlays(void);
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
@@ -46,14 +47,16 @@ public:
 	float getZoomLevel();
 private:
 	PinballBridgeInterface *_bridgeInterface;
+	Playfield *_playfield;
 	Physics *_physics;
 	Camera *_camera;
 	Editor *_editor;
 	glfont::GLFont *_glfont;
 	HostProperties *_displayProperties;
-	map<string, textureProperties> _textures;
-	map<string, overlayProperties> _overlays;
-	map<string, layoutItem> *_layoutItems;
+	map<string, Texture> *_textures;
+	map<string, Overlay> *_overlays;
 	float _scale;
 };
+
+#endif
 

@@ -1,5 +1,9 @@
 #include "Renderer.h"
 
+#include "PinballBridgeInterface.h"
+
+#include "Playfield.h"
+
 #include "Physics.h"
 
 #include "Camera.h"
@@ -52,10 +56,12 @@ void Renderer::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
 }
 
+void Renderer::setPlayfield(Playfield *playfield) {
+	_playfield = playfield;
+}
+
 void Renderer::setPhysics(Physics *physics) {
 	_physics = physics;
-	// TODO: big refactor coming up (game objects all stored in "delegate" class of some kind);
-	_layoutItems = _physics->getLayoutItems();
 }
 
 void Renderer::setEditor(Editor *editor) {
@@ -88,10 +94,10 @@ void Renderer::init(void) {
 	this->loadFonts();
 	this->loadOverlays();
 
-	for (it_textureProperties iterator = _textures.begin(); iterator != _textures.end(); iterator++) {
+	for (it_Texture iterator = _textures->begin(); iterator != _textures->end(); iterator++) {
 
 		string name = (&*iterator)->first;
-		textureProperties *props = &(&*iterator)->second;
+		Texture *props = &(&*iterator)->second;
 
 		glGenTextures(1, &props->gl_index);
 		glBindTexture(GL_TEXTURE_2D, props->gl_index);
@@ -100,7 +106,7 @@ void Renderer::init(void) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// TODO: change to "inject"...
-		Texture *tex = _bridgeInterface->createRGBATexture((void *)props->filename.c_str());
+		GLTexture *tex = _bridgeInterface->createRGBATexture((void *)props->filename.c_str());
 		
 #ifdef __APPLE__
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void *)tex->data);
@@ -115,10 +121,10 @@ void Renderer::init(void) {
 
 	}
 
-	const layoutItem *box = &_physics->getLayoutItems()->find("box")->second;
+	const LayoutItem box = _playfield->getLayout()->find("box")->second;
 	
 	// TODO: move to setter for "_displayProperties" instance??
-	_scale = _displayProperties->viewportWidth / box->width;
+	_scale = _displayProperties->viewportWidth / box.width;
 
 }
 
@@ -141,7 +147,7 @@ void Renderer::loadOverlays(void) {
 				
 				const char *name = lua_tostring(L, -2);
 
-				overlayProperties props;
+				Overlay props;
 				props.n = name;
 
 				lua_pushnil(L);
@@ -187,7 +193,7 @@ void Renderer::loadOverlays(void) {
 
 				lua_pop(L, 1);
 
-				_overlays[name] = props;
+				_overlays->insert(make_pair(props.n, props));
 
 			}
 
@@ -223,8 +229,8 @@ void Renderer::loadTextures(void) {
 				
 				const char *name = lua_tostring(L, -2);
 
-				textureProperties props = { "", "", -1 };
-				props.name = name;
+				Texture props = { "", "", -1 };
+				props.n = name;
 				
 				lua_pushnil(L);
 				while (lua_next(L, -2) != 0) {
@@ -240,7 +246,7 @@ void Renderer::loadTextures(void) {
 					lua_pop(L, 1);
 				}
 
-				_textures.insert(make_pair(name, props));
+				_textures->insert(make_pair(name, props));
 
 				lua_pop(L, 1);
 
@@ -287,7 +293,7 @@ static void _drawObject(cpBody *body, void *data) {
 
 static void _drawAnchors(cpBody *body, void *data) {
 	if (body->data) {
-		layoutItem *item = (layoutItem *)body->data;
+		LayoutItem *item = (LayoutItem *)body->data;
 		if (item->editing == true) {
 			renderer_CurrentInstance->drawAnchors(item);
 		}
@@ -329,7 +335,7 @@ void Renderer::drawPlayfield() {
 			const EditObject *o = _editor->getCurrentEditObject();
 
 			if (o->vCurrent > 0) {
-				cpVect verts[200];
+				Coord2 verts[200];
 				for (int i = 0; i < o->vCurrent; i++) {
 					verts[i].x = o->verts[i].x;
 					verts[i].y = o->verts[i].y;
@@ -352,10 +358,10 @@ void Renderer::drawPlayfield() {
 			Coord2 start = s->selectionStart;
 			Coord2 end = s->selectionEnd;
 		}
-		map<string, layoutItem> *items = _physics->getLayoutItems();
-		for (it_layoutItems it = items->begin(); it != items->end(); it++) {
+		map<string, LayoutItem> *items = _playfield->getLayout();
+		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
 
-			layoutItem item = it->second;
+			LayoutItem item = it->second;
 
 			if (item.editing == true) {
 				
@@ -393,7 +399,7 @@ void Renderer::drawPlayfield() {
 
 				glTranslatef(tx, ty, 0);
 
-				DrawPoints(20, item.count, item.v, EDIT_COLOR);
+				DrawPoints(20, item.count, &item.v.front() , EDIT_COLOR);
 				
 				glPopMatrix();
 
@@ -416,20 +422,20 @@ void Renderer::drawObject(cpBody *body, void *bground) {
 	bool background = (bool)bground;
 
 	if (body->data && bground) {
-		layoutItem *item = (layoutItem *)body->data;
-		if (strcmp(item->o.s.c_str(), "box") == 0) {
+		LayoutItem *item = (LayoutItem *)body->data;
+		if (strcmp(item->o->s.c_str(), "box") == 0) {
 			this->drawBox(item);
 		}
 	} else if (body->data) {
-		layoutItem *item = (layoutItem *)body->data;
-		if (strcmp(item->o.s.c_str(), "ball") == 0) {
+		LayoutItem *item = (LayoutItem *)body->data;
+		if (strcmp(item->o->s.c_str(), "ball") == 0) {
 			this->drawBall(item);
 		}
 	}
 
 }
 
-void Renderer::drawBox(layoutItem *item) {
+void Renderer::drawBox(LayoutItem *item) {
 
 	static const GLfloat verts[] = {
 		-0.5, -0.5,
@@ -448,9 +454,9 @@ void Renderer::drawBox(layoutItem *item) {
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-	cpBody *ball = item->body;
-	textureProperties *t = &_textures[item->o.t.n];
-
+	cpBody *ball = item->bodies[0];
+	Texture *t = item->o->t.t;
+	
 	float posX = (item->v[3].x- item->v[0].x) / 4.0f;
 	float posY = (item->v[1].y - item->v[0].y) / 2.0f;
 
@@ -472,7 +478,7 @@ void Renderer::drawBox(layoutItem *item) {
 
 }
 
-void Renderer::drawBall(layoutItem *item) {
+void Renderer::drawBall(LayoutItem *item) {
 
 	static const GLfloat verts[] = {
 		-0.5, -0.5,
@@ -491,8 +497,8 @@ void Renderer::drawBall(layoutItem *item) {
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-	cpBody *ball = item->body;
-	textureProperties *t = &_textures[item->o.t.n];
+	cpBody *ball = item->bodies[0];
+	Texture *t = item->o->t.t;
 
 	float posX = (float)ball->p.x;
 	float posY = (float)ball->p.y;
@@ -500,7 +506,7 @@ void Renderer::drawBall(layoutItem *item) {
 	glPushMatrix();
 	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef(item->o.r1 * 2, item->o.r1 * 2, 0);
+	glScalef(item->o->r1 * 2, item->o->r1 * 2, 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
 	//glEnable(GL_TEXTURE_2D);
@@ -517,7 +523,7 @@ void Renderer::drawBall(layoutItem *item) {
 
 void Renderer::setOverlayText(const char *overlayName, const char *text) {
 
-	overlayProperties *props = &_overlays[overlayName];
+	Overlay *props = &_overlays->find(overlayName)->second;
 	props->v = text;
 
 }
@@ -546,9 +552,9 @@ void Renderer::drawOverlays() {
 
 	glEnable(GL_TEXTURE_2D);
 
-	for (it_overlayProperties it = _overlays.begin(); it != _overlays.end(); it++) {
+	for (it_Overlay it = _overlays->begin(); it != _overlays->end(); it++) {
 
-		overlayProperties props = it->second;
+		Overlay props = it->second;
 
 		if (strcmp(props.t.c_str(), "text") == 0) {
 		
@@ -590,7 +596,7 @@ void Renderer::drawOverlays() {
 			glVertexPointer(2, GL_FLOAT, 0, verts);
 			glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-			textureProperties *t = &_textures[props.x];
+			Texture *t = &_textures->find(props.x)->second;
 
 			glPushMatrix();
 

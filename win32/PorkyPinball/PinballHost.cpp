@@ -53,6 +53,7 @@ void PinballHost::init() {
 
 	Renderer *r = new Renderer();
 	r->setBridgeInterface(bi);
+	r->setPlayfield(f);
 	r->setPhysics(p);
 	r->setCamera(c);
 	r->setEditor(t);
