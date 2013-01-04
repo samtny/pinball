@@ -174,7 +174,7 @@ void GlutEngine::updateMenuEditorItems() {
 
 	vector<string> names = _editor->getObjectNames();
 
-	for (int i = 0; i < names.size(); i++) {
+	for (int i = 0; i < (int)names.size(); i++) {
 		glutAddMenuEntry(names[i].c_str(), i);
 	}
 

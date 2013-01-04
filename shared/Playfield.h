@@ -4,10 +4,8 @@ using namespace std;
 #include <map>
 
 class PinballBridgeInterface;
-struct Material;
-struct Texture;
-struct Part;
-struct LayoutItem;
+
+#include "Parts.h"
 
 class Playfield {
 public:

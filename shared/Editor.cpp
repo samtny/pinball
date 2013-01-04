@@ -39,7 +39,8 @@ Editor::~Editor(void) {
 void Editor::init() {
 	this->loadConfig();
 	this->loadMaterials();
-	this->loadObjects();
+	this->loadTextures();
+	this->loadParts();
 }
 
 void Editor::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
@@ -363,7 +364,7 @@ void Editor::load() {
 
 	LayoutItem *newBox = &_layout["box"];
 
-	_physics->applyScale(newBox);
+	//_physics->applyScale(newBox);
 	_physics->createObject(newBox);
 
 	items->insert(make_pair("box", *newBox));
@@ -373,7 +374,7 @@ void Editor::load() {
 		LayoutItem *item = &(&*it)->second;
 
 		if (strcmp(item->n.c_str(), "box") != 0) {
-			_physics->applyScale(item);
+			//_physics->applyScale(item);
 			_physics->createObject(item);
 			items->insert(make_pair(item->n, *item));
 		}
@@ -553,7 +554,7 @@ void Editor::loadMaterials() {
 
 }
 
-void Playfield::loadTextures(void) {
+void Editor::loadTextures(void) {
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
@@ -608,7 +609,7 @@ void Playfield::loadTextures(void) {
 
 }
 
-void Playfield::loadParts(void) {
+void Editor::loadParts(void) {
 
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);

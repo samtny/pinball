@@ -59,7 +59,7 @@ void Playfield::loadMaterials(void) {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				Material m = { "", -1, -1, -1 };
+				Material m;
 
 				// "value" is properties table;
 				lua_pushnil(L);
@@ -176,6 +176,7 @@ void Playfield::loadParts(void) {
 				const char *name = lua_tostring(L, -2);
 
 				Part props;
+				props.n = name;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {

@@ -98,7 +98,7 @@ void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fil
 
 }
 
-void DrawPoints(float size, int count, cpVect *verts, Color color)
+void DrawPoints(float size, int count, Coord2 *verts, Color color)
 {
 
 	glVertexPointer(2, GL_FLOAT, 0, verts);

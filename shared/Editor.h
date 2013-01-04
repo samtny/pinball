@@ -73,7 +73,8 @@ public:
 	void load();
 	void loadConfig();
 	void loadMaterials();
-	void loadObjects();
+	void loadTextures();
+	void loadParts();
 	void loadLayout();
 	vector<string> getObjectNames();
 private:

@@ -287,10 +287,6 @@ void Renderer::draw(void) {
 
 }
 
-static void _drawObject(cpBody *body, void *data) {
-	renderer_CurrentInstance->drawObject(body, data);
-}
-
 static void _drawAnchors(cpBody *body, void *data) {
 	if (body->data) {
 		LayoutItem *item = (LayoutItem *)body->data;
@@ -320,7 +316,14 @@ void Renderer::drawPlayfield() {
 
 	// TODO: separate "drawBackgrounds" method plzz...
 	glEnable(GL_TEXTURE_2D);
-	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
+	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
+	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
+
+		LayoutItem item = it->second;
+
+		drawObject(&item);
+
+	}
 	glDisable(GL_TEXTURE_2D);
 
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
@@ -387,7 +390,7 @@ void Renderer::drawPlayfield() {
 					Coord2 rotvec = coordsub(m, c);
 
 					// rot
-					rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
+					rot = atan2f(rotvec.y, rotvec.x) * (180.0f / (float)M_PI);
 
 					// rotate
 					glRotatef(rot, 0, 0, 1);
@@ -412,27 +415,26 @@ void Renderer::drawPlayfield() {
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
 
 	glEnable(GL_TEXTURE_2D);
-	cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
+	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
+	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
+
+		LayoutItem item = it->second;
+
+		drawObject(&item);
+
+	}
 	glDisable(GL_TEXTURE_2D);
 
 }
 
-void Renderer::drawObject(cpBody *body, void *bground) {
+void Renderer::drawObject(LayoutItem *item) {
 
-	bool background = (bool)bground;
-
-	if (body->data && bground) {
-		LayoutItem *item = (LayoutItem *)body->data;
-		if (strcmp(item->o->s.c_str(), "box") == 0) {
-			this->drawBox(item);
-		}
-	} else if (body->data) {
-		LayoutItem *item = (LayoutItem *)body->data;
-		if (strcmp(item->o->s.c_str(), "ball") == 0) {
-			this->drawBall(item);
-		}
+	if (strcmp(item->o->s.c_str(), "box") == 0) {
+		this->drawBox(item);
+	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
+		this->drawBall(item);
 	}
-
+	
 }
 
 void Renderer::drawBox(LayoutItem *item) {
@@ -604,17 +606,17 @@ void Renderer::drawOverlays() {
 			float txY = 0;
 			const char *align = props.a.c_str();
 			if (strcmp(align, "bl") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5;
-				txY = props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5;
+				txX = props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5f;
+				txY = props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5f;
 			} else if (strcmp(align, "c") == 0) {
 				txX = props.p.x * _displayProperties->viewportWidth;
 				txY = props.p.y * _displayProperties->viewportHeight;
 			} else if (strcmp(align, "r") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5;
+				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f;
 				txY = props.p.y * _displayProperties->viewportHeight;
 			} else if (strcmp(align, "tr") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5;
-				txY = props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5;
+				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f;
+				txY = props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5f;
 			}
 
 			glTranslatef(txX, txY, 0);

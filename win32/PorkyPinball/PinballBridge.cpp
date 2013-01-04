@@ -46,7 +46,7 @@ const char *PinballBridgeInterface::getPathForTextureFileName(void *textureFilen
 	return nativeInstance->getPathForTextureFilename(textureFilename);
 }
 
-Texture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
+GLTexture *PinballBridgeInterface::createRGBATexture(void *textureFilename) {
 	PinballBridge *nativeInstance = (PinballBridge *)_this;
 	return nativeInstance->createRGBATexture(textureFilename);
 }
@@ -91,6 +91,8 @@ void PinballBridgeInterface::playSound(void * soundName) {
 	// TODO: something
 }
 
+#pragma warning( disable : 4996 )
+
 const char *PinballBridge::getPathForScriptFileName(void *scriptFileName) {
 	
 	const char *p = "..\\..\\shared\\";
@@ -127,9 +129,9 @@ const char *PinballBridge::getPathForTextureFilename(void *textureFilename) {
 
 }
 
-Texture *PinballBridge::createRGBATexture(void *textureFilename) {
+GLTexture *PinballBridge::createRGBATexture(void *textureFilename) {
 
-	Texture *tex = new Texture();
+	GLTexture *tex = new GLTexture();
 
 	ilInit();
 	ILuint imageName;

@@ -13,7 +13,7 @@ public:
 	const char * getGameName();
 	const char * getPathForScriptFileName(void * scriptFileName);
 	const char * getPathForTextureFilename(void * textureFilename);
-	Texture *createRGBATexture(void *textureFilename);
+	GLTexture *createRGBATexture(void *textureFilename);
     HostProperties *getHostProperties();
 	void playSound(void * soundName);
 	void addTimer(float duration, int timerId);

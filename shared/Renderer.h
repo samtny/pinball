@@ -7,11 +7,13 @@ using namespace std;
 #include <map>
 
 class PinballBridgeInterface;
+struct HostProperties;
 class Physics;
 class Playfield;
 class Camera;
 class Editor;
 struct LayoutItem;
+struct Texture;
 struct Overlay;
 
 namespace glfont
@@ -35,7 +37,7 @@ public:
 	void loadOverlays(void);
 	void draw(void);
 	void drawPlayfield(void);
-	void drawObject(cpBody *body, void *data);
+	void drawObject(LayoutItem *item);
 	void drawAnchors(LayoutItem *item);
 	void drawBall(LayoutItem *item);
 	void drawBox(LayoutItem *item);

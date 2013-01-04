@@ -241,7 +241,6 @@ void Physics::initCollisionHandlers(void) {
 cpSpace *Physics::getSpace() {
 	return _space;
 }
-
 /*
 void Physics::applyScale(LayoutItem *iprops) {
 
@@ -259,7 +258,6 @@ void Physics::applyScale(LayoutItem *iprops) {
 	
 }
 */
-
 float Physics::getScale() {
 	return scale;
 }
