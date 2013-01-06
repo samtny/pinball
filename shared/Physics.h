@@ -14,9 +14,6 @@ struct cpSpace;
 struct cpBody;
 struct cpArbiter;
 
-#include <string>
-#include <map>
-
 class Physics
 {
 public:

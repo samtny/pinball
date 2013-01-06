@@ -27,6 +27,9 @@ extern "C" {
 	#include <GL/GLU.h>
 #endif
 
+using std::string;
+using std::map;
+
 typedef struct CameraMode {
 	string name;
 	CameraType t;
@@ -317,8 +320,8 @@ Coord2 Camera::transform(Coord2 coord) {
 
 	float _activeCameraModeH = _activeCameraMode->w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
 
-	float tx = coord.x * 1 / _scale + _activeCameraMode->c.x - (_activeCameraMode->w / 2.0f);
-	float ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode->c.y - (_activeCameraModeH / 2.0f);
+	cpFloat tx = coord.x * 1 / _scale + _activeCameraMode->c.x - (_activeCameraMode->w / 2.0f);
+	cpFloat ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode->c.y - (_activeCameraModeH / 2.0f);
 
 	Coord2 transformed = {tx, ty};
 
@@ -334,9 +337,9 @@ void Camera::applyTransform(void) {
 	{
 	case CAMERA_TYPE_FIXED: {
 
-		float tx = _activeCameraMode->c.x * _scale - (_displayProperties->viewportWidth / 2.0f);
+		float tx = (float)(_activeCameraMode->c.x * _scale - (_displayProperties->viewportWidth / 2.0f));
 
-		float ty = _activeCameraMode->c.y * _scale - (_displayProperties->viewportHeight / 2.0f);
+		float ty = (float)(_activeCameraMode->c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
 
 		glTranslatef(-tx, -ty, 0);
 
@@ -366,15 +369,15 @@ void Camera::applyTransform(void) {
 			}
 		}
 
-		float minY = box.v[0].y;
-		float maxY = box.v[1].y;
+		float minY = (float)box.v[0].y;
+		float maxY = (float)box.v[1].y;
 
 		float posY = 0;
 
 		posY = (float)lowBall.bodies[0]->p.y;
 		posY -= lowBall.o->r1;
 
-		posY -= _activeCameraMode->b.y; // margin
+		posY -= (float)_activeCameraMode->b.y; // margin
 
 		if (posY < minY) {
 			posY = minY;

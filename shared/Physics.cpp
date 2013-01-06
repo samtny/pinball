@@ -19,6 +19,9 @@ extern "C" {
 #include "lualib.h"
 }
 
+using std::string;
+using std::map;
+
 static Physics *physics_currentInstance;
 
 //static cpSpace *_space;

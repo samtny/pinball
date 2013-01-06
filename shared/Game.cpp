@@ -13,6 +13,9 @@ extern "C" {
 #include "lua/lualib.h"
 }
 
+using std::string;
+using std::vector;
+
 Game::Game(void) {
 	_paused = false;
 }

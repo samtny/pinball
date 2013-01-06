@@ -14,7 +14,7 @@ typedef enum CameraType {
 } CameraType;
 
 typedef struct CameraEffect {
-	string n;	
+	std::string n;	
 	float d;
 	float aStart;
 	float aEnd;
@@ -55,10 +55,10 @@ private:
 	float _scale;
 	float _minZoomLevel;
 	float _maxZoomLevel;
-	map<string, CameraEffect> _effects;
-	vector<CameraEffect> _activeEffects;
+	std::map<std::string, CameraEffect> _effects;
+	std::vector<CameraEffect> _activeEffects;
 	CameraType _type;
-	map<string, CameraMode> _cameraModes;
+	std::map<std::string, CameraMode> _cameraModes;
 	CameraMode *_activeCameraMode;
 };
 

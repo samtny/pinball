@@ -2,6 +2,7 @@
 #include "PhysicsDelegate.h"
 #include "TimerDelegate.h"
 
+#include <string>
 #include <vector>
 
 class PinballBridgeInterface;
@@ -24,7 +25,7 @@ public:
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
 	float getZoomLevel();
-	void addLuaTimer(float duration, string funcName, int arg);
+	void addLuaTimer(float duration, std::string funcName, int arg);
 	void timerCallback(int timerId);
 	void updateOverlayText(const char *key, const char *val);
 	void doCameraEffect(const char *effectName);

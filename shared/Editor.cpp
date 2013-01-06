@@ -23,6 +23,12 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 
+using std::string;
+using std::map;
+using std::vector;
+using std::make_pair;
+using std::ofstream;
+
 Editor::Editor(void) {
 	_state.editMode = EDIT_MODE_NONE;
 	_state.selectionStart.x = 0;
@@ -122,7 +128,7 @@ void Editor::dupeItems() {
 			LayoutItem *orig = &(&*it)->second;
 			orig->editing = false;
 
-			float offset = abs(item.v[0].x - item.v[item.count-1].x);
+			float offset = (float)abs(item.v[0].x - item.v[item.count-1].x);
 
 			if (offset == 0) {
 				offset = item.o->r1 * 2;
@@ -919,7 +925,7 @@ void Editor::rotateItems() {
 				Coord2 rotvec = coordsub(m, c);
 
 				// rot
-				double rot = atan2f(rotvec.y, rotvec.x) * (180.0f / M_PI);
+				double rot = atan2f((float)rotvec.y, (float)rotvec.x) * (180.0f / M_PI);
 
 				// rotate all points around c
 				for (int i = 0; i < item->count; i++) {
@@ -942,7 +948,7 @@ void Editor::rotateItems() {
 						Coord2 vrelntn = coordnormalize(vrelnt);
 						
 						// multiply by length of original center-relative vector
-						Coord2 vt = coordmult(vrelntn, coordlen(vrel));
+						Coord2 vt = coordmult(vrelntn, (float)coordlen(vrel));
 
 						// add back center
 						Coord2 vfinal = coordadd(c, vt);

@@ -11,6 +11,10 @@ extern "C" {
 #include "lualib.h"
 }
 
+using std::map;
+using std::string;
+using std::make_pair;
+
 void Playfield::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
 }
@@ -19,8 +23,12 @@ map<string, Material> *Playfield::getMaterials() {
 	return &_materials;
 }
 
-map(string, Texture> *Playfield::getTextures() {
+map<string, Texture> *Playfield::getTextures() {
 	return &_textures;
+}
+
+map<string, Overlay> *Playfield::getOverlays() {
+	return &_overlays;
 }
 
 map<string, LayoutItem> *Playfield::getLayout() {
@@ -32,6 +40,7 @@ void Playfield::init(void) {
 	this->loadConfig();
 	this->loadMaterials();
 	this->loadTextures();
+	this->loadOverlays();
 	this->loadParts();
 	this->loadLayout();
 
@@ -186,6 +195,88 @@ void Playfield::loadTextures(void) {
 		lua_pop(L, 1); // pop table
 
     } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
+
+}
+
+void Playfield::loadOverlays(void) {
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *overlaysFilename = _bridgeInterface->getPathForScriptFileName((void *)"overlays.lua");
+
+	int error = luaL_dofile(L, overlaysFilename);
+	if (!error) {
+
+		lua_getglobal(L, "overlays");
+
+		if (lua_istable(L, -1)) {
+
+			lua_pushnil(L);
+			while (lua_next(L, -2) != 0) {
+				
+				const char *name = lua_tostring(L, -2);
+
+				Overlay props;
+				props.n = name;
+
+				lua_pushnil(L);
+				while (lua_next(L, -2) != 0) {
+
+					const char *key = lua_tostring(L, -2);
+
+					if (strcmp(key, "t") == 0) {
+						props.t = lua_tostring(L, -1);
+					} else if (strcmp(key, "l") == 0) {
+						props.l = lua_tostring(L, -1);
+					} else if (strcmp(key, "v") == 0) {
+						props.v = lua_tostring(L, -1);
+					} else if (strcmp(key, "p") == 0) {
+						
+						Coord2 coord;
+
+						lua_pushnil(L);
+
+						lua_next(L, -2);
+						coord.x = (float)lua_tonumber(L, -1);
+						lua_pop(L, 1);
+						lua_next(L, -2);
+						coord.y = (float)lua_tonumber(L, -1);
+						lua_pop(L, 1);
+
+						lua_pop(L, 1);
+
+						props.p = coord;
+
+					} else if (strcmp(key, "a") == 0) {
+						props.a = lua_tostring(L, -1);
+					} else if (strcmp(key, "s") == 0) {
+						props.s = (float)lua_tonumber(L, -1);
+					} else if (strcmp(key, "o") == 0) {
+						props.o = (float)lua_tonumber(L, -1);
+					} else if (strcmp(key, "x") == 0) {
+						props.x = lua_tostring(L, -1);
+					}
+
+					lua_pop(L, 1);
+				}
+
+				lua_pop(L, 1);
+
+				_overlays.insert(make_pair(props.n, props));
+
+			}
+
+		}
+
+		lua_pop(L, 1); // pop overlays table
+
+	} else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));
         lua_pop(L, 1);  // pop err from lua stack
 	}

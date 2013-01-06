@@ -14,6 +14,9 @@
 
 #include "Parts.h"
 
+using std::string;
+using std::vector;
+
 GlutEngine *glut_currentInstance;
 
 static Coord2 selectionStart = { 0, 0 };

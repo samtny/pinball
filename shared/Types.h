@@ -19,7 +19,7 @@ typedef struct Coord2{
 	};
 } Coord2;
 /// Convenience constructor for Coord2 structs.
-static inline Coord2 coord(const float x, const float y)
+static inline Coord2 coord(const cpFloat x, const cpFloat y)
 {
 	Coord2 v = {x, y};
 	return v;
@@ -39,7 +39,7 @@ static inline Coord2 coordmult(const Coord2 v, const float s)
 	return coord(v.x*s, v.y*s);
 }
 /// Vector length
-static inline float coordlen(const Coord2 v) {
+static inline cpFloat coordlen(const Coord2 v) {
 	return sqrt(v.x * v.x + v.y * v.y);
 }
 /// Rotate vector 1 by vector 2
@@ -48,7 +48,7 @@ static inline Coord2 coordrotate(const Coord2 v1, const Coord2 v2) {
 }
 /// Normalize vector
 static inline Coord2 coordnormalize(const Coord2 v) {
-	return coordmult(v, 1.0f/coordlen(v));
+	return coordmult(v, 1.0f/(float)coordlen(v));
 }
 
 typedef struct Rect{

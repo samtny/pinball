@@ -37,7 +37,9 @@ extern "C" {
 #include <string>
 #include <map>
 
-using namespace std;
+using std::string;
+using std::map;
+using std::pair;
 
 static Renderer *renderer_CurrentInstance;
 
@@ -91,9 +93,8 @@ void Renderer::init(void) {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	this->loadFonts();
-	this->loadOverlays();
 
-	for (it_Texture iterator = _playfield->getTextures()->->begin(); iterator != _textures->end(); iterator++) {
+	for (it_Texture iterator = _playfield->getTextures()->begin(); iterator != _playfield->getTextures()->end(); iterator++) {
 
 		string name = (&*iterator)->first;
 		Texture *props = &(&*iterator)->second;
@@ -124,143 +125,6 @@ void Renderer::init(void) {
 	
 	// TODO: move to setter for "_displayProperties" instance??
 	_scale = _displayProperties->viewportWidth / box.width;
-
-}
-
-void Renderer::loadOverlays(void) {
-
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *overlaysFilename = _bridgeInterface->getPathForScriptFileName((void *)"overlays.lua");
-
-	int error = luaL_dofile(L, overlaysFilename);
-	if (!error) {
-
-		lua_getglobal(L, "overlays");
-
-		if (lua_istable(L, -1)) {
-
-			lua_pushnil(L);
-			while (lua_next(L, -2) != 0) {
-				
-				const char *name = lua_tostring(L, -2);
-
-				Overlay props;
-				props.n = name;
-
-				lua_pushnil(L);
-				while (lua_next(L, -2) != 0) {
-
-					const char *key = lua_tostring(L, -2);
-
-					if (strcmp(key, "t") == 0) {
-						props.t = lua_tostring(L, -1);
-					} else if (strcmp(key, "l") == 0) {
-						props.l = lua_tostring(L, -1);
-					} else if (strcmp(key, "v") == 0) {
-						props.v = lua_tostring(L, -1);
-					} else if (strcmp(key, "p") == 0) {
-						
-						Coord2 coord;
-
-						lua_pushnil(L);
-
-						lua_next(L, -2);
-						coord.x = (float)lua_tonumber(L, -1);
-						lua_pop(L, 1);
-						lua_next(L, -2);
-						coord.y = (float)lua_tonumber(L, -1);
-						lua_pop(L, 1);
-
-						lua_pop(L, 1);
-
-						props.p = coord;
-
-					} else if (strcmp(key, "a") == 0) {
-						props.a = lua_tostring(L, -1);
-					} else if (strcmp(key, "s") == 0) {
-						props.s = (float)lua_tonumber(L, -1);
-					} else if (strcmp(key, "o") == 0) {
-						props.o = (float)lua_tonumber(L, -1);
-					} else if (strcmp(key, "x") == 0) {
-						props.x = lua_tostring(L, -1);
-					}
-
-					lua_pop(L, 1);
-				}
-
-				lua_pop(L, 1);
-
-				_overlays->insert(make_pair(props.n, props));
-
-			}
-
-		}
-
-		lua_pop(L, 1); // pop overlays table
-
-	} else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
-
-}
-
-void Renderer::loadTextures(void) {
-
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
-
-	int error = luaL_dofile(L, texturesFileName);
-	if (!error) {
-
-        lua_getglobal(L, "textures");
-
-		if (lua_istable(L, -1)) {
-			
-			lua_pushnil(L);
-			while(lua_next(L, -2) != 0) {
-				
-				const char *name = lua_tostring(L, -2);
-
-				Texture props;
-				props.n = name;
-				
-				lua_pushnil(L);
-				while (lua_next(L, -2) != 0) {
-
-					const char *key = lua_tostring(L, -2);
-                    
-					if (strcmp("filename", key) == 0) {
-						
-						props.filename = lua_tostring(L, -1);
-                        
-					}
-                    
-					lua_pop(L, 1);
-				}
-
-				_textures->insert(make_pair(name, props));
-
-				lua_pop(L, 1);
-
-			}
-            
-		}
-        
-		lua_pop(L, 1); // pop table
-
-    } else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
 
 }
 
@@ -354,8 +218,8 @@ void Renderer::drawPlayfield() {
 		if (s->editMode == EDIT_MODE_MOVE) {
 			Coord2 start = _camera->transform(s->selectionStart);
 			Coord2 end = _camera->transform(s->selectionEnd);
-			tx = end.x - start.x;
-			ty = end.y - start.y;
+			tx = (float)(end.x - start.x);
+			ty = (float)(end.y - start.y);
 		} else if (s->editMode == EDIT_MODE_ROTATE) {
 			Coord2 start = s->selectionStart;
 			Coord2 end = s->selectionEnd;
@@ -380,7 +244,7 @@ void Renderer::drawPlayfield() {
 					c = coordmult(c, 1 / (float)item.count);
 
 					// translate to origin
-					glTranslatef(c.x, c.y, 0);
+					glTranslatef((float)c.x, (float)c.y, 0);
 
 					// mouse position
 					Coord2 m = _camera->transform(s->selectionEnd);
@@ -389,13 +253,13 @@ void Renderer::drawPlayfield() {
 					Coord2 rotvec = coordsub(m, c);
 
 					// rot
-					rot = atan2f(rotvec.y, rotvec.x) * (180.0f / (float)M_PI);
+					rot = atan2f((float)rotvec.y, (float)rotvec.x) * (180.0f / (float)M_PI);
 
 					// rotate
 					glRotatef(rot, 0, 0, 1);
 
 					// translate back
-					glTranslatef(-c.x, -c.y, 0);
+					glTranslatef((float)-c.x, (float)-c.y, 0);
 
 				}
 
@@ -458,13 +322,13 @@ void Renderer::drawBox(LayoutItem *item) {
 	cpBody *ball = item->bodies[0];
 	Texture *t = item->o->t.t;
 	
-	float posX = (item->v[3].x- item->v[0].x) / 4.0f;
-	float posY = (item->v[1].y - item->v[0].y) / 2.0f;
+	float posX = (float)(item->v[3].x- item->v[0].x) / 4.0f;
+	float posY = (float)(item->v[1].y - item->v[0].y) / 2.0f;
 
 	glPushMatrix();
 	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef((item->v[3].x - item->v[0].x), (item->v[1].y - item->v[0].y), 0);
+	glScalef((float)(item->v[3].x - item->v[0].x), (float)(item->v[1].y - item->v[0].y), 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
 	//glEnable(GL_TEXTURE_2D);
@@ -524,7 +388,7 @@ void Renderer::drawBall(LayoutItem *item) {
 
 void Renderer::setOverlayText(const char *overlayName, const char *text) {
 
-	Overlay *props = &_overlays->find(overlayName)->second;
+	Overlay *props = &_playfield->getOverlays()->find(overlayName)->second;
 	props->v = text;
 
 }
@@ -553,7 +417,7 @@ void Renderer::drawOverlays() {
 
 	glEnable(GL_TEXTURE_2D);
 
-	for (it_Overlay it = _overlays->begin(); it != _overlays->end(); it++) {
+	for (it_Overlay it = _playfield->getOverlays()->begin(); it != _playfield->getOverlays()->end(); it++) {
 
 		Overlay props = it->second;
 
@@ -597,7 +461,7 @@ void Renderer::drawOverlays() {
 			glVertexPointer(2, GL_FLOAT, 0, verts);
 			glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-			Texture *t = &_textures->find(props.x)->second;
+			Texture *t = &_playfield->getTextures()->find(props.x)->second;
 
 			glPushMatrix();
 
@@ -605,17 +469,17 @@ void Renderer::drawOverlays() {
 			float txY = 0;
 			const char *align = props.a.c_str();
 			if (strcmp(align, "bl") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5f;
-				txY = props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5f;
+				txX = (float)(props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5f);
 			} else if (strcmp(align, "c") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth;
-				txY = props.p.y * _displayProperties->viewportHeight;
+				txX = (float)(props.p.x * _displayProperties->viewportWidth);
+				txY = (float)(props.p.y * _displayProperties->viewportHeight);
 			} else if (strcmp(align, "r") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f;
-				txY = props.p.y * _displayProperties->viewportHeight;
+				txX = (float)(props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props.p.y * _displayProperties->viewportHeight);
 			} else if (strcmp(align, "tr") == 0) {
-				txX = props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f;
-				txY = props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5f;
+				txX = (float)(props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5f);
 			}
 
 			glTranslatef(txX, txY, 0);

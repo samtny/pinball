@@ -6,14 +6,14 @@
 #include <map>
 
 class PinballBridgeInterface;
+
+#include "Parts.h"
+
 struct HostProperties;
 class Physics;
 class Playfield;
 class Camera;
 class Editor;
-struct LayoutItem;
-struct Texture;
-struct Overlay;
 
 namespace glfont
 {
@@ -32,7 +32,6 @@ public:
 	void setEditor(Editor *editor);
 	void init(void);
 	void loadFonts(void);
-	void loadOverlays(void);
 	void draw(void);
 	void drawPlayfield(void);
 	void drawObject(LayoutItem *item);
@@ -53,7 +52,6 @@ private:
 	Editor *_editor;
 	glfont::GLFont *_glfont;
 	HostProperties *_displayProperties;
-	map<string, Overlay> *_overlays;
 	float _scale;
 };
 

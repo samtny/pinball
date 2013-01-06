@@ -32,7 +32,7 @@ typedef enum EditMode {
 
 typedef struct EditObject {
 	Part *object;
-	vector<Coord2> verts;
+	std::vector<Coord2> verts;
 	int vCurrent;
 } EditObject;
 
@@ -43,8 +43,8 @@ typedef struct EditorState {
 	EditMode editMode;
 	Coord2 selectionStart;
 	Coord2 selectionEnd;
-	string editObjectName;
-	map<string, LayoutItem> items;
+	std::string editObjectName;
+	std::map<std::string, LayoutItem> items;
 } EditorState;
 
 class Editor {
@@ -75,7 +75,7 @@ public:
 	void loadTextures();
 	void loadParts();
 	void loadLayout();
-	vector<string> getObjectNames();
+	std::vector<std::string> getObjectNames();
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Playfield *_playfield;
@@ -83,11 +83,11 @@ private:
 	Physics *_physics;
 	Camera *_camera;
 	EditorState _state;
-	vector<EditorState> _history;
-	map<string, Material> _materials;
-	map<string, Texture> _textures;
-	map<string, Part> _parts;
-	map<string, LayoutItem> _layout;
+	std::vector<EditorState> _history;
+	std::map<std::string, Material> _materials;
+	std::map<std::string, Texture> _textures;
+	std::map<std::string, Part> _parts;
+	std::map<std::string, LayoutItem> _layout;
 	EditObject _currentEditObject;
 	int _currentEditObjectName;
 	double _scale;
