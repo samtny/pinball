@@ -30,16 +30,6 @@ extern "C" {
 using std::string;
 using std::map;
 
-typedef struct CameraMode {
-	string name;
-	CameraType t;
-	Coord2 c;
-	float w;
-	Coord2 b; // buffer / border
-	float z;
-} CameraMode;
-typedef map<string, CameraMode>::iterator it_CameraMode;
-
 Camera::Camera()
 {
 
@@ -295,13 +285,13 @@ void Camera::setPlayfield(Playfield *playfield) {
 }
 
 void Camera::setZoomLevel(float zoomLevel) {
-	if (_activeCameraMode->z <= _maxZoomLevel && zoomLevel >= _minZoomLevel) {
-		_activeCameraMode->z = zoomLevel;
+	if (_activeCameraMode.z <= _maxZoomLevel && zoomLevel >= _minZoomLevel) {
+		_activeCameraMode.z = zoomLevel;
 	}
 }
 
 float Camera::getZoomLevel() {
-	return _activeCameraMode->z;
+	return _activeCameraMode.z;
 }
 
 void Camera::setMode(const char *modeName) {
@@ -309,7 +299,7 @@ void Camera::setMode(const char *modeName) {
 	for (it_CameraMode iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
 		CameraMode mode = iterator->second;
 		if (strcmp(modeName, mode.name.c_str()) == 0) {
-			_activeCameraMode = &mode;
+			_activeCameraMode = mode;
 			break;
 		}
 	}
@@ -318,10 +308,10 @@ void Camera::setMode(const char *modeName) {
 
 Coord2 Camera::transform(Coord2 coord) {
 
-	float _activeCameraModeH = _activeCameraMode->w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
+	float _activeCameraModeH = _activeCameraMode.w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
 
-	cpFloat tx = coord.x * 1 / _scale + _activeCameraMode->c.x - (_activeCameraMode->w / 2.0f);
-	cpFloat ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode->c.y - (_activeCameraModeH / 2.0f);
+	cpFloat tx = coord.x * 1 / _scale + _activeCameraMode.c.x - (_activeCameraMode.w / 2.0f);
+	cpFloat ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode.c.y - (_activeCameraModeH / 2.0f);
 
 	Coord2 transformed = {tx, ty};
 
@@ -331,15 +321,15 @@ Coord2 Camera::transform(Coord2 coord) {
 
 void Camera::applyTransform(void) {
 
-	_scale = (_displayProperties->viewportWidth / _activeCameraMode->w) * _activeCameraMode->z;
+	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;
 
-	switch (_activeCameraMode->t)
+	switch (_activeCameraMode.t)
 	{
 	case CAMERA_TYPE_FIXED: {
 
-		float tx = (float)(_activeCameraMode->c.x * _scale - (_displayProperties->viewportWidth / 2.0f));
+		float tx = (float)(_activeCameraMode.c.x * _scale - (_displayProperties->viewportWidth / 2.0f));
 
-		float ty = (float)(_activeCameraMode->c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
+		float ty = (float)(_activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
 
 		glTranslatef(-tx, -ty, 0);
 
@@ -377,7 +367,7 @@ void Camera::applyTransform(void) {
 		posY = (float)lowBall.bodies[0]->p.y;
 		posY -= lowBall.o->r1;
 
-		posY -= (float)_activeCameraMode->b.y; // margin
+		posY -= (float)_activeCameraMode.b.y; // margin
 
 		if (posY < minY) {
 			posY = minY;
@@ -385,11 +375,11 @@ void Camera::applyTransform(void) {
 			posY = maxY;
 		}
 
-		posY *= _scale * _activeCameraMode->z;
+		posY *= _scale * _activeCameraMode.z;
 
 		glTranslatef(0, -posY, 0);
 
-		glScalef(_activeCameraMode->z, _activeCameraMode->z, 1);
+		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
 		
 		break;
 	}

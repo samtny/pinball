@@ -8,6 +8,8 @@ struct HostProperties;
 class Playfield;
 struct Coord2;
 
+#include "Types.h"
+
 typedef enum CameraType {
 	CAMERA_TYPE_FOLLOW_BALL,
 	CAMERA_TYPE_FIXED
@@ -22,7 +24,15 @@ typedef struct CameraEffect {
 	double startTime;
 } CameraEffect;
 
-struct CameraMode;
+typedef struct CameraMode {
+	std::string name;
+	CameraType t;
+	Coord2 c;
+	float w;
+	Coord2 b; // buffer / border
+	float z;
+} CameraMode;
+typedef std::map<std::string, CameraMode>::iterator it_CameraMode;
 
 class Camera {
 public:
@@ -59,7 +69,7 @@ private:
 	std::vector<CameraEffect> _activeEffects;
 	CameraType _type;
 	std::map<std::string, CameraMode> _cameraModes;
-	CameraMode *_activeCameraMode;
+	CameraMode _activeCameraMode;
 };
 
 

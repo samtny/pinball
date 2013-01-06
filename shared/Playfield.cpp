@@ -318,9 +318,9 @@ void Playfield::loadParts(void) {
 					} else if (strcmp("m", key) == 0) {
 						props.m = &_materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
-						props.r1 = (float)lua_tonumber(L, -1);
+						props.r1 = 1.0f / (float)_scale * (float)lua_tonumber(L, -1);
 					} else if (strcmp("r2", key) == 0) {
-						props.r2 = (float)lua_tonumber(L, -1);
+						props.r2 = 1.0f / (float)_scale * (float)lua_tonumber(L, -1);
 					} else if (strcmp("t", key) == 0) {
 
 						lua_pushnil(L);
@@ -429,6 +429,10 @@ void Playfield::loadLayout(void) {
 							// pop the table;
 							lua_pop(L, 1);
 							
+							// scale vertices;
+							v.x *= 1 / _scale;
+							v.y *= 1 / _scale;
+
 							// assign vect to array
 							props.v.push_back(v);
 

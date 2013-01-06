@@ -43,7 +43,7 @@ public:
 	bool getPaused();
 
 	// TODO: refactor variously...
-	void applyScale(LayoutItem *iprops);
+	//void applyScale(LayoutItem *iprops);
 	void createObject(LayoutItem *iprops);
 	void destroyObject(LayoutItem *iprops);
 	void destroyBody(cpBody *body);
