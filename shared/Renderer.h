@@ -2,7 +2,6 @@
 #ifndef __PINBALL_RENDERER__
 #define __PINBALL_RENDERER__
 
-using namespace std;
 #include <string>
 #include <map>
 
@@ -32,7 +31,6 @@ public:
 	void setCamera(Camera *camera);
 	void setEditor(Editor *editor);
 	void init(void);
-	void loadTextures(void);
 	void loadFonts(void);
 	void loadOverlays(void);
 	void draw(void);
@@ -55,7 +53,6 @@ private:
 	Editor *_editor;
 	glfont::GLFont *_glfont;
 	HostProperties *_displayProperties;
-	map<string, Texture> *_textures;
 	map<string, Overlay> *_overlays;
 	float _scale;
 };

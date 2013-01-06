@@ -340,7 +340,7 @@ void Physics::createBox(LayoutItem *item) {
 	cpFloat mass = area * item->o->m->d;
 	
 	// create body on which to hang the "box";
-	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, (const cpVect *)&item->v.front(), cpvzero)));
+	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, (const cpVect *)&item->v[0], cpvzero)));
 	
 	// the implications of attaching all playfield objects to this non-zero-indexed body are not inconsequential...
 	cpBodySetPos(body, cpvmult(cpvadd(item->v[2], item->v[0]), 0.5f));

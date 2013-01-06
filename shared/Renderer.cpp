@@ -90,11 +90,10 @@ void Renderer::init(void) {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	this->loadTextures();
 	this->loadFonts();
 	this->loadOverlays();
 
-	for (it_Texture iterator = _textures->begin(); iterator != _textures->end(); iterator++) {
+	for (it_Texture iterator = _playfield->getTextures()->->begin(); iterator != _textures->end(); iterator++) {
 
 		string name = (&*iterator)->first;
 		Texture *props = &(&*iterator)->second;
@@ -229,7 +228,7 @@ void Renderer::loadTextures(void) {
 				
 				const char *name = lua_tostring(L, -2);
 
-				Texture props = { "", "", -1 };
+				Texture props;
 				props.n = name;
 				
 				lua_pushnil(L);

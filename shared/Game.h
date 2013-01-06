@@ -2,7 +2,6 @@
 #include "PhysicsDelegate.h"
 #include "TimerDelegate.h"
 
-using namespace std;
 #include <vector>
 
 class PinballBridgeInterface;

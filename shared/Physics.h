@@ -14,7 +14,6 @@ struct cpSpace;
 struct cpBody;
 struct cpArbiter;
 
-using namespace std;
 #include <string>
 #include <map>
 

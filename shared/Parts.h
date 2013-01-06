@@ -2,7 +2,6 @@
 #ifndef __PINBALL_PARTS__
 #define __PINBALL_PARTS__
 
-using namespace std;
 #include <string>
 #include <vector>
 #include <map>
@@ -11,21 +10,21 @@ using namespace std;
 #include "Types.h"
 
 typedef struct Material {
-	string n;
+	std::string n;
 	float e;
 	float f;
 	float d;
 } Material;
-typedef map<string, Material>::iterator it_Material;
+typedef std::map<std::string, Material>::iterator it_Material;
 
 typedef struct Texture {
-	string n;
-	string filename;
+	std::string n;
+	std::string filename;
 	uint32_t gl_index;
 	int w;
 	int h;
 } Texture;
-typedef map<string, Texture>::iterator it_Texture;
+typedef std::map<std::string, Texture>::iterator it_Texture;
 
 typedef struct TextureInfo {
 	Texture *t;
@@ -37,42 +36,43 @@ typedef struct TextureInfo {
 } TextureInfo;
 
 typedef struct Part {
-	string n;
+	std::string n;
 	int v;
-	string s;
+	std::string s;
 	float r1;
 	float r2;
 	Material *m;
 	TextureInfo t;
 } Part;
-typedef map<string, Part>::iterator it_Part;
+typedef std::map<std::string, Part>::iterator it_Part;
 
 typedef struct LayoutItem {
-	string n;
+	std::string n;
 	Part *o;
-	vector<Coord2> v;
+	std::vector<Coord2> v;
 	float s;
 	int count;
-	vector<Body *> bodies;
-	vector<Shape *> shapes;
+	std::vector<Body *> bodies;
+	std::vector<Shape *> shapes;
 	float width;
 	float height;
 	bool editing;
 	Coord2 c;
 } LayoutItem;
-typedef map<string, LayoutItem>::iterator it_LayoutItem;
+typedef std::map<std::string, LayoutItem>::iterator it_LayoutItem;
 
 struct Overlay {
-	string n;
-	string t;
-	string l;
-	string v;
-	string x;
+	std::string n;
+	std::string t;
+	std::string l;
+	std::string v;
+	std::string x;
 	Coord2 p;
-	string a;
+	std::string a;
 	float s;
 	float o;
 };
-typedef map<string, Overlay>::iterator it_Overlay;
+typedef std::map<std::string, Overlay>::iterator it_Overlay;
 
 #endif
+

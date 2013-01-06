@@ -19,6 +19,10 @@ map<string, Material> *Playfield::getMaterials() {
 	return &_materials;
 }
 
+map(string, Texture> *Playfield::getTextures() {
+	return &_textures;
+}
+
 map<string, LayoutItem> *Playfield::getLayout() {
 	return &_layout;
 }
@@ -35,7 +39,42 @@ void Playfield::init(void) {
 
 void Playfield::loadConfig(void) {
 
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
 
+	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+
+	int error = luaL_dofile(L, configFileName);
+	if (!error) {
+
+        lua_getglobal(L, "config");
+
+		if (lua_istable(L, -1)) {
+			
+			lua_pushnil(L);
+			while(lua_next(L, -2) != 0) {
+				
+				const char *key = lua_tostring(L, -2);
+                    
+				 if (strcmp("scale", key) == 0) {
+
+					_scale = (double)lua_tonumber(L, -1);
+
+				}
+                   
+				lua_pop(L, 1);
+			}
+            
+		}
+        
+		lua_pop(L, 1); // pop table
+
+    } else {
+		fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_pop(L, 1);  // pop err from lua stack
+	}
+
+	lua_close(L);
 
 }
 
@@ -300,7 +339,7 @@ void Playfield::loadLayout(void) {
 							lua_pop(L, 1);
 							
 							// assign vect to array
-							props.v[i-1] = v;
+							props.v.push_back(v);
 
 						}
 

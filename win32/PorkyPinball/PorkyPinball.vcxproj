@@ -141,7 +141,6 @@
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballHost.h" />
     <ClInclude Include=".\PinballBridge.h" />
-    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\shared\Flipperfall\camera.lua" />

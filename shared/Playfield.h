@@ -1,5 +1,4 @@
 
-using namespace std;
 #include <string>
 #include <map>
 
@@ -12,6 +11,7 @@ public:
 	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void init(void);
 	map<string, Material> *getMaterials();
+	map<string, Texture> *getTextures();
 	map<string, LayoutItem> *getLayout();
 protected:
 	void loadConfig(void);
@@ -25,5 +25,6 @@ private:
 	map<string, Texture> _textures;
 	map<string, Part> _parts;
 	map<string, LayoutItem> _layout;
+	double _scale;
 };
 

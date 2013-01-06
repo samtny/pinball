@@ -2,7 +2,6 @@
 #ifndef __PINBALL_TYPES__
 #define __PINBALL_TYPES__
 
-using namespace std;
 #include <math.h>
 
 #include "chipmunk/chipmunk.h"
@@ -11,9 +10,12 @@ typedef cpBody Body;
 typedef cpShape Shape;
 
 typedef struct Coord2{
-	float x,y;
+	cpFloat x,y;
 	operator cpVect() {
-		return cpv(x, y);
+		cpVect v;
+		v.x = x;
+		v.y = y;
+		return v;
 	};
 } Coord2;
 /// Convenience constructor for Coord2 structs.

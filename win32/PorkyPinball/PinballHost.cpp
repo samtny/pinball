@@ -44,6 +44,7 @@ void PinballHost::init() {
 
 	Editor *t = new Editor();
 	t->setBridgeInterface(bi);
+	t->setPlayfield(f);
 	t->setCamera(c);
 	t->setPhysics(p);
 	t->init();
