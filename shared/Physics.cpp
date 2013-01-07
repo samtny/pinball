@@ -110,20 +110,8 @@ void Physics::init() {
 	_slingshotRestLength *= 1 / scale;
 	_slingshotSwitchGap *= 1 / scale;
 
-	for (it_LayoutItem iterator = _playfield->getLayout()->begin(); iterator != _playfield->getLayout()->end(); iterator++) {
-		LayoutItem *lprops = &(&*iterator)->second;
-		//this->applyScale(lprops);
-		this->createObject(lprops);
-	}
-
-	/*
-	for (it_layoutItems iterator = layoutItems.begin(); iterator != layoutItems.end(); iterator++) {
-		layoutItem lprops = iterator->second;
-		this->applyScale(&lprops);
-		this->createObject(&lprops);
-	}
-	*/
-
+	this->createObjects();
+	
 	this->initCollisionHandlers();
 
 	cpSpaceSetGravity(_space, gravity);
@@ -296,7 +284,7 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 	*/
 	LayoutItem *item = (LayoutItem *)itm;
 
-	for (int i = 0; i < item->bodies.size(); i++) {
+	for (int i = 0; i < (int)item->bodies.size(); i++) {
 		cpBody *body = item->bodies[i];
 		cpBodyEachConstraint(body, destroyConstraint, NULL);
 		cpBodyEachShape(body, destroyShape, NULL);
@@ -305,7 +293,7 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 	}
 	item->bodies.clear();
 
-	for (int i = 0; i < item->shapes.size(); i++) {
+	for (int i = 0; i < (int)item->shapes.size(); i++) {
 		cpShape *shape = item->shapes[i];
 		cpSpaceRemoveShape(space, shape);
 		cpShapeFree(shape);
@@ -322,6 +310,13 @@ void Physics::destroyObject(LayoutItem *item) {
 		::destroyObject(_space, item, NULL);
 	}
 
+}
+
+void Physics::createObjects(void) {
+	for (it_LayoutItem iterator = _playfield->getLayout()->begin(); iterator != _playfield->getLayout()->end(); iterator++) {
+		LayoutItem *lprops = &(&*iterator)->second;
+		this->createObject(lprops);
+	}
 }
 
 void Physics::createObject(LayoutItem *item) {

@@ -9,8 +9,6 @@ class Playfield;
 class Game;
 class Physics;
 class Camera;
-struct Material;
-struct Texture;
 struct Part;
 struct LayoutItem;
 struct Coord2;
@@ -31,7 +29,7 @@ typedef enum EditMode {
 } EditMode;
 
 typedef struct EditObject {
-	Part *object;
+	Part *part;
 	std::vector<Coord2> verts;
 	int vCurrent;
 } EditObject;
@@ -71,10 +69,6 @@ public:
 	void save();
 	void load();
 	void loadConfig();
-	void loadMaterials();
-	void loadTextures();
-	void loadParts();
-	void loadLayout();
 	std::vector<std::string> getObjectNames();
 private:
 	PinballBridgeInterface *_bridgeInterface;
@@ -84,10 +78,6 @@ private:
 	Camera *_camera;
 	EditorState _state;
 	std::vector<EditorState> _history;
-	std::map<std::string, Material> _materials;
-	std::map<std::string, Texture> _textures;
-	std::map<std::string, Part> _parts;
-	std::map<std::string, LayoutItem> _layout;
 	EditObject _currentEditObject;
 	int _currentEditObjectName;
 	double _scale;

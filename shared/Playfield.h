@@ -13,7 +13,9 @@ public:
 	std::map<std::string, Material> *getMaterials();
 	std::map<std::string, Texture> *getTextures();
 	std::map<std::string, Overlay> *getOverlays();
+	std::map<std::string, Part> *getParts();
 	std::map<std::string, LayoutItem> *getLayout();
+	void reload(void);
 protected:
 	void loadConfig(void);
 	void loadMaterials(void);

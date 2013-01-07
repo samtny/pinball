@@ -42,12 +42,10 @@ public:
 
 	bool getPaused();
 
-	// TODO: refactor variously...
-	//void applyScale(LayoutItem *iprops);
+	void createObjects(void);
 	void createObject(LayoutItem *iprops);
 	void destroyObject(LayoutItem *iprops);
-	void destroyBody(cpBody *body);
-
+	
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
 

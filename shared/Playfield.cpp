@@ -31,6 +31,10 @@ map<string, Overlay> *Playfield::getOverlays() {
 	return &_overlays;
 }
 
+map<string, Part> *Playfield::getParts() {
+	return &_parts;
+}
+
 map<string, LayoutItem> *Playfield::getLayout() {
 	return &_layout;
 }
@@ -42,6 +46,13 @@ void Playfield::init(void) {
 	this->loadTextures();
 	this->loadOverlays();
 	this->loadParts();
+	this->loadLayout();
+
+}
+
+void Playfield::reload(void) {
+	
+	_layout.clear();
 	this->loadLayout();
 
 }

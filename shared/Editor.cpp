@@ -44,9 +44,6 @@ Editor::~Editor(void) {
 
 void Editor::init() {
 	this->loadConfig();
-	this->loadMaterials();
-	this->loadTextures();
-	this->loadParts();
 }
 
 void Editor::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
@@ -337,55 +334,18 @@ void Editor::save() {
 
 void Editor::load() {
 
-	// TODO: not be a complete hack job
-
-	map<string, LayoutItem> *items = _playfield->getLayout();
-
-	LayoutItem box;
-
-	for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
-
-		LayoutItem item = it->second;
-
-		if (strcmp(item.n.c_str(), "box") != 0) {
-
-			_physics->destroyObject(&item);
-
-		} else {
-			box = item;
-		}
-
-	}
-
-	if (box.n == "box") {
-		_physics->destroyObject(&box);
-	}
-
-	items->clear();
-
-	_layout.clear();
-	this->loadLayout();
-
-
-
-	LayoutItem *newBox = &_layout["box"];
-
-	//_physics->applyScale(newBox);
-	_physics->createObject(newBox);
-
-	items->insert(make_pair("box", *newBox));
-
-	for (it_LayoutItem it = _layout.begin(); it != _layout.end(); it++) {
+	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
 
 		LayoutItem *item = &(&*it)->second;
-
-		if (strcmp(item->n.c_str(), "box") != 0) {
-			//_physics->applyScale(item);
-			_physics->createObject(item);
-			items->insert(make_pair(item->n, *item));
-		}
+		item->editing = true;
 
 	}
+
+	this->deleteItems();
+
+	_playfield->reload();
+
+	_physics->createObjects();
 
 }
 
@@ -404,7 +364,7 @@ void Editor::insertItems() {
 	case EDIT_MODE_INSERT_BEGIN:
 		{
 			EditObject obj;
-			obj.object = &_parts[_state.editObjectName];
+			obj.part = &_playfield->getParts()->find(_state.editObjectName)->second;
 			obj.vCurrent = 0;
 			_currentEditObject = obj;
 		}
@@ -415,35 +375,36 @@ void Editor::insertItems() {
 			_currentEditObject.verts.push_back(_camera->transform(v));
 			_currentEditObject.vCurrent++;
 
-			if (_currentEditObject.vCurrent == _currentEditObject.object->count) {
+			if (_currentEditObject.vCurrent == _currentEditObject.part->count) {
 				
 				this->pushState();
 
 				LayoutItem l;
-				l.o = _currentEditObject.object;
+				l.o = _currentEditObject.part;
 
 				l.s = 1;
 
-				double localScale = _scale * 1 / l.s;
+				//double localScale = _scale * 1 / l.s;
 
-				l.o->r1 *= 1 / (float)localScale;
-				l.o->r2 *= 1 / (float)localScale;
+				//l.o->r1 *= 1 / (float)localScale;
+				//l.o->r2 *= 1 / (float)localScale;
 
 				char num[21];
 				sprintf_s(num, "%d", _currentEditObjectName);
-				l.n = "_" + _currentEditObject.object->n + num;
+				l.n = "_" + _currentEditObject.part->n + num;
 				_currentEditObjectName++;
 
-				l.o->count = _currentEditObject.object->count;
+				//l.o->count = _currentEditObject.object->count;
 				l.editing = false;
 				
-				for (int i = 0; i < _currentEditObject.object->count; i++) {
-					l.v[i].x = _currentEditObject.verts[i].x;
-					l.v[i].y = _currentEditObject.verts[i].y;
+				for (int i = 0; i < _currentEditObject.part->count; i++) {
+					Coord2 v = coord(_currentEditObject.verts[i].x, _currentEditObject.verts[i].y);
+					l.v.push_back(v);
 				}
 				
-				//_physics->addLayoutItem(l);
 				_playfield->getLayout()->insert(make_pair(l.n, l));
+				
+				_physics->createObject(&_playfield->getLayout()->find(l.n)->second);
 
 				// reset;
 				_currentEditObject.vCurrent = 0;
@@ -499,305 +460,6 @@ void Editor::loadConfig() {
 
 }
 
-void Editor::loadMaterials() {
-	
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *materialsFileName = _bridgeInterface->getPathForScriptFileName((void *)"materials.lua");
-
-	int error = luaL_dofile(L, materialsFileName);
-	if (!error) {
-
-        lua_getglobal(L, "materials");
-
-		if (lua_istable(L, -1)) {
-			
-			lua_pushnil(L);
-			while(lua_next(L, -2) != 0) {
-				
-				// key;
-				const char *name = lua_tostring(L, -2);
-
-				Material props = { "", -1, -1, -1 };
-
-				// "value" is properties table;
-				lua_pushnil(L);
-				while(lua_next(L, -2) != 0) {
-
-					// property name
-					const char *key = lua_tostring(L, -2);
-
-					// property value
-					float val = (float)lua_tonumber(L, -1);
-
-					if (strcmp("e", key) == 0) {
-						props.e = val;
-					} else if (strcmp("f", key) == 0) {
-						props.f = val;
-					} else if (strcmp("d", key) == 0) {
-						props.d = val;
-					}
-
-					lua_pop(L, 1);
-				}
-				
-				_materials.insert(make_pair(name, props));
-
-				lua_pop(L, 1);
-			}
-
-		}
-
-		lua_pop(L, 1); // pop materials table
-
-    } else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
-
-}
-
-void Editor::loadTextures(void) {
-
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
-
-	int error = luaL_dofile(L, texturesFileName);
-	if (!error) {
-
-        lua_getglobal(L, "textures");
-
-		if (lua_istable(L, -1)) {
-			
-			lua_pushnil(L);
-			while(lua_next(L, -2) != 0) {
-				
-				const char *name = lua_tostring(L, -2);
-
-				Texture props;
-				props.n = name;
-				
-				lua_pushnil(L);
-				while (lua_next(L, -2) != 0) {
-
-					const char *key = lua_tostring(L, -2);
-                    
-					if (strcmp("filename", key) == 0) {
-						
-						props.filename = lua_tostring(L, -1);
-                        
-					}
-                    
-					lua_pop(L, 1);
-				}
-
-				_textures.insert(make_pair(name, props));
-
-				lua_pop(L, 1);
-
-			}
-            
-		}
-        
-		lua_pop(L, 1); // pop table
-
-    } else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
-
-}
-
-void Editor::loadParts(void) {
-
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"parts.lua");
-
-	int error = luaL_dofile(L, objectsPath);
-	if (!error) {
-
-        lua_getglobal(L, "parts");
-
-		if (lua_istable(L, -1)) {
-			
-			lua_pushnil(L);
-			while(lua_next(L, -2) != 0) {
-				
-				// key;
-				const char *name = lua_tostring(L, -2);
-
-				Part props;
-				props.n = name;
-
-				lua_pushnil(L);
-				while(lua_next(L, -2) != 0) {
-					
-					const char *key = lua_tostring(L, -2);
-
-					if (strcmp("s", key) == 0) {
-						props.s = lua_tostring(L, -1);
-					} else if (strcmp("m", key) == 0) {
-						props.m = &_materials[lua_tostring(L, -1)];
-					} else if (strcmp("r1", key) == 0) {
-						props.r1 = (float)lua_tonumber(L, -1) * 1 / _scale;
-					} else if (strcmp("r2", key) == 0) {
-						props.r2 = (float)lua_tonumber(L, -1) * 1 / _scale;
-					} else if (strcmp("t", key) == 0) {
-
-						lua_pushnil(L);
-						while(lua_next(L, -2) != 0) {
-							
-							const char *tkey = lua_tostring(L, -2);
-
-							if (strcmp("n", tkey) == 0) {
-								props.t.t = &_textures[lua_tostring(L, -1)];
-							} else if (strcmp("x", tkey) == 0) {
-								props.t.x = (int)lua_tonumber(L, -1);
-							} else if (strcmp("y", tkey) == 0) {
-								props.t.y = (int)lua_tonumber(L, -1);
-							} else if (strcmp("w", tkey) == 0) {
-								props.t.w = (int)lua_tonumber(L, -1);
-							} else if (strcmp("h", tkey) == 0) {
-								props.t.h = (int)lua_tonumber(L, -1);
-							} else if (strcmp("a", tkey) == 0) {
-								props.t.a = (float)lua_tonumber(L, -1);
-							}
-
-							lua_pop(L, 1);
-
-						}
-
-					} else if (strcmp("v", key) == 0) {
-						props.count = (int)lua_tonumber(L, -1);
-					}
-
-					lua_pop(L, 1);
-				}
-				
-				_parts.insert(make_pair(name, props));
-
-				lua_pop(L, 1);
-			}
-
-		}
-
-		lua_pop(L, 1); // pop table
-
-    } else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
-
-}
-
-void Editor::loadLayout() {
-	
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-
-	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"layout.lua");
-
-	int error = luaL_dofile(L, layoutPath);
-	if (!error) {
-
-        lua_getglobal(L, "layout");
-
-		if (lua_istable(L, -1)) {
-			
-			lua_pushnil(L);
-			while(lua_next(L, -2) != 0) {
-				
-				// key;
-				const char *name = lua_tostring(L, -2);
-
-				LayoutItem props = { name };
-				props.s = -1;
-				props.editing = false;
-
-				lua_pushnil(L);
-				while(lua_next(L, -2) != 0) {
-					
-					const char *key = lua_tostring(L, -2);
-
-					if (strcmp("o", key) == 0) {
-						
-						props.o = &_parts[lua_tostring(L, -1)];
-
-					} else if (strcmp("v", key) == 0) {
-						
-						int count = lua_rawlen(L, -1);
-
-						// traverse 2d vects
-						for (int i = 1; i <= count; i++)
-						{
-
-							// init vect object
-							Coord2 v;
-
-							// get the 2d table
-							lua_rawgeti(L, -1, i);
-
-							// get the first vertex
-							lua_rawgeti(L, -1, 1);
-							v.x = (float)lua_tonumber(L, -1);
-							lua_pop(L, 1);
-
-							// get the second vertex
-							lua_rawgeti(L, -1, 2);
-							v.y = (float)lua_tonumber(L, -1);
-							lua_pop(L, 1);
-							
-							// pop the table;
-							lua_pop(L, 1);
-							
-							v.x *= 1 / _scale;
-							v.y *= 1 / _scale;
-
-							// assign vect to array
-							props.v.push_back(v);
-							
-						}
-
-					} else if (strcmp("s", key) == 0) {
-						props.s = (float)lua_tonumber(L, -1);
-					}
-
-					lua_pop(L, 1);
-				}
-				
-				if (props.s == -1) {
-					props.s = 1;
-				}
-
-				_layout.insert(make_pair(name, props));
-
-				lua_pop(L, 1);
-			}
-
-		}
-
-		lua_pop(L, 1); // pop table
-
-    } else {
-		fprintf(stderr, "%s\n", lua_tostring(L, -1));
-        lua_pop(L, 1);  // pop err from lua stack
-	}
-
-	lua_close(L);
-
-}
-
 void Editor::selectItems() {
 
 	map<string, LayoutItem> *items = _playfield->getLayout();
@@ -839,7 +501,7 @@ vector<string> Editor::getObjectNames() {
 
 	vector<string> names;
 
-	for (it_Part it = _parts.begin(); it != _parts.end(); it++) {
+	for (it_Part it = _playfield->getParts()->begin(); it != _playfield->getParts()->end(); it++) {
 
 		Part object = it->second;
 
