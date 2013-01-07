@@ -37,7 +37,7 @@ typedef struct TextureInfo {
 
 typedef struct Part {
 	std::string n;
-	int v;
+	int count;
 	std::string s;
 	float r1;
 	float r2;
@@ -51,7 +51,6 @@ typedef struct LayoutItem {
 	Part *o;
 	std::vector<Coord2> v;
 	float s;
-	int count;
 	std::vector<Body *> bodies;
 	std::vector<Shape *> shapes;
 	float width;

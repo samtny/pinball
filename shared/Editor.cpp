@@ -128,7 +128,7 @@ void Editor::dupeItems() {
 			LayoutItem *orig = &(&*it)->second;
 			orig->editing = false;
 
-			float offset = (float)abs(item.v[0].x - item.v[item.count-1].x);
+			float offset = (float)abs(item.v[0].x - item.v[item.o->count-1].x);
 
 			if (offset == 0) {
 				offset = item.o->r1 * 2;
@@ -150,7 +150,7 @@ void Editor::dupeItems() {
 
 		if (item.editing == true) {
 
-			for (int i = 0; i < item.count; i++) {
+			for (int i = 0; i < item.o->count; i++) {
 				item.v[i].x += minOffset;
 			}
 
@@ -295,13 +295,13 @@ void Editor::save() {
 
 		layout << "\t\t" << "o = \"" << item.o->n << "\"";
 
-		if (item.count > 0) {
+		if (item.o->count > 0) {
 
 			layout << ",\n";
 
 			layout << "\t\t" << "v = {";
 
-			for (int i = 0; i < item.count; i++) {
+			for (int i = 0; i < item.o->count; i++) {
 
 				if (i > 0) layout << " ,";
 
@@ -412,10 +412,10 @@ void Editor::insertItems() {
 	case EDIT_MODE_INSERT:
 		{
 			Coord2 v = { _state.selectionStart.x, _state.selectionStart.y };
-			_currentEditObject.verts[_currentEditObject.vCurrent] = _camera->transform(v);
+			_currentEditObject.verts.push_back(_camera->transform(v));
 			_currentEditObject.vCurrent++;
 
-			if (_currentEditObject.vCurrent == _currentEditObject.object->v) {
+			if (_currentEditObject.vCurrent == _currentEditObject.object->count) {
 				
 				this->pushState();
 
@@ -434,10 +434,10 @@ void Editor::insertItems() {
 				l.n = "_" + _currentEditObject.object->n + num;
 				_currentEditObjectName++;
 
-				l.count = _currentEditObject.object->v;
+				l.o->count = _currentEditObject.object->count;
 				l.editing = false;
 				
-				for (int i = 0; i < _currentEditObject.object->v; i++) {
+				for (int i = 0; i < _currentEditObject.object->count; i++) {
 					l.v[i].x = _currentEditObject.verts[i].x;
 					l.v[i].y = _currentEditObject.verts[i].y;
 				}
@@ -636,6 +636,7 @@ void Editor::loadParts(void) {
 				const char *name = lua_tostring(L, -2);
 
 				Part props;
+				props.n = name;
 
 				lua_pushnil(L);
 				while(lua_next(L, -2) != 0) {
@@ -647,9 +648,9 @@ void Editor::loadParts(void) {
 					} else if (strcmp("m", key) == 0) {
 						props.m = &_materials[lua_tostring(L, -1)];
 					} else if (strcmp("r1", key) == 0) {
-						props.r1 = (float)lua_tonumber(L, -1);
+						props.r1 = (float)lua_tonumber(L, -1) * 1 / _scale;
 					} else if (strcmp("r2", key) == 0) {
-						props.r2 = (float)lua_tonumber(L, -1);
+						props.r2 = (float)lua_tonumber(L, -1) * 1 / _scale;
 					} else if (strcmp("t", key) == 0) {
 
 						lua_pushnil(L);
@@ -675,6 +676,8 @@ void Editor::loadParts(void) {
 
 						}
 
+					} else if (strcmp("v", key) == 0) {
+						props.count = (int)lua_tonumber(L, -1);
 					}
 
 					lua_pop(L, 1);
@@ -733,10 +736,10 @@ void Editor::loadLayout() {
 
 					} else if (strcmp("v", key) == 0) {
 						
-						int length = lua_rawlen(L, -1);
-						
+						int count = lua_rawlen(L, -1);
+
 						// traverse 2d vects
-						for (int i = 1; i <= length; i++)
+						for (int i = 1; i <= count; i++)
 						{
 
 							// init vect object
@@ -758,12 +761,13 @@ void Editor::loadLayout() {
 							// pop the table;
 							lua_pop(L, 1);
 							
+							v.x *= 1 / _scale;
+							v.y *= 1 / _scale;
+
 							// assign vect to array
-							props.v[i-1] = v;
+							props.v.push_back(v);
 							
 						}
-
-						props.count = length;
 
 					} else if (strcmp("s", key) == 0) {
 						props.s = (float)lua_tonumber(L, -1);
@@ -808,7 +812,7 @@ void Editor::selectItems() {
 		
 		bool inside = false;
 
-		for (int i = 0; i < item->count; i++) {
+		for (int i = 0; i < item->o->count; i++) {
 			cpVect v = item->v[i];
 			if (
 				v.x >= min(start.x, end.x) &&
@@ -871,7 +875,7 @@ void Editor::moveItems() {
 
 				_physics->destroyObject(item);
 
-				for (int i = 0; i < item->count; i++) {
+				for (int i = 0; i < item->o->count; i++) {
 					item->v[i].x = item->v[i].x - (start.x - end.x);
 					item->v[i].y = item->v[i].y - (start.y - end.y);
 				}
@@ -912,11 +916,11 @@ void Editor::rotateItems() {
 
 				// find center
 				Coord2 c = { 0, 0 };
-				for (int i = 0; i < item->count; i++) {
+				for (int i = 0; i < item->o->count; i++) {
 					Coord2 t = { item->v[i].x, item->v[i].y };
 					c = coordadd(c, t);
 				}
-				c = coordmult(c, 1 / (float)item->count);
+				c = coordmult(c, 1 / (float)item->o->count);
 				
 				// mouse position
 				Coord2 m = _camera->transform(end);
@@ -928,7 +932,7 @@ void Editor::rotateItems() {
 				double rot = atan2f((float)rotvec.y, (float)rotvec.x) * (180.0f / M_PI);
 
 				// rotate all points around c
-				for (int i = 0; i < item->count; i++) {
+				for (int i = 0; i < item->o->count; i++) {
 					
 					// current vertex
 					Coord2 v = { item->v[i].x, item->v[i].y };

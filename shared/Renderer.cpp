@@ -176,10 +176,11 @@ void Renderer::drawPlayfield() {
 	//glTranslatef(0.375, 0.375, 0.0);
 
 	_camera->applyTransform();
-
+	
 	// TODO: separate "drawBackgrounds" method plzz...
 	glEnable(GL_TEXTURE_2D);
 	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
+	/*
 	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
 
 		LayoutItem item = it->second;
@@ -187,8 +188,10 @@ void Renderer::drawPlayfield() {
 		drawObject(&item);
 
 	}
+	*/
+	drawObject(&_playfield->getLayout()->find("box")->second);
 	glDisable(GL_TEXTURE_2D);
-
+	
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
 	cpSpaceEachShape(_physics->getSpace(), DrawShape, NULL);
@@ -237,11 +240,11 @@ void Renderer::drawPlayfield() {
 					
 					// find center
 					Coord2 c = { 0, 0 };
-					for (int i = 0; i < item.count; i++) {
+					for (int i = 0; i < item.o->count; i++) {
 						Coord2 t = { item.v[i].x, item.v[i].y };
 						c = coordadd(c, t);
 					}
-					c = coordmult(c, 1 / (float)item.count);
+					c = coordmult(c, 1 / (float)item.o->count);
 
 					// translate to origin
 					glTranslatef((float)c.x, (float)c.y, 0);
@@ -265,7 +268,7 @@ void Renderer::drawPlayfield() {
 
 				glTranslatef(tx, ty, 0);
 
-				DrawPoints(20, item.count, &item.v.front() , EDIT_COLOR);
+				DrawPoints(20, item.o->count, &item.v.front() , EDIT_COLOR);
 				
 				glPopMatrix();
 
@@ -276,18 +279,22 @@ void Renderer::drawPlayfield() {
 	}
 	
 	ChipmunkDebugDrawConstraints(_physics->getSpace());
-
+	
 	glEnable(GL_TEXTURE_2D);
 	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
 	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
 
 		LayoutItem item = it->second;
 
-		drawObject(&item);
+		if (strcmp(item.n.c_str(), "box") != 0) {
+
+			drawObject(&item);
+
+		}
 
 	}
 	glDisable(GL_TEXTURE_2D);
-
+	
 }
 
 void Renderer::drawObject(LayoutItem *item) {
@@ -371,7 +378,7 @@ void Renderer::drawBall(LayoutItem *item) {
 	glPushMatrix();
 	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef(item->o->r1 * 2, item->o->r1 * 2, 0);
+	glScalef(item->o->r1 * item->s * 2, item->o->r1 * item->s * 2, 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
 	//glEnable(GL_TEXTURE_2D);

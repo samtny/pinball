@@ -294,6 +294,24 @@ void destroyObject(cpSpace *space, void *itm, void *unused) {
 		cpShapeFree(item->shape);
 	}
 	*/
+	LayoutItem *item = (LayoutItem *)itm;
+
+	for (int i = 0; i < item->bodies.size(); i++) {
+		cpBody *body = item->bodies[i];
+		cpBodyEachConstraint(body, destroyConstraint, NULL);
+		cpBodyEachShape(body, destroyShape, NULL);
+		cpSpaceRemoveBody(space, body);
+		cpBodyFree(body);
+	}
+	item->bodies.clear();
+
+	for (int i = 0; i < item->shapes.size(); i++) {
+		cpShape *shape = item->shapes[i];
+		cpSpaceRemoveShape(space, shape);
+		cpShapeFree(shape);
+	}
+	item->shapes.clear();
+
 }
 
 void Physics::destroyObject(LayoutItem *item) {
@@ -393,13 +411,13 @@ static int ballCollisionGroup = 2048;
 
 void Physics::createBall(LayoutItem *item) {
     
-    cpFloat area = (item->o->r1 * item->o->r1 * M_PI);
+    cpFloat area = (item->o->r1 * item->s * item->o->r1 * item->s * M_PI);
     cpFloat mass = area * item->o->m->d;
     
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
+    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1 * item->s, cpvzero)));
     cpBodySetPos(body, item->v[0]);
     
-    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
+    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1 * item->s, cpvzero));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBall + ballCollisionGroup); // TODO: ball shape group is kludged
@@ -481,9 +499,7 @@ void Physics::createSwitch(LayoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shapes.push_back(shape);
-
-	//item->bodies.push_back(box->bodies[0]);
-	
+		
 }
 
 void Physics::createSegment(LayoutItem *item) {
@@ -496,9 +512,7 @@ void Physics::createSegment(LayoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shapes.push_back(shape);
-
-	item->bodies.push_back(box->bodies[0]);
-
+	
 }
 
 void Physics::createSlingshot(LayoutItem *item) {
@@ -552,9 +566,7 @@ void Physics::createCircle(LayoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	item->shapes.push_back(shape);
-
-	item->bodies.push_back(box->bodies[0]);
-
+	
 }
 
 void Physics::createTarget(LayoutItem *item) {

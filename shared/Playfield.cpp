@@ -346,6 +346,8 @@ void Playfield::loadParts(void) {
 
 						}
 
+					} else if (strcmp("v", key) == 0) {
+						props.count = (int)lua_tonumber(L, -1);
 					}
 
 					lua_pop(L, 1);
@@ -404,10 +406,10 @@ void Playfield::loadLayout(void) {
 
 					} else if (strcmp("v", key) == 0) {
 						
-						int length = lua_rawlen(L, -1);
-						
+						int count = lua_rawlen(L, -1);
+
 						// traverse 2d vects
-						for (int i = 1; i <= length; i++)
+						for (int i = 1; i <= count; i++)
 						{
 
 							// init vect object
@@ -437,9 +439,7 @@ void Playfield::loadLayout(void) {
 							props.v.push_back(v);
 
 						}
-
-						props.count = length;
-
+						
 					} else if (strcmp("s", key) == 0) {
 						props.s = (float)lua_tonumber(L, -1);
 					}
