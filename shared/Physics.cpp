@@ -812,6 +812,14 @@ void Physics::loadForces() {
 						_slingshotDamping = (float)lua_tonumber(L, -1);
 					} else if (strcmp("slingshotImpulse", key) == 0) {
 						_slingshotImpulse = (float)lua_tonumber(L, -1);
+					} else if (strcmp("flipImpulse", key) == 0) {
+						flipImpulse = (float)lua_tonumber(L, -1);
+					} else if (strcmp("flipForce", key) == 0) {
+						flipForce = (float)lua_tonumber(L, -1);
+					} else if (strcmp("unflipForce", key) == 0) {
+						unflipForce = (float)lua_tonumber(L, -1);
+					} else if (strcmp("unflipImpulse", key) == 0) {
+						unflipImpulse = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);

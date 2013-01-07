@@ -408,6 +408,7 @@ void Editor::insertItems() {
 
 				// reset;
 				_currentEditObject.vCurrent = 0;
+				_currentEditObject.verts.clear();
 
 			}
 
