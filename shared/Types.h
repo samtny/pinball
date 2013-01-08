@@ -51,9 +51,5 @@ static inline Coord2 coordnormalize(const Coord2 v) {
 	return coordmult(v, 1.0f/(float)coordlen(v));
 }
 
-typedef struct Rect{
-	Coord2 begin, end;
-} Rect;
-
 #endif
 
