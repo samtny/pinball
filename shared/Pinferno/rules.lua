@@ -96,12 +96,12 @@ function leftTargetBankHit(index)
 			end
 		end
 		
-		playSound(chimeC1, LOOP_INTERVAL_NONE)
+		--playSound(chimeC1, LOOP_INTERVAL_NONE)
 		
 	elseif leftTargetBankStates[index] == targetStateLit then
 		
 		score = score + leftTargetBankScoreLit
-		playSound(chimeC0, LOOP_INTERVAL_NONE)
+		--playSound(chimeC0, LOOP_INTERVAL_NONE)
 
 	end
 
@@ -156,11 +156,11 @@ function startGame()
 	-- TODO: switch on __PINBALL_DEBUG flag;
 	resetBallPosition()
 	setCameraMode("centered")
-	doCameraEffect("swirlin")
+	--doCameraEffect("swirlin")
 
 	resetAll()
 	serveBallToTrough()
-	playSound(gameStartMusic, 10)
+	--playSound(gameStartMusic, 10)
 
 	ballsInPlay = 0 -- yeah, not how this works...
 

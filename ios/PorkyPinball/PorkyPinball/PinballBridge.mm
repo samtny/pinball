@@ -42,8 +42,8 @@
     return size;
 }
 
-PinballBridgeInterface::PinballBridgeInterface(void) : self (NULL) {
-    
+PinballBridgeInterface::PinballBridgeInterface(void) {
+    self = [[PinballBridge alloc] init];
 }
 
 PinballBridgeInterface::~PinballBridgeInterface(void) {
@@ -51,14 +51,14 @@ PinballBridgeInterface::~PinballBridgeInterface(void) {
 }
 
 bool PinballBridgeInterface::init(void) {
-    self = [[PinballBridge alloc] init];
     [(PinballBridge *)self initI];
     return YES;
 }
 
 -(void)initI {
     
-#ifndef TARGET_IPHONE_SIMULATOR
+#if !TARGET_IPHONE_SIMULATOR
+    NSLog(@"loading sounds");
     SoundManager *s = [[SoundManager alloc] init];
     
     [s loadSoundWithKey:@"flip" musicFile:@"flip.caf"];
@@ -196,7 +196,9 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     
     NSString *name = [NSString stringWithCString:(const char *)soundName encoding:NSUTF8StringEncoding];
     
-    [_soundManager playSoundWithKey:name gain:0 pitch:0 location:CGPointMake(0, 0) shouldLoop:NO sourceID:0];
+    NSUInteger result = [_soundManager playSoundWithKey:name gain:1.0f pitch:1.0f location:CGPointMake(0, 0) shouldLoop:NO sourceID:-1];
+    
+    NSLog(@"result: %d\n", result);
     
 }
 

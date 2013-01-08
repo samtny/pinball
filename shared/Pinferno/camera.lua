@@ -6,7 +6,7 @@ camera = {
 		t = "fixed",
 		z = 1,
 		c = { 10, 20 },
-		w = 40
+		w = 25
 	},
     
 	free = {

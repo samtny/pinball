@@ -185,7 +185,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(SoundManager);
 #pragma mark Sound management
 
 - (void)loadSoundWithKey:(NSString*)aSoundKey musicFile:(NSString*)aMusicFile {
-
+    NSLog(@"loadSoundWithKey");
     // Check to make sure that a sound with the same key does not already exist
     NSNumber *numVal = [soundLibrary objectForKey:aSoundKey];
     
@@ -413,6 +413,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(SoundManager);
 	// Find the buffer linked to the key which has been passed in
 	NSNumber *numVal = [soundLibrary objectForKey:aSoundKey];
 	if(numVal == nil) return 0;
+    
 	NSUInteger bufferID = [numVal unsignedIntValue];
 	
 	// Find an available source if -1 has been passed in as the sourceID.  If the sourceID is
