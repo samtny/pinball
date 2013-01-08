@@ -30,7 +30,7 @@ extern "C" {
 
 #include "chipmunk/chipmunk.h"
 
-#include "chipmunk/ChipmunkDebugDraw.h"
+//#include "chipmunk/ChipmunkDebugDraw.h"
 
 #include "glfont2.h"
 
@@ -227,8 +227,8 @@ void Renderer::drawPlayfield() {
 			tx = (float)(end.x - start.x);
 			ty = (float)(end.y - start.y);
 		} else if (s->editMode == EDIT_MODE_ROTATE) {
-			Coord2 start = s->selectionStart;
-			Coord2 end = s->selectionEnd;
+			//Coord2 start = s->selectionStart;
+			//Coord2 end = s->selectionEnd;
 		}
 		map<string, LayoutItem> *items = _playfield->getLayout();
 		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
@@ -281,7 +281,7 @@ void Renderer::drawPlayfield() {
 		
 	}
 	
-	ChipmunkDebugDrawConstraints(_physics->getSpace());
+	//ChipmunkDebugDrawConstraints(_physics->getSpace());
 	
 	glEnable(GL_TEXTURE_2D);
 	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);

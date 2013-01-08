@@ -53,6 +53,11 @@
 		4B170278164AB7CA007D4A2F /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 4B170256164AB7CA007D4A2F /* lzio.c */; };
 		4B2890D5166B03DB00F3A92C /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B2890D3166B03DB00F3A92C /* Util.cpp */; };
 		4B2F787E1665CD2F0037FE71 /* Waterfall2 in Resources */ = {isa = PBXBuildFile; fileRef = 4B2F787D1665CD2F0037FE71 /* Waterfall2 */; };
+		4B356730169C5F0000080F94 /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B356726169C5F0000080F94 /* Drawing.cpp */; };
+		4B356731169C5F0000080F94 /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B356728169C5F0000080F94 /* Editor.cpp */; };
+		4B356732169C5F0000080F94 /* Flipperfall in Resources */ = {isa = PBXBuildFile; fileRef = 4B35672A169C5F0000080F94 /* Flipperfall */; };
+		4B356733169C5F0000080F94 /* Pinferno in Resources */ = {isa = PBXBuildFile; fileRef = 4B35672B169C5F0000080F94 /* Pinferno */; };
+		4B356734169C5F0000080F94 /* Playfield.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B35672C169C5F0000080F94 /* Playfield.cpp */; };
 		4BB93825164DF69400EC9983 /* ChipmunkDebugDraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */; };
 		4BBF7C2F1664284900957DA4 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF7C071664284900957DA4 /* Camera.cpp */; };
 		4BBF7C301664284900957DA4 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BBF7C091664284900957DA4 /* Game.cpp */; };
@@ -123,6 +128,16 @@
 		4B2890D3166B03DB00F3A92C /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
 		4B2890D4166B03DB00F3A92C /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		4B2F787D1665CD2F0037FE71 /* Waterfall2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Waterfall2; sourceTree = "<group>"; };
+		4B356726169C5F0000080F94 /* Drawing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Drawing.cpp; sourceTree = "<group>"; };
+		4B356727169C5F0000080F94 /* Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawing.h; sourceTree = "<group>"; };
+		4B356728169C5F0000080F94 /* Editor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Editor.cpp; sourceTree = "<group>"; };
+		4B356729169C5F0000080F94 /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Editor.h; sourceTree = "<group>"; };
+		4B35672A169C5F0000080F94 /* Flipperfall */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Flipperfall; sourceTree = "<group>"; };
+		4B35672B169C5F0000080F94 /* Pinferno */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pinferno; sourceTree = "<group>"; };
+		4B35672C169C5F0000080F94 /* Playfield.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Playfield.cpp; sourceTree = "<group>"; };
+		4B35672D169C5F0000080F94 /* Playfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Playfield.h; sourceTree = "<group>"; };
+		4B35672E169C5F0000080F94 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		4B35672F169C5F0000080F94 /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		4B77E0791655729C0065BE6E /* libChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libChipmunk-iPhone.a"; path = "/lib/chipmunk/iphone simulator/libChipmunk-iPhone.a"; sourceTree = "<absolute>"; };
 		4BB93824164DF69300EC9983 /* ChipmunkDebugDraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChipmunkDebugDraw.cpp; path = ../../../../../../../src/chipmunk/debugdraw/ChipmunkDebugDraw.cpp; sourceTree = "<group>"; };
 		4BBF7C071664284900957DA4 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
@@ -282,8 +297,18 @@
 		4BBF7C061664284900957DA4 /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B35672A169C5F0000080F94 /* Flipperfall */,
+				4B35672B169C5F0000080F94 /* Pinferno */,
 				4BBF7C4C166428CF00957DA4 /* Waterfall */,
 				4B2F787D1665CD2F0037FE71 /* Waterfall2 */,
+				4B356726169C5F0000080F94 /* Drawing.cpp */,
+				4B356727169C5F0000080F94 /* Drawing.h */,
+				4B356728169C5F0000080F94 /* Editor.cpp */,
+				4B356729169C5F0000080F94 /* Editor.h */,
+				4B35672C169C5F0000080F94 /* Playfield.cpp */,
+				4B35672D169C5F0000080F94 /* Playfield.h */,
+				4B35672E169C5F0000080F94 /* Texture.h */,
+				4B35672F169C5F0000080F94 /* Types.h */,
 				4BBF7C071664284900957DA4 /* Camera.cpp */,
 				4BBF7C081664284900957DA4 /* Camera.h */,
 				4BBF7C091664284900957DA4 /* Game.cpp */,
@@ -376,6 +401,8 @@
 				4BC9500A165C68E500AF8A8E /* flip.caf in Resources */,
 				4BBF7C4D166428CF00957DA4 /* Waterfall in Resources */,
 				4B2F787E1665CD2F0037FE71 /* Waterfall2 in Resources */,
+				4B356732169C5F0000080F94 /* Flipperfall in Resources */,
+				4B356733169C5F0000080F94 /* Pinferno in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +458,9 @@
 				4BBF7C321664284900957DA4 /* Physics.cpp in Sources */,
 				4BBF7C3E1664284900957DA4 /* Renderer.cpp in Sources */,
 				4B2890D5166B03DB00F3A92C /* Util.cpp in Sources */,
+				4B356730169C5F0000080F94 /* Drawing.cpp in Sources */,
+				4B356731169C5F0000080F94 /* Editor.cpp in Sources */,
+				4B356734169C5F0000080F94 /* Playfield.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,9 +2,8 @@
 #include "Drawing.h"
 
 #ifdef __APPLE__
-	#include "OpenGL/gl.h"
-	#include "OpenGL/glu.h"
-	#include <GLUT/glut.h>
+    #include <OpenGLES/ES1/gl.h>
+    #include <OpenGLES/ES1/glext.h>
 #else
 	#ifdef _WIN32
 		#include <windows.h>
@@ -17,7 +16,11 @@
 
 static inline void
 glColor_from_color(Color color){
+#ifdef __APPLE__
+    glColor4f(color.r, color.g, color.b, color.a);
+#else
 	glColor4fv((GLfloat *)&color);
+#endif
 }
 
 void DrawShape(cpShape *shape, void *data) {
@@ -107,10 +110,7 @@ void DrawPoints(float size, int count, Coord2 *verts, Color color)
 
 	glColor4f(color.r, color.g, color.b, color.a);
 	
-	glBegin(GL_POINTS); {
-		for (int i = 0; i < count; i++) {
-			glVertex2f(verts[i].x, verts[i].y);
-		}
-	} glEnd();
+    glDrawArrays(GL_POINTS, 0, count);
 
 }
+

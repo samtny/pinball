@@ -10,7 +10,13 @@
 
 #import "PinballBridgeInterface.h"
 
+#import "Playfield.h"
+
 #import "Physics.h"
+
+#import "Camera.h"
+
+#import "Editor.h"
 
 #import "Renderer.h"
 
@@ -148,15 +154,35 @@ GLfloat gCubeVertexData[216] =
     
     PinballBridgeInterface *bi = new PinballBridgeInterface();
     bi->init();
-    bi->setGameName("Waterfall2");
+    bi->setGameName("Pinferno");
+    
+    Playfield *f = new Playfield();
+    f->setBridgeInterface(bi);
+    f->init();
     
     Physics *p = new Physics();
     p->setBridgeInterface(bi);
+    p->setPlayfield(f);
     p->init();
+    
+    Camera *c = new Camera();
+    c->setBridgeInterface(bi);
+    c->setPlayfield(f);
+    c->init();
+    
+    Editor *e = new Editor();
+    e->setBridgeInterface(bi);
+    e->setPlayfield(f);
+    e->setCamera(c);
+    e->setPhysics(p);
+    e->init();
     
     Renderer *r = new Renderer();
     r->setBridgeInterface(bi);
+    r->setPlayfield(f);
     r->setPhysics(p);
+    r->setCamera(c);
+    r->setEditor(e);
     r->init();
     
     Game *g = new Game();
@@ -465,6 +491,22 @@ GLfloat gCubeVertexData[216] =
 -(IBAction)userDidTapStartButton:(id)sender {
     // TODO: use dynamically set startButton id;
     _game->closeSwitch(0);
+}
+
+-(IBAction)userDidTapLeftFlipperButton:(id)sender {
+    _game->switchClosed("lbutton");
+}
+
+-(IBAction)userDidReleaseLeftFlipperButton:(id)sender {
+    _game->switchOpened("lbutton");
+}
+
+-(IBAction)userDidTapRightFlipperButton:(id)sender {
+    _game->switchClosed("rbutton");
+}
+
+-(IBAction)userDidReleaseRightFlipperButton:(id)sender {
+    _game->switchOpened("rbutton");
 }
 
 @end

@@ -12,5 +12,9 @@
 @interface ViewController : GLKViewController 
 
 -(IBAction)userDidTapStartButton:(id)sender;
+-(IBAction)userDidTapLeftFlipperButton:(id)sender;
+-(IBAction)userDidReleaseLeftFlipperButton:(id)sender;
+-(IBAction)userDidTapRightFlipperButton:(id)sender;
+-(IBAction)userDidReleaseRightFlipperButton:(id)sender;
 
 @end

@@ -265,7 +265,7 @@ static void destroyShape(cpBody *body, cpShape *shape, void *data) {
 	cpShapeFree(shape);
 }
 
-void destroyObject(cpSpace *space, void *itm, void *unused) {
+static void destroyObject(cpSpace *space, void *itm, void *unused) {
 	// TODO: yep
 	/*
 	LayoutItem *item = (LayoutItem *)itm;

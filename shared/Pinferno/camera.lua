@@ -8,6 +8,7 @@ camera = {
 		c = { 10, 20 },
 		w = 40
 	},
+    
 	free = {
 		t = "follow",
 		z = 1.0,

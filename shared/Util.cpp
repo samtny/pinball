@@ -1,4 +1,5 @@
 
+double absoluteTime(void);
 
 #ifdef _WIN32
 

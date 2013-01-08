@@ -13,9 +13,10 @@
 
 -(void)initI;
 -(void)setGameName:(const char *)gameName;
+-(const char *)getGameName;
 -(const char *)getPathForScriptFileName:(void *)scriptFileName;
 -(const char *)getPathForTextureFileName:(void *)textureFileName;
--(Texture *)createRGBATexture:(void *)textureFileName;
+-(GLTexture *)createRGBATexture:(void *)textureFileName;
 -(HostProperties *)getHostProperties;
 -(void)playSound:(const char *)soundName;
 

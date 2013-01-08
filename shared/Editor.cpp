@@ -28,6 +28,8 @@ using std::map;
 using std::vector;
 using std::make_pair;
 using std::ofstream;
+using std::min;
+using std::max;
 
 Editor::Editor(void) {
 	_state.editMode = EDIT_MODE_NONE;
@@ -161,7 +163,7 @@ void Editor::dupeItems() {
 
 			// rename;
 			char num[21];
-			sprintf_s(num, "%d", _currentEditObjectName);
+			sprintf(num, "%d", _currentEditObjectName);
 			newItem.n = "_" + newItem.o->n + num;
 			_currentEditObjectName++;
 			
@@ -260,7 +262,7 @@ void Editor::save() {
 
 	map<string, LayoutItem> *items = _playfield->getLayout();
 
-	const char *savePath = _bridgeInterface->getPathForScriptFileName("user.layout.lua");
+	const char *savePath = _bridgeInterface->getPathForScriptFileName((void *)"user.layout.lua");
 
 	ofstream layout;
 	layout.open(savePath);
@@ -377,7 +379,7 @@ void Editor::insertItems() {
 				//l.o->r2 *= 1 / (float)localScale;
 
 				char num[21];
-				sprintf_s(num, "%d", _currentEditObjectName);
+				sprintf(num, "%d", _currentEditObjectName);
 				l.n = "_" + _currentEditObject.part->n + num;
 				_currentEditObjectName++;
 
@@ -553,7 +555,7 @@ void Editor::rotateItems() {
 
 		map<string, LayoutItem> *items = _playfield->getLayout();
 
-		Coord2 start = _state.selectionStart;
+		//Coord2 start = _state.selectionStart;
 		Coord2 end = _state.selectionEnd;
 
 		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
@@ -579,7 +581,7 @@ void Editor::rotateItems() {
 				Coord2 rotvec = coordsub(m, c);
 
 				// rot
-				double rot = atan2f((float)rotvec.y, (float)rotvec.x) * (180.0f / M_PI);
+				//double rot = atan2f((float)rotvec.y, (float)rotvec.x) * (180.0f / M_PI);
 
 				// rotate all points around c
 				for (int i = 0; i < item->o->count; i++) {

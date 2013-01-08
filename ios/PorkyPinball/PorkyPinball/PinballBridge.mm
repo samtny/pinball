@@ -77,6 +77,10 @@ void PinballBridgeInterface::setGameName(const char *gameName) {
     [(id)self setGameName:gameName];
 }
 
+const char *PinballBridgeInterface::getGameName() {
+    return [(id)self getGameName];
+}
+
 const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
     return [(id)self getPathForScriptFileName:scriptFileName];
 }
@@ -85,7 +89,7 @@ const char * PinballBridgeInterface::getPathForTextureFileName(void * textureFil
     return [(id)self getPathForTextureFileName:textureFileName];
 }
 
-Texture * PinballBridgeInterface::createRGBATexture(void *textureFileName) {
+GLTexture * PinballBridgeInterface::createRGBATexture(void *textureFileName) {
     return [(id)self createRGBATexture:textureFileName];
 }
 
@@ -112,6 +116,10 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     
 }
 
+-(const char *)getGameName {
+    return _gameName;
+}
+
 -(const char *)getPathForScriptFileName:(void *)scriptFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)scriptFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)scriptFileName] pathExtension];
@@ -130,9 +138,10 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     return path;
 }
 
--(Texture *)createRGBATexture:(void *)textureFileName {
+-(GLTexture *)createRGBATexture:(void *)textureFileName {
     
-    Texture *tex = new Texture();
+    // TODO: "inject" this into a something instead;
+    GLTexture *tex = new GLTexture();
     
     NSString *path = [NSString stringWithUTF8String:[self getPathForTextureFileName:textureFileName]];
     NSData *data = [[NSData data] initWithContentsOfFile:path];
