@@ -189,8 +189,11 @@ void Renderer::drawPlayfield() {
 
 	}
 	*/
-	drawObject(&_playfield->getLayout()->find("box")->second);
-	glDisable(GL_TEXTURE_2D);
+	it_LayoutItem it = _playfield->getLayout()->find("box");
+	if (it != _playfield->getLayout()->end()) {
+		drawObject(&it->second);
+		glDisable(GL_TEXTURE_2D);
+	}
 	
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
