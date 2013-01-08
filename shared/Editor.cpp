@@ -144,23 +144,33 @@ void Editor::dupeItems() {
 	for (it_LayoutItem it = toDupe.begin(); it != toDupe.end(); it++) {
 	
 		LayoutItem item = it->second;
+		LayoutItem newItem;
+
+		newItem.c = item.c;
+		newItem.height = item.height;
+		newItem.o = item.o;
+		newItem.s = item.s;
+		newItem.v = item.v;
+		newItem.width = item.width;
 
 		if (item.editing == true) {
 
 			for (int i = 0; i < item.o->count; i++) {
-				item.v[i].x += minOffset;
+				newItem.v[i].x += minOffset;
 			}
 
 			// rename;
 			char num[21];
 			sprintf_s(num, "%d", _currentEditObjectName);
-			item.n = "_" + item.o->n + num;
+			newItem.n = "_" + newItem.o->n + num;
 			_currentEditObjectName++;
 			
-			item.editing = true;
+			newItem.editing = true;
 
 			//_physics->addLayoutItem(item);
-			_playfield->getLayout()->insert(make_pair(item.n, item));
+			_playfield->getLayout()->insert(make_pair(newItem.n, newItem));
+
+			_physics->createObject(&_playfield->getLayout()->find(newItem.n)->second);
 
 		}
 
@@ -218,52 +228,29 @@ void Editor::deleteItems() {
 
 void Editor::undo() {
 
-	// TODO: this is a complete hack job...
-	if (_history.size() > 1) {
+	// kill current
+	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
+		LayoutItem *item = &(&*it)->second;
+		item->editing = true;
+	}
+	this->deleteItems();
 
-		map<string, LayoutItem> *items = _playfield->getLayout();
+	// TODO: borked
 
-		LayoutItem box;
+	_history.pop_back();
 
-		for (it_LayoutItem it = items->begin(); it != items->end(); it++) {
+	EditorState state = _history.back();
 
-			LayoutItem item = it->second;
+	for (it_LayoutItem it = state.items.begin(); it != state.items.end(); it++) {
 
-			if (strcmp(item.n.c_str(), "box") != 0) {
+		LayoutItem *item = &(&*it)->second;
 
-				_physics->destroyObject(&item);
+		item->bodies.clear();
+		item->shapes.clear();
 
-			} else {
-				box = item;
-			}
+		_physics->createObject(item);
 
-		}
-
-		if (box.n == "box") {
-			_physics->destroyObject(&box);
-		}
-
-		items->clear();
-		
-		_history.pop_back();
-
-		EditorState *state = &_history.back();
-
-		LayoutItem *newBox = &state->items["box"];
-
-		_physics->createObject(newBox);
-		items->insert(make_pair("box", *newBox));
-
-		for (it_LayoutItem it = state->items.begin(); it != state->items.end(); it++) {
-
-			LayoutItem *item = &(&*it)->second;
-
-			if (strcmp(item->n.c_str(), "box") != 0) {
-				_physics->createObject(item);
-				items->insert(make_pair(item->n, *item));
-			}
-
-		}
+		_playfield->getLayout()->insert(make_pair(item->n, *item));
 
 	}
 
