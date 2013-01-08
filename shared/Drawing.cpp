@@ -101,6 +101,10 @@ void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fil
 
 }
 
+#ifndef GL_DOUBLE
+#define GL_DOUBLE 0x140A
+#endif
+
 void DrawPoints(float size, int count, Coord2 *verts, Color color)
 {
 
