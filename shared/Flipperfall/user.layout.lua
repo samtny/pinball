@@ -1,4 +1,12 @@
 layout = {
+	_popbumper20 = {
+		o = "popbumper",
+		v = { {4.25,31.9} }
+	},
+	_popbumper21 = {
+		o = "popbumper",
+		v = { {15.65,31.9} }
+	},
 	ball0 = {
 		o = "ball",
 		v = { {2.5,35} }
@@ -38,63 +46,7 @@ layout = {
 	},
 	pop0 = {
 		o = "popbumper",
-		v = { {10,28.5} }
-	},
-	post0 = {
-		o = "post",
-		v = { {10,20} }
-	},
-	post1 = {
-		o = "post",
-		v = { {10,23} }
-	},
-	post10 = {
-		o = "post",
-		v = { {16,20} }
-	},
-	post11 = {
-		o = "post",
-		v = { {16,23} }
-	},
-	post12 = {
-		o = "post",
-		v = { {19,21.5} }
-	},
-	post13 = {
-		o = "post",
-		v = { {19,24.5} }
-	},
-	post2 = {
-		o = "post",
-		v = { {13,21.5} }
-	},
-	post3 = {
-		o = "post",
-		v = { {13,24.5} }
-	},
-	post4 = {
-		o = "post",
-		v = { {7,21.5} }
-	},
-	post5 = {
-		o = "post",
-		v = { {7,24.5} }
-	},
-	post6 = {
-		o = "post",
-		v = { {4,20} }
-	},
-	post7 = {
-		o = "post",
-		v = { {4,23} }
-	},
-	post8 = {
-		o = "post",
-		v = { {1,21.5} }
-	},
-	post9 = {
-		o = "post",
-		v = { {1,24.5} }
+		v = { {10.15,22.65} }
 	},
 	rflipper = {
 		o = "flipper",
@@ -106,23 +58,15 @@ layout = {
 	},
 	target0 = {
 		o = "target",
-		v = { {5,17} , {6,16} }
+		v = { {-3.13963,21.2258} , {-3.96037,20.0742} }
 	},
 	target1 = {
 		o = "target",
-		v = { {14,16} , {15,17} }
+		v = { {23.3713,19.5821} , {22.5287,20.7179} }
 	},
 	troughSwitch = {
 		o = "switch",
 		v = { {-9.5,0.5} , {29.5,0.5} }
-	},
-	waterfallSwitch0 = {
-		o = "switch",
-		v = { {5.5,22.5} , {5.5,21.5} }
-	},
-	waterfallSwitch1 = {
-		o = "switch",
-		v = { {11.5,22.5} , {11.5,21.5} }
 	},
 	wireguide0 = {
 		o = "wireGuide",
