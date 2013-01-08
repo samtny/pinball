@@ -31,6 +31,7 @@ public:
 	void doCameraEffect(const char *effectName);
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
+    void playSound(const char *sound, const float loopInterval);
 	void setPaused(bool paused);
 	bool getPaused();
 	const char *getGameName();

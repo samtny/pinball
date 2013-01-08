@@ -58,8 +58,10 @@ function handleSwitchClosed(switch)
 		addToScore(targetValue)
 	elseif switch == "lbutton" then
 		activateMech("lflipper")
+        playSound("flip", LOOP_INTERVAL_NONE)
 	elseif switch == "rbutton" then
 		activateMech("rflipper")
+        playSound("flip", LOOP_INTERVAL_NONE)
 	end
 end
 

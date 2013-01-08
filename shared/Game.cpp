@@ -106,7 +106,13 @@ static int lua_addTimer(lua_State *L) {
 
 static int lua_playSound(lua_State *L) {
     
-    // TODO: something...
+    int count = lua_gettop(L);
+    
+    if (count == 2) {
+        const char *sound = lua_tostring(L, 1);
+        const float loopInterval = (const float)lua_tonumber(L, 2);
+        lua_currentInstance->playSound(sound, loopInterval);
+    }
     
     return 0;
     
@@ -174,6 +180,10 @@ void Game::activateMech(const char *mechName) {
 
 	_physics->activateMech(mechName);
 
+}
+
+void Game::playSound(const char *sound, const float loopInterval) {
+    _bridgeInterface->playSound((void *)sound);
 }
 
 void Game::doCameraEffect(const char *effectName) {
@@ -255,6 +265,9 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_deactivateMech);
 		lua_setglobal(L, "deactivateMech");
+        
+        lua_pushcfunction(L, lua_playSound);
+        lua_setglobal(L, "playSound");
 
     } else {
 		fprintf(stderr, "%s\n", lua_tostring(L, -1));
