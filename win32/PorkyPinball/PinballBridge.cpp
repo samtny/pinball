@@ -13,7 +13,7 @@
 using namespace std;
 
 PinballBridgeInterface::PinballBridgeInterface(void) : _this(nullptr) {
-	
+	_this = new PinballBridge();
 }
 
 PinballBridgeInterface::~PinballBridgeInterface(void) {
@@ -21,7 +21,6 @@ PinballBridgeInterface::~PinballBridgeInterface(void) {
 }
 
 void PinballBridgeInterface::init() {
-	_this = new PinballBridge();
 	PinballBridge *b = (PinballBridge *)_this;
 	b->init();
 }
@@ -89,6 +88,7 @@ const char *PinballBridge::getGameName() {
 
 void PinballBridgeInterface::playSound(void * soundName) {
 	// TODO: something
+
 }
 
 #pragma warning( disable : 4996 )

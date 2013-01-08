@@ -307,6 +307,9 @@
     <None Include="..\..\shared\Flipperfall\parts.lua">
       <Filter>Source Files\shared\Flipperfall</Filter>
     </None>
+    <None Include="..\..\shared\Flipperfall\user.layout.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">

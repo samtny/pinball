@@ -154,6 +154,7 @@
     <None Include="..\..\shared\Flipperfall\rules.lua" />
     <None Include="..\..\shared\Flipperfall\textures.lua" />
     <None Include="..\..\shared\Flipperfall\textures\font.glf" />
+    <None Include="..\..\shared\Flipperfall\user.layout.lua" />
     <None Include="..\..\shared\Pinferno\camera.lua" />
     <None Include="..\..\shared\Pinferno\config.lua" />
     <None Include="..\..\shared\Pinferno\effects.lua" />
