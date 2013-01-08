@@ -11,7 +11,7 @@ layout = {
     ball0 = {
         o = "ball",
         v = { {10,35} },
-		s = 3.5
+		s = 2
     },
 	
     waterfallSwitch0 = {

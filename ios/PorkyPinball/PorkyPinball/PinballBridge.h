@@ -19,5 +19,7 @@
 -(GLTexture *)createRGBATexture:(void *)textureFileName;
 -(HostProperties *)getHostProperties;
 -(void)playSound:(const char *)soundName;
+-(void)addTimer:(int)timerId duration:(float)duration;
+-(void)setTimerDelegate:(ITimerDelegate *)timerDelegate;
 
 @end

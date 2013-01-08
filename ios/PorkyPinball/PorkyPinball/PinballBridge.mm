@@ -12,6 +12,7 @@
 @interface PinballBridge() {
     SoundManager *_soundManager;
     const char *_gameName;
+    ITimerDelegate *_timerDelegate;
 }
 
 +(CGSize)windowCurrentSize;
@@ -101,12 +102,12 @@ void PinballBridgeInterface::playSound(void * soundName) {
     [(id)self playSound:(const char *)soundName];
 }
 
-void PinballBridgeInterface::addTimer(float duration, int id) {
-    // TODO: something
+void PinballBridgeInterface::addTimer(float duration, int timerId) {
+    [(id)self addTimer:timerId duration:duration];
 }
 
 void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
-    // TODO: something
+    [(id)self setTimerDelegate:timerDelegate];
 }
 
 -(void)setGameName:(const char *)gameName {
@@ -197,6 +198,19 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     
     [_soundManager playSoundWithKey:name gain:0 pitch:0 location:CGPointMake(0, 0) shouldLoop:NO sourceID:0];
     
+}
+
+-(void)timerCallback:(NSNumber *)timerId {
+    NSLog(@"timer: %d\n", [timerId intValue]);
+    _timerDelegate->timerCallback([timerId intValue]);
+}
+
+-(void)addTimer:(int)timerId duration:(float)duration {
+    [self performSelector:@selector(timerCallback:) withObject:[NSNumber numberWithInt:timerId] afterDelay:duration];
+}
+
+-(void)setTimerDelegate:(ITimerDelegate *)timerDelegate {
+    _timerDelegate = timerDelegate;
 }
 
 @end
