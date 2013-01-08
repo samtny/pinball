@@ -350,7 +350,7 @@ void Camera::applyTransform(void) {
 		
 		for (it_LayoutItem iterator = items->begin(); iterator != items->end(); iterator++) {
 			LayoutItem item = iterator->second;
-			if (strcmp("ball", item.o->n.c_str()) == 0) {
+			if (strcmp("ball", item.o->s.c_str()) == 0) {
 				if (lowBall.width == -1 || item.bodies[0]->p.y < lowBall.bodies[0]->p.y) {
 					lowBall = item;
 				}
@@ -379,7 +379,7 @@ void Camera::applyTransform(void) {
 
 		glTranslatef(0, -posY, 0);
 
-		glScalef(_activeCameraMode.z, _activeCameraMode.z, 1);
+		glScalef(_scale, _scale, 1);
 		
 		break;
 	}

@@ -155,7 +155,7 @@ function startGame()
 
 	-- TODO: switch on __PINBALL_DEBUG flag;
 	resetBallPosition()
-	setCameraMode("centered")
+	
 	--doCameraEffect("swirlin")
 
 	resetAll()
@@ -217,7 +217,7 @@ function resetLights()
 end
 
 function resetCamera()
-	setCameraMode("centered")
+	setCameraMode("free")
 end
 
 function serveBallToTrough()
