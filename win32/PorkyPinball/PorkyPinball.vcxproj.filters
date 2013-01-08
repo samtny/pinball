@@ -256,9 +256,6 @@
     <None Include="..\..\shared\Flipperfall\materials.lua">
       <Filter>Source Files\shared\Flipperfall</Filter>
     </None>
-    <None Include="..\..\shared\Flipperfall\objects.lua">
-      <Filter>Source Files\shared\Flipperfall</Filter>
-    </None>
     <None Include="..\..\shared\Flipperfall\overlays.lua">
       <Filter>Source Files\shared\Flipperfall</Filter>
     </None>
@@ -306,6 +303,9 @@
     </None>
     <None Include="..\..\shared\Pinferno\parts.lua">
       <Filter>Source Files\shared\Pinferno</Filter>
+    </None>
+    <None Include="..\..\shared\Flipperfall\parts.lua">
+      <Filter>Source Files\shared\Flipperfall</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

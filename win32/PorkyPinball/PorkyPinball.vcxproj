@@ -149,7 +149,7 @@
     <None Include="..\..\shared\Flipperfall\forces.lua" />
     <None Include="..\..\shared\Flipperfall\layout.lua" />
     <None Include="..\..\shared\Flipperfall\materials.lua" />
-    <None Include="..\..\shared\Flipperfall\objects.lua" />
+    <None Include="..\..\shared\Flipperfall\parts.lua" />
     <None Include="..\..\shared\Flipperfall\overlays.lua" />
     <None Include="..\..\shared\Flipperfall\rules.lua" />
     <None Include="..\..\shared\Flipperfall\textures.lua" />

@@ -5,9 +5,9 @@ forces = {
 	tableAngle = 6.5,
 	gravity = { 0.0, -9.80665 * ( 6.5 / 90.0 ) },
 
-	flipImpulse = 1.0,
+	flipImpulse = 0.05,
 	flipForce = 0.5,
-	unflipImpulse = 1.0,
+	unflipImpulse = 0.05,
 	unflipForce = 0.5,
 
 	slingshotRestLength = 0.6,

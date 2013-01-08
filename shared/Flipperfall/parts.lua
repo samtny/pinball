@@ -1,5 +1,5 @@
 
-objects = {
+parts = {
 	ball = {
 		s = "ball",
 		v = 1,
