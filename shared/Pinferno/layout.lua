@@ -14,6 +14,12 @@ layout = {
 		s = 2
     },
 	
+	ball1 = {
+		o = "ball",
+		v = { {0, 35} },
+		s = 2
+	},
+
     waterfallSwitch0 = {
 		o = "switch",
 		v = { {5.5, 22.5}, {5.5, 21.5} }

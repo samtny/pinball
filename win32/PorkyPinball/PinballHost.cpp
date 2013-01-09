@@ -66,6 +66,7 @@ void PinballHost::init() {
 	g->setRenderer(r);
 	g->init();
 	
+	// TODO: find factoring error/s
 	e->setPhysics(p);
 	e->setRenderer(r);
 	e->setGame(g);
@@ -73,9 +74,6 @@ void PinballHost::init() {
 	
 	_glutEngine = e;
 
-	// TODO: find factoring error/s;
-	//r->init();
-	
 }
 
 void PinballHost::start() {

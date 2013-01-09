@@ -52,8 +52,8 @@ void Camera::init() {
 
 	for (it_CameraMode iterator = _cameraModes.begin(); iterator != _cameraModes.end(); iterator++) {
 		CameraMode *mode = &(&*iterator)->second;
-		mode->b.x *= 1 / _scale;
-		mode->b.y *= 1 / _scale;
+		//mode->b.x *= 1 / _scale;
+		//mode->b.y *= 1 / _scale;
 		mode->c.x *= 1 / _scale;
 		mode->c.y *= 1 / _scale;
 		mode->w *= 1 / _scale;
@@ -325,66 +325,105 @@ void Camera::applyTransform(void) {
 
 	switch (_activeCameraMode.t)
 	{
-	case CAMERA_TYPE_FIXED: {
+		case CAMERA_TYPE_FIXED: {
 
-		float tx = (float)(_activeCameraMode.c.x * _scale - (_displayProperties->viewportWidth / 2.0f));
+			float tx = (float)(_activeCameraMode.c.x * _scale - (_displayProperties->viewportWidth / 2.0f));
 
-		float ty = (float)(_activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
+			float ty = (float)(_activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
 
-		glTranslatef(-tx, -ty, 0);
+			glTranslatef(-tx, -ty, 0);
 
-		//this->applyEffectsTransforms();
+			//this->applyEffectsTransforms();
 
-		glScalef(_scale, _scale, 1);
+			glScalef(_scale, _scale, 1);
 
-		break;
-	}
-	case CAMERA_TYPE_FOLLOW_BALL:
-	default:
-		
-		map<string, LayoutItem> *items = _playfield->getLayout();
-		
-		LayoutItem box;
-		LayoutItem lowBall;
-		lowBall.width = -1;
-		
-		for (it_LayoutItem iterator = items->begin(); iterator != items->end(); iterator++) {
-			LayoutItem item = iterator->second;
-			if (strcmp("ball", item.o->s.c_str()) == 0) {
-				if (lowBall.width == -1 || item.bodies[0]->p.y < lowBall.bodies[0]->p.y) {
-					lowBall = item;
+			break;
+		}
+		case CAMERA_TYPE_FOLLOW_BALL:
+			// fall thru...
+		default:
+
+			// optimize for low ball.y + avg balls.x
+			float ballX = 0;
+			float ballY = FLT_MAX;
+			float ballRadius = 0;
+			float boxLeftX = FLT_MAX;
+			float boxRightX = FLT_MIN;
+			float boxBottomY = FLT_MAX;
+			float boxTopY = FLT_MIN;
+			
+			int numBalls = 0;
+			for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
+
+				LayoutItem item = it->second;
+
+				if (strcmp(item.o->s.c_str(), "ball") == 0) {
+
+					ballX += item.bodies[0]->p.x;
+					numBalls++;
+
+					float y = item.bodies[0]->p.y;
+
+					if (y < ballY) {
+						ballY = y;
+						ballRadius = item.o->r1 * item.s;
+					}
+
+				} else if (strcmp(item.o->s.c_str(), "box") == 0) {
+
+					boxLeftX = item.v[0].x;
+					boxRightX = item.v[3].x;
+
+					boxBottomY = item.v[0].y;
+					boxTopY = item.v[1].y;
+					
 				}
-			} else if (strcmp("box", item.n.c_str()) == 0) {
-				box = item;
+
 			}
-		}
 
-		float minY = (float)box.v[0].y;
-		float maxY = (float)box.v[1].y;
+			ballX *= 1.0f / (float)numBalls;
 
-		float posY = 0;
+			ballX *= _scale;
+			ballY *= _scale;
+			ballRadius *= _scale;
+			boxLeftX *= _scale;
+			boxRightX *= _scale;
+			boxBottomY *= _scale;
+			boxTopY *= _scale;
 
-		posY = (float)lowBall.bodies[0]->p.y;
-		posY -= lowBall.o->r1;
+			float viewableX = _displayProperties->viewportWidth;
+			float bufferX = _activeCameraMode.b.x * viewableX;
 
-		posY -= (float)_activeCameraMode.b.y; // margin
+			float tx = ballX - bufferX;
 
-		if (posY < minY) {
-			posY = minY;
-		} else if (posY > maxY) {
-			posY = maxY;
-		}
+			if (tx < (boxLeftX)) {
+				tx = boxLeftX;
+			}
 
-		posY *= _scale * _activeCameraMode.z;
+			if ((tx + viewableX) > boxRightX) {
+				tx = boxRightX - viewableX;
+			}
 
-		glTranslatef(0, -posY, 0);
+			float viewableY = _displayProperties->viewportHeight;
+			float bufferY = _activeCameraMode.b.y * viewableY;
 
-		glScalef(_scale, _scale, 1);
-		
-		break;
+			float ty = boxBottomY;
+
+			float bufferedY = ballY + ballRadius + bufferY;
+
+			if (bufferedY > (boxBottomY + viewableY)) {
+				ty += bufferedY - (boxBottomY + viewableY);
+			}
+
+			if ((ty + viewableY) > boxTopY) {
+				ty = boxTopY - viewableY;
+			}
+
+			glTranslatef(-tx, -ty, 0);
+			glScalef(_scale, _scale, 1);
+
+			break;
 	}
-
-	
 
 }
 
