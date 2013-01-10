@@ -313,10 +313,17 @@ void Physics::destroyObject(LayoutItem *item) {
 }
 
 void Physics::createObjects(void) {
+
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
+	this->createObject(box);
+
 	for (it_LayoutItem iterator = _playfield->getLayout()->begin(); iterator != _playfield->getLayout()->end(); iterator++) {
 		LayoutItem *lprops = &(&*iterator)->second;
-		this->createObject(lprops);
+		if (strcmp(lprops->n.c_str(), "box") != 0) {
+			this->createObject(lprops);
+		}
 	}
+
 }
 
 void Physics::createObject(LayoutItem *item) {

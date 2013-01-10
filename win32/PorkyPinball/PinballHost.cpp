@@ -25,7 +25,7 @@ PinballHost::~PinballHost() {
 void PinballHost::init() {
 
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
-	bi->setGameName("Pinferno");
+	bi->setGameName("Cosmos");
 	bi->init();
 	
 	Playfield *f = new Playfield();

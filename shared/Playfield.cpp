@@ -316,7 +316,7 @@ void Playfield::loadParts(void) {
 				// key;
 				const char *name = lua_tostring(L, -2);
 
-				Part props;
+				Part props = PART_INIT;
 				props.n = name;
 
 				lua_pushnil(L);
@@ -387,7 +387,7 @@ void Playfield::loadLayout(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"layout.lua");
+	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"user.layout.lua");
 
 	int error = luaL_dofile(L, layoutPath);
 	if (!error) {

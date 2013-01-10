@@ -175,6 +175,13 @@ void Renderer::drawPlayfield() {
 	glLoadIdentity();
 	//glTranslatef(0.375, 0.375, 0.0);
 
+	const EditorState *s = _editor->getState();
+	if (s->editMode == EDIT_MODE_PAN) {
+		Coord2 diff = coordsub(s->selectionStart, s->selectionEnd);
+		//_camera->setPan(diff);
+		glTranslatef(-diff.x, diff.y, 0);
+	}
+	
 	_camera->applyTransform();
 	
 	// TODO: separate "drawBackgrounds" method plzz...
@@ -191,15 +198,17 @@ void Renderer::drawPlayfield() {
 	*/
 	it_LayoutItem it = _playfield->getLayout()->find("box");
 	if (it != _playfield->getLayout()->end()) {
-		drawObject(&it->second);
-		glDisable(GL_TEXTURE_2D);
+		LayoutItem *item = &it->second;
+		if (item->o->t.t != NULL) {
+			drawObject(item);
+		}
 	}
+	glDisable(GL_TEXTURE_2D);
 	
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
 	cpSpaceEachShape(_physics->getSpace(), DrawShape, NULL);
 
-	const EditorState *s = _editor->getState();
 	if (s->editMode != EDIT_MODE_NONE) {
 		
 		// new / inserted 
@@ -284,15 +293,16 @@ void Renderer::drawPlayfield() {
 	//ChipmunkDebugDrawConstraints(_physics->getSpace());
 	
 	glEnable(GL_TEXTURE_2D);
-	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)false);
 	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
 
 		LayoutItem item = it->second;
 
 		if (strcmp(item.n.c_str(), "box") != 0) {
 
-			drawObject(&item);
-
+			if (item.o->t.t != NULL) {
+				drawObject(&item);
+			}
+		
 		}
 
 	}
@@ -306,6 +316,8 @@ void Renderer::drawObject(LayoutItem *item) {
 		this->drawBox(item);
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
 		this->drawBall(item);
+	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
+		this->drawFlipper(item);
 	}
 	
 }
@@ -338,7 +350,7 @@ void Renderer::drawBox(LayoutItem *item) {
 	glPushMatrix();
 	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
-	glScalef((float)(item->v[3].x - item->v[0].x), (float)(item->v[1].y - item->v[0].y), 0);
+	glScalef((float)(item->v[1].y - item->v[0].y), (float)(item->v[1].y - item->v[0].y), 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
 	
 	//glEnable(GL_TEXTURE_2D);
@@ -383,6 +395,54 @@ void Renderer::drawBall(LayoutItem *item) {
 	glTranslatef(posX, posY, 0);
 	glScalef(item->o->r1 * item->s * 2, item->o->r1 * item->s * 2, 0);
 	glRotatef((float)ball->a * 57.2957795f, 0, 0, 1);
+	
+	//glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, t->gl_index);
+	
+	glColor4f(1, 1, 1, 1);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	
+	//glDisable(GL_TEXTURE_2D);
+	
+	glPopMatrix();
+
+}
+
+void Renderer::drawFlipper(LayoutItem *item) {
+
+	static const GLfloat verts[] = {
+		-0.5, -0.5,
+		-0.5, 0.5,
+		0.5, -0.5,
+		0.5, 0.5
+	};
+
+	static const GLfloat tex[] = {
+		0, 1,
+		0, 0,
+		1, 1,
+		1, 0
+	};
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glTexCoordPointer(2, GL_FLOAT, 0, tex);
+
+	cpBody *flipper = item->bodies[0];
+	Texture *t = item->o->t.t;
+
+	cpVect center = cpvmult(cpvadd(item->v[0], item->v[1]), 0.5f);
+
+	float posX = (float)center.x;
+	float posY = (float)center.y;
+
+	glPushMatrix();
+	//_camera->applyTransform();
+	glTranslatef(posX, posY, 0);
+
+	Coord2 vect = coordsub(item->v[0], item->v[1]);
+
+	glScalef(coordlen(vect) + item->o->r1 + item->o->r2, coordlen(vect) + item->o->r1 + item->o->r2, 0);
+	glRotatef((float)flipper->a * 57.2957795f, 0, 0, 1);
 	
 	//glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, t->gl_index);

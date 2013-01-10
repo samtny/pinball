@@ -53,6 +53,9 @@ public:
 
 	void applyEffectsTransforms(void);
 
+	void setPan(Coord2 pan);
+	Coord2 getPan();
+
 protected:
 	void loadConfig();
 	void loadCamera();
@@ -70,6 +73,7 @@ private:
 	CameraType _type;
 	std::map<std::string, CameraMode> _cameraModes;
 	CameraMode _activeCameraMode;
+	Coord2 _pan;
 };
 
 

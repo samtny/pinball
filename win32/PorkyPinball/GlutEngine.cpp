@@ -78,6 +78,7 @@ void glut_menuFuncInsert(int value) {
 
 typedef enum Menu {
 	MENU_NONE,
+	MENU_PAN,
 	MENU_SELECT,
 	MENU_MOVE,
 	MENU_ROTATE,
@@ -90,6 +91,9 @@ void GlutEngine::menuCallback(int value) {
 
 	switch (value)
 	{
+	case MENU_PAN:
+		_currentEditMode = EDIT_MODE_PAN;
+		break;
 	case MENU_SELECT:
 		_currentEditMode = EDIT_MODE_SELECT;
 		break;
@@ -159,6 +163,7 @@ void GlutEngine::init() {
 
 	// main menu
 	glutCreateMenu(glut_menuFunc);
+	glutAddMenuEntry("Pan", MENU_PAN);
 	glutAddMenuEntry("Select", MENU_SELECT);
 	glutAddMenuEntry("Move", MENU_MOVE);
 	glutAddMenuEntry("Rotate", MENU_ROTATE);
@@ -275,7 +280,11 @@ void GlutEngine::keyboardUpCallback(unsigned char key) {
 
 void GlutEngine::motionCallback(int x, int y) {
 	
-	if (_currentEditMode == EDIT_MODE_SELECT) {
+	if (_currentEditMode == EDIT_MODE_PAN) {
+		const EditorState *s = _editor->getState();
+		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		_editor->setState(newState);
+	} else if (_currentEditMode == EDIT_MODE_SELECT) {
 		const EditorState *s = _editor->getState();
 		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
 		_editor->setState(newState);
@@ -299,7 +308,11 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 		switch (state)
 		{
 		case GLUT_DOWN:
-			if (_currentEditMode == EDIT_MODE_SELECT) {
+			if (_currentEditMode == EDIT_MODE_PAN) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_PAN, { x, y }, { x, y } };
+				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_SELECT) {
 				const EditorState *s = _editor->getState();
 				EditorState newState = { glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE, { x, y }, { x, y } };
 				_editor->setState(newState);
@@ -318,7 +331,11 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 			}
 			break;
 		case GLUT_UP: {
-			if (_currentEditMode == EDIT_MODE_SELECT) {
+			if (_currentEditMode == EDIT_MODE_PAN) {
+				const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_PAN_COMMIT, s->selectionStart, s->selectionEnd };
+				_editor->setState(newState);
+			} else if (_currentEditMode == EDIT_MODE_SELECT) {
 				// do nothing
 			} else if (_currentEditMode == EDIT_MODE_MOVE) {
 				const EditorState *s = _editor->getState();

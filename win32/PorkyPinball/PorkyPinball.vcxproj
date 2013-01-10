@@ -143,6 +143,19 @@
     <ClInclude Include=".\PinballBridge.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\shared\Cosmos\camera.lua" />
+    <None Include="..\..\shared\Cosmos\config.lua" />
+    <None Include="..\..\shared\Cosmos\effects.lua" />
+    <None Include="..\..\shared\Cosmos\forces.lua" />
+    <None Include="..\..\shared\Cosmos\layout.lua" />
+    <None Include="..\..\shared\Cosmos\materials.lua" />
+    <None Include="..\..\shared\Cosmos\objects.lua" />
+    <None Include="..\..\shared\Cosmos\overlays.lua" />
+    <None Include="..\..\shared\Cosmos\parts.lua" />
+    <None Include="..\..\shared\Cosmos\rules.lua" />
+    <None Include="..\..\shared\Cosmos\textures.lua" />
+    <None Include="..\..\shared\Cosmos\textures\font.glf" />
+    <None Include="..\..\shared\Cosmos\user.layout.lua" />
     <None Include="..\..\shared\Flipperfall\camera.lua" />
     <None Include="..\..\shared\Flipperfall\config.lua" />
     <None Include="..\..\shared\Flipperfall\effects.lua" />
@@ -172,6 +185,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\shared\Cosmos\textures\cosmos-playfield.png" />
+    <Image Include="..\..\shared\Cosmos\textures\origami_butterfly001.png" />
+    <Image Include="..\..\shared\Cosmos\textures\origami_duck001.png" />
+    <Image Include="..\..\shared\Cosmos\textures\origami_duck002.png" />
+    <Image Include="..\..\shared\Cosmos\textures\origami_pinwheel001.png" />
+    <Image Include="..\..\shared\Cosmos\textures\origami_pinwheel002.png" />
+    <Image Include="..\..\shared\Cosmos\textures\pinball.png" />
+    <Image Include="..\..\shared\Cosmos\textures\Pinferno7-Ball.png" />
+    <Image Include="..\..\shared\Cosmos\textures\pinferno7.jpg" />
+    <Image Include="..\..\shared\Cosmos\textures\Pinferno7.png" />
+    <Image Include="..\..\shared\Cosmos\textures\Test-Flipper.png" />
+    <Image Include="..\..\shared\Cosmos\textures\tiling.png" />
+    <Image Include="..\..\shared\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png" />
     <Image Include="..\..\shared\Flipperfall\textures\origami_butterfly001.png" />
     <Image Include="..\..\shared\Flipperfall\textures\origami_duck001.png" />
     <Image Include="..\..\shared\Flipperfall\textures\origami_duck002.png" />

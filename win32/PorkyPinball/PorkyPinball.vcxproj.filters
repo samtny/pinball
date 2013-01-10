@@ -37,6 +37,12 @@
     <Filter Include="Source Files\shared\Pinferno\textures">
       <UniqueIdentifier>{917224af-89b6-4c15-bd14-af79eed172a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shared\Cosmos">
+      <UniqueIdentifier>{e1d792ed-9c5a-4aab-ba71-34131ed182c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\Cosmos\textures">
+      <UniqueIdentifier>{7e423728-905e-46a5-a722-2280ea5b2327}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\shared\Physics.cpp">
@@ -310,6 +316,45 @@
     <None Include="..\..\shared\Flipperfall\user.layout.lua">
       <Filter>Source Files\shared\Flipperfall</Filter>
     </None>
+    <None Include="..\..\shared\Cosmos\camera.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\config.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\effects.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\forces.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\layout.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\materials.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\objects.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\overlays.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\parts.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\rules.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\textures.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\user.layout.lua">
+      <Filter>Source Files\shared\Cosmos</Filter>
+    </None>
+    <None Include="..\..\shared\Cosmos\textures\font.glf">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\shared\PorkyPinball\textures\pinball.png">
@@ -368,6 +413,45 @@
     </Image>
     <Image Include="..\..\shared\Pinferno\textures\Pinferno7-Ball.png">
       <Filter>Source Files\shared\Pinferno\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\cosmos-playfield.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\origami_butterfly001.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\origami_duck001.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\origami_duck002.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\origami_pinwheel001.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\origami_pinwheel002.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\pinball.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\pinferno7.jpg">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\Pinferno7.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\Pinferno7-Ball.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\Test-Flipper.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\tiling.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
+    </Image>
+    <Image Include="..\..\shared\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png">
+      <Filter>Source Files\shared\Cosmos\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>

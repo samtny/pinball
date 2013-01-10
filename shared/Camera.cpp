@@ -32,7 +32,7 @@ using std::map;
 
 Camera::Camera()
 {
-
+	_pan = coord(0, 0);
 }
 
 Camera::~Camera() {
@@ -313,7 +313,7 @@ Coord2 Camera::transform(Coord2 coord) {
 	cpFloat tx = coord.x * 1 / _scale + _activeCameraMode.c.x - (_activeCameraMode.w / 2.0f);
 	cpFloat ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode.c.y - (_activeCameraModeH / 2.0f);
 
-	Coord2 transformed = {tx, ty};
+	Coord2 transformed = {tx + _pan.x * 1 / _scale, ty - _pan.y * 1 / _scale};
 
 	return transformed;
 
@@ -331,7 +331,7 @@ void Camera::applyTransform(void) {
 
 			float ty = (float)(_activeCameraMode.c.y * _scale - (_displayProperties->viewportHeight / 2.0f));
 
-			glTranslatef(-tx, -ty, 0);
+			glTranslatef(-tx + -_pan.x, -ty + _pan.y, 0);
 
 			//this->applyEffectsTransforms();
 
@@ -419,7 +419,7 @@ void Camera::applyTransform(void) {
 				ty = boxTopY - viewableY;
 			}
 
-			glTranslatef(-tx, -ty, 0);
+			glTranslatef(-tx + -_pan.x, -ty + _pan.y, 0);
 			glScalef(_scale, _scale, 1);
 
 			break;
@@ -454,3 +454,12 @@ void Camera::doEffect(const char *effectName) {
 	_activeEffects.push_back(effect);
 
 }
+
+void Camera::setPan(Coord2 pan) {
+	_pan = pan;
+}
+
+Coord2 Camera::getPan() {
+	return _pan;
+}
+

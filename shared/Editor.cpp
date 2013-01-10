@@ -79,6 +79,11 @@ void Editor::setState(EditorState state) {
 	_state = state;
 
 	switch (_state.editMode) {
+	case EDIT_MODE_PAN:
+		break;
+	case EDIT_MODE_PAN_COMMIT:
+		commitPan();
+		break;
 	case EDIT_MODE_SELECT:
 	case EDIT_MODE_SELECT_EXCLUSIVE:
 	case EDIT_MODE_SELECT_MANY:
@@ -624,5 +629,11 @@ void Editor::rotateItems() {
 
 	}
 	
+}
+
+void Editor::commitPan() {
+
+	_camera->setPan(coordadd(_camera->getPan(), coordsub(_state.selectionStart, _state.selectionEnd)));
+
 }
 

@@ -15,6 +15,8 @@ struct Coord2;
 
 typedef enum EditMode {
 	EDIT_MODE_NONE,
+	EDIT_MODE_PAN,
+	EDIT_MODE_PAN_COMMIT,
 	EDIT_MODE_SELECT,
 	EDIT_MODE_SELECT_EXCLUSIVE,
 	EDIT_MODE_SELECT_MANY,
@@ -67,6 +69,7 @@ public:
 	void deleteItems();
 	void undo();
 	void save();
+	void commitPan();
 	void load();
 	void loadConfig();
 	std::vector<std::string> getObjectNames();
