@@ -34,6 +34,7 @@ typedef struct TextureInfo {
 	int h;
 	float a;
 } TextureInfo;
+#define TEXTUREINFO_INIT { NULL, -1, -1, -1, -1, 0 }
 
 typedef struct Part {
 	std::string n;
@@ -45,6 +46,7 @@ typedef struct Part {
 	TextureInfo t;
 } Part;
 typedef std::map<std::string, Part>::iterator it_Part;
+#define PART_INIT { "", -1, "", -1, -1, NULL, TEXTUREINFO_INIT }
 
 typedef struct LayoutItem {
 	std::string n;
