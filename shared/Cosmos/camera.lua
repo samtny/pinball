@@ -13,7 +13,7 @@ camera = {
 		t = "follow",
 		z = 1.0,
 		b = { 0.5, 0.35 }, -- buffers currently expressed as percent of viewable x/y
-		w = 40
+		w = 34
 	}
 
 }

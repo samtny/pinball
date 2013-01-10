@@ -153,7 +153,7 @@ GLfloat gCubeVertexData[216] =
     [self setupGL];
     
     PinballBridgeInterface *bi = new PinballBridgeInterface();
-    bi->setGameName("Pinferno");
+    bi->setGameName("Cosmos");
     bi->init();
     
     Playfield *f = new Playfield();

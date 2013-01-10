@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B150162169F3D3400B66026 /* Cosmos in Resources */ = {isa = PBXBuildFile; fileRef = 4B150161169F3D3400B66026 /* Cosmos */; };
 		4B1701FB164AAC4F007D4A2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B1701FA164AAC4F007D4A2F /* UIKit.framework */; };
 		4B1701FD164AAC4F007D4A2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B1701FC164AAC4F007D4A2F /* Foundation.framework */; };
 		4B1701FF164AAC4F007D4A2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B1701FE164AAC4F007D4A2F /* CoreGraphics.framework */; };
@@ -76,6 +77,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B150161169F3D3400B66026 /* Cosmos */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Cosmos; sourceTree = "<group>"; };
 		4B1701F6164AAC4F007D4A2F /* PorkyPinball.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PorkyPinball.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1701FA164AAC4F007D4A2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4B1701FC164AAC4F007D4A2F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -297,6 +299,7 @@
 		4BBF7C061664284900957DA4 /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				4B150161169F3D3400B66026 /* Cosmos */,
 				4B35672A169C5F0000080F94 /* Flipperfall */,
 				4B35672B169C5F0000080F94 /* Pinferno */,
 				4BBF7C4C166428CF00957DA4 /* Waterfall */,
@@ -403,6 +406,7 @@
 				4B2F787E1665CD2F0037FE71 /* Waterfall2 in Resources */,
 				4B356732169C5F0000080F94 /* Flipperfall in Resources */,
 				4B356733169C5F0000080F94 /* Pinferno in Resources */,
+				4B150162169F3D3400B66026 /* Cosmos in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
