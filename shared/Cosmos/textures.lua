@@ -4,7 +4,7 @@ textures = {
 		filename = "Test-Flipper.png"
 	},
 	pinball = {
-		filename = "Pinferno7-Ball.png"
+		filename = "pinball.png"
 	},
 	logo = {
 		filename = "pinball.png"

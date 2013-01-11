@@ -355,32 +355,33 @@ void Camera::applyTransform(void) {
 			int numBalls = 0;
 			for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
 
-				LayoutItem item = it->second;
+				//LayoutItem item = it->second;
+				LayoutItem *item = &(&*it)->second;
 
-				if (strcmp(item.o->s.c_str(), "ball") == 0) {
+				if (strcmp(item->o->s.c_str(), "ball") == 0) {
 
-					ballX += item.bodies[0]->p.x;
+					ballX += item->bodies[0]->p.x;
 					numBalls++;
 
-					float y = item.bodies[0]->p.y;
+					float y = item->bodies[0]->p.y;
 
 					if (y < ballY) {
 						ballY = y;
-						ballRadius = item.o->r1 * item.s;
+						ballRadius = item->o->r1 * item->s;
 					}
 
-				} else if (strcmp(item.o->s.c_str(), "box") == 0) {
+				} else if (strcmp(item->o->s.c_str(), "box") == 0) {
 
-					boxLeftX = item.v[0].x;
-					boxRightX = item.v[3].x;
+					boxLeftX = item->v[0].x;
+					boxRightX = item->v[3].x;
 
-					boxBottomY = item.v[0].y;
-					boxTopY = item.v[1].y;
+					boxBottomY = item->v[0].y;
+					boxTopY = item->v[1].y;
 					
 				}
 
 			}
-
+			
 			ballX *= 1.0f / (float)numBalls;
 
 			ballX *= _scale;
@@ -423,6 +424,7 @@ void Camera::applyTransform(void) {
 			glScalef(_scale, _scale, 1);
 
 			break;
+
 	}
 
 }

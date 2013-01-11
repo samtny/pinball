@@ -208,7 +208,7 @@ void Renderer::drawPlayfield() {
 	//ChipmunkDebugDrawShapes(_physics->getSpace());
 	
 	cpSpaceEachShape(_physics->getSpace(), DrawShape, NULL);
-
+	
 	if (s->editMode != EDIT_MODE_NONE) {
 		
 		// new / inserted 
@@ -294,16 +294,19 @@ void Renderer::drawPlayfield() {
 	
 	glEnable(GL_TEXTURE_2D);
 	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
+		
+		LayoutItem *item = &(&*it)->second;
+		
+		//LayoutItem item = it->second;
+		
+		if (strcmp(item->n.c_str(), "box") != 0) {
 
-		LayoutItem item = it->second;
-
-		if (strcmp(item.n.c_str(), "box") != 0) {
-
-			if (item.o->t.t != NULL) {
-				drawObject(&item);
+			if (item->o->t.t != NULL) {
+				drawObject(item);
 			}
 		
 		}
+		
 
 	}
 	glDisable(GL_TEXTURE_2D);
