@@ -11,7 +11,7 @@ typedef struct Color {
 } Color;
 
 const Color LINE_COLOR = {.25, .25, .25, 1};
-const Color FILL_COLOR = {0, 0, 0, 1};
+const Color FILL_COLOR = {.75, .75, .75, 1};
 const Color EDIT_COLOR = {1, 1, 1, 1};
 
 void DrawShape(cpShape *shape, void *data);
