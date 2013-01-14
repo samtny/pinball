@@ -271,7 +271,7 @@ void Playfield::loadOverlays(void) {
 					} else if (strcmp(key, "o") == 0) {
 						props.o = (float)lua_tonumber(L, -1);
 					} else if (strcmp(key, "x") == 0) {
-						props.x = lua_tostring(L, -1);
+						props.x = &_textures[lua_tostring(L, -1)];
 					}
 
 					lua_pop(L, 1);

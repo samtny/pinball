@@ -67,7 +67,7 @@ struct Overlay {
 	std::string t;
 	std::string l;
 	std::string v;
-	std::string x;
+	Texture* x;
 	Coord2 p;
 	std::string a;
 	float s;

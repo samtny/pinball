@@ -297,8 +297,6 @@ void GLFont::DrawString(const char *text, float x, float y) {
             
 		}
 		
-	
-    
 }
 
 //End of file

@@ -178,7 +178,6 @@ void Renderer::drawPlayfield() {
 	const EditorState *s = _editor->getState();
 	if (s->editMode == EDIT_MODE_PAN) {
 		Coord2 diff = coordsub(s->selectionStart, s->selectionEnd);
-		//_camera->setPan(diff);
 		glTranslatef(-diff.x, diff.y, 0);
 	}
 	
@@ -186,6 +185,7 @@ void Renderer::drawPlayfield() {
 	
 	// TODO: separate "drawBackgrounds" method plzz...
 	glEnable(GL_TEXTURE_2D);
+	
 	//cpSpaceEachBody(_physics->getSpace(), _drawObject, (void *)true);
 	/*
 	for (it_LayoutItem it = _playfield->getLayout()->begin(); it != _playfield->getLayout()->end(); it++) {
@@ -196,6 +196,7 @@ void Renderer::drawPlayfield() {
 
 	}
 	*/
+	
 	it_LayoutItem it = _playfield->getLayout()->find("box");
 	if (it != _playfield->getLayout()->end()) {
 		LayoutItem *item = &it->second;
@@ -347,6 +348,7 @@ void Renderer::drawBox(LayoutItem *item) {
 	cpBody *ball = item->bodies[0];
 	Texture *t = item->o->t.t;
 	
+	// TODO: this is just wrong; instead, precompute "center" from these coords, offset by body position above...
 	float posX = (float)(item->v[3].x- item->v[0].x) / 4.0f;
 	float posY = (float)(item->v[1].y - item->v[0].y) / 2.0f;
 
@@ -439,7 +441,6 @@ void Renderer::drawFlipper(LayoutItem *item) {
 	float posY = (float)center.y;
 
 	glPushMatrix();
-	//_camera->applyTransform();
 	glTranslatef(posX, posY, 0);
 
 	Coord2 vect = coordsub(item->v[0], item->v[1]);
@@ -447,13 +448,10 @@ void Renderer::drawFlipper(LayoutItem *item) {
 	glScalef(coordlen(vect) + item->o->r1 + item->o->r2, coordlen(vect) + item->o->r1 + item->o->r2, 0);
 	glRotatef((float)flipper->a * 57.2957795f, 0, 0, 1);
 	
-	//glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, t->gl_index);
 	
 	glColor4f(1, 1, 1, 1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	
-	//glDisable(GL_TEXTURE_2D);
 	
 	glPopMatrix();
 
@@ -492,30 +490,31 @@ void Renderer::drawOverlays() {
 
 	for (it_Overlay it = _playfield->getOverlays()->begin(); it != _playfield->getOverlays()->end(); it++) {
 
-		Overlay props = it->second;
-
-		if (strcmp(props.t.c_str(), "text") == 0) {
+		Overlay *props = &(&*it)->second;
 		
+		if (strcmp(props->t.c_str(), "text") == 0) {
+			
 			_glfont->Begin();
 			pair<int, int> texSize;
-			//_glfont->GetStringSize("abcdefghijklmnopqrstuvwxyz", &texSize);
-			_glfont->GetStringSize((props.l + props.v).c_str(), &texSize);
+			_glfont->GetStringSize((props->l + props->v).c_str(), &texSize);
 
-			float txX = (float)(_displayProperties->viewportWidth * props.p.x - texSize.first / 2.0 * _displayProperties->fontScale);
-			float txY = (float)(_displayProperties->viewportHeight * props.p.y + texSize.second / 2.0 * _displayProperties->fontScale);
+			float txX = (float)(_displayProperties->viewportWidth * props->p.x - texSize.first / 2.0 * _displayProperties->fontScale);
+			float txY = (float)(_displayProperties->viewportHeight * props->p.y + texSize.second / 2.0 * _displayProperties->fontScale);
 
 			glPushMatrix();
 			glTranslatef(txX, txY, 0);
 			glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
+			
 			#ifdef __APPLE__
 				glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 			#else
 				glColor3f(0.0f, 0.0f, 1.0f);
 			#endif
-			_glfont->DrawString((props.l + props.v).c_str(), 0, 0);
+			
+			_glfont->DrawString((props->l + props->v).c_str(), 0, 0);
 			glPopMatrix();
 
-		} else if (strcmp(props.t.c_str(), "image") == 0) {
+		} else if (strcmp(props->t.c_str(), "image") == 0) {
 
 			static const GLfloat verts[] = {
 				-0.5, -0.5,
@@ -534,32 +533,32 @@ void Renderer::drawOverlays() {
 			glVertexPointer(2, GL_FLOAT, 0, verts);
 			glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-			Texture *t = &_playfield->getTextures()->find(props.x)->second;
-
 			glPushMatrix();
 
 			float txX = 0;
 			float txY = 0;
-			const char *align = props.a.c_str();
+			
+			const char *align = props->a.c_str();
+			
 			if (strcmp(align, "bl") == 0) {
-				txX = (float)(props.p.x * _displayProperties->viewportWidth + t->w * props.s * _displayProperties->overlayScale * 0.5f);
-				txY = (float)(props.p.y * _displayProperties->viewportHeight + t->h * props.s * _displayProperties->overlayScale * 0.5f);
+				txX = (float)(props->p.x * _displayProperties->viewportWidth + props->x->w * props->s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props->p.y * _displayProperties->viewportHeight + props->x->h * props->s * _displayProperties->overlayScale * 0.5f);
 			} else if (strcmp(align, "c") == 0) {
-				txX = (float)(props.p.x * _displayProperties->viewportWidth);
-				txY = (float)(props.p.y * _displayProperties->viewportHeight);
+				txX = (float)(props->p.x * _displayProperties->viewportWidth);
+				txY = (float)(props->p.y * _displayProperties->viewportHeight);
 			} else if (strcmp(align, "r") == 0) {
-				txX = (float)(props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f);
-				txY = (float)(props.p.y * _displayProperties->viewportHeight);
+				txX = (float)(props->p.x * _displayProperties->viewportWidth - props->x->w * props->s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props->p.y * _displayProperties->viewportHeight);
 			} else if (strcmp(align, "tr") == 0) {
-				txX = (float)(props.p.x * _displayProperties->viewportWidth - t->w * props.s * _displayProperties->overlayScale * 0.5f);
-				txY = (float)(props.p.y * _displayProperties->viewportHeight - t->h * props.s * _displayProperties->overlayScale * 0.5f);
+				txX = (float)(props->p.x * _displayProperties->viewportWidth - props->x->w * props->s * _displayProperties->overlayScale * 0.5f);
+				txY = (float)(props->p.y * _displayProperties->viewportHeight - props->x->h * props->s * _displayProperties->overlayScale * 0.5f);
 			}
 
 			glTranslatef(txX, txY, 0);
 
-			glScalef(t->w * props.s * _displayProperties->overlayScale, t->h * props.s * _displayProperties->overlayScale, 1);
-
-			glBindTexture(GL_TEXTURE_2D, t->gl_index);
+			glScalef(props->x->w * props->s * _displayProperties->overlayScale, props->x->h * props->s * _displayProperties->overlayScale, 1);
+			
+			glBindTexture(GL_TEXTURE_2D, props->x->gl_index);
 
 			#ifdef __APPLE__
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
