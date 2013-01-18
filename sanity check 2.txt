@@ -16,6 +16,30 @@ nearing completion, we have following areas to complete for "very simple" game d
 	-DONE "undo"
 	-DONE "delete"
 	-DONE export to layout.lua
-2) pshop import wireframe, export prettiness
+2) PROBLEMS: pshop import wireframe, export prettiness
+	- here are the problem/s;
+		- I can't get texture to line up properly with object (i prefer to "clip" any stray pixels)
+		- If texture editing were integrated into "parts" Editor, i guess it wouldn't be a problem
+			- There is no "parts" editor.  E.g., I "build" the parts internally, using Chipmunk objects
+				- Can I create some sort of editor instead?
+					- is "maya" or 3dstudio appropriate?  What would that look like?
+						- 1; create maya object
+						- 2; export
+						- 3; break maya object into "physics" domain object stuff
+							- not sure i like this because a "flipper" becomes a 3D polygon instead of "2 circles and 2 segments"
+					- otoh if i write my own "parts" editor, how does this go?
+						- 1; i gotta use "physics" primitives, e.g. circle, segment, poly
+							- lining things up becomes critical, e.g. flipper should be nice and exact...
+						- 2; i gotta say "here are control points, e.g.; object layout is configurable thusly..."
+						- starting to hate this method as well...
+				- What if I just allow "position" etc. of texture relative to the game object in question?
+					- start with some default position (works for some/most objects)
+					- for irregular (flipper) objects, allow "offset/rotate/scale" of the texture in the editor
+					- store the offset/rotate/scale as part of the layout item (?)
+						- or store it as pertaining to part def?
+							- any variation in texture implies a new part?
+							- i think this is fine.
+					- "fixed" aspect ratio only?  e.g.; new, "fat tip" flipper will need new texture authoring...
+						- this is consistent with current part defs
 3) grab + munge sound fx
 
