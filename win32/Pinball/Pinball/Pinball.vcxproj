@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7DABD545-78AC-450A-BBAF-0F6258B31F33}</ProjectGuid>
+    <RootNamespace>Pinball</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\..\..\shared\include\lua;..\..\include;..\..\..\shared\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <LibraryPath>..\..\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS=1;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>chipmunk.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\shared\src\Camera.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Drawing.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Editor.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Game.cpp" />
+    <ClCompile Include="..\..\..\shared\src\glfont2.cpp" />
+    <ClCompile Include="..\..\..\shared\src\lua\lapi.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lauxlib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lbaselib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lbitlib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lcode.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lcorolib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lctype.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ldblib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ldebug.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ldo.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ldump.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lfunc.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lgc.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\linit.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\liolib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\llex.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lmathlib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lmem.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\loadlib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lobject.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lopcodes.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\loslib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lparser.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lstate.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lstring.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lstrlib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ltable.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ltablib.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\ltm.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lundump.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lvm.c" />
+    <ClCompile Include="..\..\..\shared\src\lua\lzio.c" />
+    <ClCompile Include="..\..\..\shared\src\Physics.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Playfield.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Renderer.cpp" />
+    <ClCompile Include="..\..\..\shared\src\Util.cpp" />
+    <ClCompile Include="GlutEngine.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PinballBridge.cpp" />
+    <ClCompile Include="PinballHost.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\shared\include\Camera.h" />
+    <ClInclude Include="..\..\..\shared\include\Drawing.h" />
+    <ClInclude Include="..\..\..\shared\include\Editor.h" />
+    <ClInclude Include="..\..\..\shared\include\Game.h" />
+    <ClInclude Include="..\..\..\shared\include\glfont2.h" />
+    <ClInclude Include="..\..\..\shared\include\Parts.h" />
+    <ClInclude Include="..\..\..\shared\include\Physics.h" />
+    <ClInclude Include="..\..\..\shared\include\PhysicsDelegate.h" />
+    <ClInclude Include="..\..\..\shared\include\PinballBridgeInterface.h" />
+    <ClInclude Include="..\..\..\shared\include\Playfield.h" />
+    <ClInclude Include="..\..\..\shared\include\Renderer.h" />
+    <ClInclude Include="..\..\..\shared\include\Texture.h" />
+    <ClInclude Include="..\..\..\shared\include\TimerDelegate.h" />
+    <ClInclude Include="..\..\..\shared\include\Types.h" />
+    <ClInclude Include="..\..\..\shared\include\Util.h" />
+    <ClInclude Include="GlutEngine.h" />
+    <ClInclude Include="PinballBridge.h" />
+    <ClInclude Include="PinballHost.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\shared\resource\Cosmos\camera.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\config.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\effects.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\forces.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\layout.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\materials.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\objects.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\overlays.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\parts.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\rules.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures.lua" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\cosmos-playfield.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\font.glf" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_butterfly001.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck001.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck002.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel001.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel002.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\pinball.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7-Ball.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\pinferno7.jpg" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Test-Flipper.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\tiling.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png" />
+    <None Include="..\..\..\shared\resource\Cosmos\user.layout.lua" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

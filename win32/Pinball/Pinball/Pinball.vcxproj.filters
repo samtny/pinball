@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\shared">
+      <UniqueIdentifier>{7d57a0fe-49c9-4fe5-8610-bcc584afc56e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared">
+      <UniqueIdentifier>{1bdbce42-ac1d-45b6-ba96-a02aa2afcf6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\src">
+      <UniqueIdentifier>{c915761b-4952-4586-b082-5627debeaccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\src\lua">
+      <UniqueIdentifier>{5d682198-9566-469b-bb58-adcb80c82cad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\resource">
+      <UniqueIdentifier>{1ffca30c-79ac-4198-bb8d-cbf117ea8654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\resource\Cosmos">
+      <UniqueIdentifier>{e8974bf9-5315-4f63-9de3-0c19bc0a9839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared\resource\Cosmos\textures">
+      <UniqueIdentifier>{020091b3-e492-4521-942b-b7282aed4ff0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlutEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PinballBridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PinballHost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lapi.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lauxlib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lbaselib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lbitlib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lcode.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lcorolib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lctype.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ldblib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ldebug.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ldo.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ldump.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lfunc.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lgc.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\linit.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\liolib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\llex.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lmathlib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lmem.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\loadlib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lobject.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lopcodes.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\loslib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lparser.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lstate.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lstring.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lstrlib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ltable.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ltablib.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\ltm.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lundump.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lvm.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\lua\lzio.c">
+      <Filter>Source Files\shared\src\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Camera.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Util.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Drawing.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Editor.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Game.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\glfont2.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Physics.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Playfield.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\shared\src\Renderer.cpp">
+      <Filter>Source Files\shared\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GlutEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PinballBridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PinballHost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Camera.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Drawing.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Editor.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Game.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\glfont2.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Parts.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Physics.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\PhysicsDelegate.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\PinballBridgeInterface.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Playfield.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Renderer.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Texture.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\TimerDelegate.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Types.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\shared\include\Util.h">
+      <Filter>Header Files\shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\shared\resource\Cosmos\camera.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\config.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\effects.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\forces.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\layout.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\materials.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\objects.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\overlays.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\parts.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\rules.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\user.layout.lua">
+      <Filter>Source Files\shared\resource\Cosmos</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\font.glf">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\pinferno7.jpg">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\cosmos-playfield.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_butterfly001.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck001.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck002.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel001.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel002.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\pinball.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7-Ball.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\Test-Flipper.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\tiling.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+    <None Include="..\..\..\shared\resource\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png">
+      <Filter>Source Files\shared\resource\Cosmos\textures</Filter>
+    </None>
+  </ItemGroup>
+</Project>
