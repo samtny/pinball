@@ -53,7 +53,8 @@ public:
 
 	void applyEffectsTransforms(void);
 
-	void setPan(Coord2 pan);
+	void setPan(const Coord2 pan);
+
 	Coord2 getPan();
 
 protected:
