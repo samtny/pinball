@@ -165,6 +165,9 @@
     <ClCompile Include="..\..\..\shared\src\Renderer.cpp">
       <Filter>Source Files\shared</Filter>
     </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlutEngine.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\shared\include\Util.h">
       <Filter>Header Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\StdAfx.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
