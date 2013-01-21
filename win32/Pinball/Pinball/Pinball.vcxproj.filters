@@ -209,9 +209,6 @@
     <ClInclude Include="..\..\..\shared\include\Renderer.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\shared\include\Texture.h">
-      <Filter>Header Files\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\shared\include\TimerDelegate.h">
       <Filter>Header Files\shared</Filter>
     </ClInclude>

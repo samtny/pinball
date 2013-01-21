@@ -346,9 +346,9 @@ void Playfield::loadParts(void) {
 							} else if (strcmp("y", tkey) == 0) {
 								props.t.y = (int)lua_tonumber(L, -1);
 							} else if (strcmp("w", tkey) == 0) {
-								props.t.w = (int)lua_tonumber(L, -1);
+								//props.t.w = (int)lua_tonumber(L, -1);
 							} else if (strcmp("h", tkey) == 0) {
-								props.t.h = (int)lua_tonumber(L, -1);
+								//props.t.h = (int)lua_tonumber(L, -1);
 							} else if (strcmp("a", tkey) == 0) {
 								props.t.a = (float)lua_tonumber(L, -1);
 							}
@@ -356,6 +356,10 @@ void Playfield::loadParts(void) {
 							lua_pop(L, 1);
 
 						}
+
+						// scale texture offsets;
+						props.t.x *= 1 / _scale;
+						props.t.y *= 1 / _scale;
 
 					} else if (strcmp("v", key) == 0) {
 						props.count = (int)lua_tonumber(L, -1);

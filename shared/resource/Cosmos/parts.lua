@@ -9,8 +9,6 @@ parts = {
 			n = "pinball",
 			x = 0,
 			y = 0,
-			w = 64,
-			h = 64,
 			a = 0.0
 		}
 	},
@@ -23,8 +21,6 @@ parts = {
 			n = "duck",
 			x = 0,
 			y = 0,
-			w = 256,
-			h = 256,
 			a = 0.0
 		}
 	},
@@ -37,8 +33,6 @@ parts = {
 			n = "butterfly",
 			x = 0,
 			y = 0,
-			w = 256,
-			h = 256,
 			a = 0.0
 		}
 	},
@@ -51,8 +45,6 @@ parts = {
 			n = "pinwheel",
 			x = 0,
 			y = 0,
-			w = 256,
-			h = 256,
 			a = 0.0
 		}
 	},
@@ -65,8 +57,6 @@ parts = {
 			n = "pinwheel2",
 			x = 0,
 			y = 0,
-			w = 256,
-			h = 256,
 			a = 0.0
 		}
 	},
@@ -108,8 +98,6 @@ parts = {
 			n = "background",
 			x = 0,
 			y = 0,
-			w = 512,
-			h = 512,
 			a = 0.0
 		}
 	},
@@ -118,7 +106,13 @@ parts = {
 		v = 3,
 		m = "flipper",
 		r1 = 0.75,
-		r2 = 0.45
+		r2 = 0.45,
+		t = {
+			n = "flipper",
+			x = 1.35,
+			y = 0,
+			a = 0.0
+		}
 	},
 	slingshot = {
 		s = "slingshot", -- "slingshot" shape defined internally

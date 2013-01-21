@@ -46,6 +46,7 @@ public:
 	void setMode(const char *modeName);
 	
 	Coord2 transform(Coord2 coord);
+	Coord2 scale(Coord2 coord);
 
 	void applyTransform(void);
 

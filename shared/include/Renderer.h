@@ -39,6 +39,7 @@ public:
 	void drawBox(LayoutItem *item);
 	void drawBall(LayoutItem *item);
 	void drawFlipper(LayoutItem *item);
+	void drawTexture(const LayoutItem *item);
 	void drawOverlays(void);
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);

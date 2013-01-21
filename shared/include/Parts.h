@@ -28,13 +28,11 @@ typedef std::map<std::string, Texture>::iterator it_Texture;
 
 typedef struct TextureInfo {
 	Texture *t;
-	int x;
-	int y;
-	int w;
-	int h;
+	float x;
+	float y;
 	float a;
 } TextureInfo;
-#define TEXTUREINFO_INIT { NULL, -1, -1, -1, -1, 0 }
+#define TEXTUREINFO_INIT { NULL, -1, -1, 0 }
 
 typedef struct Part {
 	std::string n;

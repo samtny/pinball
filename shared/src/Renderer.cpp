@@ -321,7 +321,7 @@ void Renderer::drawObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
 		this->drawBall(item);
 	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
-		this->drawFlipper(item);
+		this->drawTexture(item);
 	}
 	
 }
@@ -413,7 +413,7 @@ void Renderer::drawBall(LayoutItem *item) {
 
 }
 
-void Renderer::drawFlipper(LayoutItem *item) {
+void Renderer::drawTexture(const LayoutItem *item) {
 
 	static const GLfloat verts[] = {
 		-0.5, -0.5,
@@ -432,23 +432,24 @@ void Renderer::drawFlipper(LayoutItem *item) {
 	glVertexPointer(2, GL_FLOAT, 0, verts);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex);
 
-	cpBody *flipper = item->bodies[0];
-	Texture *t = item->o->t.t;
-
-	cpVect center = cpvmult(cpvadd(item->v[0], item->v[1]), 0.5f);
-
-	float posX = (float)center.x;
-	float posY = (float)center.y;
+	cpBody *body = item->bodies[0];
+	
+	float posX = (float)body->p.x + item->o->t.x;
+	float posY = (float)body->p.y + item->o->t.y;
 
 	glPushMatrix();
+
 	glTranslatef(posX, posY, 0);
 
-	Coord2 vect = coordsub(item->v[0], item->v[1]);
+	//glScalef(item->o->r1 * item->s * 2, item->o->r1 * item->s * 2, 0);
 
-	glScalef((float)coordlen(vect) + item->o->r1 + item->o->r2, (float)coordlen(vect) + item->o->r1 + item->o->r2, 0);
-	glRotatef((float)flipper->a * 57.2957795f, 0, 0, 1);
+	Coord2 tx = _camera->scale(coord(item->o->t.t->w * item->s, item->o->t.t->w * item->s));
+
+	glScalef(tx.x, tx.y, 0);
 	
-	glBindTexture(GL_TEXTURE_2D, t->gl_index);
+	glRotatef((float)body->a * 57.2957795f, 0, 0, 1);
+	
+	glBindTexture(GL_TEXTURE_2D, item->o->t.t->gl_index);
 	
 	glColor4f(1, 1, 1, 1);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

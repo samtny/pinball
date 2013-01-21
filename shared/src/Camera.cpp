@@ -319,6 +319,14 @@ Coord2 Camera::transform(Coord2 coord) {
 
 }
 
+Coord2 Camera::scale(Coord2 coord) {
+
+	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;
+
+	return coordmult(coord, 1 / _scale);
+
+}
+
 void Camera::applyTransform(void) {
 
 	_scale = (_displayProperties->viewportWidth / _activeCameraMode.w) * _activeCameraMode.z;
