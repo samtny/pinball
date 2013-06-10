@@ -19,12 +19,6 @@
     <Filter Include="Source Files\shared">
       <UniqueIdentifier>{1bdbce42-ac1d-45b6-ba96-a02aa2afcf6c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Cosmos">
-      <UniqueIdentifier>{e8974bf9-5315-4f63-9de3-0c19bc0a9839}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Cosmos\textures">
-      <UniqueIdentifier>{020091b3-e492-4521-942b-b7282aed4ff0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\shared\lua">
       <UniqueIdentifier>{5d682198-9566-469b-bb58-adcb80c82cad}</UniqueIdentifier>
     </Filter>
@@ -224,85 +218,13 @@
     <ClInclude Include="..\..\include\StdAfx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\shared\resource\Cosmos\camera.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\config.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\effects.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\forces.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\layout.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\materials.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\objects.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\overlays.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\parts.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\rules.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\user.layout.lua">
-      <Filter>Resource Files\Cosmos</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\font.glf">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\pinferno7.jpg">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\cosmos-playfield.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_butterfly001.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck001.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck002.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel001.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel002.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\pinball.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7-Ball.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Test-Flipper.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\tiling.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
-    <None Include="..\..\..\shared\resource\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png">
-      <Filter>Resource Files\Cosmos\textures</Filter>
-    </None>
+    <ResourceCompile Include="Pinball.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

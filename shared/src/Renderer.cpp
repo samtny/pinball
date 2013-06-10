@@ -414,7 +414,7 @@ void Renderer::drawBall(LayoutItem *item) {
 }
 
 void Renderer::drawTexture(const LayoutItem *item) {
-
+	return;
 	static const GLfloat verts[] = {
 		-0.5, -0.5,
 		-0.5, 0.5,

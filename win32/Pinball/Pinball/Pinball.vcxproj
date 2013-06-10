@@ -327,34 +327,10 @@
     <ClInclude Include="GlutEngine.h" />
     <ClInclude Include="PinballBridge.h" />
     <ClInclude Include="PinballHost.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\shared\resource\Cosmos\camera.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\config.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\effects.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\forces.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\layout.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\materials.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\objects.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\overlays.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\parts.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\rules.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures.lua" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\cosmos-playfield.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\font.glf" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_butterfly001.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck001.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_duck002.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel001.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\origami_pinwheel002.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\pinball.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7-Ball.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\pinferno7.jpg" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Pinferno7.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\Test-Flipper.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\tiling.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\textures\ToyFactory_Multi-texturing_hardwood.png" />
-    <None Include="..\..\..\shared\resource\Cosmos\user.layout.lua" />
+    <ResourceCompile Include="Pinball.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

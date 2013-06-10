@@ -61,7 +61,7 @@ layout = {
 
 	lflipper = {
 		o = "flipper",
-		v = { {5, 6}, {8, 4.5}, {7, 7} }
+		v = { {27, 6}, {8, 4.5}, {7, 7} }
 	},
 
 	rflipper = {
