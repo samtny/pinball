@@ -142,3 +142,6 @@ UpgradeLog*.XML
 
 # NuGet
 packages/
+
+# Vim
+*.swp

@@ -709,7 +709,7 @@ void Physics::loadConfig() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+	const char *configFileName = _bridgeInterface->getScriptPath((const char *)"config.lua");
 
 	int error = luaL_dofile(L, configFileName);
 	if (!error) {
@@ -771,7 +771,7 @@ void Physics::loadForces() {
     lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
     
-	const char *forcesPath = _bridgeInterface->getPathForScriptFileName((void *)"forces.lua");
+	const char *forcesPath = _bridgeInterface->getScriptPath((const char *)"forces.lua");
     
 	int error = luaL_dofile(L, forcesPath);
 	if (!error) {

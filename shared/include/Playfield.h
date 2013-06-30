@@ -1,5 +1,5 @@
 
-#include <string>
+#include <cstring>
 #include <map>
 
 class PinballBridgeInterface;
@@ -8,7 +8,9 @@ class PinballBridgeInterface;
 
 class Playfield {
 public:
-	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
+	Playfield(void);
+	~Playfield(void);
+	void setBridgeInterface(const PinballBridgeInterface *bridgeInterface);
 	void init(void);
 	std::map<std::string, Material> *getMaterials();
 	std::map<std::string, Texture> *getTextures();
@@ -24,7 +26,7 @@ protected:
 	void loadParts(void);
 	void loadLayout(void);
 private:
-	PinballBridgeInterface *_bridgeInterface;
+	const PinballBridgeInterface *_bridgeInterface;
 	std::map<std::string, Material> _materials;
 	std::map<std::string, Texture> _textures;
 	std::map<std::string, Overlay> _overlays;

@@ -15,7 +15,13 @@ using std::map;
 using std::string;
 using std::make_pair;
 
-void Playfield::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
+Playfield::Playfield(void) {
+}
+
+Playfield::~Playfield(void) {
+}
+
+void Playfield::setBridgeInterface(const PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
 }
 
@@ -62,7 +68,7 @@ void Playfield::loadConfig(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+	const char *configFileName = _bridgeInterface->getScriptPath((const char *)"config.lua");
 
 	int error = luaL_dofile(L, configFileName);
 	if (!error) {
@@ -103,7 +109,7 @@ void Playfield::loadMaterials(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *materialsFileName = _bridgeInterface->getPathForScriptFileName((void *)"materials.lua");
+	const char *materialsFileName = _bridgeInterface->getScriptPath((const char *)"materials.lua");
 
 	int error = luaL_dofile(L, materialsFileName);
 	if (!error) {
@@ -164,7 +170,7 @@ void Playfield::loadTextures(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *texturesFileName = _bridgeInterface->getPathForScriptFileName((void *)"textures.lua");
+	const char *texturesFileName = _bridgeInterface->getScriptPath((const char *)"textures.lua");
 
 	int error = luaL_dofile(L, texturesFileName);
 	if (!error) {
@@ -219,7 +225,7 @@ void Playfield::loadOverlays(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *overlaysFilename = _bridgeInterface->getPathForScriptFileName((void *)"overlays.lua");
+	const char *overlaysFilename = _bridgeInterface->getScriptPath((const char *)"overlays.lua");
 
 	int error = luaL_dofile(L, overlaysFilename);
 	if (!error) {
@@ -301,7 +307,7 @@ void Playfield::loadParts(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *objectsPath = _bridgeInterface->getPathForScriptFileName((void *)"parts.lua");
+	const char *objectsPath = _bridgeInterface->getScriptPath((const char *)"parts.lua");
 
 	int error = luaL_dofile(L, objectsPath);
 	if (!error) {
@@ -391,7 +397,7 @@ void Playfield::loadLayout(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *layoutPath = _bridgeInterface->getPathForScriptFileName((void *)"user.layout.lua");
+	const char *layoutPath = _bridgeInterface->getScriptPath((const char *)"user.layout.lua");
 
 	int error = luaL_dofile(L, layoutPath);
 	if (!error) {

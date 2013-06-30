@@ -22,9 +22,16 @@ extern "C" {
 #else
 	#ifdef _WIN32
 		#include <windows.h>
+		#include <GL/GL.h>
+		#include <GL/GLU.h>
+	#else
+		#include <GL/gl.h>
+		#include <GL/glu.h>
 	#endif
-	#include <GL/GL.h>
-	#include <GL/GLU.h>
+#endif
+
+#ifndef FLT_MAX
+	#include <values.h>
 #endif
 
 using std::string;
@@ -66,7 +73,7 @@ void Camera::loadConfig() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+	const char *configFileName = _bridgeInterface->getScriptPath((const char *)"config.lua");
 
 	int error = luaL_dofile(L, configFileName);
 	if (!error) {
@@ -108,7 +115,7 @@ void Camera::loadCamera() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"camera.lua");
+	const char *configFileName = _bridgeInterface->getScriptPath((const char *)"camera.lua");
 
 	int error = luaL_dofile(L, configFileName);
 	if (!error) {
@@ -199,7 +206,7 @@ void Camera::loadEffects() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *effectsFileName = _bridgeInterface->getPathForScriptFileName((void *)"effects.lua");
+	const char *effectsFileName = _bridgeInterface->getScriptPath((const char *)"effects.lua");
 
 	int error = luaL_dofile(L, effectsFileName);
 	if (!error) {

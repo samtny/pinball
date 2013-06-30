@@ -5,5 +5,7 @@ class PinballHost {
 		PinballHost(void);
 		~PinballHost(void);
 		void init();
-		void start();
+		void start(const char *gameName);
+	private:
+		void *_engine;
 };

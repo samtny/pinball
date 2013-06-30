@@ -32,35 +32,19 @@ public:
 	PinballBridgeInterface(void);
     ~PinballBridgeInterface(void);
     
-#ifdef _WIN32
-	void init(void);
-#elif __APPLE__
-	bool init(void);
-#endif
-
 	void setGameName(const char *gameName);
-
 	const char *getGameName();
-
-	const char *getPathForScriptFileName(void *scriptFileName);
-
-	const char *getPathForTextureFileName(void *textureFileName);
-
-	GLTexture *createRGBATexture(void *textureFileName);
-
-    HostProperties *getHostProperties();
-	
-	void playSound(void *soundName);
-
-	void setTimerDelegate(ITimerDelegate *timerDelegate);
-
-	void addTimer(float duration, int id);
+	const char *getBasePath();
+	const char *getScriptPath(const char *scriptName) const;
+    	const HostProperties *getHostProperties() const;
+	void playSound(const char *soundName);
+	void addTimer(float duration, int id, const ITimerDelegate *timerDelegate);
 
 private:
-#ifdef _WIN32
+#ifdef __APPLE__
+	void *self;
+#else
 	void *_this;
-#elif __APPLE__
-    void *self;
 #endif
 	ITimerDelegate *_timerDelegate;
 };
