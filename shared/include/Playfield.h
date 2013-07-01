@@ -10,7 +10,7 @@ class Playfield {
 public:
 	Playfield(void);
 	~Playfield(void);
-	void setBridgeInterface(const PinballBridgeInterface *bridgeInterface);
+	void setBridgeInterface(PinballBridgeInterface *bridgeInterface);
 	void init(void);
 	std::map<std::string, Material> *getMaterials();
 	std::map<std::string, Texture> *getTextures();
@@ -26,7 +26,7 @@ protected:
 	void loadParts(void);
 	void loadLayout(void);
 private:
-	const PinballBridgeInterface *_bridgeInterface;
+	PinballBridgeInterface *_bridgeInterface;
 	std::map<std::string, Material> _materials;
 	std::map<std::string, Texture> _textures;
 	std::map<std::string, Overlay> _overlays;

@@ -6,9 +6,9 @@
 #include "Parts.h"
 
 extern "C" {
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include "lua/lua.h"
+#include "lua/lauxlib.h"
+#include "lua/lualib.h"
 }
 
 using std::map;
@@ -21,7 +21,7 @@ Playfield::Playfield(void) {
 Playfield::~Playfield(void) {
 }
 
-void Playfield::setBridgeInterface(const PinballBridgeInterface *bridgeInterface) {
+void Playfield::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
 }
 

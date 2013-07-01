@@ -64,7 +64,7 @@ protected:
 	void loadEffects();
 	void initModes();
 private:
-	const PinballBridgeInterface *_bridgeInterface;
+	PinballBridgeInterface *_bridgeInterface;
 	const HostProperties *_displayProperties;
 	Playfield *_playfield;
 	float _scale;

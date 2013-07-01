@@ -30,13 +30,13 @@ class PinballBridgeInterface
 public:
     
 	PinballBridgeInterface(void);
-    ~PinballBridgeInterface(void);
+	~PinballBridgeInterface(void);
     
 	void setGameName(const char *gameName);
 	const char *getGameName();
 	const char *getBasePath();
-	const char *getScriptPath(const char *scriptName) const;
-    	const HostProperties *getHostProperties() const;
+	const char *getScriptPath(const char *scriptName);
+    	const HostProperties *getHostProperties();
 	void playSound(const char *soundName);
 	void addTimer(float duration, int id, const ITimerDelegate *timerDelegate);
 
