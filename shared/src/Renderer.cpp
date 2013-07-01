@@ -15,14 +15,17 @@
 #include "Drawing.h"
 
 extern "C" {
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include "lua/lua.h"
+#include "lua/lauxlib.h"
+#include "lua/lualib.h"
 }
 
 #ifdef __APPLE__
 #include <OpenGLES/ES1/gl.h>
 #include <OpenGLES/ES1/glext.h>
+#elif __linux__
+#include <GL/gl.h>
+#include <GL/glu.h>
 #else
 #include <GL/GL.h>
 #include <GL/GLU.h>
@@ -130,7 +133,7 @@ void Renderer::init(void) {
 
 void Renderer::loadFonts(void) {
 	_glfont = new glfont::GLFont();
-	_glfont->Create(_bridgeInterface->getPathForTextureFileName((void *)"font.glf"), txIdFont);
+	_glfont->Create(_bridgeInterface->getTexturePath((const char *)"font.glf"), txIdFont);
 }
 
 void Renderer::draw(void) {

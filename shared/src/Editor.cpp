@@ -15,9 +15,9 @@
 #include "chipmunk/chipmunk.h"
 
 extern "C" {
-#include "lua.h"
-#include "lauxlib.h"
-#include "lualib.h"
+#include "lua/lua.h"
+#include "lua/lauxlib.h"
+#include "lua/lualib.h"
 }
 
 #include <iostream>
@@ -267,7 +267,7 @@ void Editor::save() {
 
 	map<string, LayoutItem> *items = _playfield->getLayout();
 
-	const char *savePath = _bridgeInterface->getPathForScriptFileName((void *)"user.layout.lua");
+	const char *savePath = _bridgeInterface->getScriptPath((const char *)"user.layout.lua");
 
 	ofstream layout;
 	layout.open(savePath);
@@ -419,7 +419,7 @@ void Editor::loadConfig() {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *configFileName = _bridgeInterface->getPathForScriptFileName((void *)"config.lua");
+	const char *configFileName = _bridgeInterface->getScriptPath((const char *)"config.lua");
 
 	int error = luaL_dofile(L, configFileName);
 	if (!error) {

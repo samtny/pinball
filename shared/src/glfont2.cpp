@@ -27,6 +27,10 @@ using namespace glfont;
 #include <OpenGLES/ES1/glext.h>
 #endif
 
+#ifdef __linux__
+#include <GL/gl.h>
+#endif
+
 //*******************************************************************
 //GLFont Class Implementation
 //*******************************************************************

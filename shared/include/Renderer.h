@@ -53,7 +53,7 @@ private:
 	Camera *_camera;
 	Editor *_editor;
 	glfont::GLFont *_glfont;
-	HostProperties *_displayProperties;
+	const HostProperties *_displayProperties;
 	float _scale;
 };
 

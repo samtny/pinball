@@ -1,3 +1,8 @@
+class Physics;
+class Renderer;
+class Game;
+class Editor;
+
 class XEngine {
 	public:
 		XEngine(void);

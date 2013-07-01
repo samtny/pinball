@@ -1,3 +1,5 @@
+#include "XEngine.h"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<X11/X.h>
@@ -5,6 +7,15 @@
 #include<GL/gl.h>
 #include<GL/glx.h>
 #include<GL/glu.h>
+
+XEngine::XEngine(void) {
+}
+
+XEngine::~XEngine(void) {
+}
+
+void XEngine::init(void) {
+}
 
 Display			*dpy;
 Window			root;
@@ -39,7 +50,7 @@ void DrawAQuad() {
 	glEnd();
 }
 
-int main (int argc, char *argv[]) {
+int _main (int argc, char *argv[]) {
 	dpy = XOpenDisplay(NULL);
 
 	if (dpy == NULL) {

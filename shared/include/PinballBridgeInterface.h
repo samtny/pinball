@@ -36,7 +36,9 @@ public:
 	const char *getGameName();
 	const char *getBasePath();
 	const char *getScriptPath(const char *scriptName);
+	const char *getTexturePath(const char *textureName);
     	const HostProperties *getHostProperties();
+	GLTexture *createRGBATexture(void *textureName);
 	void playSound(const char *soundName);
 	void addTimer(float duration, int id, const ITimerDelegate *timerDelegate);
 

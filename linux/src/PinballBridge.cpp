@@ -48,5 +48,49 @@ const char *PinballBridgeInterface::getScriptPath(const char *scriptName) {
 	return static_cast<PinballBridge *>(_this)->getScriptPath(scriptName);
 }
 
+const char *PinballBridge::getTexturePath(const char *_textureName) {
+	if (_texturePath == NULL) {
+		char path[1024];
+		strcpy(path, _basePath);
+		strcat(path, "/../shared/resource/");
+		strcat(path, _gameName);
+		strcat(path, "/");
+		strcat(path, _textureName);
+		_texturePath = (const char *)&path;
+	}
+	return _texturePath;
+}
 
+const char *PinballBridgeInterface::getTexturePath(const char *textureName) {
+	return static_cast<PinballBridge *>(_this)->getTexturePath(textureName);
+}
+
+const HostProperties *PinballBridge::getHostProperties() {
+	if (_hostProperties == NULL) {
+		HostProperties *props = new HostProperties();
+
+		// TODO: vary by glut props;
+		props->viewportX = 0;
+		props->viewportY = 0;
+		props->viewportHeight = 800;
+		props->viewportWidth = 800;
+		props->fontScale = 1;
+		props->overlayScale = 1;
+
+		_hostProperties = props;
+	}
+	return _hostProperties;	
+}
+
+const HostProperties *PinballBridgeInterface::getHostProperties() {
+	return static_cast<PinballBridge *>(_this)->getHostProperties();
+}
+
+GLTexture *PinballBridge::createRGBATexture(const char *textureName) {
+	return NULL;
+}
+
+GLTexture *PinballBridgeInterface::createRGBATexture(void *textureName) {
+	return static_cast<PinballBridge *>(_this)->createRGBATexture((const char *)textureName);
+}
 
