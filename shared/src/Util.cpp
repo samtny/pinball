@@ -39,4 +39,14 @@ double absoluteTime() {
     return mach_absolute_time() * sysTimebaseMult;
 };
 
+#elif __linux__
+
+#include <time.h>
+
+double absoluteTime() {
+	static timespec t;
+	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t);
+	return t.tv_sec + t.tv_nsec;
+};
+
 #endif
