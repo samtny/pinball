@@ -94,3 +94,28 @@ GLTexture *PinballBridgeInterface::createRGBATexture(void *textureName) {
 	return static_cast<PinballBridge *>(_this)->createRGBATexture((const char *)textureName);
 }
 
+void PinballBridge::playSound(const char *soundName) {
+	
+}
+
+void PinballBridgeInterface::playSound(const char *soundName) {
+	static_cast<PinballBridge *>(_this)->playSound(soundName);
+}
+
+void PinballBridge::addTimer(float duration, int id, const ITimerDelegate *delegate) {
+}
+
+void PinballBridgeInterface::addTimer(float duration, int id, const ITimerDelegate *delegate) {
+	static_cast<PinballBridge *>(_this)->addTimer(duration, id, delegate);
+}
+
+const char *PinballBridge::getGameName() {
+	return _gameName;
+}
+
+const char *PinballBridgeInterface::getGameName() {
+	return static_cast<PinballBridge *>(_this)->getGameName();
+}
+
+
+

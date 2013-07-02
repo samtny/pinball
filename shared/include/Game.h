@@ -42,9 +42,11 @@ private:
 	Physics *_physics;
 	Renderer *_renderer;
 	lua_State *_rules;
+/*
 	int _zoomLevel;
 	int _maxZoomLevel;
 	int _min_ZoomLevel;
+*/
 	bool _paused;
 };
 

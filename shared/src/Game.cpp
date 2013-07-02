@@ -26,7 +26,6 @@ Game::~Game(void) {
 
 void Game::setBridgeInterface(PinballBridgeInterface *bridgeInterface) {
 	_bridgeInterface = bridgeInterface;
-	_bridgeInterface->setTimerDelegate(this);
 }
 
 void Game::setPhysics(Physics *physics) {
@@ -183,7 +182,7 @@ void Game::activateMech(const char *mechName) {
 }
 
 void Game::playSound(const char *sound, const float loopInterval) {
-    _bridgeInterface->playSound((void *)sound);
+    _bridgeInterface->playSound((const char *)sound);
 }
 
 void Game::doCameraEffect(const char *effectName) {
@@ -208,7 +207,7 @@ void Game::addLuaTimer(float duration, string funcName, int arg) {
 
 	timers.push_back(t);
 
-	_bridgeInterface->addTimer(t.duration, t.id);
+	_bridgeInterface->addTimer(t.duration, t.id, this);
 
 }
 
@@ -239,7 +238,7 @@ void Game::loadRules(void) {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *rulesFilename = _bridgeInterface->getPathForScriptFileName((void *)"rules.lua");
+	const char *rulesFilename = _bridgeInterface->getScriptPath((const char *)"rules.lua");
 
 	int error = luaL_dofile(L, rulesFilename);
 	if (!error) {

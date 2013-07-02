@@ -78,10 +78,10 @@ void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fil
 			Coord2 r = coordmult(d, radius/coordlen(d));
 
 			const GLfloat matrix[] = {
-				 r.x, r.y, 0.0f, 0.0f,
-				-r.y, r.x, 0.0f, 0.0f,
-				 d.x, d.y, 0.0f, 0.0f,
-				 a.x, a.y, 0.0f, 1.0f,
+				 (float)r.x, (float)r.y, 0.0f, 0.0f,
+				-(float)r.y, (float)r.x, 0.0f, 0.0f,
+				 (float)d.x, (float)d.y, 0.0f, 0.0f,
+				 (float)a.x, (float)a.y, 0.0f, 1.0f,
 			};
 			glMultMatrixf(matrix);
 			

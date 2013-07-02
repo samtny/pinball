@@ -17,6 +17,22 @@ XEngine::~XEngine(void) {
 void XEngine::init(void) {
 }
 
+void XEngine::setPhysics(Physics *physics) {
+	_physics = physics;
+}
+
+void XEngine::setRenderer(Renderer *renderer) {
+	_renderer = renderer;
+}
+
+void XEngine::setGame(Game *game) {
+	_game = game;
+}
+
+void XEngine::setEditor(Editor *editor) {
+	_editor = editor;
+}
+
 Display			*dpy;
 Window			root;
 GLint			att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };

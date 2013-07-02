@@ -152,7 +152,7 @@ void Renderer::draw(void) {
 	}
 
 }
-
+/*
 static void _drawAnchors(cpBody *body, void *data) {
 	if (body->data) {
 		LayoutItem *item = (LayoutItem *)body->data;
@@ -161,6 +161,7 @@ static void _drawAnchors(cpBody *body, void *data) {
 		}
 	}
 }
+*/
 
 void Renderer::drawPlayfield() {
 	
