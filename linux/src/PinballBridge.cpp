@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <libgen.h>
+#include <Magick++.h>
 
 PinballBridge::PinballBridge(void) {
 }
@@ -19,46 +21,54 @@ void PinballBridgeInterface::setGameName(const char *gameName) {
 }
 
 const char *PinballBridge::getBasePath() {
-	if (_basePath == NULL) {
-		char cwd[1024];
-		getcwd(cwd, sizeof(cwd));
-		_basePath = (const char *)&cwd;
-	}
-	return _basePath;	
+	char *cwd = getcwd(0, 0);
+	char *dir = dirname(cwd);
+	return dir;	
 }
 
 const char *PinballBridgeInterface::getBasePath() {
 	return static_cast<PinballBridge *>(_this)->getBasePath();
 }
 
-const char *PinballBridge::getScriptPath(const char *_scriptName) {
-	if (_scriptPath == NULL) {
-		char path[1024];
-		strcpy(path, _basePath);
-		strcat(path, "/../shared/resource/");
-		strcat(path, _gameName);
-		strcat(path, "/");
-		strcat(path, _scriptName);
-		_scriptPath = (const char *)&path;
-	}
-	return _scriptPath;
+const char *PinballBridge::getScriptPath(const char *scriptName) {
+	const char *p = "./../shared/resource/";
+	const char *g = _gameName;
+	const char *s = "/";
+	const char *f = (const char *)scriptName;
+	
+	std::string path = "./../shared/" + (std::string)_gameName + "/" + (std::string)(const char *)scriptName;
+
+	char *concat = new char[strlen(p) + strlen(g) + strlen(s) + strlen(f) + 1];
+	strcpy(concat, p);
+	strcat(concat, g);
+	strcat(concat, s);
+	strcat(concat, f);
+
+	return concat;
 }
 
 const char *PinballBridgeInterface::getScriptPath(const char *scriptName) {
 	return static_cast<PinballBridge *>(_this)->getScriptPath(scriptName);
 }
 
-const char *PinballBridge::getTexturePath(const char *_textureName) {
-	if (_texturePath == NULL) {
-		char path[1024];
-		strcpy(path, _basePath);
-		strcat(path, "/../shared/resource/");
-		strcat(path, _gameName);
-		strcat(path, "/");
-		strcat(path, _textureName);
-		_texturePath = (const char *)&path;
-	}
-	return _texturePath;
+const char *PinballBridge::getTexturePath(const char *textureName) {
+	long size = 1024;
+	char *buf = (char *)malloc((size_t)size);
+	char *cwd = getcwd(buf, size);
+	const char *d = dirname(cwd);
+	const char *r = "/shared/resource/";
+	const char *g = _gameName;
+	const char *s = "/textures/";
+	const char *f = (const char *)textureName;
+	
+	char *concat = new char[strlen(d) + strlen(r) + strlen(g) + strlen(s) + strlen(f) + 1];
+	strcpy(concat, d);
+	strcat(concat, r);
+	strcat(concat, g);
+	strcat(concat, s);
+	strcat(concat, f);
+	std::cout << concat << "\n";
+	return concat;
 }
 
 const char *PinballBridgeInterface::getTexturePath(const char *textureName) {
@@ -87,6 +97,17 @@ const HostProperties *PinballBridgeInterface::getHostProperties() {
 }
 
 GLTexture *PinballBridge::createRGBATexture(const char *textureName) {
+	GLTexture *tex = new GLTexture();
+	
+	const char *filename = this->getTexturePath(textureName);
+	std::cout << filename << "\n";
+
+	Magick::Image *i = new Magick::Image;
+	
+
+	i->read(filename);
+
+		
 	return NULL;
 }
 

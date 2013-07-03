@@ -16,6 +16,8 @@
 
 #include "XEngine.h"
 
+#include <iostream>
+
 PinballHost::PinballHost() {
 }
 
@@ -23,8 +25,8 @@ PinballHost::~PinballHost() {
 }
 
 void PinballHost::start(const char *gameName) {
-	printf("\nstarting %s\n", gameName);
 
+	std::cout << "starting " << gameName << std::endl;
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
 	bi->setGameName(gameName);
 	

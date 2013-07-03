@@ -1,13 +1,17 @@
-CFLAGS=-c -Wall -I./include -I../shared/include -O3 -std=c++11
+CFLAGS=-c -Wall -I./include -I../shared/include -O3 -std=c++11 -g
 
-LFLAGS=-L./lib -lGL -lGLU -llua -lchipmunk -lrt
+LFLAGS=-L./lib -lGL -lGLU -llua -lchipmunk -lrt -g
+
+CFLAGS_MAGICK=`Magick++-config --cxxflags --cppflags`
+
+LFLAGS_MAGICK=`Magick++-config --ldflags --libs`
 
 CC=clang++
 
 all: pinball
 
 pinball: main.o PinballHost.o
-	$(CC) main.o PinballBridge.o Playfield.o Physics.o Camera.o PinballHost.o Util.o Editor.o XEngine.o Renderer.o glfont2.o Drawing.o Game.o -o pinball $(LFLAGS) 	
+	$(CC) main.o PinballBridge.o Playfield.o Physics.o Camera.o PinballHost.o Util.o Editor.o XEngine.o Renderer.o glfont2.o Drawing.o Game.o -o pinball $(LFLAGS) $(LFLAGS_MAGICK) 	
 
 SRC=./src/
 
@@ -18,7 +22,7 @@ PinballHost.o: PinballBridge.o Playfield.o Physics.o Camera.o Editor.o XEngine.o
 	$(CC) $(CFLAGS) $(SRC)PinballHost.cpp
 
 PinballBridge.o: $(SRC)PinballBridge.cpp
-	$(CC) $(CFLAGS) $(SRC)PinballBridge.cpp
+	$(CC) $(CFLAGS) $(CFLAGS_MAGICK) $(SRC)PinballBridge.cpp
 
 XEngine.o: $(SRC)XEngine.cpp
 	$(CC) $(CFLAGS) $(SRC)XEngine.cpp
