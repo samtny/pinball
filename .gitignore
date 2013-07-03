@@ -25,13 +25,13 @@ DerivedData
 *.o
 
 # Compiled Dynamic libraries
-*.so
-*.dylib
+#*.so
+#*.dylib
 
 # Compiled Static libraries
-*.lai
-*.la
-*.a
+#*.lai
+#*.la
+#*.a
 
 ### Section: Visual Studio
 ## Ignore Visual Studio temporary files, build results, and
@@ -145,3 +145,6 @@ packages/
 
 # Vim
 *.swp
+
+# linux cruft
+.directory
