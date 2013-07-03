@@ -41,12 +41,14 @@ double absoluteTime() {
 
 #elif __linux__
 
-#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 
-double absoluteTime() {
-	static timespec t;
-	clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t);
-	return t.tv_sec + t.tv_nsec;
-};
+double absoluteTime(){
+	struct timeval time;
+	gettimeofday(&time, NULL);
+	
+	return (time.tv_sec*1000.0 + time.tv_usec/1000.0)/(double)1000.0;
+}
 
 #endif

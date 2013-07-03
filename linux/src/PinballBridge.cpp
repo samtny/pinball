@@ -105,9 +105,18 @@ GLTexture *PinballBridge::createRGBATexture(const char *textureName) {
 	
 
 	i->read(filename);
-	Magick::Geometry d = i->density();
 
-	tex->width = d.width();	
+	size_t width = i->columns();
+	size_t height = i->rows();
+	std::cout << "width: " << width << "\n";
+	std::cout << "height: " << height << "\n";
+	char *data = (char *)malloc(width * height * 4);
+	i->write(0, 0, width, height, "RGBA", Magick::CharPixel, data);
+
+	tex->width = width;
+	tex->height = height;
+	tex->data = data;
+		
 		
 	return tex;
 }
