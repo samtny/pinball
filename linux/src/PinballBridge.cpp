@@ -67,7 +67,7 @@ const char *PinballBridge::getTexturePath(const char *textureName) {
 	strcat(concat, g);
 	strcat(concat, s);
 	strcat(concat, f);
-	std::cout << concat << "\n";
+	
 	return concat;
 }
 
@@ -100,15 +100,16 @@ GLTexture *PinballBridge::createRGBATexture(const char *textureName) {
 	GLTexture *tex = new GLTexture();
 	
 	const char *filename = this->getTexturePath(textureName);
-	std::cout << filename << "\n";
 
 	Magick::Image *i = new Magick::Image;
 	
 
 	i->read(filename);
+	Magick::Geometry d = i->density();
 
+	tex->width = d.width();	
 		
-	return NULL;
+	return tex;
 }
 
 GLTexture *PinballBridgeInterface::createRGBATexture(void *textureName) {

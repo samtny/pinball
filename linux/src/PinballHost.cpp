@@ -14,7 +14,7 @@
 
 #include "Game.h"
 
-#include "XEngine.h"
+#include "GlutEngine.h"
 
 #include <iostream>
 
@@ -24,7 +24,7 @@ PinballHost::PinballHost() {
 PinballHost::~PinballHost() {
 }
 
-void PinballHost::start(const char *gameName) {
+void PinballHost::init(const char *gameName) {
 
 	std::cout << "starting " << gameName << std::endl;
 	PinballBridgeInterface *bi = new PinballBridgeInterface();
@@ -51,7 +51,7 @@ void PinballHost::start(const char *gameName) {
 	t->setPhysics(p);
 	t->init();
 
-	XEngine *e = new XEngine();
+	GlutEngine *e = new GlutEngine();
 	e->init();
 
 	Renderer *r = new Renderer();
@@ -76,4 +76,9 @@ void PinballHost::start(const char *gameName) {
 	
 	_engine = e;
 
-}	
+}
+
+void PinballHost::start(void) {
+	_engine->start();
+}
+	

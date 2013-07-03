@@ -3,7 +3,8 @@
 int main(void) {
 	PinballHost *host = new PinballHost();
 	
-	host->start("Cosmos");
+	host->init("Cosmos");
+	host->start();
 
 	return 0;
 }

@@ -19,8 +19,8 @@ using std::vector;
 
 GlutEngine *glut_currentInstance;
 
-static Coord2 selectionStart = { 0, 0 };
-static Coord2 selectionEnd = { 0, 0 };
+//static Coord2 selectionStart = { 0, 0 };
+//static Coord2 selectionEnd = { 0, 0 };
 
 static EditMode _currentEditMode = EDIT_MODE_SELECT;
 
@@ -140,7 +140,11 @@ void glut_motionCallback(int x, int y) {
 
 void GlutEngine::init() {
 	
-	//glutInit(&argc, argv);
+	#ifdef __linux__
+	char *argv[1];
+	int argc=1;
+	glutInit(&argc, argv);
+	#endif
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 50);
@@ -281,19 +285,19 @@ void GlutEngine::motionCallback(int x, int y) {
 	
 	if (_currentEditMode == EDIT_MODE_PAN) {
 		const EditorState *s = _editor->getState();
-		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		EditorState newState = { s->editMode, s->selectionStart, { (cpFloat)x, (cpFloat)y } };
 		_editor->setState(newState);
 	} else if (_currentEditMode == EDIT_MODE_SELECT) {
 		const EditorState *s = _editor->getState();
-		EditorState newState = { s->editMode, s->selectionStart, { x, y } };
+		EditorState newState = { s->editMode, s->selectionStart, { (cpFloat)x, (cpFloat)y } };
 		_editor->setState(newState);
 	} else if (_currentEditMode == EDIT_MODE_MOVE) {
 		const EditorState *s = _editor->getState();
-		EditorState newState = { EDIT_MODE_MOVE, s->selectionStart, { x, y } };
+		EditorState newState = { EDIT_MODE_MOVE, s->selectionStart, { (cpFloat)x, (cpFloat)y } };
 		_editor->setState(newState);
 	} else if (_currentEditMode == EDIT_MODE_ROTATE) {
 		const EditorState *s = _editor->getState();
-		EditorState newState = { EDIT_MODE_ROTATE, s->selectionStart, { x, y } };
+		EditorState newState = { EDIT_MODE_ROTATE, s->selectionStart, { (cpFloat)x, (cpFloat)y } };
 		_editor->setState(newState);
 	}
 
@@ -308,24 +312,24 @@ void GlutEngine::mouseCallback(int button, int state, int x, int y) {
 		{
 		case GLUT_DOWN:
 			if (_currentEditMode == EDIT_MODE_PAN) {
-				const EditorState *s = _editor->getState();
-				EditorState newState = { EDIT_MODE_PAN, { x, y }, { x, y } };
+				//const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_PAN, { (cpFloat)x, (cpFloat)y }, { (cpFloat)x, (cpFloat)y } };
 				_editor->setState(newState);
 			} else if (_currentEditMode == EDIT_MODE_SELECT) {
-				const EditorState *s = _editor->getState();
-				EditorState newState = { glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE, { x, y }, { x, y } };
+				//const EditorState *s = _editor->getState();
+				EditorState newState = { glutGetModifiers() == GLUT_ACTIVE_SHIFT ? EDIT_MODE_SELECT_MANY : EDIT_MODE_SELECT_EXCLUSIVE, { (cpFloat)x, (cpFloat)y }, { (cpFloat)x, (cpFloat)y } };
 				_editor->setState(newState);
 			} else if (_currentEditMode == EDIT_MODE_MOVE) {
-				const EditorState *s = _editor->getState();
-				EditorState newState = { EDIT_MODE_MOVE_BEGIN, { x, y }, { x, y } };
+				//const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_MOVE_BEGIN, { (cpFloat)x, (cpFloat)y }, { (cpFloat)x, (cpFloat)y } };
 				_editor->setState(newState);
 			} else if (_currentEditMode == EDIT_MODE_ROTATE) {
-				const EditorState *s = _editor->getState();
-				EditorState newState = { EDIT_MODE_ROTATE, { x, y }, { x, y } };
+				//const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_ROTATE, { (cpFloat)x, (cpFloat)y }, { (cpFloat)x, (cpFloat)y } };
 				_editor->setState(newState);
 			} else if (_currentEditMode == EDIT_MODE_INSERT) {
-				const EditorState *s = _editor->getState();
-				EditorState newState = { EDIT_MODE_INSERT, { x, y }, { x, y } };
+				//const EditorState *s = _editor->getState();
+				EditorState newState = { EDIT_MODE_INSERT, { (cpFloat)x, (cpFloat)y }, { (cpFloat)x, (cpFloat)y } };
 				_editor->setState(newState);
 			}
 			break;

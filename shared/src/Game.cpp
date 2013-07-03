@@ -309,7 +309,6 @@ void Game::resetBallPosition() {
 
 void Game::setCameraMode(const char *modeName) {
 
-	fprintf(stderr, "%s\n", "setCameraMode");
 	_renderer->setCameraMode(modeName);	
 
 }

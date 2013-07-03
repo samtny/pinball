@@ -1,11 +1,13 @@
 #include <stdio.h>
 
+class GlutEngine;
+
 class PinballHost {
 	public:
 		PinballHost(void);
 		~PinballHost(void);
-		void init();
-		void start(const char *gameName);
+		void init(const char *gameName);
+		void start();
 	private:
-		void *_engine;
+		GlutEngine *_engine;
 };
