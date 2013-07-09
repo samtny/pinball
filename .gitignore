@@ -148,3 +148,6 @@ packages/
 
 # linux cruft
 .directory
+
+# llvm cruft
+linux/*.plist

@@ -13,6 +13,8 @@
 
 #include "chipmunk/chipmunk.h"
 
+#include <iostream>
+
 extern "C" {
 #include "lua/lua.h"
 #include "lua/lauxlib.h"
@@ -47,6 +49,8 @@ static double _slingshotImpulse = 0.02;
 
 static double _popBumperThreshold = 0.005;
 static double _popBumperImpulse = 0.04;
+
+static double _nudgeImpulse = 1.0;
 
 static double timeStep = 1.0/180.0;
 
@@ -103,6 +107,8 @@ void Physics::init() {
 
 	_space = cpSpaceNew();
 	cpSpaceSetIterations(_space, iterations);
+	//cpSpaceSetCollisionSlop(_space, 0.9);
+	//cpSpaceSetDamping(_space, 0.1);
 	
 	// TODO: move to properties of item/object;
 	_targetRestLength *= 1 / scale;
@@ -144,9 +150,10 @@ static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	LayoutItem *l = (LayoutItem *)b->data;
-
-	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+	LayoutItem *sw = (LayoutItem *)b->data;
+	LayoutItem *ball = (LayoutItem *)a->data;
+	
+	physics_currentInstance->getDelegate()->switchClosed(sw->n.c_str(), ball->n.c_str());
 
 	return 1;
 
@@ -158,9 +165,10 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	LayoutItem *l = (LayoutItem *)b->data;
+	LayoutItem *sw = (LayoutItem *)b->data;
+	LayoutItem *ball = (LayoutItem *)a->data;
 
-	physics_currentInstance->getDelegate()->switchOpened(l->n.c_str());
+	physics_currentInstance->getDelegate()->switchOpened(sw->n.c_str(), ball->n.c_str());
 
 }
 
@@ -181,7 +189,7 @@ static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 		
 		LayoutItem *l = (LayoutItem *)pop->data;
 
-		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
 
 	}
 
@@ -194,7 +202,7 @@ static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 	LayoutItem *l = (LayoutItem *)target->data;
 
-	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str());
+	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
 
 	// we don't need more information from this
 	return 0;
@@ -375,8 +383,9 @@ void Physics::createBox(LayoutItem *item) {
 	//constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, staticBody, boxVerts[3]));
 	
 	// pin the box in place;
-	constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, staticBody, cpvmult(cpvadd(item->v[0], item->v[2]), 0.5)) );
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
+	constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, staticBody, cpvmult(cpvadd(cpvmult(cpvadd(item->v[0], item->v[1]), 0.5), item->v[2]), 0.5)) );
+	//constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
+	constraint = cpSpaceAddConstraint(_space, cpDampedRotarySpringNew(body, staticBody, 0.0f, 1000.0f, 100.9001) );
 	
 	// hang the box shapes on the body;
 	// left
@@ -407,9 +416,23 @@ void Physics::createBox(LayoutItem *item) {
 
 	item->bodies.push_back(body);
 
+	_boxBody = body;
+
+}
+
+cpBody *Physics::getBoxBody() {
+	return _boxBody;
 }
 
 static int ballCollisionGroup = 2048;
+
+static void
+ballGravityVelocityFunc(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
+{
+	cpVect g = cpvrotate(cpvforangle(physics_currentInstance->getBoxBody()->a), gravity);
+	
+	cpBodyUpdateVelocity(body, g, damping, dt);
+}
 
 void Physics::createBall(LayoutItem *item) {
     
@@ -418,12 +441,14 @@ void Physics::createBall(LayoutItem *item) {
     
     cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1 * item->s, cpvzero)));
     cpBodySetPos(body, item->v[0]);
+    body->velocity_func = ballGravityVelocityFunc;
     
     cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1 * item->s, cpvzero));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetGroup(shape, shapeGroupBall + ballCollisionGroup); // TODO: ball shape group is kludged
 	cpShapeSetCollisionType(shape, CollisionTypeBall);
+	cpShapeSetUserData(shape, item);
 
 	body->data = item;
 
@@ -616,6 +641,49 @@ void Physics::createTarget(LayoutItem *item) {
 
 }
 
+void Physics::createDropTarget(LayoutItem *item) {
+	cpVect a = cpv(item->v[0].x, item->v[0].y);
+	cpVect b = cpv(item->v[1].x, item->v[1].y);
+	cpVect mid = cpvmult(cpvadd(a, b), 0.5);
+
+	cpFloat length = cpvdist(a, b);
+
+	cpFloat area = (item->o->r1 * length) * 2;
+	cpFloat mass = area * item->o->m->d;
+
+	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
+	cpBodySetPos(body, mid);
+	
+	// target surface normal;
+	cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
+
+	// groove
+	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
+	cpVect grooveB = body->p;
+
+	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
+
+	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpBodyWorld2Local(box->bodies[0], grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], 0.0f, 0.0f));
+
+	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
+	cpShapeSetElasticity(shape, item->o->m->e);
+	cpShapeSetFriction(shape, item->o->m->f);
+	cpShapeSetCollisionType(shape, CollisionTypeTarget);
+	cpShapeSetGroup(shape, shapeGroupTargets);
+	cpShapeSetUserData(shape, item);
+
+	// switch
+	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->bodies[0], grooveA)));
+	cpShapeSetSensor(shape, true);
+	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
+
+	item->shapes.push_back(shape);
+
+	item->bodies.push_back(body);
+}
+
 void Physics::createPopbumper(LayoutItem *item) {
 
 	cpFloat area = (item->o->r1 * item->o->r1 * M_PI);
@@ -702,6 +770,11 @@ void Physics::unflip(LayoutItem *flipper) {
 	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -unflipImpulse * dir), anchor);
 	cpBodyApplyForce(flipper->bodies[0], cpv(0, -unflipForce * dir), anchor);
 
+}
+
+void Physics::nudge(cpVect dir) {
+	cpBodyApplyImpulse(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -0.1));
+	//cpBodyApplyForce(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -01.));
 }
 
 void Physics::loadConfig() {
@@ -827,6 +900,8 @@ void Physics::loadForces() {
 						unflipForce = (float)lua_tonumber(L, -1);
 					} else if (strcmp("unflipImpulse", key) == 0) {
 						unflipImpulse = (float)lua_tonumber(L, -1);
+					} else if (strcmp("nudgeImpulse", key) == 0) {
+						_nudgeImpulse = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);

@@ -17,14 +17,14 @@ public:
 	std::map<std::string, Overlay> *getOverlays();
 	std::map<std::string, Part> *getParts();
 	std::map<std::string, LayoutItem> *getLayout();
-	void reload(void);
+	void reload(bool userLayout);
 protected:
 	void loadConfig(void);
 	void loadMaterials(void);
 	void loadTextures(void);
 	void loadOverlays(void);
 	void loadParts(void);
-	void loadLayout(void);
+	void loadLayout(bool userLayout);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	std::map<std::string, Material> _materials;

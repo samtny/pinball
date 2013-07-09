@@ -318,7 +318,7 @@ Coord2 Camera::transform(Coord2 coord) {
 	float _activeCameraModeH = _activeCameraMode.w / _displayProperties->viewportWidth * _displayProperties->viewportHeight;
 
 	cpFloat tx = coord.x * 1 / _scale + _activeCameraMode.c.x - (_activeCameraMode.w / 2.0f);
-	cpFloat ty = (_activeCameraModeH - coord.y * 1 / _scale) + _activeCameraMode.c.y - (_activeCameraModeH / 2.0f);
+	cpFloat ty = _activeCameraModeH - coord.y * 1 / _scale + _activeCameraMode.c.y - _activeCameraModeH / 2.0f;
 
 	Coord2 transformed = {tx + _pan.x * 1 / _scale, ty - _pan.y * 1 / _scale};
 

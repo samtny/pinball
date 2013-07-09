@@ -5,8 +5,8 @@
 class IPhysicsDelegate {
 public:
 	virtual ~IPhysicsDelegate() {};
-	virtual void switchClosed(const char *switchName) {};
-	virtual void switchOpened(const char *switchName) {};
+	virtual void switchClosed(const char *switchName, const char *ballName) {};
+	virtual void switchOpened(const char *switchName, const char *ballName) {};
 };
 
 #endif

@@ -63,7 +63,6 @@ void glut_keyboardUpCallback(unsigned char key, int x, int y) {
 
 void glut_mouseCallback (int button, int state, int x, int y) {
 
-	fprintf(stderr, "%s\n", "glut_mouseCallback");
 	glut_currentInstance->mouseCallback(button, state, x, y);
 
 }
@@ -145,6 +144,7 @@ void GlutEngine::init() {
 	int argc=1;
 	glutInit(&argc, argv);
 	#endif
+	
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(800, 800);
 	glutInitWindowPosition(100, 50);
@@ -260,13 +260,17 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 	} else if (key == 'p') {
 		_game->setPaused(!_game->getPaused());
 	} else if (key == '/') {
-		_game->switchClosed("rbutton");
+		_game->switchClosed("rbutton", NULL);
 	} else if (key == 'z') {
-		_game->switchClosed("lbutton");
+		_game->switchClosed("lbutton", NULL);
 	} else if (key == 26) {
 		_editor->undo();
 	} else if (key == 127) {
 		_editor->deleteItems();
+	} else if (key == 'x') {
+		_game->nudge( { (cpFloat)1.0, (cpFloat)0.0 });
+	} else if (key == '.') {
+		_game->nudge( { (cpFloat)-1.0, (cpFloat)0.0 });
 	}
 
 }
@@ -274,9 +278,9 @@ void GlutEngine::keyboardCallback(unsigned char key) {
 void GlutEngine::keyboardUpCallback(unsigned char key) {
 
 	if (key == '/') {
-		_game->switchOpened("rbutton");
+		_game->switchOpened("rbutton", NULL);
 	} else if (key == 'z') {
-		_game->switchOpened("lbutton");
+		_game->switchOpened("lbutton", NULL);
 	}
 
 }

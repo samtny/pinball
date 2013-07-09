@@ -68,8 +68,8 @@ private:
 	const HostProperties *_displayProperties;
 	Playfield *_playfield;
 	float _scale;
-	float _minZoomLevel;
-	float _maxZoomLevel;
+	float _minZoomLevel = 0.1f;
+	float _maxZoomLevel = 3.0f;
 	std::map<std::string, CameraEffect> _effects;
 	std::vector<CameraEffect> _activeEffects;
 	CameraType _type;

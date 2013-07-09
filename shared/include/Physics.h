@@ -10,6 +10,7 @@ class Game;
 class Playfield;
 struct LayoutItem;
 
+struct cpVect;
 struct cpSpace;
 struct cpBody;
 struct cpArbiter;
@@ -49,6 +50,10 @@ public:
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
 
+	void nudge(cpVect dir);
+
+	cpBody *getBoxBody();
+
 protected:
 	void loadConfig();
     void loadForces();
@@ -57,6 +62,7 @@ protected:
     void createBall(LayoutItem *iprops);
 	void createFlipper(LayoutItem *iprops);
 	void createTarget(LayoutItem *iprops);
+	void createDropTarget(LayoutItem *iprops);
 	void createPopbumper(LayoutItem *iprops);
 	void createSlingshot(LayoutItem *iprops);
 	void createSwitch(LayoutItem *iprops);
@@ -69,6 +75,7 @@ private:
 	IPhysicsDelegate *_delegate;
 	Playfield *_playfield;
 	cpSpace *_space;
+	cpBody *_boxBody;
 	bool _paused;
 };
 

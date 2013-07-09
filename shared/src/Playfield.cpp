@@ -52,14 +52,14 @@ void Playfield::init(void) {
 	this->loadTextures();
 	this->loadOverlays();
 	this->loadParts();
-	this->loadLayout();
+	this->loadLayout(false);
 
 }
 
-void Playfield::reload(void) {
+void Playfield::reload(bool userLayout) {
 	
 	_layout.clear();
-	this->loadLayout();
+	this->loadLayout(userLayout);
 
 }
 
@@ -392,12 +392,20 @@ void Playfield::loadParts(void) {
 
 }
 
-void Playfield::loadLayout(void) {
+void Playfield::loadLayout(bool userLayout) {
 	
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	const char *layoutPath = _bridgeInterface->getScriptPath((const char *)"user.layout.lua");
+	const char *layoutFile;
+	
+	if (userLayout) {
+		layoutFile = "user.layout.lua";
+	} else {
+		layoutFile = "layout.lua";
+	}
+
+	const char *layoutPath = _bridgeInterface->getScriptPath(layoutFile);
 
 	int error = luaL_dofile(L, layoutPath);
 	if (!error) {

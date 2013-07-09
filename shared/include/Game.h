@@ -9,6 +9,7 @@ class PinballBridgeInterface;
 class Physics;
 class Renderer;
 struct lua_State;
+struct Coord2;
 
 class Game : public IPhysicsDelegate, ITimerDelegate {
 public:
@@ -18,9 +19,10 @@ public:
 	void setPhysics(Physics *physics);
 	void setRenderer(Renderer *renderer);
 	void init();
-	void switchClosed(const char *switchName);
-	void switchOpened(const char *switchName);
+	void switchClosed(const char *switchName, const char *ballName);
+	void switchOpened(const char *switchName, const char *ballName);
 	void closeSwitch(int switchIndex);
+	void sleepBall(const char *ballName);
 	void resetBallPosition();
 	void setCameraMode(const char *modeName);
 	void setZoomLevel(float zoomLevel);
@@ -31,7 +33,8 @@ public:
 	void doCameraEffect(const char *effectName);
 	void activateMech(const char *mechName);
 	void deactivateMech(const char *mechName);
-    void playSound(const char *sound, const float loopInterval);
+	void nudge(Coord2 direction);
+	void playSound(const char *sound, const float loopInterval);
 	void setPaused(bool paused);
 	bool getPaused();
 	const char *getGameName();

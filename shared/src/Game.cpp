@@ -7,6 +7,8 @@
 
 #include "Renderer.h"
 
+#include "Types.h"
+
 extern "C" {
 #include "lua/lua.h"
 #include "lua/lauxlib.h"
@@ -169,6 +171,19 @@ static int lua_deactivateMech(lua_State *L) {
 
 }
 
+static int lua_sleepBall(lua_State *L) {
+
+	int count = lua_gettop(L);
+
+	if (count == 1) {
+		const char *ballName = lua_tostring(L, 1);
+		lua_currentInstance->sleepBall(ballName);
+	}
+
+	return 0;
+
+}
+
 void Game::deactivateMech(const char *mechName) {
 	
 	_physics->deactivateMech(mechName);
@@ -179,6 +194,10 @@ void Game::activateMech(const char *mechName) {
 
 	_physics->activateMech(mechName);
 
+}
+
+void Game::nudge(Coord2 dir) {
+	_physics->nudge(dir);
 }
 
 void Game::playSound(const char *sound, const float loopInterval) {
@@ -264,6 +283,9 @@ void Game::loadRules(void) {
 
 		lua_pushcfunction(L, lua_deactivateMech);
 		lua_setglobal(L, "deactivateMech");
+
+		lua_pushcfunction(L, lua_sleepBall);
+		lua_setglobal(L, "sleepBall");
         
         lua_pushcfunction(L, lua_playSound);
         lua_setglobal(L, "playSound");
@@ -279,16 +301,18 @@ void Game::loadRules(void) {
 
 }
 
-void Game::switchClosed(const char *switchName) {
+void Game::switchClosed(const char *switchName, const char *ballName) {
 	lua_getglobal(_rules, "handleSwitchClosed");
 	lua_pushstring(_rules, switchName);
-	lua_call(_rules, 1, 0);
+	lua_pushstring(_rules, ballName);
+	lua_call(_rules, 2, 0);
 }
 
-void Game::switchOpened(const char *switchName) {
+void Game::switchOpened(const char *switchName, const char *ballName) {
 	lua_getglobal(_rules, "handleSwitchOpened");
 	lua_pushstring(_rules, switchName);
-	lua_call(_rules, 1, 0);
+	lua_pushstring(_rules, ballName);
+	lua_call(_rules, 2, 0);
 }
 
 // TODO: this is redundant (legacy) method;
@@ -301,6 +325,9 @@ void Game::closeSwitch(int switchIndex) {
 		lua_call(_rules, 1, 0);
 	}
 
+}
+
+void Game::sleepBall(const char *ballName) {
 }
 
 void Game::resetBallPosition() {

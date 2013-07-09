@@ -337,7 +337,7 @@ void Editor::load() {
 
 	this->deleteItems();
 
-	_playfield->reload();
+	_playfield->reload(true);
 
 	_physics->createObjects();
 
@@ -383,12 +383,7 @@ void Editor::insertItems() {
 				//l.o->r1 *= 1 / (float)localScale;
 				//l.o->r2 *= 1 / (float)localScale;
 
-				char num[21];
-				sprintf(num, "%d", _currentEditObjectName);
-				l.n = "_" + _currentEditObject.part->n + num;
-				_currentEditObjectName++;
-
-				//l.o->count = _currentEditObject.object->count;
+								//l.o->count = _currentEditObject.object->count;
 				l.editing = false;
 				
 				for (int i = 0; i < _currentEditObject.part->count; i++) {
@@ -396,7 +391,16 @@ void Editor::insertItems() {
 					l.v.push_back(v);
 				}
 				
-				_playfield->getLayout()->insert(make_pair(l.n, l));
+				char num[21];
+				sprintf(num, "%d", _currentEditObjectName);
+				l.n = "_" + _currentEditObject.part->n + num;
+	
+				while (_playfield->getLayout()->insert(make_pair(l.n, l)).second == false) {
+					_currentEditObjectName++;
+					sprintf(num, "%d", _currentEditObjectName);
+					l.n = "_" + _currentEditObject.part->n + num;
+				}
+				_currentEditObjectName++;
 				
 				_physics->createObject(&_playfield->getLayout()->find(l.n)->second);
 

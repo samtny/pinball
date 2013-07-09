@@ -22,7 +22,7 @@ textures = {
 		filename = "origami_pinwheel002.png"
 	},
 	background = {
-		filename = "Pinferno7.png"
+		filename = "ToyFactory_Multi-texturing_hardwood.png"
 	}
 }
 
