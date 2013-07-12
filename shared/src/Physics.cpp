@@ -30,6 +30,9 @@ static Physics *physics_currentInstance;
 
 static cpVect gravity = cpv(0.0, 9.80665f);
 
+static double _boxStiffness = 200.0;
+static double _boxDamping = 100.0;
+
 static double flipImpulse = 0.02f;
 static double unflipImpulse = 0.02f;
 
@@ -385,7 +388,7 @@ void Physics::createBox(LayoutItem *item) {
 	// pin the box in place;
 	constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, staticBody, cpvmult(cpvadd(cpvmult(cpvadd(item->v[0], item->v[1]), 0.5), item->v[2]), 0.5)) );
 	//constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, staticBody, 0.0f, 0.0f));
-	constraint = cpSpaceAddConstraint(_space, cpDampedRotarySpringNew(body, staticBody, 0.0f, 1000.0f, 100.9001) );
+	constraint = cpSpaceAddConstraint(_space, cpDampedRotarySpringNew(body, staticBody, 0.0f, _boxStiffness, _boxDamping) );
 	
 	// hang the box shapes on the body;
 	// left
@@ -902,6 +905,10 @@ void Physics::loadForces() {
 						unflipImpulse = (float)lua_tonumber(L, -1);
 					} else if (strcmp("nudgeImpulse", key) == 0) {
 						_nudgeImpulse = (float)lua_tonumber(L, -1);
+					} else if (strcmp("boxStiffness", key) == 0) {
+						_boxStiffness = (float)lua_tonumber(L, -1);
+					} else if (strcmp("boxDamping", key) == 0) {
+						_boxDamping = (float)lua_tonumber(L, -1);
 					}
                     
 					lua_pop(L, 1);

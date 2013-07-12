@@ -4,6 +4,9 @@ forces = {
 	gravityBase = { 0.0, -9.80665 },
 	tableAngle = 6.5,
 	gravity = { 0.0, -9.80665 * ( 10.5 / 90.0 ) },
+	
+	boxStiffness = 500.0, -- steel = 200
+	boxDamping = 70.0,
 
 	flipImpulse = 0.095,
 	flipForce = 0.3,

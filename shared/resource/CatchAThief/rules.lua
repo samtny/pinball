@@ -223,7 +223,7 @@ function resetLights()
 end
 
 function resetCamera()
-	setCameraMode("free")
+	setCameraMode("centered")
 end
 
 function serveBallToTrough()
