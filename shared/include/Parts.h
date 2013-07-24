@@ -50,6 +50,7 @@ typedef struct LayoutItem {
 	std::string n;
 	Part *o;
 	std::vector<Coord2> v;
+	int count;
 	float s;
 	std::vector<Body *> bodies;
 	std::vector<Shape *> shapes;

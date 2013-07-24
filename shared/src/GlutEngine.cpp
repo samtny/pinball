@@ -146,8 +146,8 @@ void GlutEngine::init() {
 	#endif
 	
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-	glutInitWindowSize(800, 800);
-	glutInitWindowPosition(100, 50);
+	glutInitWindowSize(1200, 800);
+	glutInitWindowPosition(100, 20);
 	glutCreateWindow("");
 
 	glutIgnoreKeyRepeat(1);

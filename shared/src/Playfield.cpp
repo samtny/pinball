@@ -1,4 +1,3 @@
-
 #include "Playfield.h"
 
 #include "PinballBridgeInterface.h"
@@ -471,6 +470,8 @@ void Playfield::loadLayout(bool userLayout) {
 						
 					} else if (strcmp("s", key) == 0) {
 						props.s = (float)lua_tonumber(L, -1);
+					} else if (strcmp("n", key) == 0) {
+						props.count = (int)lua_tonumber(L, -1);
 					}
 
 					lua_pop(L, 1);
@@ -478,6 +479,11 @@ void Playfield::loadLayout(bool userLayout) {
 				
 				if (props.s == -1) {
 					props.s = 1;
+				}
+
+				// TODO: remove kludge;
+				if (props.count == -1 || props.count > 1000) {
+					props.count = 2;
 				}
 
 				_layout.insert(make_pair(name, props));

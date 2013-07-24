@@ -484,6 +484,8 @@ void Renderer::drawOverlays() {
 #ifdef __APPLE__
     // todo; get these from the correct place...
     glOrthof(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 1.0);
+#elif __linux__
+	glOrtho(_displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 0, 1);
 #else
 	glOrtho(0, _displayProperties->viewportWidth, 0, _displayProperties->viewportHeight, 0, 1);
 #endif

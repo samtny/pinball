@@ -536,12 +536,16 @@ void Physics::createSegment(LayoutItem *item) {
 
 	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[0]), cpBodyWorld2Local(box->bodies[0], item->v[1]), item->o->r1));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetUserData(shape, item);
+	for (int i = 0; i < item->count-1; i++) {
 
-	item->shapes.push_back(shape);
+		cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[i]), cpBodyWorld2Local(box->bodies[0], item->v[i+1]), item->o->r1));
+		cpShapeSetElasticity(shape, item->o->m->e);
+		cpShapeSetFriction(shape, item->o->m->f);
+		cpShapeSetUserData(shape, item);
+
+		item->shapes.push_back(shape);
+
+	}
 	
 }
 

@@ -10,8 +10,8 @@ forces = {
 
 	flipImpulse = 0.095,
 	flipForce = 0.7,
-	unflipImpulse = 0.0,
-	unflipForce = 0.7,
+	unflipImpulse = 0.046,
+	unflipForce = 0.1,
 
 	slingshotRestLength = 0.6,
 	slingshotSwitchGap = 0.25,
