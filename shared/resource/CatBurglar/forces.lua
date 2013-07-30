@@ -9,9 +9,9 @@ forces = {
 	boxDamping = 70.0,
 
 	flipImpulse = 0.005,
-	flipForce = 0.01,
-	unflipImpulse = 0.0,
-	unflipForce = 0.01,
+	flipForce = 0.02,
+	unflipImpulse = 0.005,
+	unflipForce = 0.02,
 
 	slingshotRestLength = 0.6,
 	slingshotSwitchGap = 0.35,

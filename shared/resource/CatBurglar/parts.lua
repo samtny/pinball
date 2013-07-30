@@ -28,6 +28,12 @@ parts = {
 		s = "circle",
 		v = 1,
 		m = "rubber",
+		r1 = 0.1384
+	},
+	post_t = {
+		s = "circle",
+		v = 1,
+		m = "rubber",
 		r1 = 0.0968
 	},
 	rubber = {
