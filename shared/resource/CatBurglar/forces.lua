@@ -3,13 +3,13 @@ forces = {
 
 	gravityBase = { 0.0, -9.80665 },
 	tableAngle = 6.5,
-	gravity = { 0.0, -9.80665 * ( 10.5 / 90.0 ) },
+	gravity = { 0.0, -9.80665 * ( 6.5 / 90.0 ) },
 	
-	boxStiffness = 500.0, -- steel = 200
-	boxDamping = 70.0,
+	boxStiffness = 10.0, -- steel = 200
+	boxDamping = 1.0,
 
-	flipImpulse = 0.005,
-	flipForce = 0.02,
+	flipImpulse = 0.013,
+	flipForce = 0.15,
 	unflipImpulse = 0.005,
 	unflipForce = 0.02,
 
@@ -21,11 +21,11 @@ forces = {
 
 	targetStiffness = 190.0, -- glass == 90
 	targetDamping = 0.50,
-	targetRestLength = 0.9,
-	targetSwitchGap = 0.25,
+	targetRestLength = 0.125,
+	targetSwitchGap = 0.05,
 
 	popBumperThreshold = 0.005,
-	popBumperImpulse = 0.0055,
+	popBumperImpulse = 10.1055,
 
 	nudgeImpulse = 0.1
 

@@ -54,6 +54,12 @@ parts = {
 		m = "wood",
 		r1 = 0.01
 	},
+	metalGuide = {
+		s = "segment",
+		v = 2,
+		m = "steel",
+		r1 = 0.01
+	},
 	box = {
 		s = "box", -- "box" shape defined internally - internal winding is clockwise from blh
 		v = 4,
@@ -73,6 +79,12 @@ parts = {
 		m = "flipper",
 		r1 = 0.2274,
 		r2 = 0.1140
+	},
+	plunger = {
+		s = "segment",
+		v = 2,
+		m = "steel",
+		r1 = 0.5168
 	},
 	slingshot = {
 		s = "slingshot", -- "slingshot" shape defined internally
@@ -101,6 +113,12 @@ parts = {
 		s = "notch", -- "notch" shape defined internally
 		v = 2,
 		r1 = 0.02
+	},
+	oneway = {
+		s = "segment",
+		v = 2,
+		m = "steel",
+		r1 = 0.01
 	}
 
 }
