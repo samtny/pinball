@@ -483,7 +483,7 @@ void Physics::createFlipper(LayoutItem *item) {
  	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, box->bodies[0], item->v[0]));
 	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], flipStart, flipEnd));
 
-	// lflipper base shape
+	// base shape
 	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
@@ -497,7 +497,7 @@ void Physics::createFlipper(LayoutItem *item) {
 	cpVect p3n = cpvrotate(p2p1n, cpvforangle(loft));
 	cpVect p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
 
-	// lflipper face shapes
+	// face shapes
 	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);

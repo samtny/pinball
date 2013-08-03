@@ -61,6 +61,7 @@ function handleSwitchClosed(switch, ball)
         playSound("flip", LOOP_INTERVAL_NONE)
 	elseif switch == "rbutton" then
 		activateMech("rflipper")
+		activateMech("uflipper")
         playSound("flip", LOOP_INTERVAL_NONE)
 	end
 end
@@ -114,6 +115,7 @@ function handleSwitchOpened(switch, ball)
 		deactivateMech("lflipper")
 	elseif switch == "rbutton" then
 		deactivateMech("rflipper")
+		deactivateMech("uflipper")
 	end
 end
 
@@ -223,7 +225,7 @@ function resetLights()
 end
 
 function resetCamera()
-	setCameraMode("centered")
+	setCameraMode("free")
 end
 
 function serveBallToTrough()

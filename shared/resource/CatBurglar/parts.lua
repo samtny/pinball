@@ -63,7 +63,7 @@ parts = {
 	box = {
 		s = "box", -- "box" shape defined internally - internal winding is clockwise from blh
 		v = 4,
-		m = "wood",
+		m = "box",
 		r1 = 0.03
 	},
 	flipper = {
@@ -96,7 +96,7 @@ parts = {
 		s = "target", -- "target" shape defined internally
 		v = 2,
 		m = "plastic",
-		r1 = 0.01
+		r1 = 0.03
 	},
 	switch = {
 		s = "switch", -- "switch" shape defined internally (sensor)
