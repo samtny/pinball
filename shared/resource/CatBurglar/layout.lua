@@ -33,12 +33,12 @@ layout = {
 		s = 1
 	},
 	captive0 = {
-		o = "ball",
+		o = "captiveBall",
 		v = { {8.1395, 15.2759} },
 		s = 1
 	},
 	captive1 = {
-		o = "ball",
+		o = "captiveBall",
 		v = { {8.3460, 15.8096} },
 		s = 1
 	},

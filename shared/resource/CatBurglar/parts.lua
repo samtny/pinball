@@ -12,6 +12,18 @@ parts = {
 			a = 0.0
 		}
 	},
+	captive = {
+		s = "captive",
+		v = 1,
+		m = "ball",
+		r1 = 0.2826,
+		t = {
+			n = "pinball",
+			x = 0,
+			y = 0,
+			a = 0.0
+		}
+	},
 	post_l = {
 		s = "circle",
 		v = 1,
