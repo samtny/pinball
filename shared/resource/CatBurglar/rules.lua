@@ -1,4 +1,4 @@
-
+initDone = false
 gameInProgress = false
 
 startingScore = 0
@@ -147,9 +147,9 @@ function startButtonPressed()
 	
 	print "startButtonPressed"
 	
-	if gameInProgress == false then
+	--if gameInProgress == false then
 		startGame()
-	end
+	--end
 
 end
 
@@ -166,7 +166,14 @@ function startGame()
 	
 	--doCameraEffect("swirlin")
 
-	resetAll()
+	resetScore()
+	resetAudio()
+	resetMechs()
+	resetLights()
+	if initDone == false then
+		resetCamera()
+		initDone = true
+	end
 	serveBallToTrough()
 	--playSound(gameStartMusic, 10)
 
