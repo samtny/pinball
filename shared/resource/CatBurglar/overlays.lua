@@ -16,7 +16,7 @@ overlays = {
 		v = "AbCdEfGhIjKlMnOpQrStUvWxYz",
 		p = {0.5,0.08},
 		a = "c",
-		s = 1,
+		s = 9.5,
 		o = 1.0
 	},
 	logo = {

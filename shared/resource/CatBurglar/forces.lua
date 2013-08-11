@@ -3,13 +3,13 @@ forces = {
 
 	gravityBase = { 0.0, -9.80665 },
 	tableAngle = 6.5,
-	gravity = { 0.0, -9.80665 * ( 12.5 / 90.0 ) },
+	gravity = { 0.0, -9.80665 * ( 16.5 / 90.0 ) },
 	
 	boxStiffness = 10000, -- steel = 200
 	boxDamping = 1000,
 
-	flipImpulse = 0.1,
-	flipForce = 5,
+	flipImpulse = 0.13,
+	flipForce = 8,
 
 	unflipImpulse = 0.1,
 	unflipForce = .25,
