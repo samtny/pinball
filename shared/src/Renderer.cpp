@@ -503,7 +503,7 @@ void Renderer::drawOverlays() {
 			
 			_glfont->Begin();
 			pair<int, int> texSize;
-			_glfont->GetStringSize((props->l + props->v).c_str(), &texSize);
+			_glfont->GetStringSize((props->v).c_str(), &texSize);
 
 			float txX = (float)(_displayProperties->viewportWidth * props->p.x - texSize.first / 2.0 * _displayProperties->fontScale);
 			float txY = (float)(_displayProperties->viewportHeight * props->p.y + texSize.second / 2.0 * _displayProperties->fontScale);
@@ -513,9 +513,9 @@ void Renderer::drawOverlays() {
 			glScalef(_displayProperties->fontScale, _displayProperties->fontScale, 1);
 			
 			#ifdef __APPLE__
-				glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+				glColor4f(0.839215686f, 0.701960784f, 0.376470588f, 1.0f);
 			#else
-				glColor3f(0.0f, 0.0f, 1.0f);
+				glColor3f(0.839215686f, 0.701960784f, 0.376470588f);
 			#endif
 			
 			_glfont->DrawString((props->l + props->v).c_str(), 0, 0);

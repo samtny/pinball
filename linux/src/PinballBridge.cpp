@@ -84,8 +84,8 @@ const HostProperties *PinballBridge::getHostProperties() {
 		props->viewportY = 0;
 		props->viewportHeight = 800;
 		props->viewportWidth = 1300;
-		props->fontScale = 0.6;
-		props->overlayScale = 1;
+		props->fontScale = 1.1;
+		props->overlayScale = 1.0;
 
 		_hostProperties = props;
 	}
