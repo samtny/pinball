@@ -1,6 +1,6 @@
 CFLAGS=-c -Wall -I./include -I../shared/include -O0 -std=c++11 -g 
 
-LFLAGS=-L./lib -lGL -lGLU -lglut -llua -lchipmunk -lrt -g
+LFLAGS=-L./lib -lGL -lGLU -lglut -llua -lchipmunk -lrt -g -ldl
 
 CFLAGS_MAGICK=`Magick++-config --cxxflags --cppflags`
 
