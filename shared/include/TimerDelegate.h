@@ -5,7 +5,7 @@
 class ITimerDelegate {
 public:
 	virtual ~ITimerDelegate() {};
-	virtual void timerCallback(int timerId) {};
+	virtual void timerCallback(int timerId) const {};
 };
 
 #endif

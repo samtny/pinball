@@ -10,7 +10,9 @@ class Game;
 class Playfield;
 struct LayoutItem;
 
+#if !CP_USE_CGPOINTS
 struct cpVect;
+#endif
 struct cpSpace;
 struct cpBody;
 struct cpArbiter;

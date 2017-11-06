@@ -12,7 +12,7 @@
 @interface PinballBridge() {
     SoundManager *_soundManager;
     const char *_gameName;
-    ITimerDelegate *_timerDelegate;
+    const ITimerDelegate *_timerDelegate;
 }
 
 +(CGSize)windowCurrentSize;
@@ -50,10 +50,12 @@ PinballBridgeInterface::~PinballBridgeInterface(void) {
     [(id)self dealloc];
 }
 
-bool PinballBridgeInterface::init(void) {
-    [(PinballBridge *)self initI];
-    return YES;
-}
+//bool PinballBridgeInterface::init(void) {
+//    [(PinballBridge *)self initI];
+//    return YES;
+//}
+
+
 
 -(void)initI {
     
@@ -71,7 +73,7 @@ bool PinballBridgeInterface::init(void) {
 -(void)dealloc {
     
     [_soundManager release];
-    
+    [super dealloc];
 }
 
 void PinballBridgeInterface::setGameName(const char *gameName) {
@@ -82,32 +84,28 @@ const char *PinballBridgeInterface::getGameName() {
     return [(id)self getGameName];
 }
 
-const char * PinballBridgeInterface::getPathForScriptFileName(void * scriptFileName) {
-    return [(id)self getPathForScriptFileName:scriptFileName];
+const char * PinballBridgeInterface::getScriptPath(const char *scriptName) {
+    return [(id)self getScriptPath:scriptName];
 }
 
-const char * PinballBridgeInterface::getPathForTextureFileName(void * textureFileName) {
-    return [(id)self getPathForTextureFileName:textureFileName];
+const char * PinballBridgeInterface::getTexturePath(const char * textureName) {
+    return [(id)self getTexturePath:textureName];
 }
 
 GLTexture * PinballBridgeInterface::createRGBATexture(void *textureFileName) {
     return [(id)self createRGBATexture:textureFileName];
 }
 
-HostProperties * PinballBridgeInterface::getHostProperties() {
+const HostProperties * PinballBridgeInterface::getHostProperties() {
     return [(id)self getHostProperties];
 }
 
-void PinballBridgeInterface::playSound(void * soundName) {
-    [(id)self playSound:(const char *)soundName];
+void PinballBridgeInterface::playSound(const char * soundName) {
+    [(id)self playSound:soundName];
 }
 
-void PinballBridgeInterface::addTimer(float duration, int timerId) {
-    [(id)self addTimer:timerId duration:duration];
-}
-
-void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
-    [(id)self setTimerDelegate:timerDelegate];
+void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerDelegate *timerDelegate) {
+    [(id)self addTimer:timerId duration:duration delegate:timerDelegate];
 }
 
 -(void)setGameName:(const char *)gameName {
@@ -121,16 +119,18 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     return _gameName;
 }
 
--(const char *)getPathForScriptFileName:(void *)scriptFileName {
-    NSString *prefix = [[NSString stringWithUTF8String:(const char *)scriptFileName] stringByDeletingPathExtension];
-    NSString *suffix = [[NSString stringWithUTF8String:(const char *)scriptFileName] pathExtension];
+-(const char *)getScriptPath:(const char *)scriptFileName {
+    NSString *prefix = [[NSString stringWithUTF8String:scriptFileName] stringByDeletingPathExtension];
+    NSString *suffix = [[NSString stringWithUTF8String:scriptFileName] pathExtension];
     NSString *dir = [NSString stringWithUTF8String:_gameName];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
     const char *path = [filePath UTF8String];
     return path;
 }
 
--(const char *)getPathForTextureFileName:(void *)textureFileName {
+
+
+-(const char *)getTexturePath:(const char *)textureFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)textureFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)textureFileName] pathExtension];
     NSString *dir = [[NSString stringWithUTF8String:_gameName] stringByAppendingPathComponent:@"textures"];
@@ -144,7 +144,7 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     // TODO: "inject" this into a something instead;
     GLTexture *tex = new GLTexture();
     
-    NSString *path = [NSString stringWithUTF8String:[self getPathForTextureFileName:textureFileName]];
+    NSString *path = [NSString stringWithUTF8String:[self getTexturePath:(const char *)textureFileName]];
     NSData *data = [[NSData data] initWithContentsOfFile:path];
     UIImage *image = [UIImage imageWithData:data];
     
@@ -171,7 +171,7 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     
 }
 
--(HostProperties *)getHostProperties {
+-(const HostProperties *)getHostProperties {
     HostProperties *props = new HostProperties();
     
     props->viewportX = 0;
@@ -207,12 +207,10 @@ void PinballBridgeInterface::setTimerDelegate(ITimerDelegate *timerDelegate) {
     _timerDelegate->timerCallback([timerId intValue]);
 }
 
--(void)addTimer:(int)timerId duration:(float)duration {
-    [self performSelector:@selector(timerCallback:) withObject:[NSNumber numberWithInt:timerId] afterDelay:duration];
-}
-
--(void)setTimerDelegate:(ITimerDelegate *)timerDelegate {
+-(void)addTimer:(int)timerId duration:(float)duration delegate:(const ITimerDelegate *)timerDelegate {
     _timerDelegate = timerDelegate;
+
+    [self performSelector:@selector(timerCallback:) withObject:[NSNumber numberWithInt:timerId] afterDelay:duration];
 }
 
 @end

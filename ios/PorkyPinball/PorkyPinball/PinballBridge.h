@@ -14,12 +14,11 @@
 -(void)initI;
 -(void)setGameName:(const char *)gameName;
 -(const char *)getGameName;
--(const char *)getPathForScriptFileName:(void *)scriptFileName;
--(const char *)getPathForTextureFileName:(void *)textureFileName;
+-(const char *)getScriptPath:(const char *)scriptFileName;
+-(const char *)getTexturePath:(const char *)textureFileName;
 -(GLTexture *)createRGBATexture:(void *)textureFileName;
--(HostProperties *)getHostProperties;
+-(const HostProperties *)getHostProperties;
 -(void)playSound:(const char *)soundName;
--(void)addTimer:(int)timerId duration:(float)duration;
--(void)setTimerDelegate:(ITimerDelegate *)timerDelegate;
+-(void)addTimer:(int)timerId duration:(float)duration delegate:(const ITimerDelegate *)timerDelegate;
 
 @end

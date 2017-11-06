@@ -154,7 +154,7 @@ GLfloat gCubeVertexData[216] =
     
     PinballBridgeInterface *bi = new PinballBridgeInterface();
     bi->setGameName("Cosmos");
-    bi->init();
+    //bi->init();
     
     Playfield *f = new Playfield();
     f->setBridgeInterface(bi);
@@ -494,19 +494,19 @@ GLfloat gCubeVertexData[216] =
 }
 
 -(IBAction)userDidTapLeftFlipperButton:(id)sender {
-    _game->switchClosed("lbutton");
+    _game->switchClosed("lbutton", NULL);
 }
 
 -(IBAction)userDidReleaseLeftFlipperButton:(id)sender {
-    _game->switchOpened("lbutton");
+    _game->switchOpened("lbutton", NULL);
 }
 
 -(IBAction)userDidTapRightFlipperButton:(id)sender {
-    _game->switchClosed("rbutton");
+    _game->switchClosed("rbutton", NULL);
 }
 
 -(IBAction)userDidReleaseRightFlipperButton:(id)sender {
-    _game->switchOpened("rbutton");
+    _game->switchOpened("rbutton", NULL);
 }
 
 @end
