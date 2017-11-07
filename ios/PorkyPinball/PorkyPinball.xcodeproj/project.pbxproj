@@ -19,19 +19,35 @@
 		4B170213164AAC50007D4A2F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 4B170212164AAC50007D4A2F /* Shader.vsh */; };
 		4B170216164AAC50007D4A2F /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B170215164AAC50007D4A2F /* ViewController.mm */; };
 		4B170219164AAC50007D4A2F /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B170217164AAC50007D4A2F /* ViewController.xib */; };
-		4B66B33117936E5D007C42F5 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = 4B66B33017936E5D007C42F5 /* shared */; };
 		4BC94FFD165C5A3000AF8A8E /* MyOpenALSupport.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */; };
 		4BC94FFE165C5A3000AF8A8E /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FFB165C5A3000AF8A8E /* SoundManager.m */; };
 		4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */; };
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
-		4BC9500A165C68E500AF8A8E /* flip.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4BC95009165C68E400AF8A8E /* flip.caf */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
 		4C3249F11FB257BB0024205B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3249F01FB257BB0024205B /* liblua.a */; };
 		4C3249F21FB25ABA0024205B /* libChipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8040A1FB2543300FEE04E /* libChipmunk.a */; };
+		4C324D121FB265DC0024205B /* Cosmos in Resources */ = {isa = PBXBuildFile; fileRef = 4C324D111FB265DC0024205B /* Cosmos */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CE804091FB2501C00FEE04E /* libShared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE804081FB2501C00FEE04E /* libShared.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C3249FD1FB2604A0024205B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C3249F91FB2604A0024205B /* libShared.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CE803901FB2437F00FEE04E;
+			remoteInfo = Shared;
+		};
+		4C324A001FB260920024205B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C3249F91FB2604A0024205B /* libShared.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CE8038F1FB2437F00FEE04E;
+			remoteInfo = Shared;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4B1701F6164AAC4F007D4A2F /* PorkyPinball.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PorkyPinball.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,7 +66,6 @@
 		4B170214164AAC50007D4A2F /* ViewController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ViewController.h; sourceTree = "<group>"; };
 		4B170215164AAC50007D4A2F /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
-		4B66B33017936E5D007C42F5 /* shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shared; path = ../../../shared; sourceTree = "<group>"; };
 		4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MyOpenALSupport.c; sourceTree = "<group>"; };
 		4BC94FF9165C5A3000AF8A8E /* MyOpenALSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenALSupport.h; sourceTree = "<group>"; };
 		4BC94FFA165C5A3000AF8A8E /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
@@ -63,6 +78,8 @@
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
 		4C3249F01FB257BB0024205B /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../libLua/lua/Build/Products/Debug-iphonesimulator/liblua.a"; sourceTree = "<group>"; };
+		4C3249F91FB2604A0024205B /* libShared.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libShared.xcodeproj; path = ../libShared/libShared/libShared.xcodeproj; sourceTree = "<group>"; };
+		4C324D111FB265DC0024205B /* Cosmos */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Cosmos; path = ../../../shared/resource/Cosmos; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* PorkyPinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PorkyPinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CE804081FB2501C00FEE04E /* libShared.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libShared.a; path = "../libShared/Debug-iphonesimulator/libShared.a"; sourceTree = "<group>"; };
@@ -98,6 +115,7 @@
 				4B170204164AAC50007D4A2F /* PorkyPinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
+				4C3249F91FB2604A0024205B /* libShared.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,7 +148,7 @@
 		4B170204164AAC50007D4A2F /* PorkyPinball */ = {
 			isa = PBXGroup;
 			children = (
-				4B66B33017936E5D007C42F5 /* shared */,
+				4C324D111FB265DC0024205B /* Cosmos */,
 				4BC94FF7165C5A3000AF8A8E /* Audio */,
 				4B17020D164AAC50007D4A2F /* AppDelegate.h */,
 				4B17020E164AAC50007D4A2F /* AppDelegate.m */,
@@ -170,6 +188,14 @@
 			path = Audio;
 			sourceTree = "<group>";
 		};
+		4C3249FA1FB2604A0024205B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C3249FE1FB2604A0024205B /* libShared.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -195,6 +221,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4C324A011FB260920024205B /* PBXTargetDependency */,
 			);
 			name = PorkyPinball;
 			productName = PorkyPinball;
@@ -225,6 +252,12 @@
 			mainGroup = 4B1701EB164AAC4E007D4A2F;
 			productRefGroup = 4B1701F7164AAC4F007D4A2F /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4C3249FA1FB2604A0024205B /* Products */;
+					ProjectRef = 4C3249F91FB2604A0024205B /* libShared.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4B1701F5164AAC4F007D4A2F /* PorkyPinball */,
@@ -232,18 +265,27 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		4C3249FE1FB2604A0024205B /* libShared.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libShared.a;
+			remoteRef = 4C3249FD1FB2604A0024205B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXResourcesBuildPhase section */
 		4B1701F4164AAC4F007D4A2F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C324D121FB265DC0024205B /* Cosmos in Resources */,
 				4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */,
 				4B170211164AAC50007D4A2F /* Shader.fsh in Resources */,
 				4B170213164AAC50007D4A2F /* Shader.vsh in Resources */,
 				4B170219164AAC50007D4A2F /* ViewController.xib in Resources */,
-				4BC9500A165C68E500AF8A8E /* flip.caf in Resources */,
 				4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */,
-				4B66B33117936E5D007C42F5 /* shared in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +306,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C324A011FB260920024205B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Shared;
+			targetProxy = 4C324A001FB260920024205B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4B170207164AAC50007D4A2F /* InfoPlist.strings */ = {
@@ -380,6 +430,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
@@ -393,6 +444,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -403,6 +455,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
@@ -416,6 +469,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;

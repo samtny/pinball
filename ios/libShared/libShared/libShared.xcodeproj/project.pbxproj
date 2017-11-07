@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C324D101FB2657E0024205B /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
 		4CE803901FB2437F00FEE04E /* libShared.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libShared.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CE8039F1FB2452700FEE04E /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../../../shared/src/Renderer.cpp; sourceTree = "<group>"; };
 		4CE803A01FB2452700FEE04E /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = ../../../shared/src/Camera.cpp; sourceTree = "<group>"; };
@@ -72,6 +73,7 @@
 		4CE803871FB2437F00FEE04E = {
 			isa = PBXGroup;
 			children = (
+				4C324D101FB2657E0024205B /* resource */,
 				4CE803BD1FB2472700FEE04E /* Camera.h */,
 				4CE803BB1FB2472700FEE04E /* Drawing.h */,
 				4CE803BC1FB2472700FEE04E /* Editor.h */,
