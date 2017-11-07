@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "chipmunk/chipmunk.h"
+
 #define MAX_BALL_COUNT 10
 
 class PinballBridgeInterface;
@@ -10,9 +12,14 @@ class Game;
 class Playfield;
 struct LayoutItem;
 
-#if !CP_USE_CGPOINTS
-struct cpVect;
+#if CP_USE_CGPOINTS
+typedef CGPoint cpVect;
+#else
+/// Chipmunk's 2D vector type.
+/// @addtogroup cpVect
+typedef struct cpVect{cpFloat x,y;} cpVect;
 #endif
+
 struct cpSpace;
 struct cpBody;
 struct cpArbiter;
