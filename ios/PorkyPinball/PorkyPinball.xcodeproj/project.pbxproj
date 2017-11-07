@@ -27,9 +27,10 @@
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
 		4BC9500A165C68E500AF8A8E /* flip.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4BC95009165C68E400AF8A8E /* flip.caf */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
-		4C8843D81FB20B7500E17CE9 /* libChipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C8843D61FB207E400E17CE9 /* libChipmunk.a */; };
+		4C3249F11FB257BB0024205B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3249F01FB257BB0024205B /* liblua.a */; };
+		4C3249F21FB25ABA0024205B /* libChipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8040A1FB2543300FEE04E /* libChipmunk.a */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
-		4C92A1F91FB0FF7B00806214 /* shared in Headers */ = {isa = PBXBuildFile; fileRef = 4B66B33017936E5D007C42F5 /* shared */; };
+		4CE804091FB2501C00FEE04E /* libShared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE804081FB2501C00FEE04E /* libShared.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,10 +62,11 @@
 		4BC95009165C68E400AF8A8E /* flip.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.caf; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
-		4C8843D21FB2019F00E17CE9 /* libObjectiveChipmunk-iPhone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libObjectiveChipmunk-iPhone.a"; path = "../../../../../../src/Objective-Chipmunk-trial-6.0.2/Objective-Chipmunk-trial/libObjectiveChipmunk-iPhone.a"; sourceTree = "<group>"; };
-		4C8843D61FB207E400E17CE9 /* libChipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libChipmunk.a; path = libChipmunk/libChipmunk.a; sourceTree = "<group>"; };
+		4C3249F01FB257BB0024205B /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../libLua/lua/Build/Products/Debug-iphonesimulator/liblua.a"; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* PorkyPinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PorkyPinball-Prefix.pch"; sourceTree = "<group>"; };
+		4CE804081FB2501C00FEE04E /* libShared.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libShared.a; path = "../libShared/Debug-iphonesimulator/libShared.a"; sourceTree = "<group>"; };
+		4CE8040A1FB2543300FEE04E /* libChipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libChipmunk.a; path = ../lib/Debug/libChipmunk.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +74,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C8843D81FB20B7500E17CE9 /* libChipmunk.a in Frameworks */,
+				4C3249F21FB25ABA0024205B /* libChipmunk.a in Frameworks */,
+				4CE804091FB2501C00FEE04E /* libShared.a in Frameworks */,
+				4C3249F11FB257BB0024205B /* liblua.a in Frameworks */,
 				4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */,
 				4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */,
 				4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */,
@@ -108,8 +112,9 @@
 		4B1701F9164AAC4F007D4A2F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C8843D61FB207E400E17CE9 /* libChipmunk.a */,
-				4C8843D21FB2019F00E17CE9 /* libObjectiveChipmunk-iPhone.a */,
+				4C3249F01FB257BB0024205B /* liblua.a */,
+				4CE8040A1FB2543300FEE04E /* libChipmunk.a */,
+				4CE804081FB2501C00FEE04E /* libShared.a */,
 				4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */,
 				4BC95001165C5A6800AF8A8E /* OpenAL.framework */,
 				4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */,
@@ -172,7 +177,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C92A1F91FB0FF7B00806214 /* shared in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,17 +379,22 @@
 		4B17021D164AAC50007D4A2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = "\"/Users/sthompson/Documents/pinball/shared/include\"";
 				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/libChipmunk";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(PROJECT_DIR)/../libShared/Debug-iphonesimulator\"",
+					"\"$(PROJECT_DIR)/../lib/Debug\"",
+					"\"$(PROJECT_DIR)/../libLua/lua/Build/Products/Debug-iphonesimulator\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -393,17 +402,22 @@
 		4B17021E164AAC50007D4A2F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = "\"/Users/sthompson/Documents/pinball/shared/include\"";
 				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/libChipmunk";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(PROJECT_DIR)/../libShared/Debug-iphonesimulator\"",
+					"\"$(PROJECT_DIR)/../lib/Debug\"",
+					"\"$(PROJECT_DIR)/../libLua/lua/Build/Products/Debug-iphonesimulator\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
