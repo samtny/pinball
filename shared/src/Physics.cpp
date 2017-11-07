@@ -177,7 +177,7 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 
 static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
-	if (!cpArbiterIsFirstContact(arb)) return;
+	if (!(arb->CP_PRIVATE(state) == cpArbiterStateFirstColl)) return;
 
 	cpVect impulse = cpArbiterTotalImpulse(arb);
 	
