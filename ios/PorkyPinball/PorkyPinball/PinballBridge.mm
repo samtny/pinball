@@ -122,7 +122,7 @@ void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerD
 -(const char *)getScriptPath:(const char *)scriptFileName {
     NSString *prefix = [[NSString stringWithUTF8String:scriptFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:scriptFileName] pathExtension];
-    NSString *dir = [NSString stringWithUTF8String:_gameName];
+    NSString *dir = [@"resource" stringByAppendingPathComponent:[NSString stringWithUTF8String:_gameName]];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
     const char *path = [filePath UTF8String];
     return path;
@@ -133,7 +133,7 @@ void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerD
 -(const char *)getTexturePath:(const char *)textureFileName {
     NSString *prefix = [[NSString stringWithUTF8String:(const char *)textureFileName] stringByDeletingPathExtension];
     NSString *suffix = [[NSString stringWithUTF8String:(const char *)textureFileName] pathExtension];
-    NSString *dir = [[NSString stringWithUTF8String:_gameName] stringByAppendingPathComponent:@"textures"];
+    NSString *dir = [@"resource" stringByAppendingPathComponent:[[NSString stringWithUTF8String:_gameName] stringByAppendingPathComponent:@"textures"]];
     NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
     const char *path = [filePath UTF8String];
     return path;
@@ -145,7 +145,7 @@ void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerD
     GLTexture *tex = new GLTexture();
     
     NSString *path = [NSString stringWithUTF8String:[self getTexturePath:(const char *)textureFileName]];
-    NSData *data = [[NSData data] initWithContentsOfFile:path];
+    NSData *data = [NSData dataWithContentsOfFile:path];
     UIImage *image = [UIImage imageWithData:data];
     
     GLuint width = CGImageGetWidth(image.CGImage);
