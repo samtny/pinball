@@ -25,9 +25,9 @@
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
+		4C14E92B1FB351C6000A9591 /* resource in Resources */ = {isa = PBXBuildFile; fileRef = 4C14E92A1FB351C5000A9591 /* resource */; };
 		4C3249F11FB257BB0024205B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3249F01FB257BB0024205B /* liblua.a */; };
 		4C3249F21FB25ABA0024205B /* libChipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE8040A1FB2543300FEE04E /* libChipmunk.a */; };
-		4C324D121FB265DC0024205B /* Cosmos in Resources */ = {isa = PBXBuildFile; fileRef = 4C324D111FB265DC0024205B /* Cosmos */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CE804091FB2501C00FEE04E /* libShared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CE804081FB2501C00FEE04E /* libShared.a */; };
 /* End PBXBuildFile section */
@@ -77,9 +77,9 @@
 		4BC95009165C68E400AF8A8E /* flip.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.caf; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
+		4C14E92A1FB351C5000A9591 /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../shared/resource; sourceTree = "<group>"; };
 		4C3249F01FB257BB0024205B /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../libLua/lua/Build/Products/Debug-iphonesimulator/liblua.a"; sourceTree = "<group>"; };
 		4C3249F91FB2604A0024205B /* libShared.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libShared.xcodeproj; path = ../libShared/libShared/libShared.xcodeproj; sourceTree = "<group>"; };
-		4C324D111FB265DC0024205B /* Cosmos */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Cosmos; path = ../../../shared/resource/Cosmos; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* PorkyPinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PorkyPinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CE804081FB2501C00FEE04E /* libShared.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libShared.a; path = "../libShared/Debug-iphonesimulator/libShared.a"; sourceTree = "<group>"; };
@@ -111,6 +111,7 @@
 		4B1701EB164AAC4E007D4A2F = {
 			isa = PBXGroup;
 			children = (
+				4C14E92A1FB351C5000A9591 /* resource */,
 				4C92A1221FB0E87100806214 /* Default-568h@2x.png */,
 				4B170204164AAC50007D4A2F /* PorkyPinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
@@ -148,7 +149,6 @@
 		4B170204164AAC50007D4A2F /* PorkyPinball */ = {
 			isa = PBXGroup;
 			children = (
-				4C324D111FB265DC0024205B /* Cosmos */,
 				4BC94FF7165C5A3000AF8A8E /* Audio */,
 				4B17020D164AAC50007D4A2F /* AppDelegate.h */,
 				4B17020E164AAC50007D4A2F /* AppDelegate.m */,
@@ -280,9 +280,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C324D121FB265DC0024205B /* Cosmos in Resources */,
 				4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */,
 				4B170211164AAC50007D4A2F /* Shader.fsh in Resources */,
+				4C14E92B1FB351C6000A9591 /* resource in Resources */,
 				4B170213164AAC50007D4A2F /* Shader.vsh in Resources */,
 				4B170219164AAC50007D4A2F /* ViewController.xib in Resources */,
 				4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */,
