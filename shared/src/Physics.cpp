@@ -153,10 +153,12 @@ static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	LayoutItem *sw = (LayoutItem *)b->data;
-	LayoutItem *ball = (LayoutItem *)a->data;
+	LayoutItem *sw = (LayoutItem *)a->data;
+	LayoutItem *ball = (LayoutItem *)b->data;
 	
-	physics_currentInstance->getDelegate()->switchClosed(sw->n.c_str(), ball->n.c_str());
+    if (sw && ball) {
+        physics_currentInstance->getDelegate()->switchClosed(sw->n.c_str(), ball->n.c_str());
+    }
 
 	return 1;
 
@@ -168,10 +170,12 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpShape *b;
 	cpArbiterGetShapes(arb, &a, &b);
 
-	LayoutItem *sw = (LayoutItem *)b->data;
-	LayoutItem *ball = (LayoutItem *)a->data;
+	LayoutItem *sw = (LayoutItem *)a->data;
+	LayoutItem *ball = (LayoutItem *)b->data;
 
-	physics_currentInstance->getDelegate()->switchOpened(sw->n.c_str(), ball->n.c_str());
+    if (sw && ball) {
+        physics_currentInstance->getDelegate()->switchOpened(sw->n.c_str(), ball->n.c_str());
+    }
 
 }
 
@@ -205,7 +209,9 @@ static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 	LayoutItem *l = (LayoutItem *)target->data;
 
-	physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
+    if (l) {
+        physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
+    }
 
 	// we don't need more information from this
 	return 0;
@@ -217,6 +223,9 @@ static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpBody *slingshot, *sw;
 	cpArbiterGetBodies(arb, &slingshot, &sw);
 
+    LayoutItem *a = (LayoutItem *)slingshot->data;
+    LayoutItem *b = (LayoutItem *)sw->data;
+    
 	cpVect normal = cpArbiterGetNormal(arb, 0);
 
 	cpBodyApplyImpulse(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);
