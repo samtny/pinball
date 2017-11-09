@@ -223,9 +223,6 @@ static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 	cpBody *slingshot, *sw;
 	cpArbiterGetBodies(arb, &slingshot, &sw);
 
-    LayoutItem *a = (LayoutItem *)slingshot->data;
-    LayoutItem *b = (LayoutItem *)sw->data;
-    
 	cpVect normal = cpArbiterGetNormal(arb, 0);
 
 	cpBodyApplyImpulse(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);

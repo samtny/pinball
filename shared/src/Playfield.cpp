@@ -434,7 +434,7 @@ void Playfield::loadLayout(bool userLayout) {
 
 					} else if (strcmp("v", key) == 0) {
 						
-						int count = lua_rawlen(L, -1);
+						int count = (int)lua_rawlen(L, -1);
 
 						// traverse 2d vects
 						for (int i = 1; i <= count; i++)
