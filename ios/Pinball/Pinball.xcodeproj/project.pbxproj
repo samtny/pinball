@@ -25,6 +25,8 @@
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
+		4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66331FB4B60B00F1C55D /* Media.xcassets */; };
+		4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CA8F3FA1FB3A82D000AB9AE /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */; };
 		4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3FB1FB3A83F000AB9AE /* libshared.a */; };
@@ -61,16 +63,23 @@
 			remoteGlobalIDString = 4C78FA051FB3A0570019009F;
 			remoteInfo = chipmunk;
 		};
+		4CDAAC6F1FB4AAFE00F7443F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CE804151FB2561D00FEE04E;
+			remoteInfo = lua;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4B1701F6164AAC4F007D4A2F /* PorkyPinball.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PorkyPinball.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B1701F6164AAC4F007D4A2F /* Pinball.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pinball.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B1701FA164AAC4F007D4A2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4B1701FC164AAC4F007D4A2F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4B1701FE164AAC4F007D4A2F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		4B170200164AAC4F007D4A2F /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		4B170202164AAC4F007D4A2F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		4B170206164AAC50007D4A2F /* PorkyPinball-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PorkyPinball-Info.plist"; sourceTree = "<group>"; };
+		4B170206164AAC50007D4A2F /* Pinball-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pinball-Info.plist"; sourceTree = "<group>"; };
 		4B170208164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4B17020A164AAC50007D4A2F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B17020D164AAC50007D4A2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -91,14 +100,17 @@
 		4BC95009165C68E400AF8A8E /* flip.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.caf; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
+		4C4B66331FB4B60B00F1C55D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
-		4C92A1241FB0E91200806214 /* PorkyPinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PorkyPinball-Prefix.pch"; sourceTree = "<group>"; };
+		4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = "../lib/chipmunk/Build/Products/Debug-iphonesimulator/libchipmunk.a"; sourceTree = "<group>"; };
 		4CA8F3FB1FB3A83F000AB9AE /* libshared.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libshared.a; path = "../lib/shared/Build/Products/Debug-iphonesimulator/libshared.a"; sourceTree = "<group>"; };
 		4CA8F3FD1FB3A84E000AB9AE /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../lib/lua/Build/Products/Debug-iphonesimulator/liblua.a"; sourceTree = "<group>"; };
 		4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = shared.xcodeproj; path = ../lib/shared/shared.xcodeproj; sourceTree = "<group>"; };
 		4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = chipmunk.xcodeproj; path = ../lib/chipmunk/chipmunk.xcodeproj; sourceTree = "<group>"; };
 		4CA8F4391FB3B01D000AB9AE /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
+		4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = lua.xcodeproj; path = ../lib/lua/lua.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,18 +138,19 @@
 		4B1701EB164AAC4E007D4A2F = {
 			isa = PBXGroup;
 			children = (
-				4B170204164AAC50007D4A2F /* PorkyPinball */,
+				4B170204164AAC50007D4A2F /* Pinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
-				4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */,
 				4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */,
+				4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */,
+				4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
 		4B1701F7164AAC4F007D4A2F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4B1701F6164AAC4F007D4A2F /* PorkyPinball.app */,
+				4B1701F6164AAC4F007D4A2F /* Pinball.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,7 +173,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4B170204164AAC50007D4A2F /* PorkyPinball */ = {
+		4B170204164AAC50007D4A2F /* Pinball */ = {
 			isa = PBXGroup;
 			children = (
 				4CA8F4391FB3B01D000AB9AE /* resource */,
@@ -175,15 +188,17 @@
 				4B170215164AAC50007D4A2F /* ViewController.mm */,
 				4B170217164AAC50007D4A2F /* ViewController.xib */,
 				4B170205164AAC50007D4A2F /* Supporting Files */,
-				4C92A1241FB0E91200806214 /* PorkyPinball-Prefix.pch */,
+				4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */,
+				4C4B66331FB4B60B00F1C55D /* Media.xcassets */,
+				4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */,
 			);
-			path = PorkyPinball;
+			path = Pinball;
 			sourceTree = "<group>";
 		};
 		4B170205164AAC50007D4A2F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4B170206164AAC50007D4A2F /* PorkyPinball-Info.plist */,
+				4B170206164AAC50007D4A2F /* Pinball-Info.plist */,
 				4B170207164AAC50007D4A2F /* InfoPlist.strings */,
 				4B17020A164AAC50007D4A2F /* main.m */,
 				4C92A1221FB0E87100806214 /* Default-568h@2x.png */,
@@ -220,6 +235,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4CDAAC6C1FB4AAFE00F7443F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CDAAC701FB4AAFE00F7443F /* liblua.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -233,9 +256,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		4B1701F5164AAC4F007D4A2F /* PorkyPinball */ = {
+		4B1701F5164AAC4F007D4A2F /* Pinball */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4B17021C164AAC50007D4A2F /* Build configuration list for PBXNativeTarget "PorkyPinball" */;
+			buildConfigurationList = 4B17021C164AAC50007D4A2F /* Build configuration list for PBXNativeTarget "Pinball" */;
 			buildPhases = (
 				4B1701F2164AAC4F007D4A2F /* Sources */,
 				4C92A1F41FB0FC9D00806214 /* Headers */,
@@ -248,9 +271,9 @@
 				4CA8F4211FB3AC5B000AB9AE /* PBXTargetDependency */,
 				4CA8F41F1FB3AC57000AB9AE /* PBXTargetDependency */,
 			);
-			name = PorkyPinball;
+			name = Pinball;
 			productName = PorkyPinball;
-			productReference = 4B1701F6164AAC4F007D4A2F /* PorkyPinball.app */;
+			productReference = 4B1701F6164AAC4F007D4A2F /* Pinball.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -267,7 +290,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4B1701F0164AAC4E007D4A2F /* Build configuration list for PBXProject "PorkyPinball" */;
+			buildConfigurationList = 4B1701F0164AAC4E007D4A2F /* Build configuration list for PBXProject "Pinball" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -283,13 +306,17 @@
 					ProjectRef = 4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */;
 				},
 				{
+					ProductGroup = 4CDAAC6C1FB4AAFE00F7443F /* Products */;
+					ProjectRef = 4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */;
+				},
+				{
 					ProductGroup = 4CA8F40C1FB3AB78000AB9AE /* Products */;
 					ProjectRef = 4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				4B1701F5164AAC4F007D4A2F /* PorkyPinball */,
+				4B1701F5164AAC4F007D4A2F /* Pinball */,
 			);
 		};
 /* End PBXProject section */
@@ -309,6 +336,13 @@
 			remoteRef = 4CA8F41B1FB3AB95000AB9AE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4CDAAC701FB4AAFE00F7443F /* liblua.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblua.a;
+			remoteRef = 4CDAAC6F1FB4AAFE00F7443F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -317,7 +351,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */,
+				4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */,
 				4B170211164AAC50007D4A2F /* Shader.fsh in Resources */,
+				4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */,
 				4CA8F43A1FB3B01D000AB9AE /* resource in Resources */,
 				4B170213164AAC50007D4A2F /* Shader.vsh in Resources */,
 				4B170219164AAC50007D4A2F /* ViewController.xib in Resources */,
@@ -471,22 +507,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/Pinball-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../shared/include\"",
 					"\"$(SRCROOT)/../../lib/chipmunk/include\"",
 				);
-				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Pinball/Pinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../lib/lua/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/shared/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/chipmunk/Build/Products/Debug-iphonesimulator\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.samthompson.pinball;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
@@ -499,22 +536,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/PorkyPinball-Prefix.pch";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/Pinball-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../shared/include\"",
 					"\"$(SRCROOT)/../../lib/chipmunk/include\"",
 				);
-				INFOPLIST_FILE = "PorkyPinball/PorkyPinball-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Pinball/Pinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../lib/lua/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/shared/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/chipmunk/Build/Products/Debug-iphonesimulator\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Sam-Thompson-Enterprises.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.samthompson.pinball;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
@@ -526,7 +564,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4B1701F0164AAC4E007D4A2F /* Build configuration list for PBXProject "PorkyPinball" */ = {
+		4B1701F0164AAC4E007D4A2F /* Build configuration list for PBXProject "Pinball" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B17021A164AAC50007D4A2F /* Debug */,
@@ -535,7 +573,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4B17021C164AAC50007D4A2F /* Build configuration list for PBXNativeTarget "PorkyPinball" */ = {
+		4B17021C164AAC50007D4A2F /* Build configuration list for PBXNativeTarget "Pinball" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4B17021D164AAC50007D4A2F /* Debug */,
