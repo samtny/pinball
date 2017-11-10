@@ -15,8 +15,6 @@
 		4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B170207164AAC50007D4A2F /* InfoPlist.strings */; };
 		4B17020B164AAC50007D4A2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B17020A164AAC50007D4A2F /* main.m */; };
 		4B17020F164AAC50007D4A2F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B17020E164AAC50007D4A2F /* AppDelegate.m */; };
-		4B170211164AAC50007D4A2F /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 4B170210164AAC50007D4A2F /* Shader.fsh */; };
-		4B170213164AAC50007D4A2F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 4B170212164AAC50007D4A2F /* Shader.vsh */; };
 		4B170216164AAC50007D4A2F /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B170215164AAC50007D4A2F /* ViewController.mm */; };
 		4B170219164AAC50007D4A2F /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B170217164AAC50007D4A2F /* ViewController.xib */; };
 		4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */; };
@@ -97,8 +95,6 @@
 		4B17020A164AAC50007D4A2F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B17020D164AAC50007D4A2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4B17020E164AAC50007D4A2F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4B170210164AAC50007D4A2F /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
-		4B170212164AAC50007D4A2F /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		4B170214164AAC50007D4A2F /* ViewController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ViewController.h; sourceTree = "<group>"; };
 		4B170215164AAC50007D4A2F /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
@@ -195,15 +191,12 @@
 				4B17020E164AAC50007D4A2F /* AppDelegate.m */,
 				4BE9DFD6164C11F200599EB8 /* PinballBridge.h */,
 				4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */,
-				4B170210164AAC50007D4A2F /* Shader.fsh */,
-				4B170212164AAC50007D4A2F /* Shader.vsh */,
 				4B170214164AAC50007D4A2F /* ViewController.h */,
 				4B170215164AAC50007D4A2F /* ViewController.mm */,
 				4B170217164AAC50007D4A2F /* ViewController.xib */,
 				4B170205164AAC50007D4A2F /* Supporting Files */,
 				4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */,
 				4C4B66331FB4B60B00F1C55D /* Media.xcassets */,
-				4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */,
 			);
 			path = Pinball;
 			sourceTree = "<group>";
@@ -215,6 +208,7 @@
 				4B170207164AAC50007D4A2F /* InfoPlist.strings */,
 				4B17020A164AAC50007D4A2F /* main.m */,
 				4C92A1221FB0E87100806214 /* Default-568h@2x.png */,
+				4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -380,10 +374,8 @@
 			files = (
 				4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */,
 				4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */,
-				4B170211164AAC50007D4A2F /* Shader.fsh in Resources */,
 				4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */,
 				4CA8F43A1FB3B01D000AB9AE /* resource in Resources */,
-				4B170213164AAC50007D4A2F /* Shader.vsh in Resources */,
 				4B170219164AAC50007D4A2F /* ViewController.xib in Resources */,
 				4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */,
 			);
