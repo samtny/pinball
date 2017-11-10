@@ -528,6 +528,7 @@
 				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
 				VALID_ARCHS = "arm64 armv7 armv7s";
+				WARNING_CFLAGS = "-Wno-comma";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -557,6 +558,7 @@
 				STRIP_PNG_TEXT = NO;
 				USER_HEADER_SEARCH_PATHS = "/include /src/lua/src";
 				VALID_ARCHS = "arm64 armv7 armv7s";
+				WARNING_CFLAGS = "-Wno-comma";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
