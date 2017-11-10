@@ -19,14 +19,13 @@
 		4B170213164AAC50007D4A2F /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 4B170212164AAC50007D4A2F /* Shader.vsh */; };
 		4B170216164AAC50007D4A2F /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B170215164AAC50007D4A2F /* ViewController.mm */; };
 		4B170219164AAC50007D4A2F /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B170217164AAC50007D4A2F /* ViewController.xib */; };
-		4BC94FFD165C5A3000AF8A8E /* MyOpenALSupport.c in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */; };
-		4BC94FFE165C5A3000AF8A8E /* SoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BC94FFB165C5A3000AF8A8E /* SoundManager.m */; };
 		4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */; };
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
 		4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66331FB4B60B00F1C55D /* Media.xcassets */; };
 		4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */; };
+		4C4B66731FB5FF0200F1C55D /* libSoundManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B66721FB5FF0200F1C55D /* libSoundManager.a */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CA8F3FA1FB3A82D000AB9AE /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */; };
 		4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3FB1FB3A83F000AB9AE /* libshared.a */; };
@@ -35,6 +34,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C4B666D1FB5FE1B00F1C55D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C4B66471FB5FB2100F1C55D;
+			remoteInfo = SoundManager;
+		};
+		4C4B666F1FB5FE3300F1C55D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C4B66461FB5FB2100F1C55D;
+			remoteInfo = SoundManager;
+		};
 		4CA8F40F1FB3AB78000AB9AE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */;
@@ -89,11 +102,6 @@
 		4B170214164AAC50007D4A2F /* ViewController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ViewController.h; sourceTree = "<group>"; };
 		4B170215164AAC50007D4A2F /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
-		4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MyOpenALSupport.c; sourceTree = "<group>"; };
-		4BC94FF9165C5A3000AF8A8E /* MyOpenALSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenALSupport.h; sourceTree = "<group>"; };
-		4BC94FFA165C5A3000AF8A8E /* SoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundManager.h; sourceTree = "<group>"; };
-		4BC94FFB165C5A3000AF8A8E /* SoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoundManager.m; sourceTree = "<group>"; };
-		4BC94FFC165C5A3000AF8A8E /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SynthesizeSingleton.h; sourceTree = "<group>"; };
 		4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4BC95001165C5A6800AF8A8E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -102,6 +110,8 @@
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
 		4C4B66331FB4B60B00F1C55D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SoundManager.xcodeproj; path = ../lib/SoundManager/SoundManager.xcodeproj; sourceTree = "<group>"; };
+		4C4B66721FB5FF0200F1C55D /* libSoundManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSoundManager.a; path = "../lib/SoundManager/Build/Products/Debug-iphonesimulator/libSoundManager.a"; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = "../lib/chipmunk/Build/Products/Debug-iphonesimulator/libchipmunk.a"; sourceTree = "<group>"; };
@@ -118,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4B66731FB5FF0200F1C55D /* libSoundManager.a in Frameworks */,
 				4CA8F3FE1FB3A84E000AB9AE /* liblua.a in Frameworks */,
 				4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */,
 				4CA8F3FA1FB3A82D000AB9AE /* libchipmunk.a in Frameworks */,
@@ -144,6 +155,7 @@
 				4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */,
 				4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */,
 				4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */,
+				4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,6 +170,7 @@
 		4B1701F9164AAC4F007D4A2F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C4B66721FB5FF0200F1C55D /* libSoundManager.a */,
 				4CA8F3FD1FB3A84E000AB9AE /* liblua.a */,
 				4CA8F3FB1FB3A83F000AB9AE /* libshared.a */,
 				4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */,
@@ -210,13 +223,16 @@
 			isa = PBXGroup;
 			children = (
 				4BC95009165C68E400AF8A8E /* flip.caf */,
-				4BC94FF8165C5A3000AF8A8E /* MyOpenALSupport.c */,
-				4BC94FF9165C5A3000AF8A8E /* MyOpenALSupport.h */,
-				4BC94FFA165C5A3000AF8A8E /* SoundManager.h */,
-				4BC94FFB165C5A3000AF8A8E /* SoundManager.m */,
-				4BC94FFC165C5A3000AF8A8E /* SynthesizeSingleton.h */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		4C4B666A1FB5FE1B00F1C55D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B666E1FB5FE1B00F1C55D /* libSoundManager.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4CA8F40C1FB3AB78000AB9AE /* Products */ = {
@@ -268,6 +284,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				4C4B66701FB5FE3300F1C55D /* PBXTargetDependency */,
 				4CA8F4211FB3AC5B000AB9AE /* PBXTargetDependency */,
 				4CA8F41F1FB3AC57000AB9AE /* PBXTargetDependency */,
 			);
@@ -313,6 +330,10 @@
 					ProductGroup = 4CA8F40C1FB3AB78000AB9AE /* Products */;
 					ProjectRef = 4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */;
 				},
+				{
+					ProductGroup = 4C4B666A1FB5FE1B00F1C55D /* Products */;
+					ProjectRef = 4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -322,6 +343,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4C4B666E1FB5FE1B00F1C55D /* libSoundManager.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSoundManager.a;
+			remoteRef = 4C4B666D1FB5FE1B00F1C55D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4CA8F4101FB3AB78000AB9AE /* libshared.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -372,14 +400,17 @@
 				4B17020F164AAC50007D4A2F /* AppDelegate.m in Sources */,
 				4B170216164AAC50007D4A2F /* ViewController.mm in Sources */,
 				4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */,
-				4BC94FFD165C5A3000AF8A8E /* MyOpenALSupport.c in Sources */,
-				4BC94FFE165C5A3000AF8A8E /* SoundManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4C4B66701FB5FE3300F1C55D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SoundManager;
+			targetProxy = 4C4B666F1FB5FE3300F1C55D /* PBXContainerItemProxy */;
+		};
 		4CA8F41F1FB3AC57000AB9AE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = shared;
@@ -516,12 +547,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../shared/include\"",
 					"\"$(SRCROOT)/../../lib/chipmunk/include\"",
+					"\"$(SRCROOT)/../lib/SoundManager/SoundManager/include\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Pinball/Pinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../lib/lua/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/shared/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/chipmunk/Build/Products/Debug-iphonesimulator\"",
+					"\"$(SRCROOT)/../lib/SoundManager/Build/Products/Debug-iphonesimulator\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.samthompson.pinball;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -546,12 +579,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../shared/include\"",
 					"\"$(SRCROOT)/../../lib/chipmunk/include\"",
+					"\"$(SRCROOT)/../lib/SoundManager/SoundManager/include\"",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Pinball/Pinball-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../lib/lua/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/shared/Build/Products/Debug-iphonesimulator\"",
 					"\"$(SRCROOT)/../lib/chipmunk/Build/Products/Debug-iphonesimulator\"",
+					"\"$(SRCROOT)/../lib/SoundManager/Build/Products/Debug-iphonesimulator\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.samthompson.pinball;
 				PRODUCT_NAME = "$(TARGET_NAME)";

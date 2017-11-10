@@ -148,8 +148,8 @@ void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerD
     NSData *data = [NSData dataWithContentsOfFile:path];
     UIImage *image = [UIImage imageWithData:data];
     
-    GLuint width = CGImageGetWidth(image.CGImage);
-    GLuint height = CGImageGetHeight(image.CGImage);
+    GLuint width = (GLuint)CGImageGetWidth(image.CGImage);
+    GLuint height = (GLuint)CGImageGetHeight(image.CGImage);
     GLuint bpp = 8;
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -198,7 +198,7 @@ void PinballBridgeInterface::addTimer(float duration, int timerId, const ITimerD
     
     NSUInteger result = [_soundManager playSoundWithKey:name gain:1.0f pitch:1.0f location:CGPointMake(0, 0) shouldLoop:NO sourceID:-1];
     
-    NSLog(@"result: %d\n", result);
+    NSLog(@"result: %lu\n", (unsigned long)result);
     
 }
 
