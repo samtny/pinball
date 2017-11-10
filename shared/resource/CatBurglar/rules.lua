@@ -224,7 +224,9 @@ function resetAudio()
 end
 
 function resetMechs()
-	--C API stub
+    deactivateMech("lflipper")
+    deactivateMech("rflipper")
+    deactivateMech("uflipper")
 end
 
 function resetLights()
