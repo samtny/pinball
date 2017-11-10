@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C4B66371FB5011600F1C55D /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
 		4CE803901FB2437F00FEE04E /* libshared.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libshared.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CE8039F1FB2452700FEE04E /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../../../shared/src/Renderer.cpp; sourceTree = "<group>"; };
 		4CE803A01FB2452700FEE04E /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = ../../../shared/src/Camera.cpp; sourceTree = "<group>"; };
@@ -107,11 +108,28 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		4C4B66381FB50A4C00F1C55D /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B66391FB50A5400F1C55D /* boost */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		4C4B66391FB50A5400F1C55D /* boost */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = boost;
+			sourceTree = "<group>";
+		};
 		4CE803871FB2437F00FEE04E = {
 			isa = PBXGroup;
 			children = (
+				4C4B66381FB50A4C00F1C55D /* lib */,
 				4C14E9971FB3943B000A9591 /* include */,
 				4C14E9981FB39457000A9591 /* src */,
+				4C4B66371FB5011600F1C55D /* resource */,
 				4CE803911FB2437F00FEE04E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -310,11 +328,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../lib/chipmunk/include\"",
 					"\"$(SRCROOT)/../../../lib/lua/include\"",
+					"\"$(SRCROOT)/../../../lib/boost\"",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -326,11 +347,14 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../lib/chipmunk/include\"",
 					"\"$(SRCROOT)/../../../lib/lua/include\"",
+					"\"$(SRCROOT)/../../../lib/boost\"",
 				);
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};
