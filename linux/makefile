@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall -I./include -I../shared/include -O0 -std=c++11 -g 
+CFLAGS=-c -Wall -I./../lib/chipmunk/include -I./../lib/lua/include -I./include -I../shared/include -O0 -std=c++11 -g 
 
 LFLAGS=-L./lib -lGL -lGLU -lglut -llua -lchipmunk -lrt -g -ldl
 
