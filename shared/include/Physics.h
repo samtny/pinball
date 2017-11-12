@@ -15,9 +15,7 @@ struct LayoutItem;
 #if CP_USE_CGPOINTS
 typedef CGPoint cpVect;
 #else
-/// Chipmunk's 2D vector type.
-/// @addtogroup cpVect
-typedef struct cpVect{cpFloat x,y;} cpVect;
+struct cpVect;
 #endif
 
 struct cpSpace;
