@@ -3,6 +3,8 @@
 
 #include "chipmunk/chipmunk.h"
 
+#include "shapeGroup.h"
+
 #define MAX_BALL_COUNT 10
 
 class PinballBridgeInterface;
