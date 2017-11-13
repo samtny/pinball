@@ -1,4 +1,4 @@
-CFLAGS=-c -Wall -I./include -I../shared/include -O0 -std=c++11 -g 
+CFLAGS=-c -Wall -I./../lib/chipmunk/include -I./../lib/lua/include -I./include -I../shared/include -O0 -std=c++11 -g 
 
 LFLAGS=-L./lib -lGL -lGLU -lglut -llua -lchipmunk -lrt -g -ldl
 
@@ -11,7 +11,7 @@ CC=clang++
 all: pinball
 
 pinball: main.o PinballHost.o
-	$(CC) main.o PinballBridge.o Playfield.o Physics.o Camera.o PinballHost.o Util.o Editor.o GlutEngine.o Renderer.o glfont2.o Drawing.o Game.o -o pinball $(LFLAGS) $(LFLAGS_MAGICK) 	
+	$(CC) main.o PinballBridge.o Playfield.o Flipper.o Physics.o Camera.o PinballHost.o Util.o Editor.o GlutEngine.o Renderer.o glfont2.o Drawing.o Game.o -o pinball $(LFLAGS) $(LFLAGS_MAGICK) 	
 
 SRC=./src/
 
@@ -32,7 +32,10 @@ GlutEngine.o: $(S_SRC)GlutEngine.cpp
 Playfield.o: $(S_SRC)Playfield.cpp
 	$(CC) $(CFLAGS) $(S_SRC)Playfield.cpp
 
-Physics.o: Util.o $(S_SRC)Physics.cpp
+Flipper.o: $(S_SRC)Parts/Flipper.cpp
+	$(CC) $(CFLAGS) $(S_SRC)Parts/Flipper.cpp
+
+Physics.o: Util.o Flipper.o $(S_SRC)Physics.cpp
 	$(CC) $(CFLAGS) $(S_SRC)Physics.cpp
 
 Camera.o: $(S_SRC)Camera.cpp

@@ -7,7 +7,7 @@
 
 #include "Playfield.h"
 
-#include "Parts.h"
+#include "Parts/Flipper.h"
 
 #include "Util.h"
 
@@ -60,16 +60,6 @@ static double timeStep = 1.0/180.0;
 static int iterations = 10;
 
 static float scale = 37;
-
-enum shapeGroup {
-	shapeGroupBox,
-    shapeGroupBall,
-	shapeGroupFlippers,
-	shapeGroupTargets,
-	shapeGroupPopbumpers,
-	shapeGroupSlingshots,
-    shapeGroupKraken
-};
 
 enum CollisionType {
 	CollisionTypeNone,
@@ -345,7 +335,7 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "segment") == 0) {
 		this->createSegment(item);
 	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
-		this->createFlipper(item);
+		new Flipper(item, shapeGroupFlippers, _boxBody);
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
         this->createBall(item);
     } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
@@ -462,59 +452,6 @@ void Physics::createBall(LayoutItem *item) {
 }
 
 void Physics::createFlipper(LayoutItem *item) {
-
-	cpFloat area = (item->o->r1 * M_PI) * 2; // approx
-	cpFloat mass = area * item->o->m->d;
-
-	cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
-
-	cpFloat length = cpvdist(item->v[0], item->v[1]);
-	cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item->v[1],item->v[0])), cpvnormalize(cpvsub(item->v[2],item->v[0]))));
-
-	cpFloat flipStart = flipAngle > 0 ? 0 : flipAngle;
-	cpFloat flipEnd = flipAngle > 0 ? flipAngle : 0;
-
-	// flipper body is round centered at base of flipper, and for this implementation has radius == flipper length;
-	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
-	cpBodySetPos(body, item->v[0]);
-
-	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
-
- 	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, box->bodies[0], item->v[0]));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], flipStart, flipEnd));
-
-	// base shape
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupFlippers);
-
-	float diff = item->o->r1 - item->o->r2; // r1-prime
-	float loft = atan2f(diff, (float)length);
-	float facelen = diff / sin(loft);
-	cpVect p2p1 = cpvsub(item->v[0], item->v[1]);
-	cpVect p2p1n = cpvnormalize(p2p1);
-	cpVect p3n = cpvrotate(p2p1n, cpvforangle(loft));
-	cpVect p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
-
-	// face shapes
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupFlippers);
-
-	loft = -atan2f(diff, (float)length);
-	p3n = cpvrotate(p2p1n, cpvforangle(loft));
-	p3 = cpvadd(item->v[1], cpvmult(p3n, facelen));
-
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupFlippers);
-
-	cpBodySetUserData(body, item);
-
-	item->bodies.push_back(body);
 
 }
 
