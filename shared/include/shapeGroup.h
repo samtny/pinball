@@ -11,7 +11,8 @@ enum shapeGroup {
     shapeGroupFlippers,
     shapeGroupTargets,
     shapeGroupPopbumpers,
-    shapeGroupSlingshots
+    shapeGroupSlingshots,
+    shapeGroupKraken
 };
 
 #endif //SHARED_SHAPEGROUP_H
