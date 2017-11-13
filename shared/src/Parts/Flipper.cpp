@@ -2,8 +2,8 @@
 // Created by samtny on 11/12/17.
 //
 
-#include <Parts.h>
-#include <Parts/Flipper.h>
+#include "Parts.h"
+#include "Parts/Flipper.h"
 
 Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody)
 {
