@@ -62,6 +62,8 @@ public:
 	void nudge(cpVect dir);
 
 	cpBody *getBoxBody();
+    
+    LayoutItem *getLayoutItem(const char *itemName);
 
 protected:
 	void loadConfig();
@@ -70,13 +72,14 @@ protected:
 	void createBox(LayoutItem *iprops);
     void createBall(LayoutItem *iprops);
 	void createFlipper(LayoutItem *iprops);
-	void createTarget(LayoutItem *iprops);
+	void createTarget(LayoutItem *iprops, void *attach);
 	void createDropTarget(LayoutItem *iprops);
 	void createPopbumper(LayoutItem *iprops);
 	void createSlingshot(LayoutItem *iprops);
 	void createSwitch(LayoutItem *iprops);
 	void createSegment(LayoutItem *iprops);
 	void createCircle(LayoutItem *iprops);
+    void createKraken(LayoutItem *iprops);
 	void flip(LayoutItem *flipper);
 	void unflip(LayoutItem *flipper);
 private:

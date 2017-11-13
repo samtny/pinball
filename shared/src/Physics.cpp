@@ -67,7 +67,8 @@ enum shapeGroup {
 	shapeGroupFlippers,
 	shapeGroupTargets,
 	shapeGroupPopbumpers,
-	shapeGroupSlingshots
+	shapeGroupSlingshots,
+    shapeGroupKraken
 };
 
 enum CollisionType {
@@ -78,7 +79,8 @@ enum CollisionType {
 	CollisionTypeTargetSwitch,
 	CollisionTypePopbumper,
 	CollisionTypeSlingshot,
-	CollisionTypeSlingshotSwitch
+	CollisionTypeSlingshotSwitch,
+    CollisionTypeKraken
 };
 
 Physics::Physics(void)
@@ -236,16 +238,6 @@ static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
-void Physics::initCollisionHandlers(void) {
-
-	cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
-	cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
-	cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
-	cpSpaceAddCollisionHandler(_space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
-	cpSpaceAddCollisionHandler(_space, CollisionTypeSlingshot, CollisionTypeSlingshotSwitch, slingshotSwitchBegin, NULL, NULL, NULL, NULL);
-
-}
-
 cpSpace *Physics::getSpace() {
 	return _space;
 }
@@ -361,12 +353,14 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "circle") == 0) {
 		this->createCircle(item);
 	} else if (strcmp(item->o->s.c_str(), "target") == 0) {
-		this->createTarget(item);
+		this->createTarget(item, NULL);
 	} else if (strcmp(item->o->s.c_str(), "popbumper") == 0) {
 		this->createPopbumper(item);
 	} else if (strcmp(item->o->s.c_str(), "slingshot") == 0) {
 		this->createSlingshot(item);
-	}
+    } else if (strcmp(item->o->s.c_str(), "kraken") == 0) {
+        this->createKraken(item);
+    }
 
 }
 
@@ -609,8 +603,103 @@ void Physics::createCircle(LayoutItem *item) {
 	
 }
 
-void Physics::createTarget(LayoutItem *item) {
+LayoutItem *Physics::getLayoutItem(const char *itemName) {
+    return &_playfield->getLayout()->find(itemName)->second;
+}
 
+static void ballGravityVelocityFuncKraken(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
+{
+    cpVect gBox = cpvrotate(cpvforangle(physics_currentInstance->getBoxBody()->a), gravity);
+    
+    cpFloat krakenGravity = -2.0;
+    
+    // Gravitational acceleration is proportional to the inverse square of
+    // distance, and directed toward the origin. The central planet is assumed
+    // to be massive enough that it affects the satellites but not vice versa.
+    
+    LayoutItem *kraken = physics_currentInstance->getLayoutItem("kraken");
+    
+    //LayoutItem *kraken = _playfield->getLayout()->find("kraken")->second;
+    
+    cpBody *krakenBody = kraken->bodies[0];
+    
+    cpVect p = krakenBody->p;
+
+    cpFloat sqdist = cpvlengthsq(p);
+
+    cpVect gKraken = cpvmult(p, -krakenGravity / (sqdist * cpfsqrt(sqdist)));
+    
+    //cpVect g = cpvadd(gBox, gKraken);
+    cpVect g = gKraken;
+    
+    cpBodyUpdateVelocity(body, g, damping, dt);
+}
+
+static int krakenBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+    
+    printf("%s", "begin");
+    
+    cpBody *ball, *kraken;
+    cpArbiterGetBodies(arb, &ball, &kraken);
+    
+    ball->velocity_func = ballGravityVelocityFuncKraken;
+    
+    return 1;
+}
+
+static void krakenSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
+    printf("%s", "separate");
+    
+    cpBody *ball, *kraken;
+    cpArbiterGetBodies(arb, &ball, &kraken);
+    
+    ball->velocity_func = ballGravityVelocityFunc;
+}
+
+void Physics::createKraken(LayoutItem *item) {
+    cpVect a = cpv(item->v[0].x, item->v[0].y);
+    
+    cpFloat area = (item->o->r1 * item->o->r1) * M_PI;
+    cpFloat mass = area * item->o->m->d;
+    
+    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
+    cpBodySetPos(body, a);
+    
+    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
+    cpShapeSetElasticity(shape, item->o->m->e);
+    cpShapeSetFriction(shape, item->o->m->f);
+    
+    cpShapeSetSensor(shape, true);
+    cpShapeSetCollisionType(shape, CollisionTypeKraken);
+    
+    cpShapeSetGroup(shape, shapeGroupKraken);
+    cpShapeSetUserData(shape, item);
+    
+    LayoutItem *box = &_playfield->getLayout()->find("box")->second;
+    
+    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(box->bodies[0], body, body->p));
+    
+    //constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
+    
+    //cpBodyApplyForce(body, cpv(0.0, -1.0), cpv(item->o->r1, 0.0));
+    
+    cpSpaceAddConstraint(_space, cpSimpleMotorNew(box->bodies[0], body, 2.0));
+    
+    body->data = item;
+    
+    item->bodies.push_back(body);
+}
+
+void Physics::createTarget(LayoutItem *item, void *attach) {
+
+    LayoutItem *attachItem;
+    
+    if (!attach) {
+        attachItem = &_playfield->getLayout()->find("box")->second;
+    } else {
+        attachItem = (LayoutItem *)attach;
+    }
+    
 	cpVect a = cpv(item->v[0].x, item->v[0].y);
 	cpVect b = cpv(item->v[1].x, item->v[1].y);
 	cpVect mid = cpvmult(cpvadd(a, b), 0.5);
@@ -630,11 +719,11 @@ void Physics::createTarget(LayoutItem *item) {
 	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
 	cpVect grooveB = body->p;
 
-	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
+    
 
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpBodyWorld2Local(box->bodies[0], grooveB), cpvzero));
-	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], 0.0f, 0.0f));
+	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachItem->bodies[0], body, cpBodyWorld2Local(attachItem->bodies[0], grooveA), cpBodyWorld2Local(attachItem->bodies[0], grooveB), cpvzero));
+	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachItem->bodies[0], body, cpBodyWorld2Local(attachItem->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, attachItem->bodies[0], 0.0f, 0.0f));
 
 	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
 	cpShapeSetElasticity(shape, item->o->m->e);
@@ -644,7 +733,7 @@ void Physics::createTarget(LayoutItem *item) {
 	cpShapeSetUserData(shape, item);
 
 	// switch
-	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->bodies[0], grooveA)));
+	shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachItem->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(attachItem->bodies[0], grooveA)));
 	cpShapeSetSensor(shape, true);
 	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
 
@@ -934,6 +1023,17 @@ void Physics::loadForces() {
 	}
     
 	lua_close(L);
+    
+}
+
+void Physics::initCollisionHandlers(void) {
+    
+    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
+    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
+    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
+    cpSpaceAddCollisionHandler(_space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
+    cpSpaceAddCollisionHandler(_space, CollisionTypeSlingshot, CollisionTypeSlingshotSwitch, slingshotSwitchBegin, NULL, NULL, NULL, NULL);
+    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeKraken, krakenBegin, NULL, NULL, krakenSeparate, NULL);
     
 }
 
