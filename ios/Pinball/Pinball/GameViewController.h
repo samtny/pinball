@@ -10,7 +10,11 @@
 #import <GLKit/GLKit.h>
 #import <OpenGLES/ES2/glext.h>
 
-@interface ViewController : GLKViewController 
+#import "PinballGame.h"
+
+@interface GameViewController : GLKViewController
+
+@property (strong, nonatomic) PinballGame *game;
 
 -(IBAction)userDidTapStartButton:(id)sender;
 -(IBAction)userDidTapLeftFlipperButton:(id)sender;

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 It-Just-Works Software, llc. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "GameViewController.h"
 
 #import "PinballBridgeInterface.h"
 
@@ -41,7 +41,7 @@ enum
     NUM_ATTRIBUTES
 };
 
-@interface ViewController () {
+@interface GameViewController () {
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
     float _rotation;
@@ -63,10 +63,11 @@ enum
 
 @end
 
-@implementation ViewController
+@implementation GameViewController
 
 @synthesize context = _context;
 @synthesize effect = _effect;
+@synthesize game = game;
 
 - (void)dealloc
 {
@@ -99,7 +100,7 @@ enum
     [self setupGL];
     
     PinballBridgeInterface *bi = new PinballBridgeInterface();
-    bi->setGameName("CatBurglar");
+    bi->setGameName([[self.game identifier] UTF8String]);
     //bi->init();
     
     Playfield *f = new Playfield();
@@ -154,6 +155,18 @@ enum
         [EAGLContext setCurrentContext:nil];
     }
     self.context = nil;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)didReceiveMemoryWarning

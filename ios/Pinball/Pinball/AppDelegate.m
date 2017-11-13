@@ -8,16 +8,18 @@
 
 #import "AppDelegate.h"
 
-#import "ViewController.h"
+#import "MainTableViewController.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
+@synthesize menuController = _menuController;
 @synthesize viewController = _viewController;
 
 - (void)dealloc
 {
     [_window release];
+    [_menuController release];
     [_viewController release];
     [super dealloc];
 }
@@ -26,8 +28,14 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
-    self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
-    self.window.rootViewController = self.viewController;
+    //self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
+    //self.window.rootViewController = self.viewController;
+    
+    MainTableViewController *mainController = [[MainTableViewController alloc] init];
+    
+    self.menuController = [[UINavigationController alloc] initWithRootViewController:mainController];
+    
+    self.window.rootViewController = self.menuController;
     
     [self.window makeKeyAndVisible];
     

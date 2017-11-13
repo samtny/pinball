@@ -15,8 +15,8 @@
 		4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B170207164AAC50007D4A2F /* InfoPlist.strings */; };
 		4B17020B164AAC50007D4A2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B17020A164AAC50007D4A2F /* main.m */; };
 		4B17020F164AAC50007D4A2F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B17020E164AAC50007D4A2F /* AppDelegate.m */; };
-		4B170216164AAC50007D4A2F /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B170215164AAC50007D4A2F /* ViewController.mm */; };
-		4B170219164AAC50007D4A2F /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B170217164AAC50007D4A2F /* ViewController.xib */; };
+		4B170216164AAC50007D4A2F /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B170215164AAC50007D4A2F /* GameViewController.mm */; };
+		4B170219164AAC50007D4A2F /* GameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B170217164AAC50007D4A2F /* GameViewController.xib */; };
 		4BC95000165C5A6000AF8A8E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */; };
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
@@ -24,11 +24,16 @@
 		4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66331FB4B60B00F1C55D /* Media.xcassets */; };
 		4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */; };
 		4C4B66731FB5FF0200F1C55D /* libSoundManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B66721FB5FF0200F1C55D /* libSoundManager.a */; };
+		4C4B66781FB61C6300F1C55D /* resource in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66771FB61C6300F1C55D /* resource */; };
+		4C4B66851FBA2A8800F1C55D /* MainTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B66831FBA2A8800F1C55D /* MainTableViewController.h */; };
+		4C4B66861FBA2A8800F1C55D /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B66841FBA2A8800F1C55D /* MainTableViewController.m */; };
+		4C4B668B1FBA391100F1C55D /* PinballGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B668A1FBA391100F1C55D /* PinballGame.m */; };
+		4C4B668E1FBA3E6800F1C55D /* GameTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */; };
+		4C4B668F1FBA3E6800F1C55D /* GameTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CA8F3FA1FB3A82D000AB9AE /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */; };
 		4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3FB1FB3A83F000AB9AE /* libshared.a */; };
 		4CA8F3FE1FB3A84E000AB9AE /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3FD1FB3A84E000AB9AE /* liblua.a */; };
-		4CA8F43A1FB3B01D000AB9AE /* resource in Resources */ = {isa = PBXBuildFile; fileRef = 4CA8F4391FB3B01D000AB9AE /* resource */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,9 +100,9 @@
 		4B17020A164AAC50007D4A2F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4B17020D164AAC50007D4A2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4B17020E164AAC50007D4A2F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4B170214164AAC50007D4A2F /* ViewController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ViewController.h; sourceTree = "<group>"; };
-		4B170215164AAC50007D4A2F /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		4B170214164AAC50007D4A2F /* GameViewController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = GameViewController.h; sourceTree = "<group>"; };
+		4B170215164AAC50007D4A2F /* GameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
+		4B170218164AAC50007D4A2F /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GameViewController.xib; sourceTree = "<group>"; };
 		4BC94FFF165C5A6000AF8A8E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4BC95001165C5A6800AF8A8E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -108,6 +113,13 @@
 		4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SoundManager.xcodeproj; path = ../lib/SoundManager/SoundManager.xcodeproj; sourceTree = "<group>"; };
 		4C4B66721FB5FF0200F1C55D /* libSoundManager.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSoundManager.a; path = "../lib/SoundManager/Build/Products/Debug-iphonesimulator/libSoundManager.a"; sourceTree = "<group>"; };
+		4C4B66771FB61C6300F1C55D /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
+		4C4B66831FBA2A8800F1C55D /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
+		4C4B66841FBA2A8800F1C55D /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
+		4C4B66891FBA390000F1C55D /* PinballGame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PinballGame.h; sourceTree = "<group>"; };
+		4C4B668A1FBA391100F1C55D /* PinballGame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PinballGame.m; sourceTree = "<group>"; };
+		4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameTableViewController.h; sourceTree = "<group>"; };
+		4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameTableViewController.m; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = "../lib/chipmunk/Build/Products/Debug-iphonesimulator/libchipmunk.a"; sourceTree = "<group>"; };
@@ -115,7 +127,6 @@
 		4CA8F3FD1FB3A84E000AB9AE /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "../lib/lua/Build/Products/Debug-iphonesimulator/liblua.a"; sourceTree = "<group>"; };
 		4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = shared.xcodeproj; path = ../lib/shared/shared.xcodeproj; sourceTree = "<group>"; };
 		4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = chipmunk.xcodeproj; path = ../lib/chipmunk/chipmunk.xcodeproj; sourceTree = "<group>"; };
-		4CA8F4391FB3B01D000AB9AE /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
 		4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = lua.xcodeproj; path = ../lib/lua/lua.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -185,18 +196,24 @@
 		4B170204164AAC50007D4A2F /* Pinball */ = {
 			isa = PBXGroup;
 			children = (
-				4CA8F4391FB3B01D000AB9AE /* resource */,
+				4C4B66771FB61C6300F1C55D /* resource */,
 				4BC94FF7165C5A3000AF8A8E /* Audio */,
 				4B17020D164AAC50007D4A2F /* AppDelegate.h */,
 				4B17020E164AAC50007D4A2F /* AppDelegate.m */,
 				4BE9DFD6164C11F200599EB8 /* PinballBridge.h */,
 				4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */,
-				4B170214164AAC50007D4A2F /* ViewController.h */,
-				4B170215164AAC50007D4A2F /* ViewController.mm */,
-				4B170217164AAC50007D4A2F /* ViewController.xib */,
+				4B170214164AAC50007D4A2F /* GameViewController.h */,
+				4B170215164AAC50007D4A2F /* GameViewController.mm */,
+				4B170217164AAC50007D4A2F /* GameViewController.xib */,
 				4B170205164AAC50007D4A2F /* Supporting Files */,
 				4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */,
 				4C4B66331FB4B60B00F1C55D /* Media.xcassets */,
+				4C4B66831FBA2A8800F1C55D /* MainTableViewController.h */,
+				4C4B66841FBA2A8800F1C55D /* MainTableViewController.m */,
+				4C4B66891FBA390000F1C55D /* PinballGame.h */,
+				4C4B668A1FBA391100F1C55D /* PinballGame.m */,
+				4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */,
+				4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */,
 			);
 			path = Pinball;
 			sourceTree = "<group>";
@@ -260,6 +277,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C4B668E1FBA3E6800F1C55D /* GameTableViewController.h in Headers */,
+				4C4B66851FBA2A8800F1C55D /* MainTableViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,9 +393,9 @@
 			files = (
 				4B170209164AAC50007D4A2F /* InfoPlist.strings in Resources */,
 				4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */,
+				4C4B66781FB61C6300F1C55D /* resource in Resources */,
 				4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */,
-				4CA8F43A1FB3B01D000AB9AE /* resource in Resources */,
-				4B170219164AAC50007D4A2F /* ViewController.xib in Resources */,
+				4B170219164AAC50007D4A2F /* GameViewController.xib in Resources */,
 				4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,8 +408,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B17020B164AAC50007D4A2F /* main.m in Sources */,
+				4C4B668F1FBA3E6800F1C55D /* GameTableViewController.m in Sources */,
 				4B17020F164AAC50007D4A2F /* AppDelegate.m in Sources */,
-				4B170216164AAC50007D4A2F /* ViewController.mm in Sources */,
+				4B170216164AAC50007D4A2F /* GameViewController.mm in Sources */,
+				4C4B668B1FBA391100F1C55D /* PinballGame.m in Sources */,
+				4C4B66861FBA2A8800F1C55D /* MainTableViewController.m in Sources */,
 				4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,12 +446,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		4B170217164AAC50007D4A2F /* ViewController.xib */ = {
+		4B170217164AAC50007D4A2F /* GameViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4B170218164AAC50007D4A2F /* en */,
 			);
-			name = ViewController.xib;
+			name = GameViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -531,6 +553,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -563,6 +587,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
