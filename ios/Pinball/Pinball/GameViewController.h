@@ -17,6 +17,7 @@
 @property (strong, nonatomic) PinballGame *game;
 
 -(IBAction)userDidTapStartButton:(id)sender;
+-(IBAction)userDidTapMenuButton:(id)sender;
 -(IBAction)userDidTapLeftFlipperButton:(id)sender;
 -(IBAction)userDidReleaseLeftFlipperButton:(id)sender;
 -(IBAction)userDidTapRightFlipperButton:(id)sender;

@@ -219,6 +219,10 @@ enum
     _game->closeSwitch(0);
 }
 
+-(IBAction)userDidTapMenuButton:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(IBAction)userDidTapLeftFlipperButton:(id)sender {
     _game->switchClosed("lbutton", NULL);
 }
