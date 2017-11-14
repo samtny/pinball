@@ -368,7 +368,19 @@ void Playfield::loadParts(void) {
 
 					} else if (strcmp("v", key) == 0) {
 						props.count = (int)lua_tonumber(L, -1);
-					}
+                    } else if (strcmp("meta", key) == 0 && lua_istable(L, -1)) {
+                        lua_pushnil(L);
+                        
+                        while(lua_next(L, -2) != 0) {
+                            const char *mkey = lua_tostring(L, -2);
+                            
+                            const char *val = lua_tostring(L, -1);
+                            
+                            props.meta.insert(std::make_pair(mkey, val));
+                            
+                            lua_pop(L, 1);
+                        }
+                    }
 
 					lua_pop(L, 1);
 				}

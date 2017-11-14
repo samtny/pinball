@@ -34,6 +34,8 @@ typedef struct TextureInfo {
 } TextureInfo;
 #define TEXTUREINFO_INIT { NULL, -1, -1, 0 }
 
+typedef std::map<std::string, std::string> PartMeta;
+
 typedef struct Part {
 	std::string n;
 	int count;
@@ -42,6 +44,7 @@ typedef struct Part {
 	float r2;
 	Material *m;
 	TextureInfo t;
+    PartMeta meta;
 } Part;
 typedef std::map<std::string, Part>::iterator it_Part;
 #define PART_INIT { "", -1, "", -1, -1, NULL, TEXTUREINFO_INIT }
