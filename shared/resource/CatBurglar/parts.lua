@@ -101,8 +101,8 @@ parts = {
 	slingshot = {
 		s = "slingshot", -- "slingshot" shape defined internally
 		v = 2,
-		m = "rubber",
-		r1 = 0.2316
+		m = "slingshot",
+		r1 = 0.09
 	},
 	target = {
 		s = "target", -- "target" shape defined internally
