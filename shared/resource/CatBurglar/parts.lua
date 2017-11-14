@@ -102,7 +102,14 @@ parts = {
 		s = "slingshot", -- "slingshot" shape defined internally
 		v = 2,
 		m = "slingshot",
-		r1 = 0.09
+		r1 = 0.09,
+        meta = {
+            restLength = 0.03,
+            switchGap = 0.03,
+            stiffness = 13.0,
+            damping = 0.1,
+            impulse = 0.13
+        }
 	},
 	target = {
 		s = "target", -- "target" shape defined internally
