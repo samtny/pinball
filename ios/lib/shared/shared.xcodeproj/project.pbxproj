@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C4B667E1FB9E72400F1C55D /* Flipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B667D1FB9E72400F1C55D /* Flipper.cpp */; };
+		4C4B66951FBB8FD200F1C55D /* Slingshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B66931FBB8FD200F1C55D /* Slingshot.cpp */; };
 		4CE803A81FB2452800FEE04E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8039F1FB2452700FEE04E /* Renderer.cpp */; };
 		4CE803A91FB2452800FEE04E /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A01FB2452700FEE04E /* Camera.cpp */; };
 		4CE803AA1FB2452800FEE04E /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A11FB2452700FEE04E /* Drawing.cpp */; };
@@ -36,6 +37,9 @@
 		4C4B667B1FB9E70700F1C55D /* Flipper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flipper.h; path = ../../../shared/include/Parts/Flipper.h; sourceTree = "<group>"; };
 		4C4B667C1FB9E71500F1C55D /* shapeGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shapeGroup.h; path = ../../../shared/include/shapeGroup.h; sourceTree = "<group>"; };
 		4C4B667D1FB9E72400F1C55D /* Flipper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Flipper.cpp; path = ../../../shared/src/Parts/Flipper.cpp; sourceTree = "<group>"; };
+		4C4B66931FBB8FD200F1C55D /* Slingshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Slingshot.cpp; path = ../../../shared/src/Parts/Slingshot.cpp; sourceTree = "<group>"; };
+		4C4B66971FBB909C00F1C55D /* Slingshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Slingshot.h; path = ../../../shared/include/Parts/Slingshot.h; sourceTree = "<group>"; };
+		4C4B66981FBB91B600F1C55D /* CollisionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CollisionTypes.h; path = ../../../shared/include/CollisionTypes.h; sourceTree = "<group>"; };
 		4CE803901FB2437F00FEE04E /* libshared.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libshared.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CE8039F1FB2452700FEE04E /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../../../shared/src/Renderer.cpp; sourceTree = "<group>"; };
 		4CE803A01FB2452700FEE04E /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = ../../../shared/src/Camera.cpp; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				4C4B667C1FB9E71500F1C55D /* shapeGroup.h */,
+				4C4B66981FBB91B600F1C55D /* CollisionTypes.h */,
 				4C4B66791FB9E6ED00F1C55D /* Parts */,
 				4CE803BD1FB2472700FEE04E /* Camera.h */,
 				4CE803BB1FB2472700FEE04E /* Drawing.h */,
@@ -134,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				4C4B667B1FB9E70700F1C55D /* Flipper.h */,
+				4C4B66971FBB909C00F1C55D /* Slingshot.h */,
 			);
 			name = Parts;
 			sourceTree = "<group>";
@@ -142,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				4C4B667D1FB9E72400F1C55D /* Flipper.cpp */,
+				4C4B66931FBB8FD200F1C55D /* Slingshot.cpp */,
 			);
 			name = Parts;
 			sourceTree = "<group>";
@@ -224,6 +231,7 @@
 			files = (
 				4CE803A81FB2452800FEE04E /* Renderer.cpp in Sources */,
 				4CE803A91FB2452800FEE04E /* Camera.cpp in Sources */,
+				4C4B66951FBB8FD200F1C55D /* Slingshot.cpp in Sources */,
 				4CE803AA1FB2452800FEE04E /* Drawing.cpp in Sources */,
 				4CE803AB1FB2452800FEE04E /* glfont2.cpp in Sources */,
 				4C4B667E1FB9E72400F1C55D /* Flipper.cpp in Sources */,
