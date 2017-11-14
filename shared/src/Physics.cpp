@@ -45,10 +45,10 @@ static double _targetStiffness = 0;
 static double _targetDamping = 0;
 
 static double _slingshotRestLength = 0.6;
-static double _slingshotSwitchGap = 0.25;
-static double _slingshotStiffness = 35.0;
-static double _slingshotDamping = 0.05;
-static double _slingshotImpulse = 0.02;
+static double _slingshotSwitchGap = 1.0;
+static double _slingshotStiffness = 0.25;
+static double _slingshotDamping = 0.00;
+static double _slingshotImpulse = 0.13;
 
 static double _popBumperThreshold = 0.005;
 static double _popBumperImpulse = 0.04;

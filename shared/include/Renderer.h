@@ -46,6 +46,7 @@ public:
 	void setOverlayText(const char *overlayName, const char *text);
 	void doCameraEffect(const char *effectName);
 	float getZoomLevel();
+    void setDebug(bool debug);
 private:
 	PinballBridgeInterface *_bridgeInterface;
 	Playfield *_playfield;
@@ -55,6 +56,7 @@ private:
 	glfont::GLFont *_glfont;
 	const HostProperties *_displayProperties;
 	float _scale;
+    bool _debug;
 };
 
 #endif

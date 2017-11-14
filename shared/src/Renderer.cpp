@@ -163,6 +163,10 @@ static void _drawAnchors(cpBody *body, void *data) {
 }
 */
 
+void Renderer::setDebug(bool debug) {
+    _debug = debug;
+}
+
 void Renderer::drawPlayfield() {
 	
 	glViewport(0, 0, _displayProperties->viewportWidth, _displayProperties->viewportHeight);
@@ -214,6 +218,10 @@ void Renderer::drawPlayfield() {
 	
 	cpSpaceEachShape(_physics->getSpace(), DrawShape, NULL);
 	
+    if (this->_debug) {
+        cpSpaceEachConstraint(_physics->getSpace(), DrawConstraint, NULL);
+    }
+    
 	if (s->editMode != EDIT_MODE_NONE) {
 		
 		// new / inserted 

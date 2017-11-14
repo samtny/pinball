@@ -16,6 +16,8 @@ const Color EDIT_COLOR = {1, 1, 1, 1};
 
 void DrawShape(cpShape *shape, void *data);
 
+void DrawConstraint(cpConstraint *constraint, void *data);
+
 static const GLfloat circleVAR[] = {
 	 0.0000f,  1.0000f,
 	 0.2588f,  0.9659f,
@@ -82,6 +84,8 @@ static const int pillVAR_count = sizeof(pillVAR)/sizeof(GLfloat)/3;
 void DrawFatSegment(Coord2 a, Coord2 b, float radius, Color lineColor, Color fillColor);
 
 void DrawPoints(float size, int count, Coord2 *verts, Color color);
+
+void drawSimpleJoint(cpBody *bodyA, cpBody *bodyB, cpVect anchr1, cpVect anchr2, bool drawLine);
 
 #endif
 

@@ -47,6 +47,45 @@ void DrawShape(cpShape *shape, void *data) {
 
 }
 
+void DrawConstraint(cpConstraint *constraint, void *data) {
+    
+    
+    
+    cpBody *bodyA = constraint->a;
+    cpBody *bodyB = constraint->b;
+    
+    const cpConstraintClass *klass = constraint->CP_PRIVATE(klass);
+    
+    if (klass == cpPinJointGetClass()) {
+        cpPinJoint *joint = (cpPinJoint *)constraint;
+        
+        // draw
+        drawSimpleJoint(bodyA, bodyB, joint->anchr1, joint->anchr2, true);
+    } else if (klass == cpGrooveJointGetClass()) {
+        
+        cpGrooveJoint *joint = (cpGrooveJoint *)constraint;
+        
+        cpVect a = cpBodyLocal2World(bodyA, joint->grv_a);
+        cpVect b = cpBodyLocal2World(bodyA, joint->grv_b);
+        cpVect c = cpBodyLocal2World(bodyB, joint->anchr2);
+        
+        DrawFatSegment({a.x, a.y}, {b.x, b.y}, 0.004, LINE_COLOR, FILL_COLOR);
+    }
+    
+    //DrawFatSegment(ap, bp, 0.01, LINE_COLOR, FILL_COLOR);
+}
+
+void drawSimpleJoint(cpBody *bodyA, cpBody *bodyB, cpVect anchr1, cpVect anchr2, bool drawLine) {
+    // anchor points in world coordinates
+    cpVect a = cpBodyLocal2World(bodyA, anchr1);
+    cpVect b = cpBodyLocal2World(bodyB, anchr2);
+    
+    Coord2 ap = {a.x, a.y};
+    Coord2 bp = {b.x, b.y};
+    
+    DrawFatSegment(ap, bp, 0.004, LINE_COLOR, FILL_COLOR);
+}
+
 void DrawCircle(Coord2 center, float angle, float radius, Color lineColor, Color fillColor) {
 
 	glVertexPointer(2, GL_FLOAT, 0, circleVAR);
