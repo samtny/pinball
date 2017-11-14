@@ -130,6 +130,7 @@ enum
     r->setPhysics(p);
     r->setCamera(c);
     r->setEditor(e);
+    r->setDebug(YES);
     r->init();
     
     Game *g = new Game();

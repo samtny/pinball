@@ -30,6 +30,7 @@
 		4C4B668B1FBA391100F1C55D /* PinballGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B668A1FBA391100F1C55D /* PinballGame.m */; };
 		4C4B668E1FBA3E6800F1C55D /* GameTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */; };
 		4C4B668F1FBA3E6800F1C55D /* GameTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */; };
+		4C4B66921FBA539800F1C55D /* LuaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B66911FBA539800F1C55D /* LuaFile.m */; };
 		4C92A1231FB0E87100806214 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C92A1221FB0E87100806214 /* Default-568h@2x.png */; };
 		4CA8F3FA1FB3A82D000AB9AE /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */; };
 		4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8F3FB1FB3A83F000AB9AE /* libshared.a */; };
@@ -120,6 +121,8 @@
 		4C4B668A1FBA391100F1C55D /* PinballGame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PinballGame.m; sourceTree = "<group>"; };
 		4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameTableViewController.h; sourceTree = "<group>"; };
 		4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameTableViewController.m; sourceTree = "<group>"; };
+		4C4B66901FBA538500F1C55D /* LuaFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuaFile.h; sourceTree = "<group>"; };
+		4C4B66911FBA539800F1C55D /* LuaFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuaFile.m; sourceTree = "<group>"; };
 		4C92A1221FB0E87100806214 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		4C92A1241FB0E91200806214 /* Pinball-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pinball-Prefix.pch"; sourceTree = "<group>"; };
 		4CA8F3F91FB3A82D000AB9AE /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = "../lib/chipmunk/Build/Products/Debug-iphonesimulator/libchipmunk.a"; sourceTree = "<group>"; };
@@ -159,8 +162,8 @@
 				4B170204164AAC50007D4A2F /* Pinball */,
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
-				4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */,
 				4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */,
+				4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */,
 				4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */,
 				4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */,
 			);
@@ -214,6 +217,8 @@
 				4C4B668A1FBA391100F1C55D /* PinballGame.m */,
 				4C4B668C1FBA3E6800F1C55D /* GameTableViewController.h */,
 				4C4B668D1FBA3E6800F1C55D /* GameTableViewController.m */,
+				4C4B66901FBA538500F1C55D /* LuaFile.h */,
+				4C4B66911FBA539800F1C55D /* LuaFile.m */,
 			);
 			path = Pinball;
 			sourceTree = "<group>";
@@ -413,6 +418,7 @@
 				4B170216164AAC50007D4A2F /* GameViewController.mm in Sources */,
 				4C4B668B1FBA391100F1C55D /* PinballGame.m in Sources */,
 				4C4B66861FBA2A8800F1C55D /* MainTableViewController.m in Sources */,
+				4C4B66921FBA539800F1C55D /* LuaFile.m in Sources */,
 				4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -553,7 +559,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
@@ -587,8 +593,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

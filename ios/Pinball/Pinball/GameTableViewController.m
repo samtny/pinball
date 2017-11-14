@@ -77,12 +77,15 @@
         default:
             switch (indexPath.row) {
                 case 0:
-                    [[cell textLabel] setText:@"Physics"];
+                    [[cell textLabel] setText:@"Forces"];
                     break;
                 case 1:
-                    [[cell textLabel] setText:@"Rules"];
+                    [[cell textLabel] setText:@"Materials"];
                     break;
                 case 2:
+                    [[cell textLabel] setText:@"Rules"];
+                    break;
+                case 3:
                     [[cell textLabel] setText:@"Layout"];
                     break;
             }
@@ -103,6 +106,42 @@
                     [gameController setGame:game];
                     
                     [self.navigationController pushViewController:gameController animated:YES];
+                    
+                    break;
+                }
+                    
+                default:
+                    break;
+            }
+            
+        case 1:
+            switch (indexPath.row) {
+                case 0:
+                {
+                    // edit Forces:
+                    NSString *scriptFileName = @"forces.lua";
+                    
+                    NSString *prefix = [scriptFileName stringByDeletingPathExtension];
+                    NSString *suffix = [scriptFileName pathExtension];
+                    NSString *dir = [@"resource" stringByAppendingPathComponent:[self.game identifier]];
+                    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
+                    
+                    
+                    
+                    break;
+                }
+                    
+                case 1:
+                {
+                    // edit Material:
+                    NSString *scriptFileName = @"materials.lua";
+                    
+                    NSString *prefix = [scriptFileName stringByDeletingPathExtension];
+                    NSString *suffix = [scriptFileName pathExtension];
+                    NSString *dir = [@"resource" stringByAppendingPathComponent:[self.game identifier]];
+                    NSString *filePath = [[NSBundle mainBundle] pathForResource:prefix ofType:suffix inDirectory:dir];
+                    
+                    
                     
                     break;
                 }
