@@ -4,7 +4,7 @@ parts = {
 		s = "ball",
 		v = 1,
 		m = "ball",
-		r1 = 9.7,
+		r1 = 0.2826,
 		t = {
 			n = "pinball",
 			x = 0,
@@ -12,153 +12,132 @@ parts = {
 			a = 0.0
 		}
 	},
-	duck = {
-		s = "ball",
+	captive = {
+		s = "captive",
 		v = 1,
 		m = "ball",
-		r1 = 1.53,
+		r1 = 0.2826,
 		t = {
-			n = "duck",
+			n = "pinball",
 			x = 0,
 			y = 0,
 			a = 0.0
 		}
 	},
-	butterfly = {
-		s = "ball",
-		v = 1,
-		m = "ball",
-		r1 = 0.93,
-		t = {
-			n = "butterfly",
-			x = 0,
-			y = 0,
-			a = 0.0
-		}
-	},
-	pinwheel = {
-		s = "ball",
-		v = 1,
-		m = "ball",
-		r1 = 1.02,
-		t = {
-			n = "pinwheel",
-			x = 0,
-			y = 0,
-			a = 0.0
-		}
-	},
-	pinwheel2 = {
-		s = "ball",
-		v = 1,
-		m = "ball",
-		r1 = 1.02,
-		t = {
-			n = "pinwheel2",
-			x = 0,
-			y = 0,
-			a = 0.0
-		}
-	},
-	post = {
+	post_l = {
 		s = "circle",
 		v = 1,
 		m = "rubber",
-		r1 = 0.35
+		r1 = 0.2316
+	},
+	post_m = {
+		s = "circle",
+		v = 1,
+		m = "rubber",
+		r1 = 0.1645	
+	},
+	post_s = {
+		s = "circle",
+		v = 1,
+		m = "rubber",
+		r1 = 0.1384
+	},
+	post_t = {
+		s = "circle",
+		v = 1,
+		m = "rubber",
+		r1 = 0.0968
 	},
 	rubber = {
 		s = "segment",
 		v = 2,
 		m = "rubber",
-		r1 = 0.125
+		r1 = 0.01
 	},
 	wireGuide = {
 		s = "segment",
 		v = 2,
 		m = "wire",
-		r1 = 0.125
+		r1 = 0.01
 	},
 	woodGuide = {
 		s = "segment",
 		v = 2,
 		m = "wood",
-		r1 = 0.125
+		r1 = 0.01
 	},
-	plastic = {
+	metalGuide = {
 		s = "segment",
-		v = -1,
-		m = "plastic",
-		r1 = 0.50
+		v = 2,
+		m = "steel",
+		r1 = 0.01
 	},
 	box = {
 		s = "box", -- "box" shape defined internally - internal winding is clockwise from blh
 		v = 4,
-		m = "wood",
-		r1 = 0.25 ,
-		t = {
-			n = "background",
-			x = 0,
-			y = 0,
-			a = 0.0
-		}
+		m = "box",
+		r1 = 0.03
 	},
 	flipper = {
 		s = "flipper", -- "flipper" shape defined internally
 		v = 3,
 		m = "flipper",
-		r1 = 0.75,
-		r2 = 0.49,
-		t = {
-			n = "flipper",
-			x = 1.35,
-			y = 0,
-			a = 0.0
-		}
+		r1 = 0.2313,
+		r2 = 0.1144
+	},
+	flipper_s = {
+		s = "flipper",
+		v = 3,
+		m = "flipper",
+		r1 = 0.2274,
+		r2 = 0.1140
+	},
+	plunger = {
+		s = "segment",
+		v = 2,
+		m = "steel",
+		r1 = 0.5168
 	},
 	slingshot = {
 		s = "slingshot", -- "slingshot" shape defined internally
 		v = 2,
 		m = "rubber",
-		r1 = 0.125
+		r1 = 0.2316
 	},
 	target = {
 		s = "target", -- "target" shape defined internally
 		v = 2,
 		m = "plastic",
-		r1 = 0.175
+		r1 = 0.03
 	},
 	switch = {
 		s = "switch", -- "switch" shape defined internally (sensor)
 		v = 2,
-		r1 = 0.05
+		r1 = 0.01
 	},
 	popbumper = {
 		s = "popbumper", -- "popbumper" shape defined internally
 		v = 1,
 		m = "rubber",
-		r1 = 1.1
+		r1 = 0.5921
 	},
-	roundLamp = {
-		s = "roundLamp", -- "roundLamp" shape defined internally
-		v = 1,
-		r1 = 0.5
-	},
-	roundLampSmall = {
-		s = "roundLamp",
-		v = 1,
-		r1 = 0.25
-	},
-	arrowLamp = {
-		s = "arrowLamp", -- "arrowLamp" shape defined internally
-		v = 2,
-		r1 = 0.25,
-		r2 = 0.17
-	},
-	notch = {
+	groove = {
 		s = "notch", -- "notch" shape defined internally
 		v = 2,
-		r1 = 0.125
-	}
+		r1 = 0.02
+	},
+	oneway = {
+		s = "segment",
+		v = 2,
+		m = "steel",
+		r1 = 0.01
+	},
+    kraken = {
+        s = "kraken",
+        v = 1,
+        m = "lazysusan",
+        r1 = 3.5
+    }
 
 }
 

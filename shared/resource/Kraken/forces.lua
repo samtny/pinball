@@ -3,31 +3,32 @@ forces = {
 
 	gravityBase = { 0.0, -9.80665 },
 	tableAngle = 6.5,
-	gravity = { 0.0, -9.80665 * ( 10.5 / 90.0 ) },
+	gravity = { 0.0, -9.80665 * math.sin(6.5 * (6.5 / 180)) },
 	
-	boxStiffness = 500.0, -- steel = 200
-	boxDamping = 70.0,
+	boxStiffness = 10000, -- steel = 200
+	boxDamping = 1000,
 
-	flipImpulse = 0.095,
-	flipForce = 0.7,
-	unflipImpulse = 0.046,
-	unflipForce = 0.1,
+	flipImpulse = 0.13,
+	flipForce = 8,
 
-	slingshotRestLength = 0.6,
-	slingshotSwitchGap = 0.25,
-	slingshotStiffness = 25.0,
-	slingshotDamping = 0.9,
-	slingshotImpulse = 0.007,
+	unflipImpulse = 0.1,
+	unflipForce = 3,
 
-	targetStiffness = 190.0, -- glass == 90
-	targetDamping = 0.50,
-	targetRestLength = 0.9,
-	targetSwitchGap = 0.25,
+	slingshotRestLength = 0.4,
+	slingshotSwitchGap = 0.3,
+	slingshotStiffness = 15.0,
+	slingshotDamping = 0.5,
+	slingshotImpulse = 0.07,
 
-	popBumperThreshold = 0.005,
-	popBumperImpulse = 0.0055,
+	targetStiffness = 190, -- glass == 90
+	targetDamping = 0.10,
+	targetRestLength = 0.3,
+	targetSwitchGap = 0.05,
 
-	nudgeImpulse = 1.9
+	popBumperThreshold = 0,
+	popBumperImpulse = 0.025,
+
+	nudgeImpulse = 30
 
 }
 

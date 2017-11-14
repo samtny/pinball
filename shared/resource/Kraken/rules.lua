@@ -1,4 +1,4 @@
-
+initDone = false
 gameInProgress = false
 
 startingScore = 0
@@ -61,6 +61,7 @@ function handleSwitchClosed(switch, ball)
         playSound("flip", LOOP_INTERVAL_NONE)
 	elseif switch == "rbutton" then
 		activateMech("rflipper")
+		activateMech("uflipper")
         playSound("flip", LOOP_INTERVAL_NONE)
 	end
 end
@@ -114,6 +115,7 @@ function handleSwitchOpened(switch, ball)
 		deactivateMech("lflipper")
 	elseif switch == "rbutton" then
 		deactivateMech("rflipper")
+		deactivateMech("uflipper")
 	end
 end
 
@@ -145,9 +147,9 @@ function startButtonPressed()
 	
 	print "startButtonPressed"
 	
-	if gameInProgress == false then
+	--if gameInProgress == false then
 		startGame()
-	end
+	--end
 
 end
 
@@ -164,7 +166,14 @@ function startGame()
 	
 	--doCameraEffect("swirlin")
 
-	resetAll()
+	resetScore()
+	resetAudio()
+	resetMechs()
+	resetLights()
+	if initDone == false then
+		resetCamera()
+		initDone = true
+	end
 	serveBallToTrough()
 	--playSound(gameStartMusic, 10)
 
@@ -215,7 +224,9 @@ function resetAudio()
 end
 
 function resetMechs()
-	--C API stub
+    deactivateMech("lflipper")
+    deactivateMech("rflipper")
+    deactivateMech("uflipper")
 end
 
 function resetLights()
