@@ -108,14 +108,20 @@ parts = {
             switchGap = 0.03,
             stiffness = 13.0,
             damping = 0.1,
-            impulse = 0.13
+            impulse = 0.08
         }
 	},
 	target = {
 		s = "target", -- "target" shape defined internally
 		v = 2,
 		m = "plastic",
-		r1 = 0.03
+		r1 = 0.03,
+        meta = {
+            stiffness = 90.0, -- glass == 90
+            damping = 0.10,
+            restLength = 0.02,
+            switchGap = 0.005
+        }
 	},
 	switch = {
 		s = "switch", -- "switch" shape defined internally (sensor)
@@ -126,7 +132,11 @@ parts = {
 		s = "popbumper", -- "popbumper" shape defined internally
 		v = 1,
 		m = "rubber",
-		r1 = 0.5921
+		r1 = 0.5921,
+        meta = {
+            threshold = 0,
+            impulse = 0.025
+        }
 	},
 	groove = {
 		s = "notch", -- "notch" shape defined internally
