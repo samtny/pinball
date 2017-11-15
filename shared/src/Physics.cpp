@@ -7,15 +7,11 @@
 
 #include "Playfield.h"
 
-#include "Parts/Flipper.h"
-
-#include "Parts/Slingshot.h"
+#include "Parts.h"
 
 #include "Util.h"
 
 #include "chipmunk/chipmunk.h"
-
-#include "CollisionTypes.h"
 
 #include <iostream>
 
@@ -42,14 +38,6 @@ static double unflipImpulse = 0.02f;
 
 static double flipForce = 0.2f;
 static double unflipForce = 0.2f;
-
-static double _targetRestLength = 0;
-static double _targetSwitchGap = 0;
-static double _targetStiffness = 0;
-static double _targetDamping = 0;
-
-static double _popBumperThreshold = 0.005;
-static double _popBumperImpulse = 0.04;
 
 static double _nudgeImpulse = 1.0;
 
@@ -88,13 +76,7 @@ void Physics::init() {
 
 	_space = cpSpaceNew();
 	cpSpaceSetIterations(_space, iterations);
-	//cpSpaceSetCollisionSlop(_space, 0.9);
-	//cpSpaceSetDamping(_space, 0.1);
-	
-	// TODO: move to properties of item/object;
-	_targetRestLength *= 1 / scale;
-	_targetSwitchGap *= 1 / scale;
-	
+		
 	this->createObjects();
 	
 	this->initCollisionHandlers();
@@ -155,65 +137,10 @@ static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
-static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	if (!(arb->CP_PRIVATE(state) == cpArbiterStateFirstColl)) return;
-
-	cpVect impulse = cpArbiterTotalImpulse(arb);
-	
-	if (cpvlength(impulse) >= _popBumperThreshold) {
-		
-		cpBody *ball, *pop;
-		cpArbiterGetBodies(arb, &ball, &pop);
-
-		cpVect normal = cpArbiterGetNormal(arb, 0);
-
-		cpBodyApplyImpulse(ball, cpvmult(normal, -_popBumperImpulse), cpvzero);
-		
-		LayoutItem *l = (LayoutItem *)pop->data;
-
-		physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
-
-	}
-
-}
-
-static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	cpShape *target, *sw;
-	cpArbiterGetShapes(arb, &target, &sw);
-
-	LayoutItem *l = (LayoutItem *)target->data;
-
-    if (l) {
-        physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
-    }
-
-	// we don't need more information from this
-	return 0;
-
-}
-
 cpSpace *Physics::getSpace() {
 	return _space;
 }
-/*
-void Physics::applyScale(LayoutItem *iprops) {
 
-	for (int i = 0; i < iprops->count; i++) {
-		iprops->v[i].x *= 1 / scale;
-		iprops->v[i].y *= 1 / scale;
-	}
-
-	float localScale = scale * 1 / iprops->s;
-
-	iprops->o.r1 *= 1 / localScale;
-	iprops->o.r2 *= 1 / localScale;
-	
-	//iprops->o.t.s *= 1 / scale;
-	
-}
-*/
 float Physics::getScale() {
 	return scale;
 }
@@ -301,7 +228,7 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "segment") == 0) {
 		this->createSegment(item);
 	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
-		new Flipper(item, shapeGroupFlippers, _boxBody);
+		new Flipper(item, shapeGroupFlippers, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
         this->createBall(item);
     } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
@@ -309,13 +236,13 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "circle") == 0) {
 		this->createCircle(item);
 	} else if (strcmp(item->o->s.c_str(), "target") == 0) {
-		this->createTarget(item, NULL);
+        new Target(item, shapeGroupTargets, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "popbumper") == 0) {
-		this->createPopbumper(item);
+        new PopBumper(item, shapeGroupPopbumpers, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "slingshot") == 0) {
-        new Slingshot(item, shapeGroupSlingshots, _boxBody);
+        new Slingshot(item, shapeGroupSlingshots, _boxBody, this);
     } else if (strcmp(item->o->s.c_str(), "kraken") == 0) {
-        this->createKraken(item);
+        new Kraken(item, shapeGroupKraken, _boxBody, this);
     }
 
 }
@@ -417,10 +344,6 @@ void Physics::createBall(LayoutItem *item) {
 
 }
 
-void Physics::createFlipper(LayoutItem *item) {
-
-}
-
 void Physics::createSwitch(LayoutItem *item) {
 
 	// TODO: meh
@@ -467,211 +390,6 @@ void Physics::createCircle(LayoutItem *item) {
 
 LayoutItem *Physics::getLayoutItem(const char *itemName) {
     return &_playfield->getLayout()->find(itemName)->second;
-}
-
-static void ballGravityVelocityFuncKraken(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
-{
-    cpVect gBox = cpvrotate(cpvforangle(physics_currentInstance->getBoxBody()->a), gravity);
-    
-    cpFloat krakenGravity = -2.0;
-    
-    // Gravitational acceleration is proportional to the inverse square of
-    // distance, and directed toward the origin. The central planet is assumed
-    // to be massive enough that it affects the satellites but not vice versa.
-    
-    LayoutItem *kraken = physics_currentInstance->getLayoutItem("kraken");
-    
-    //LayoutItem *kraken = _playfield->getLayout()->find("kraken")->second;
-    
-    cpBody *krakenBody = kraken->bodies[0];
-    
-    cpVect p = krakenBody->p;
-
-    cpFloat sqdist = cpvlengthsq(p);
-
-    cpVect gKraken = cpvmult(p, -krakenGravity / (sqdist * cpfsqrt(sqdist)));
-    
-    //cpVect g = cpvadd(gBox, gKraken);
-    cpVect g = gKraken;
-    
-    cpBodyUpdateVelocity(body, g, damping, dt);
-}
-
-static int krakenBegin(cpArbiter *arb, cpSpace *space, void *unused) {
-    
-    printf("%s", "begin");
-    
-    cpBody *ball, *kraken;
-    cpArbiterGetBodies(arb, &ball, &kraken);
-    
-    ball->velocity_func = ballGravityVelocityFuncKraken;
-    
-    return 1;
-}
-
-static void krakenSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
-    printf("%s", "separate");
-    
-    cpBody *ball, *kraken;
-    cpArbiterGetBodies(arb, &ball, &kraken);
-    
-    ball->velocity_func = ballGravityVelocityFunc;
-}
-
-void Physics::createKraken(LayoutItem *item) {
-    cpVect a = cpv(item->v[0].x, item->v[0].y);
-    
-    cpFloat area = (item->o->r1 * item->o->r1) * M_PI;
-    cpFloat mass = area * item->o->m->d;
-    
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
-    cpBodySetPos(body, a);
-    
-    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
-    cpShapeSetElasticity(shape, item->o->m->e);
-    cpShapeSetFriction(shape, item->o->m->f);
-    
-    cpShapeSetSensor(shape, true);
-    cpShapeSetCollisionType(shape, CollisionTypeKraken);
-    
-    cpShapeSetGroup(shape, shapeGroupKraken);
-    cpShapeSetUserData(shape, item);
-    
-    LayoutItem *box = &_playfield->getLayout()->find("box")->second;
-    
-    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(box->bodies[0], body, body->p));
-    
-    //constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
-    
-    //cpBodyApplyForce(body, cpv(0.0, -1.0), cpv(item->o->r1, 0.0));
-    
-    cpSpaceAddConstraint(_space, cpSimpleMotorNew(box->bodies[0], body, 2.0));
-    
-    body->data = item;
-    
-    item->bodies.push_back(body);
-}
-
-void Physics::createTarget(LayoutItem *item, void *attach) {
-
-    LayoutItem *attachItem;
-    
-    if (!attach) {
-        attachItem = &_playfield->getLayout()->find("box")->second;
-    } else {
-        attachItem = (LayoutItem *)attach;
-    }
-    
-	cpVect a = cpv(item->v[0].x, item->v[0].y);
-	cpVect b = cpv(item->v[1].x, item->v[1].y);
-	cpVect mid = cpvmult(cpvadd(a, b), 0.5);
-
-	cpFloat length = cpvdist(a, b);
-
-	cpFloat area = (item->o->r1 * length) * 2;
-	cpFloat mass = area * item->o->m->d;
-
-	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
-	cpBodySetPos(body, mid);
-	
-	// target surface normal;
-	cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
-
-	// groove
-	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
-	cpVect grooveB = body->p;
-
-    
-
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachItem->bodies[0], body, cpBodyWorld2Local(attachItem->bodies[0], grooveA), cpBodyWorld2Local(attachItem->bodies[0], grooveB), cpvzero));
-	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachItem->bodies[0], body, cpBodyWorld2Local(attachItem->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, attachItem->bodies[0], 0.0f, 0.0f));
-
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetCollisionType(shape, CollisionTypeTarget);
-	cpShapeSetGroup(shape, shapeGroupTargets);
-	cpShapeSetUserData(shape, item);
-
-	// switch
-	shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachItem->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(attachItem->bodies[0], grooveA)));
-	cpShapeSetSensor(shape, true);
-	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
-
-	item->shapes.push_back(shape);
-
-	item->bodies.push_back(body);
-
-}
-
-void Physics::createDropTarget(LayoutItem *item) {
-	cpVect a = cpv(item->v[0].x, item->v[0].y);
-	cpVect b = cpv(item->v[1].x, item->v[1].y);
-	cpVect mid = cpvmult(cpvadd(a, b), 0.5);
-
-	cpFloat length = cpvdist(a, b);
-
-	cpFloat area = (item->o->r1 * length) * 2;
-	cpFloat mass = area * item->o->m->d;
-
-	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
-	cpBodySetPos(body, mid);
-	
-	// target surface normal;
-	cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
-
-	// groove
-	cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
-	cpVect grooveB = body->p;
-
-	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
-
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpBodyWorld2Local(box->bodies[0], grooveB), cpvzero));
-	constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(box->bodies[0], body, cpBodyWorld2Local(box->bodies[0], grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, box->bodies[0], 0.0f, 0.0f));
-
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetCollisionType(shape, CollisionTypeTarget);
-	cpShapeSetGroup(shape, shapeGroupTargets);
-	cpShapeSetUserData(shape, item);
-
-	// switch
-	shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(box->bodies[0], grooveA)));
-	cpShapeSetSensor(shape, true);
-	cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
-
-	item->shapes.push_back(shape);
-
-	item->bodies.push_back(body);
-}
-
-void Physics::createPopbumper(LayoutItem *item) {
-
-	cpFloat area = (item->o->r1 * item->o->r1 * M_PI);
-	cpFloat mass = area * item->o->m->d;
-
-	cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
-	cpBodySetPos(body, cpv(item->v[0].x, item->v[0].y));
-
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
-	cpShapeSetElasticity(shape, item->o->m->e);
-	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetCollisionType(shape, CollisionTypePopbumper);
-	cpShapeSetGroup(shape, shapeGroupPopbumpers);
-	cpShapeSetUserData(shape, item);
-
-	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
-
-	cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(box->bodies[0], body, body->p));
-	constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
-
-	body->data = item;
-
-	item->bodies.push_back(body);
-
 }
 
 void Physics::activateMech(const char *mechName) {
@@ -789,20 +507,7 @@ void Physics::loadConfig() {
 	lua_close(L);
 
 }
-/*
-void Physics::addLayoutItem(layoutItem item) {
 
-	_layoutItems.insert(make_pair(item.n, item));
-
-	for (it_layoutItems it = _layoutItems.begin(); it != _layoutItems.end(); it++) {
-		LayoutItem *lprops = &(&*it)->second;
-		if (lprops->n == item.n) {
-			this->createObject(lprops);
-		}
-	}
-
-}
-*/
 void Physics::loadForces() {
     
     lua_State *L = luaL_newstate();
@@ -833,19 +538,7 @@ void Physics::loadForces() {
                         lua_rawgeti(L, -1, 2);
                         gravity.y = (float)lua_tonumber(L, -1);
                         lua_pop(L, 1);
-                                                
-					} else if (strcmp("targetStiffness", key) == 0) {
-						_targetStiffness = (float)lua_tonumber(L, -1);
-					} else if (strcmp("targetDamping", key) == 0) {
-						_targetDamping = (float)lua_tonumber(L, -1);
-					} else if (strcmp("targetRestLength", key) == 0) {
-						_targetRestLength = (float)lua_tonumber(L, -1);
-					} else if (strcmp("targetSwitchGap", key) == 0) {
-						_targetSwitchGap = (float)lua_tonumber(L, -1);
-					} else if (strcmp("popBumperImpulse", key) == 0) {
-						_popBumperImpulse = (float)lua_tonumber(L, -1);
-					} else if (strcmp("popBumperThreshold", key) == 0) {
-						_popBumperThreshold = (float)lua_tonumber(L, -1);
+                        
 					} else if (strcmp("flipImpulse", key) == 0) {
 						flipImpulse = (float)lua_tonumber(L, -1);
 					} else if (strcmp("flipForce", key) == 0) {
@@ -882,9 +575,6 @@ void Physics::initCollisionHandlers(void) {
     
     cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
     cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
-    cpSpaceAddCollisionHandler(_space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeKraken, krakenBegin, NULL, NULL, krakenSeparate, NULL);
     
 }
 

@@ -2,11 +2,12 @@
 // Created by samtny on 11/12/17.
 //
 
-#include "Parts.h"
 #include "Parts/Slingshot.h"
-#include "CollisionTypes.h"
+#include "Types.h"
 
 static double _slingshotImpulse = 0;
+
+static Physics *_physics_currentInstance;
 
 static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
     
@@ -26,8 +27,9 @@ static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
     
 }
 
-Slingshot::Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody) {
+Slingshot::Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics) {
     this->item = item;
+    _physics_currentInstance = physics;
 
     cpVect mid = cpvmult(cpvadd(item->v[0], item->v[1]), 0.5);
     

@@ -9,12 +9,15 @@
 #ifndef Slingshot_h
 #define Slingshot_h
 
-#include "shapeGroup.h"
+#include "Types.h"
+
+struct LayoutItem;
+class Physics;
 
 class Slingshot
 {
 public:
-    Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody);
+    Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics);
     
 private:
     LayoutItem *item;

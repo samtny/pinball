@@ -2,12 +2,16 @@
 // Created by samtny on 11/12/17.
 //
 
-#include "Parts.h"
 #include "Parts/Flipper.h"
+#include "Types.h"
 
-Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody)
+static Physics *_physics_currentInstance;
+
+Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics)
 {
     this->item = item;
+    
+    _physics_currentInstance = physics;
 
     cpFloat area = (item->o->r1 * M_PI) * 2; // approx
     cpFloat mass = area * item->o->m->d;
