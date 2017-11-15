@@ -45,7 +45,7 @@ function handleSwitchClosed(switch, ball)
 	if ballInPlay == true or switch == troughSwitch or switch == "troughSwitch" then -- TODO: decide int vs. strings plzz...
 		if switch == troughSwitch or switch == "troughSwitch" then
 			troughSwitchClosed(ball)
-		elseif switch == target1 then
+		elseif switch == target_1 then
 			leftTargetBankHit(1)
 		end
 	elseif switch == "startButton" then
@@ -54,8 +54,10 @@ function handleSwitchClosed(switch, ball)
 		addToScore(waterfallSwitchValue)
 	elseif switch == "pop0" then
 		addToScore(popBumperValue)
-	elseif switch == "target0" or switch == "target1" then
+	elseif switch == "target_0" or switch == "target_1" then
 		addToScore(targetValue)
+    elseif string.find(switch, "target", 1, true) == 1 then
+        addToScore(targetValue)
 	elseif switch == "lbutton" then
 		activateMech("lflipper")
         playSound("flip", LOOP_INTERVAL_NONE)
