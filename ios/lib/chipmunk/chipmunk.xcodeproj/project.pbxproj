@@ -396,6 +396,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../lib/chipmunk/include/chipmunk\"";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -409,6 +410,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4KK757C74H;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../lib/chipmunk/include/chipmunk\"";
+				OTHER_CFLAGS = "-DNDEBUG";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
