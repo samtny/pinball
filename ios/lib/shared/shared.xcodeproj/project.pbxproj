@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C29F2F01FBDE92600EB01EC /* Switch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C29F2EF1FBDE92600EB01EC /* Switch.cpp */; };
 		4C4B667E1FB9E72400F1C55D /* Flipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B667D1FB9E72400F1C55D /* Flipper.cpp */; };
 		4C4B66951FBB8FD200F1C55D /* Slingshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B66931FBB8FD200F1C55D /* Slingshot.cpp */; };
 		4C4B669C1FBC905A00F1C55D /* PopBumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B669B1FBC905A00F1C55D /* PopBumper.cpp */; };
@@ -36,6 +37,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C29F2EE1FBDE8EC00EB01EC /* Switch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Switch.h; path = ../../../shared/include/Parts/Switch.h; sourceTree = "<group>"; };
+		4C29F2EF1FBDE92600EB01EC /* Switch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Switch.cpp; path = ../../../shared/src/Parts/Switch.cpp; sourceTree = "<group>"; };
 		4C4B66371FB5011600F1C55D /* resource */ = {isa = PBXFileReference; lastKnownFileType = folder; name = resource; path = ../../../shared/resource; sourceTree = "<group>"; };
 		4C4B667B1FB9E70700F1C55D /* Flipper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flipper.h; path = ../../../shared/include/Parts/Flipper.h; sourceTree = "<group>"; };
 		4C4B667D1FB9E72400F1C55D /* Flipper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Flipper.cpp; path = ../../../shared/src/Parts/Flipper.cpp; sourceTree = "<group>"; };
@@ -129,6 +132,7 @@
 				4C4B66A41FBCA93700F1C55D /* Kraken.h */,
 				4C4B669D1FBC90E500F1C55D /* PopBumper.h */,
 				4C4B66971FBB909C00F1C55D /* Slingshot.h */,
+				4C29F2EE1FBDE8EC00EB01EC /* Switch.h */,
 				4C4B669E1FBC99BE00F1C55D /* Target.h */,
 			);
 			name = Parts;
@@ -143,6 +147,7 @@
 				4C4B669B1FBC905A00F1C55D /* PopBumper.cpp */,
 				4C4B66931FBB8FD200F1C55D /* Slingshot.cpp */,
 				4C4B669F1FBC99CA00F1C55D /* Target.cpp */,
+				4C29F2EF1FBDE92600EB01EC /* Switch.cpp */,
 			);
 			name = Parts;
 			sourceTree = "<group>";
@@ -225,6 +230,7 @@
 				4CE803A81FB2452800FEE04E /* Renderer.cpp in Sources */,
 				4C4B66A31FBC9D1400F1C55D /* DropTarget.cpp in Sources */,
 				4CE803A91FB2452800FEE04E /* Camera.cpp in Sources */,
+				4C29F2F01FBDE92600EB01EC /* Switch.cpp in Sources */,
 				4C4B66951FBB8FD200F1C55D /* Slingshot.cpp in Sources */,
 				4CE803AA1FB2452800FEE04E /* Drawing.cpp in Sources */,
 				4C4B66A01FBC99CA00F1C55D /* Target.cpp in Sources */,

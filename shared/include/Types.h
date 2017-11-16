@@ -139,6 +139,7 @@ enum CollisionType {
 enum shapeGroup {
     shapeGroupBox,
     shapeGroupBall,
+    shapeGroupSwitch,
     shapeGroupFlippers,
     shapeGroupTargets,
     shapeGroupPopbumpers,

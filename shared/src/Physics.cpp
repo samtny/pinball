@@ -105,38 +105,6 @@ int Physics::ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
 
 }
 
-static int switchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	cpShape *a;
-	cpShape *b;
-	cpArbiterGetShapes(arb, &a, &b);
-
-	LayoutItem *sw = (LayoutItem *)a->data;
-	LayoutItem *ball = (LayoutItem *)b->data;
-	
-    if (sw && ball) {
-        physics_currentInstance->getDelegate()->switchClosed(sw->n.c_str(), ball->n.c_str());
-    }
-
-	return 1;
-
-}
-
-static void switchSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	cpShape *a;
-	cpShape *b;
-	cpArbiterGetShapes(arb, &a, &b);
-
-	LayoutItem *sw = (LayoutItem *)a->data;
-	LayoutItem *ball = (LayoutItem *)b->data;
-
-    if (sw && ball) {
-        physics_currentInstance->getDelegate()->switchOpened(sw->n.c_str(), ball->n.c_str());
-    }
-
-}
-
 cpSpace *Physics::getSpace() {
 	return _space;
 }
@@ -232,7 +200,7 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
         this->createBall(item);
     } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
-		this->createSwitch(item);
+        new Switch(item, shapeGroupSwitch, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "circle") == 0) {
 		this->createCircle(item);
 	} else if (strcmp(item->o->s.c_str(), "target") == 0) {
@@ -342,20 +310,6 @@ void Physics::createBall(LayoutItem *item) {
 
 	item->bodies.push_back(body);
 
-}
-
-void Physics::createSwitch(LayoutItem *item) {
-
-	// TODO: meh
-	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
-	
-	cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[0]), cpBodyWorld2Local(box->bodies[0], item->v[1]), item->o->r1));
-	cpShapeSetSensor(shape, true);
-	cpShapeSetCollisionType(shape, CollisionTypeSwitch);
-	cpShapeSetUserData(shape, item);
-
-	item->shapes.push_back(shape);
-		
 }
 
 void Physics::createSegment(LayoutItem *item) {
@@ -574,7 +528,7 @@ void Physics::loadForces() {
 void Physics::initCollisionHandlers(void) {
     
     cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeSwitch, switchBegin, NULL, NULL, switchSeparate, NULL);
+    
     
 }
 
