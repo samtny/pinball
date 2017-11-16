@@ -66,7 +66,6 @@ public:
 protected:
 	void loadConfig();
     void loadForces();
-	void initCollisionHandlers();
 	void createBox(LayoutItem *iprops);
     void createBall(LayoutItem *iprops);
 	void createDropTarget(LayoutItem *iprops);

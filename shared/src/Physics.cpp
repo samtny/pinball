@@ -78,16 +78,8 @@ void Physics::init() {
 	cpSpaceSetIterations(_space, iterations);
 		
 	this->createObjects();
-	
-	this->initCollisionHandlers();
 
 	cpSpaceSetGravity(_space, gravity);
-
-}
-
-static int __ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	return physics_currentInstance->ballPreSolve(arb, space, unused);
 
 }
 
@@ -198,7 +190,7 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
 		new Flipper(item, shapeGroupFlippers, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
-        this->createBall(item);
+        new Ball(item, shapeGroupBall, _boxBody, this);
     } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
         new Switch(item, shapeGroupSwitch, _boxBody, this);
 	} else if (strcmp(item->o->s.c_str(), "circle") == 0) {
@@ -276,40 +268,6 @@ void Physics::createBox(LayoutItem *item) {
 
 cpBody *Physics::getBoxBody() {
 	return _boxBody;
-}
-
-static int ballCollisionGroup = 2048;
-
-static void
-ballGravityVelocityFunc(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
-{
-	cpVect g = cpvrotate(cpvforangle(physics_currentInstance->getBoxBody()->a), gravity);
-	
-	cpBodyUpdateVelocity(body, g, damping, dt);
-}
-
-void Physics::createBall(LayoutItem *item) {
-    
-    cpFloat area = (item->o->r1 * item->s * item->o->r1 * item->s * M_PI);
-    cpFloat mass = area * item->o->m->d;
-    
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1 * item->s, cpvzero)));
-    cpBodySetPos(body, item->v[0]);
-    body->velocity_func = ballGravityVelocityFunc;
-    
-    cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1 * item->s, cpvzero));
-    cpShapeSetElasticity(shape, item->o->m->e);
-    cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupBall + ballCollisionGroup); // TODO: ball shape group is kludged
-	cpShapeSetCollisionType(shape, CollisionTypeBall);
-	cpShapeSetUserData(shape, item);
-
-	body->data = item;
-
-	ballCollisionGroup++;
-
-	item->bodies.push_back(body);
-
 }
 
 void Physics::createSegment(LayoutItem *item) {
@@ -522,13 +480,6 @@ void Physics::loadForces() {
 	}
     
 	lua_close(L);
-    
-}
-
-void Physics::initCollisionHandlers(void) {
-    
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
-    
     
 }
 

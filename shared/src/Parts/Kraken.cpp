@@ -38,8 +38,8 @@ static void ballGravityVelocityFuncKraken(cpBody *body, cpVect gravity, cpFloat 
     
     cpVect gKraken = cpvmult(p, -krakenGravity / (sqdist * cpfsqrt(sqdist)));
     
-    //cpVect g = cpvadd(gBox, gKraken);
-    cpVect g = gKraken;
+    cpVect g = cpvadd(gBox, gKraken);
+    //cpVect g = gKraken;
     
     cpBodyUpdateVelocity(body, g, damping, dt);
 }
