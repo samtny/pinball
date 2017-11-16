@@ -16,7 +16,6 @@
 		4CE803A81FB2452800FEE04E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE8039F1FB2452700FEE04E /* Renderer.cpp */; };
 		4CE803A91FB2452800FEE04E /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A01FB2452700FEE04E /* Camera.cpp */; };
 		4CE803AA1FB2452800FEE04E /* Drawing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A11FB2452700FEE04E /* Drawing.cpp */; };
-		4CE803AB1FB2452800FEE04E /* glfont2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A21FB2452700FEE04E /* glfont2.cpp */; };
 		4CE803AC1FB2452800FEE04E /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A31FB2452700FEE04E /* Util.cpp */; };
 		4CE803AD1FB2452800FEE04E /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A41FB2452800FEE04E /* Game.cpp */; };
 		4CE803AE1FB2452800FEE04E /* Editor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4CE803A51FB2452800FEE04E /* Editor.cpp */; };
@@ -54,13 +53,11 @@
 		4CE8039F1FB2452700FEE04E /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../../../shared/src/Renderer.cpp; sourceTree = "<group>"; };
 		4CE803A01FB2452700FEE04E /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = ../../../shared/src/Camera.cpp; sourceTree = "<group>"; };
 		4CE803A11FB2452700FEE04E /* Drawing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Drawing.cpp; path = ../../../shared/src/Drawing.cpp; sourceTree = "<group>"; };
-		4CE803A21FB2452700FEE04E /* glfont2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = glfont2.cpp; path = ../../../shared/src/glfont2.cpp; sourceTree = "<group>"; };
 		4CE803A31FB2452700FEE04E /* Util.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Util.cpp; path = ../../../shared/src/Util.cpp; sourceTree = "<group>"; };
 		4CE803A41FB2452800FEE04E /* Game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Game.cpp; path = ../../../shared/src/Game.cpp; sourceTree = "<group>"; };
 		4CE803A51FB2452800FEE04E /* Editor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Editor.cpp; path = ../../../shared/src/Editor.cpp; sourceTree = "<group>"; };
 		4CE803A61FB2452800FEE04E /* Physics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Physics.cpp; path = ../../../shared/src/Physics.cpp; sourceTree = "<group>"; };
 		4CE803A71FB2452800FEE04E /* Playfield.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Playfield.cpp; path = ../../../shared/src/Playfield.cpp; sourceTree = "<group>"; };
-		4CE803B11FB2472600FEE04E /* glfont2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glfont2.h; path = ../../../shared/include/glfont2.h; sourceTree = "<group>"; };
 		4CE803B21FB2472600FEE04E /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = ../../../shared/include/Util.h; sourceTree = "<group>"; };
 		4CE803B31FB2472600FEE04E /* PinballBridgeInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PinballBridgeInterface.h; path = ../../../shared/include/PinballBridgeInterface.h; sourceTree = "<group>"; };
 		4CE803B41FB2472600FEE04E /* TimerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerDelegate.h; path = ../../../shared/include/TimerDelegate.h; sourceTree = "<group>"; };
@@ -73,7 +70,6 @@
 		4CE803BB1FB2472700FEE04E /* Drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Drawing.h; path = ../../../shared/include/Drawing.h; sourceTree = "<group>"; };
 		4CE803BC1FB2472700FEE04E /* Editor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Editor.h; path = ../../../shared/include/Editor.h; sourceTree = "<group>"; };
 		4CE803BD1FB2472700FEE04E /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../shared/include/Camera.h; sourceTree = "<group>"; };
-		4CE803BE1FB2472700FEE04E /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Texture.h; path = ../../../shared/include/Texture.h; sourceTree = "<group>"; };
 		4CE803BF1FB2472700FEE04E /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Types.h; path = ../../../shared/include/Types.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,14 +92,12 @@
 				4CE803BB1FB2472700FEE04E /* Drawing.h */,
 				4CE803BC1FB2472700FEE04E /* Editor.h */,
 				4CE803B51FB2472600FEE04E /* Game.h */,
-				4CE803B11FB2472600FEE04E /* glfont2.h */,
 				4CE803B91FB2472700FEE04E /* Parts.h */,
 				4CE803BA1FB2472700FEE04E /* Physics.h */,
 				4CE803B61FB2472700FEE04E /* PhysicsDelegate.h */,
 				4CE803B31FB2472600FEE04E /* PinballBridgeInterface.h */,
 				4CE803B81FB2472700FEE04E /* Playfield.h */,
 				4CE803B71FB2472700FEE04E /* Renderer.h */,
-				4CE803BE1FB2472700FEE04E /* Texture.h */,
 				4CE803B41FB2472600FEE04E /* TimerDelegate.h */,
 				4CE803BF1FB2472700FEE04E /* Types.h */,
 				4CE803B21FB2472600FEE04E /* Util.h */,
@@ -119,28 +113,12 @@
 				4CE803A11FB2452700FEE04E /* Drawing.cpp */,
 				4CE803A51FB2452800FEE04E /* Editor.cpp */,
 				4CE803A41FB2452800FEE04E /* Game.cpp */,
-				4CE803A21FB2452700FEE04E /* glfont2.cpp */,
 				4CE803A61FB2452800FEE04E /* Physics.cpp */,
 				4CE803A71FB2452800FEE04E /* Playfield.cpp */,
 				4CE8039F1FB2452700FEE04E /* Renderer.cpp */,
 				4CE803A31FB2452700FEE04E /* Util.cpp */,
 			);
 			name = src;
-			sourceTree = "<group>";
-		};
-		4C4B66381FB50A4C00F1C55D /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				4C4B66391FB50A5400F1C55D /* boost */,
-			);
-			name = lib;
-			sourceTree = "<group>";
-		};
-		4C4B66391FB50A5400F1C55D /* boost */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = boost;
 			sourceTree = "<group>";
 		};
 		4C4B66791FB9E6ED00F1C55D /* Parts */ = {
@@ -172,7 +150,6 @@
 		4CE803871FB2437F00FEE04E = {
 			isa = PBXGroup;
 			children = (
-				4C4B66381FB50A4C00F1C55D /* lib */,
 				4C4B66371FB5011600F1C55D /* resource */,
 				4C14E9971FB3943B000A9591 /* include */,
 				4C14E9981FB39457000A9591 /* src */,
@@ -252,7 +229,6 @@
 				4CE803AA1FB2452800FEE04E /* Drawing.cpp in Sources */,
 				4C4B66A01FBC99CA00F1C55D /* Target.cpp in Sources */,
 				4C4B669C1FBC905A00F1C55D /* PopBumper.cpp in Sources */,
-				4CE803AB1FB2452800FEE04E /* glfont2.cpp in Sources */,
 				4C4B667E1FB9E72400F1C55D /* Flipper.cpp in Sources */,
 				4CE803AC1FB2452800FEE04E /* Util.cpp in Sources */,
 				4CE803AD1FB2452800FEE04E /* Game.cpp in Sources */,
@@ -380,6 +356,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../lib/chipmunk/include\"",
 					"\"$(SRCROOT)/../../../lib/lua/include\"",
+					"\"$(SRCROOT)/../../../lib/glfont2/include\"",
 					"\"$(SRCROOT)/../../../lib/boost\"",
 					"\"$(SRCROOT)/../../../shared/include\"",
 				);
@@ -400,6 +377,7 @@
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../lib/chipmunk/include\"",
 					"\"$(SRCROOT)/../../../lib/lua/include\"",
+					"\"$(SRCROOT)/../../../lib/glfont2/include\"",
 					"\"$(SRCROOT)/../../../lib/boost\"",
 					"\"$(SRCROOT)/../../../shared/include\"",
 				);

@@ -21,6 +21,7 @@
 		4BC95002165C5A6800AF8A8E /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95001165C5A6800AF8A8E /* OpenAL.framework */; };
 		4BC95004165C5A8A00AF8A8E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BC95003165C5A8A00AF8A8E /* AVFoundation.framework */; };
 		4BE9DFD8164C11F200599EB8 /* PinballBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */; };
+		4C29F2ED1FBDE4A300EB01EC /* libglfont2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29F2EA1FBDE4A300EB01EC /* libglfont2.a */; };
 		4C4B66341FB4B60B00F1C55D /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66331FB4B60B00F1C55D /* Media.xcassets */; };
 		4C4B66361FB4BAD900F1C55D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */; };
 		4C4B66731FB5FF0200F1C55D /* libSoundManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B66721FB5FF0200F1C55D /* libSoundManager.a */; };
@@ -38,6 +39,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C29F2E21FBDE41C00EB01EC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C29F2DE1FBDE41C00EB01EC /* glfont2.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C29F2CD1FBDE2FB00EB01EC;
+			remoteInfo = glfont2;
+		};
 		4C4B666D1FB5FE1B00F1C55D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */;
@@ -110,6 +118,8 @@
 		4BC95009165C68E400AF8A8E /* flip.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = flip.caf; sourceTree = "<group>"; };
 		4BE9DFD6164C11F200599EB8 /* PinballBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinballBridge.h; sourceTree = "<group>"; };
 		4BE9DFD7164C11F200599EB8 /* PinballBridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PinballBridge.mm; sourceTree = "<group>"; };
+		4C29F2DE1FBDE41C00EB01EC /* glfont2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glfont2.xcodeproj; path = ../lib/glfont2/glfont2.xcodeproj; sourceTree = "<group>"; };
+		4C29F2EA1FBDE4A300EB01EC /* libglfont2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglfont2.a; path = "../lib/glfont2/Build/Products/Debug-iphonesimulator/libglfont2.a"; sourceTree = "<group>"; };
 		4C4B66331FB4B60B00F1C55D /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		4C4B66351FB4BAD900F1C55D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SoundManager.xcodeproj; path = ../lib/SoundManager/SoundManager.xcodeproj; sourceTree = "<group>"; };
@@ -138,6 +148,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C29F2ED1FBDE4A300EB01EC /* libglfont2.a in Frameworks */,
 				4C4B66731FB5FF0200F1C55D /* libSoundManager.a in Frameworks */,
 				4CA8F3FE1FB3A84E000AB9AE /* liblua.a in Frameworks */,
 				4CA8F3FC1FB3A83F000AB9AE /* libshared.a in Frameworks */,
@@ -163,6 +174,7 @@
 				4B1701F9164AAC4F007D4A2F /* Frameworks */,
 				4B1701F7164AAC4F007D4A2F /* Products */,
 				4CA8F40B1FB3AB78000AB9AE /* shared.xcodeproj */,
+				4C29F2DE1FBDE41C00EB01EC /* glfont2.xcodeproj */,
 				4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */,
 				4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */,
 				4C4B66691FB5FE1B00F1C55D /* SoundManager.xcodeproj */,
@@ -180,6 +192,7 @@
 		4B1701F9164AAC4F007D4A2F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C29F2EA1FBDE4A300EB01EC /* libglfont2.a */,
 				4C4B66721FB5FF0200F1C55D /* libSoundManager.a */,
 				4CA8F3FD1FB3A84E000AB9AE /* liblua.a */,
 				4CA8F3FB1FB3A83F000AB9AE /* libshared.a */,
@@ -241,6 +254,14 @@
 				4BC95009165C68E400AF8A8E /* flip.caf */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		4C29F2DF1FBDE41C00EB01EC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C29F2E31FBDE41C00EB01EC /* libglfont2.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4C4B666A1FB5FE1B00F1C55D /* Products */ = {
@@ -342,6 +363,10 @@
 					ProjectRef = 4CA8F4171FB3AB95000AB9AE /* chipmunk.xcodeproj */;
 				},
 				{
+					ProductGroup = 4C29F2DF1FBDE41C00EB01EC /* Products */;
+					ProjectRef = 4C29F2DE1FBDE41C00EB01EC /* glfont2.xcodeproj */;
+				},
+				{
 					ProductGroup = 4CDAAC6C1FB4AAFE00F7443F /* Products */;
 					ProjectRef = 4CDAAC6B1FB4AAFE00F7443F /* lua.xcodeproj */;
 				},
@@ -362,6 +387,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4C29F2E31FBDE41C00EB01EC /* libglfont2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libglfont2.a;
+			remoteRef = 4C29F2E21FBDE41C00EB01EC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4C4B666E1FB5FE1B00F1C55D /* libSoundManager.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
