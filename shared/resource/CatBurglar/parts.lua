@@ -83,14 +83,26 @@ parts = {
 		v = 3,
 		m = "flipper",
 		r1 = 0.2313,
-		r2 = 0.1144
+		r2 = 0.1144,
+        meta = {
+            impulse = 0.13,
+            force = 8,
+            unflipImpulse = 0.1,
+            unflipForce = 3
+        }
 	},
 	flipper_s = {
 		s = "flipper",
 		v = 3,
 		m = "flipper",
 		r1 = 0.2274,
-		r2 = 0.1140
+		r2 = 0.1140,
+        meta = {
+            impulse = 0.13,
+            force = 8,
+            unflipImpulse = 0.1,
+            unflipForce = 3
+        }
 	},
 	plunger = {
 		s = "segment",

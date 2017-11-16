@@ -1,7 +1,11 @@
 
 #pragma once
 
+#include <map>
+
 #include "chipmunk/chipmunk.h"
+
+#include "Parts/Flipper.h"
 
 #define MAX_BALL_COUNT 10
 
@@ -34,6 +38,8 @@ public:
 	void setPlayfield(Playfield *playfield);
 	void init();
 
+    Playfield *getPlayfield();
+    
 	IPhysicsDelegate *getDelegate();
 	
 	cpSpace *getSpace();
@@ -43,8 +49,6 @@ public:
 	void updatePhysics();
 	
 	void resetBallsToInitialPosition();
-	
-	int ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused);
 
 	void setPaused(bool paused);
 
@@ -82,5 +86,7 @@ private:
 	cpSpace *_space;
 	cpBody *_boxBody;
 	bool _paused;
+    
+    std::map<std::string, Flipper(*)> flippers;
 };
 

@@ -18,9 +18,19 @@ class Flipper
 {
 public:
     Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics);
+    void Flip(void);
+    void Unflip(void);
 
 private:
     LayoutItem *item;
+
+    double _flipDirection;
+    double _flipOffset;
+    
+    double _flipImpulse;
+    double _flipForce;
+    double _unflipImpulse;
+    double _unflipForce;
 };
 
 #endif //SHARED_FLIPPER_H

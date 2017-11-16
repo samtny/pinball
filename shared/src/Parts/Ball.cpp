@@ -6,27 +6,36 @@
 //  Copyright © 2017 Sam Thompson. All rights reserved.
 //
 
+#include <map>
+#include <string>
+
 #include "Parts/Ball.h"
 #include "Types.h"
 
 #include "Physics.h"
 #include "PhysicsDelegate.h"
 
+#include "Playfield.h"
+
 static Physics *_physics_currentInstance;
 
 static int ballCollisionGroup = 2048;
 
+static Material _steelMaterial;
+
 static void ballGravityVelocityFunc(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
 {
     cpVect g = cpvrotate(cpvforangle(_physics_currentInstance->getBoxBody()->a), gravity);
-    
+
     cpBodyUpdateVelocity(body, g, damping, dt);
 }
 
 static int __ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
-    
-    return _physics_currentInstance->ballPreSolve(arb, space, unused);
-    
+
+    arb->e = _steelMaterial.e;
+    arb->u = _steelMaterial.f;
+
+    return 1;
 }
 
 Ball::Ball(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics) {
@@ -55,4 +64,8 @@ Ball::Ball(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics 
     item->bodies.push_back(body);
     
     cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeBall, NULL, __ballPreSolve, NULL, NULL, NULL);
+    
+    std::map<std::string, Material> mats = *_physics_currentInstance->getPlayfield()->getMaterials();
+    
+    _steelMaterial = mats["steel"];
 }

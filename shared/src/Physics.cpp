@@ -33,12 +33,6 @@ static cpVect gravity = cpv(0.0, 9.80665f);
 static double _boxStiffness = 200.0;
 static double _boxDamping = 100.0;
 
-static double flipImpulse = 0.02f;
-static double unflipImpulse = 0.02f;
-
-static double flipForce = 0.2f;
-static double unflipForce = 0.2f;
-
 static double _nudgeImpulse = 1.0;
 
 static double timeStep = 1.0/180.0;
@@ -69,6 +63,10 @@ void Physics::setPlayfield(Playfield *playfield) {
 	_playfield = playfield;
 }
 
+Playfield *Physics::getPlayfield() {
+    return _playfield;
+}
+
 void Physics::init() {
 
 	this->loadConfig();
@@ -80,20 +78,6 @@ void Physics::init() {
 	this->createObjects();
 
 	cpSpaceSetGravity(_space, gravity);
-
-}
-
-int Physics::ballPreSolve(cpArbiter *arb, cpSpace *space, void *unused) {
-
-	// TODO: move to local var;
-	map<string, Material> mats = *_playfield->getMaterials();
-
-	Material mat = mats["steel"];
-
-	arb->e = mat.e;
-	arb->u = mat.f;
-
-	return 1;
 
 }
 
@@ -188,7 +172,9 @@ void Physics::createObject(LayoutItem *item) {
 	} else if (strcmp(item->o->s.c_str(), "segment") == 0) {
 		this->createSegment(item);
 	} else if (strcmp(item->o->s.c_str(), "flipper") == 0) {
-		new Flipper(item, shapeGroupFlippers, _boxBody, this);
+		Flipper *flipper = new Flipper(item, shapeGroupFlippers, _boxBody, this);
+        
+        this->flippers[item->n.c_str()] = flipper;
 	} else if (strcmp(item->o->s.c_str(), "ball") == 0) {
         new Ball(item, shapeGroupBall, _boxBody, this);
     } else if (strcmp(item->o->s.c_str(), "switch") == 0) {
@@ -326,43 +312,13 @@ void Physics::deactivateMech(const char *mechName) {
 
 void Physics::flip(LayoutItem *flipper) {
 
-	cpBodyResetForces(flipper->bodies[0]);
-
-	float dir = (float)(flipper->v[0].x < flipper->v[1].x ? 1 : -1);
-
-	// TODO: precompute
-	float offset = (float)cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
-
-	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
-
-	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, flipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->bodies[0], cpv(0, flipForce * dir), anchor);
-
-	anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), offset));
-
-	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -flipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->bodies[0], cpv(0, -flipForce * dir), anchor);
+    this->flippers[flipper->n]->Flip();
 
 }
 
 void Physics::unflip(LayoutItem *flipper) {
 
-	cpBodyResetForces(flipper->bodies[0]);
-
-	float dir = (float)(flipper->v[0].x < flipper->v[1].x ? -1 : 1);
-
-	// TODO: precompute
-	float offset = (float)cpvlength(cpvsub(flipper->v[0], flipper->v[1]));
-
-	cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), offset));
-
-	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, unflipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->bodies[0], cpv(0, unflipForce * dir), anchor);
-
-	anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), offset));
-
-	cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -unflipImpulse * dir), anchor);
-	cpBodyApplyForce(flipper->bodies[0], cpv(0, -unflipForce * dir), anchor);
+	this->flippers[flipper->n]->Unflip();
 
 }
 
@@ -450,15 +406,7 @@ void Physics::loadForces() {
                         lua_rawgeti(L, -1, 2);
                         gravity.y = (float)lua_tonumber(L, -1);
                         lua_pop(L, 1);
-                        
-					} else if (strcmp("flipImpulse", key) == 0) {
-						flipImpulse = (float)lua_tonumber(L, -1);
-					} else if (strcmp("flipForce", key) == 0) {
-						flipForce = (float)lua_tonumber(L, -1);
-					} else if (strcmp("unflipForce", key) == 0) {
-						unflipForce = (float)lua_tonumber(L, -1);
-					} else if (strcmp("unflipImpulse", key) == 0) {
-						unflipImpulse = (float)lua_tonumber(L, -1);
+                    
 					} else if (strcmp("nudgeImpulse", key) == 0) {
 						_nudgeImpulse = (float)lua_tonumber(L, -1);
 					} else if (strcmp("boxStiffness", key) == 0) {

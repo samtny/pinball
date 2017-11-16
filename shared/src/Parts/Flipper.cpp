@@ -7,19 +7,57 @@
 
 static Physics *_physics_currentInstance;
 
+void Flipper::Flip() {
+    LayoutItem *flipper = this->item;
+    
+    cpBodyResetForces(flipper->bodies[0]);
+    
+    cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), this->_flipOffset));
+    
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_flipForce * this->_flipDirection), anchor);
+    
+    anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), this->_flipOffset));
+    
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_flipForce * this->_flipDirection), anchor);
+}
+
+void Flipper::Unflip() {
+    LayoutItem *flipper = this->item;
+
+    cpBodyResetForces(flipper->bodies[0]);
+    
+    cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), this->_flipOffset));
+    
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_unflipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_unflipForce * this->_flipDirection), anchor);
+    
+    anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), this->_flipOffset));
+    
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_unflipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_unflipForce * this->_flipDirection), anchor);
+}
+
 Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics)
 {
     this->item = item;
     
     _physics_currentInstance = physics;
-
+    
     cpFloat area = (item->o->r1 * M_PI) * 2; // approx
     cpFloat mass = area * item->o->m->d;
 
-    cpFloat direction = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
-
+    this->_flipDirection = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
+    this->_flipOffset = (float)cpvlength(cpvsub(item->v[0], item->v[1]));
+    
+    this->_flipImpulse = ::atof(item->o->meta.find("impulse")->second.c_str());
+    this->_flipForce = ::atof(item->o->meta.find("force")->second.c_str());
+    this->_unflipImpulse = ::atof(item->o->meta.find("unflipImpulse")->second.c_str());
+    this->_unflipForce = ::atof(item->o->meta.find("unflipForce")->second.c_str());
+    
     cpFloat length = cpvdist(item->v[0], item->v[1]);
-    cpFloat flipAngle = direction * cpfacos(cpvdot(cpvnormalize(cpvsub(item->v[1],item->v[0])), cpvnormalize(cpvsub(item->v[2],item->v[0]))));
+    cpFloat flipAngle = this->_flipDirection * cpfacos(cpvdot(cpvnormalize(cpvsub(item->v[1],item->v[0])), cpvnormalize(cpvsub(item->v[2],item->v[0]))));
 
     cpFloat flipStart = flipAngle > 0 ? 0 : flipAngle;
     cpFloat flipEnd = flipAngle > 0 ? flipAngle : 0;
