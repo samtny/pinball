@@ -90,9 +90,9 @@ Kraken::Kraken(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     cpShapeSetGroup(shape, shapeGroupKraken);
     cpShapeSetUserData(shape, item);
     
-    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(attachBody, body, body->p));
+    cpSpaceAddConstraint(_space, cpPivotJointNew(attachBody, body, body->p));
     
-    //constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
+    //cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(box->bodies[0], body, 0.0f, 0.0f));
     
     //cpBodyApplyForce(body, cpv(0.0, -1.0), cpv(item->o->r1, 0.0));
     

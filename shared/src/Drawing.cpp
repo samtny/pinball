@@ -67,7 +67,7 @@ void DrawConstraint(cpConstraint *constraint, void *data) {
         
         cpVect a = cpBodyLocal2World(bodyA, joint->grv_a);
         cpVect b = cpBodyLocal2World(bodyA, joint->grv_b);
-        cpVect c = cpBodyLocal2World(bodyB, joint->anchr2);
+        //cpVect c = cpBodyLocal2World(bodyB, joint->anchr2);
         
         DrawFatSegment({a.x, a.y}, {b.x, b.y}, 0.004, LINE_COLOR, FILL_COLOR);
     }
