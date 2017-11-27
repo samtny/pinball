@@ -327,6 +327,20 @@ void Physics::nudge(cpVect dir) {
 	//cpBodyApplyForce(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -01.));
 }
 
+void Physics::drag(cpVect translation) {
+    cpBodyApplyImpulse(_boxBody, cpv(_nudgeImpulse * translation.x, _nudgeImpulse * translation.y), cpv(0, -0.1));
+    
+    if (!this->_dragJoint) {
+        /*
+        mouse_joint = cpPivotJointNew2(this->_boxBody, body, cpvzero, cpBodyWorldToLocal(body, nearest));
+        mouse_joint->maxForce = 50000.0f;
+        mouse_joint->errorBias = cpfpow(1.0f - 0.15f, 60.0f);
+        cpSpaceAddConstraint(space, mouse_joint);
+         */
+    }
+    
+}
+
 void Physics::loadConfig() {
 
 	lua_State *L = luaL_newstate();

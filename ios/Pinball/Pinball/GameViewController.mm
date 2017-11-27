@@ -60,6 +60,7 @@ enum
 
 - (void)setupGL;
 - (void)tearDownGL;
+- (void)move:(UIPanGestureRecognizer *)sender;
 
 @end
 
@@ -144,6 +145,18 @@ enum
     _renderer = r;
     _game = g;
     
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(move:)];
+    [panRecognizer setMinimumNumberOfTouches:1];
+    [panRecognizer setMaximumNumberOfTouches:1];
+    
+    [self.view addGestureRecognizer:panRecognizer];
+}
+
+- (void)move:(UIPanGestureRecognizer *)sender {
+    //NSLog(@"translation: %@", NSStringFromCGPoint([sender translationInView:self.view]));
+    //NSLog(@"velocity: %@", NSStringFromCGPoint([sender velocityInView:self.view]));
+    
+    _physics->drag((cpVect)[sender translationInView:self.view]);
 }
 
 - (void)viewDidUnload

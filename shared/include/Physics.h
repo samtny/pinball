@@ -25,6 +25,7 @@ struct cpVect;
 struct cpSpace;
 struct cpBody;
 struct cpArbiter;
+struct cpConstraint;
 
 class Physics
 {
@@ -63,6 +64,8 @@ public:
 
 	void nudge(cpVect dir);
 
+    void drag(cpVect translation);
+    
 	cpBody *getBoxBody();
     
     LayoutItem *getLayoutItem(const char *itemName);
@@ -86,6 +89,9 @@ private:
 	cpSpace *_space;
 	cpBody *_boxBody;
 	bool _paused;
+    
+    cpBody *_dragBody;
+    cpConstraint *_dragJoint;
     
     std::map<std::string, Flipper(*)> flippers;
 };
