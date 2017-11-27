@@ -14,13 +14,13 @@ void Flipper::Flip() {
     
     cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_flipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_flipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_flipForce * this->_flipDirection), anchor);
     
     anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_flipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_flipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_flipForce * this->_flipDirection), anchor);
 }
 
 void Flipper::Unflip() {
@@ -48,7 +48,7 @@ Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Ph
     cpFloat area = (item->o->r1 * M_PI) * 2; // approx
     cpFloat mass = area * item->o->m->d;
 
-    this->_flipDirection = item->v[0].x <= item->v[1].x ? -1 : 1; // rotate clockwise for right-facing flipper...
+    this->_flipDirection = (float)(item->v[0].x < item->v[1].x ? -1 : 1);
     this->_flipOffset = (float)cpvlength(cpvsub(item->v[0], item->v[1]));
     
     this->_flipImpulse = ::atof(item->o->meta.find("impulse")->second.c_str());
