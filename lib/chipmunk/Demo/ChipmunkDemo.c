@@ -36,10 +36,20 @@
 #include <limits.h>
 #include <stdarg.h>
 
+#ifdef _MSC_VER
+  // Needed for VS 2015 compatability
+  // http://stackoverflow.com/questions/30412951/unresolved-external-symbol-imp-fprintf-and-imp-iob-func-sdl2
+  #if _MSC_VER >= 1700
+	#ifndef __iob_func
+	  extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
+	#endif
+  #endif
+#endif
+
 #include "GL/glew.h"
 #include "GL/glfw.h"
 
-#include "chipmunk_private.h"
+#include "chipmunk/chipmunk_private.h"
 #include "ChipmunkDemo.h"
 #include "ChipmunkDemoTextSupport.h"
 
@@ -65,8 +75,11 @@ cpVect ChipmunkDemoKeyboard = {};
 static cpBody *mouse_body = NULL;
 static cpConstraint *mouse_joint = NULL;
 
-char *ChipmunkDemoMessageString = NULL;
+char const *ChipmunkDemoMessageString = NULL;
 
+#define GRABBABLE_MASK_BIT (1<<31)
+cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
+cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
 cpVect translate = {0, 0};
 cpFloat scale = 1.0;
@@ -109,12 +122,94 @@ ChipmunkDemoFreeSpaceChildren(cpSpace *space)
 	cpSpaceEachBody(space, (cpSpaceBodyIteratorFunc)PostBodyFree, space);
 }
 
-void ChipmunkDemoDefaultDrawImpl(cpSpace *space)
+static void
+DrawCircle(cpVect p, cpFloat a, cpFloat r, cpSpaceDebugColor outline, cpSpaceDebugColor fill, cpDataPointer data)
+{ChipmunkDebugDrawCircle(p, a, r, outline, fill);}
+
+static void
+DrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color, cpDataPointer data)
+{ChipmunkDebugDrawSegment(a, b, color);}
+
+static void
+DrawFatSegment(cpVect a, cpVect b, cpFloat r, cpSpaceDebugColor outline, cpSpaceDebugColor fill, cpDataPointer data)
+{ChipmunkDebugDrawFatSegment(a, b, r, outline, fill);}
+
+static void
+DrawPolygon(int count, const cpVect *verts, cpFloat r, cpSpaceDebugColor outline, cpSpaceDebugColor fill, cpDataPointer data)
+{ChipmunkDebugDrawPolygon(count, verts, r, outline, fill);}
+
+static void
+DrawDot(cpFloat size, cpVect pos, cpSpaceDebugColor color, cpDataPointer data)
+{ChipmunkDebugDrawDot(size, pos, color);}
+
+static cpSpaceDebugColor
+ColorForShape(cpShape *shape, cpDataPointer data)
 {
-	ChipmunkDebugDrawShapes(space);
-	ChipmunkDebugDrawConstraints(space);
+	if(cpShapeGetSensor(shape)){
+		return LAColor(1.0f, 0.1f);
+	} else {
+		cpBody *body = cpShapeGetBody(shape);
+		
+		if(cpBodyIsSleeping(body)){
+			return LAColor(0.2f, 1.0f);
+		} else if(body->sleeping.idleTime > shape->space->sleepTimeThreshold) {
+			return LAColor(0.66f, 1.0f);
+		} else {
+			uint32_t val = (uint32_t)shape->hashid;
+			
+			// scramble the bits up using Robert Jenkins' 32 bit integer hash function
+			val = (val+0x7ed55d16) + (val<<12);
+			val = (val^0xc761c23c) ^ (val>>19);
+			val = (val+0x165667b1) + (val<<5);
+			val = (val+0xd3a2646c) ^ (val<<9);
+			val = (val+0xfd7046c5) + (val<<3);
+			val = (val^0xb55a4f09) ^ (val>>16);
+			
+			GLfloat r = (GLfloat)((val>>0) & 0xFF);
+			GLfloat g = (GLfloat)((val>>8) & 0xFF);
+			GLfloat b = (GLfloat)((val>>16) & 0xFF);
+			
+			GLfloat max = (GLfloat)cpfmax(cpfmax(r, g), b);
+			GLfloat min = (GLfloat)cpfmin(cpfmin(r, g), b);
+			GLfloat intensity = (cpBodyGetType(body) == CP_BODY_TYPE_STATIC ? 0.15f : 0.75f);
+			
+			// Saturate and scale the color
+			if(min == max){
+				return RGBAColor(intensity, 0.0f, 0.0f, 1.0f);
+			} else {
+				GLfloat coef = (GLfloat)intensity/(max - min);
+				return RGBAColor(
+					(r - min)*coef,
+					(g - min)*coef,
+					(b - min)*coef,
+					1.0f
+				);
+			}
+		}
+	}
+}
+
+
+void
+ChipmunkDemoDefaultDrawImpl(cpSpace *space)
+{
+	cpSpaceDebugDrawOptions drawOptions = {
+		DrawCircle,
+		DrawSegment,
+		DrawFatSegment,
+		DrawPolygon,
+		DrawDot,
+		
+		(cpSpaceDebugDrawFlags)(CP_SPACE_DEBUG_DRAW_SHAPES | CP_SPACE_DEBUG_DRAW_CONSTRAINTS | CP_SPACE_DEBUG_DRAW_COLLISION_POINTS),
+		
+		{200.0f/255.0f, 210.0f/255.0f, 230.0f/255.0f, 1.0f},
+		ColorForShape,
+		{0.0f, 0.75f, 0.0f, 1.0f},
+		{1.0f, 0.0f, 0.0f, 1.0f},
+		NULL,
+	};
 	
-	ChipmunkDebugDrawCollisionPoints(space);
+	cpSpaceDebugDraw(space, &drawOptions);
 }
 
 static void
@@ -138,7 +233,7 @@ DrawInfo()
 	int points = 0;
 	
 	for(int i=0; i<arbiters; i++)
-		points += ((cpArbiter *)(space->arbiters->arr[i]))->numContacts;
+		points += ((cpArbiter *)(space->arbiters->arr[i]))->count;
 	
 	int constraints = (space->constraints->num + points)*space->iterations;
 	
@@ -154,7 +249,7 @@ DrawInfo()
 		"Constraints x Iterations: %d (%d)\n"
 		"Time:% 5.2fs, KE:% 5.2e";
 	
-	cpArray *bodies = space->bodies;
+	cpArray *bodies = space->dynamicBodies;
 	cpFloat ke = 0.0f;
 	for(int i=0; i<bodies->num; i++){
 		cpBody *body = (cpBody *)bodies->arr[i];
@@ -178,14 +273,24 @@ static char PrintStringBuffer[1024*8];
 static char *PrintStringCursor;
 
 void
-ChipmunkDemoPrintString(char *fmt, ...)
+ChipmunkDemoPrintString(char const *fmt, ...)
 {
+	if (PrintStringCursor == NULL) {
+		return;
+	}
+
 	ChipmunkDemoMessageString = PrintStringBuffer;
-	
+
 	va_list args;
 	va_start(args, fmt);
-	// TODO should use vsnprintf herep
-	PrintStringCursor += vsprintf(PrintStringCursor, fmt, args);
+	int remaining = sizeof(PrintStringBuffer) - (PrintStringCursor - PrintStringBuffer);
+	int would_write = vsnprintf(PrintStringCursor, remaining, fmt, args);
+	if (would_write > 0 && would_write < remaining) {
+		PrintStringCursor += would_write;
+	} else {
+		// encoding error or overflow, prevent further use until reinitialized
+		PrintStringCursor = NULL;
+	}
 	va_end(args);
 }
 
@@ -246,9 +351,9 @@ Display(void)
 	ChipmunkDebugDrawPushRenderer();
 	demos[demo_index].drawFunc(space);
 	
-	// Highlight the shape under the mouse because it looks neat.
-	cpShape *nearest = cpSpaceNearestPointQueryNearest(space, ChipmunkDemoMouse, 0.0f, CP_ALL_LAYERS, CP_NO_GROUP, NULL);
-	if(nearest) ChipmunkDebugDrawShape(nearest, RGBAColor(1.0f, 0.0f, 0.0f, 1.0f), LAColor(0.0f, 0.0f));
+//	// Highlight the shape under the mouse because it looks neat.
+//	cpShape *nearest = cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0.0f, CP_ALL_LAYERS, CP_NO_GROUP, NULL);
+//	if(nearest) ChipmunkDebugDrawShape(nearest, RGBAColor(1.0f, 0.0f, 0.0f, 1.0f), LAColor(0.0f, 0.0f));
 	
 	// Draw the renderer contents and reset it back to the last tick's state.
 	ChipmunkDebugDrawFlushRenderer();
@@ -396,10 +501,18 @@ Click(int button, int state)
 {
 	if(button == GLFW_MOUSE_BUTTON_1){
 		if(state == GLFW_PRESS){
-			cpShape *shape = cpSpacePointQueryFirst(space, ChipmunkDemoMouse, GRABABLE_MASK_BIT, CP_NO_GROUP);
+			// give the mouse click a little radius to make it easier to click small shapes.
+			cpFloat radius = 5.0;
+			
+			cpPointQueryInfo info = {};
+			cpShape *shape = cpSpacePointQueryNearest(space, ChipmunkDemoMouse, radius, GRAB_FILTER, &info);
+			
 			if(shape && cpBodyGetMass(cpShapeGetBody(shape)) < INFINITY){
+				// Use the closest point on the surface if the click is outside of the shape.
+				cpVect nearest = (info.distance > 0.0f ? info.point : ChipmunkDemoMouse);
+				
 				cpBody *body = cpShapeGetBody(shape);
-				mouse_joint = cpPivotJointNew2(mouse_body, body, cpvzero, cpBodyWorld2Local(body, ChipmunkDemoMouse));
+				mouse_joint = cpPivotJointNew2(mouse_body, body, cpvzero, cpBodyWorldToLocal(body, nearest));
 				mouse_joint->maxForce = 50000.0f;
 				mouse_joint->errorBias = cpfpow(1.0f - 0.15f, 60.0f);
 				cpSpaceAddConstraint(space, mouse_joint);
@@ -479,7 +592,8 @@ SetupGLFW()
 	glfwSetMouseButtonCallback(Click);
 }
 
-void TimeTrial(int index, int count)
+static void
+TimeTrial(int index, int count)
 {
 	space = demos[index].initFunc();
 	
@@ -494,6 +608,7 @@ void TimeTrial(int index, int count)
 	demos[index].destroyFunc(space);
 	
 	printf("Time(%c) = %8.2f ms (%s)\n", index + 'a', (end_time - start_time)*1e3f, demos[index].name);
+	fflush(stdout);
 }
 
 extern ChipmunkDemo LogoSmash;
@@ -520,6 +635,7 @@ extern ChipmunkDemo Convex;
 extern ChipmunkDemo Unicycle;
 extern ChipmunkDemo Sticky;
 extern ChipmunkDemo Shatter;
+extern ChipmunkDemo GJK;
 
 extern ChipmunkDemo bench_list[];
 extern int bench_count;
@@ -527,35 +643,31 @@ extern int bench_count;
 int
 main(int argc, const char **argv)
 {
-	// Segment/segment collisions need to be explicitly enabled currently.
-	// This will becoume enabled by default in future versions of Chipmunk.
-	cpEnableSegmentToSegmentCollisions();
-	
 	ChipmunkDemo demo_list[] = {
-		LogoSmash,
-		PyramidStack,
-		Plink,
-		BouncyHexagons,
-		Tumble,
-		PyramidTopple,
-		Planet,
-		Springies,
-		Pump,
-		TheoJansen,
-		Query,
-		OneWay,
-		Joints,
-		Tank,
-		Chains,
-		Crane,
-		ContactGraph,
-		Buoyancy,
-		Player,
-		Slice,
-		Convex,
-		Unicycle,
-		Sticky,
-		Shatter,
+		LogoSmash,//A
+		PyramidStack,//B
+		Plink,//C
+		BouncyHexagons,//D
+		Tumble,//E
+		PyramidTopple,//F
+		Planet,//G
+		Springies,//H
+		Pump,//I
+		TheoJansen,//J
+		Query,//K
+		OneWay,//L
+		Joints,//M
+		Tank,//N
+		Chains,//O
+		Crane,//P
+		ContactGraph,//Q
+		Buoyancy,//R
+		Player,//S
+		Slice,//T
+		Convex,//U
+		Unicycle,//V
+		Sticky,//W
+		Shatter,//X
 	};
 	
 	demos = demo_list;
@@ -578,7 +690,7 @@ main(int argc, const char **argv)
 //		time_trial('d' - 'a', 10000);
 		exit(0);
 	} else {
-		mouse_body = cpBodyNew(INFINITY, INFINITY);
+		mouse_body = cpBodyNewKinematic();
 		
 		RunDemo(demo_index);
 		SetupGLFW();

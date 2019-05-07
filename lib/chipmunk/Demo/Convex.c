@@ -19,8 +19,8 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
-#include "chipmunk_unsafe.h"
+#include "chipmunk/chipmunk.h"
+#include "chipmunk/chipmunk_unsafe.h"
 
 #include "ChipmunkDemo.h"
 
@@ -33,9 +33,9 @@ update(cpSpace *space, double dt)
 {
 	cpFloat tolerance = 2.0;
 	
-	if(ChipmunkDemoRightClick && cpShapeNearestPointQuery(shape, ChipmunkDemoMouse, NULL) > tolerance){
+	if(ChipmunkDemoRightClick && cpShapePointQuery(shape, ChipmunkDemoMouse, NULL) > tolerance){
 		cpBody *body = cpShapeGetBody(shape);
-		int count = cpPolyShapeGetNumVerts(shape);
+		int count = cpPolyShapeGetCount(shape);
 		
 		// Allocate the space for the new vertexes on the stack.
 		cpVect *verts = (cpVect *)alloca((count + 1)*sizeof(cpVect));
@@ -44,24 +44,24 @@ update(cpSpace *space, double dt)
 			verts[i] = cpPolyShapeGetVert(shape, i);
 		}
 		
-		verts[count] = cpBodyWorld2Local(body, ChipmunkDemoMouse);
+		verts[count] = cpBodyWorldToLocal(body, ChipmunkDemoMouse);
 		
 		// This function builds a convex hull for the vertexes.
-		// Because the result array is NULL, it will reduce the input array instead.
-		int hullCount = cpConvexHull(count + 1, verts, NULL, NULL, tolerance);
+		// Because the result array is the same as verts, it will reduce it in place.
+		int hullCount = cpConvexHull(count + 1, verts, verts, NULL, tolerance);
 		
 		// Figure out how much to shift the body by.
 		cpVect centroid = cpCentroidForPoly(hullCount, verts);
 		
 		// Recalculate the body properties to match the updated shape.
-		cpFloat mass = cpAreaForPoly(hullCount, verts)*DENSITY;
+		cpFloat mass = cpAreaForPoly(hullCount, verts, 0.0f)*DENSITY;
 		cpBodySetMass(body, mass);
-		cpBodySetMoment(body, cpMomentForPoly(mass, hullCount, verts, cpvneg(centroid)));
-		cpBodySetPos(body, cpBodyLocal2World(body, centroid));
+		cpBodySetMoment(body, cpMomentForPoly(mass, hullCount, verts, cpvneg(centroid), 0.0f));
+		cpBodySetPosition(body, cpBodyLocalToWorld(body, centroid));
 		
 		// Use the setter function from chipmunk_unsafe.h.
 		// You could also remove and recreate the shape if you wanted.
-		cpPolyShapeSetVerts(shape, hullCount, verts, cpvneg(centroid));
+		cpPolyShapeSetVerts(shape, hullCount, verts, cpTransformTranslate(cpvneg(centroid)));
 	}
 	
 	cpSpaceStep(space, dt);
@@ -84,7 +84,7 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	cpFloat width = 50.0f;
 	cpFloat height = 70.0f;
@@ -93,7 +93,7 @@ init(void)
 	
 	body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
 	
-	shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height));
+	shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height, 0.0));
 	cpShapeSetFriction(shape, 0.6f);
 		
 	return space;

@@ -58,11 +58,11 @@ extern cpVect ChipmunkDemoMouse;
 extern cpBool ChipmunkDemoRightClick;
 extern cpBool ChipmunkDemoRightDown;
 
-extern char *ChipmunkDemoMessageString;
-void ChipmunkDemoPrintString(char *fmt, ...);
+extern char const *ChipmunkDemoMessageString;
+void ChipmunkDemoPrintString(char const *fmt, ...);
 
-#define GRABABLE_MASK_BIT (1<<31)
-#define NOT_GRABABLE_MASK (~GRABABLE_MASK_BIT)
+extern cpShapeFilter GRAB_FILTER;
+extern cpShapeFilter NOT_GRABBABLE_FILTER;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace *space);
 void ChipmunkDemoFreeSpaceChildren(cpSpace *space);

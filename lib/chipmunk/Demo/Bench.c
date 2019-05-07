@@ -1,17 +1,12 @@
-#include "chipmunk.h"
-#include "chipmunk_unsafe.h"
+#include "chipmunk/chipmunk.h"
+#include "chipmunk/chipmunk_unsafe.h"
 #include "ChipmunkDemo.h"
 
-#if 1
-	#define BENCH_SPACE_NEW cpSpaceNew
-	#define BENCH_SPACE_FREE cpSpaceFree
-	#define BENCH_SPACE_STEP cpSpaceStep
-#else
-	#import "cpHastySpace.h"
+#define ENABLE_HASTY 0
+#if ENABLE_HASTY
+	#include "chipmunk/cpHastySpace.h"
 	
-	static cpSpace *
-	MakeHastySpace()
-	{
+	static cpSpace *MakeHastySpace(){
 		cpSpace *space = cpHastySpaceNew();
 		cpHastySpaceSetThreads(space, 0);
 		return space;
@@ -20,9 +15,13 @@
 	#define BENCH_SPACE_NEW MakeHastySpace
 	#define BENCH_SPACE_FREE cpHastySpaceFree
 	#define BENCH_SPACE_STEP cpHastySpaceStep
+#else
+	#define BENCH_SPACE_NEW cpSpaceNew
+	#define BENCH_SPACE_FREE cpSpaceFree
+	#define BENCH_SPACE_STEP cpSpaceStep
 #endif
 
-const cpFloat bevel = 0.0;
+const cpFloat bevel = 1.0;
 
 static cpVect simple_terrain_verts[] = {
 	{350.00, 425.07}, {336.00, 436.55}, {272.00, 435.39}, {258.00, 427.63}, {225.28, 420.00}, {202.82, 396.00},
@@ -43,53 +42,53 @@ static void add_circle(cpSpace *space, int index, cpFloat radius){
 	cpFloat mass = radius*radius/25.0f;
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
 //	cpBody *body = cpSpaceAddBody(space, cpBodyInit(&bodies[i], mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
-	body->p = cpvmult(frand_unit_circle(), 180.0f);
+	cpBodySetPosition(body, cpvmult(frand_unit_circle(), 180.0f));
 	
 	
 	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
 //	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeInit(&circles[i], body, radius, cpvzero));
-	shape->e = 0.0f; shape->u = 0.9f;
+	cpShapeSetElasticity(shape, 0.0); cpShapeSetFriction(shape, 0.9);
 }
 
 static void add_box(cpSpace *space, int index, cpFloat size){
 	cpFloat mass = size*size/100.0f;
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForBox(mass, size, size)));
 //	cpBody *body = cpSpaceAddBody(space, cpBodyInit(&bodies[i], mass, cpMomentForBox(mass, size, size)));
-	body->p = cpvmult(frand_unit_circle(), 180.0f);
+	cpBodySetPosition(body, cpvmult(frand_unit_circle(), 180.0f));
 	
 	
-	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, size - bevel*2, size - bevel*2));
+	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, size - bevel*2, size - bevel*2, 0.0));
 	cpPolyShapeSetRadius(shape, bevel);
-	shape->e = 0.0f; shape->u = 0.9f;
+	cpShapeSetElasticity(shape, 0.0); cpShapeSetFriction(shape, 0.9);
 }
 
 static void add_hexagon(cpSpace *space, int index, cpFloat radius){
 	cpVect hexagon[6] = {};
 	for(int i=0; i<6; i++){
-		cpFloat angle = -M_PI*2.0f*i/6.0f;
+		cpFloat angle = -CP_PI*2.0f*i/6.0f;
 		hexagon[i] = cpvmult(cpv(cos(angle), sin(angle)), radius - bevel);
 	}
 	
 	cpFloat mass = radius*radius;
-	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero)));
-	body->p = cpvmult(frand_unit_circle(), 180.0f);
+	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero, 0.0f)));
+	cpBodySetPosition(body, cpvmult(frand_unit_circle(), 180.0f));
 	
-	cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew2(body, 6, hexagon, cpvzero, bevel));
-	shape->e = 0.0f; shape->u = 0.9f;
+	cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew(body, 6, hexagon, cpTransformIdentity, bevel));
+	cpShapeSetElasticity(shape, 0.0); cpShapeSetFriction(shape, 0.9);
 }
 
 
 static cpSpace *
 SetupSpace_simpleTerrain(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
-	space->gravity = cpv(0, -100);
-	space->collisionSlop = 0.5f;
+	cpSpaceSetIterations(space, 10);
+	cpSpaceSetGravity(space, cpv(0, -100));
+	cpSpaceSetCollisionSlop(space, 0.5f);
 	
 	cpVect offset = cpv(-320, -240);
 	for(int i=0; i<(simple_terrain_count - 1); i++){
 		cpVect a = simple_terrain_verts[i], b = simple_terrain_verts[i+1];
-		cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpvadd(a, offset), cpvadd(b, offset), 0.0f));
+		cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpvadd(a, offset), cpvadd(b, offset), 0.0f));
 	}
 	
 	return space;
@@ -217,24 +216,24 @@ static int complex_terrain_count = sizeof(complex_terrain_verts)/sizeof(cpVect);
 
 static cpSpace *init_ComplexTerrainCircles_1000(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
-	space->gravity = cpv(0, -100);
-	space->collisionSlop = 0.5f;
+	cpSpaceSetIterations(space, 10);
+	cpSpaceSetGravity(space, cpv(0, -100));
+	cpSpaceSetCollisionSlop(space, 0.5f);
 	
 	cpVect offset = cpv(-320, -240);
 	for(int i=0; i<(complex_terrain_count - 1); i++){
 		cpVect a = complex_terrain_verts[i], b = complex_terrain_verts[i+1];
-		cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpvadd(a, offset), cpvadd(b, offset), 0.0f));
+		cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpvadd(a, offset), cpvadd(b, offset), 0.0f));
 	}
 	
 	for(int i=0; i<1000; i++){
 		cpFloat radius = 5.0f;
 		cpFloat mass = radius*radius;
 		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
-		body->p = cpvadd(cpvmult(frand_unit_circle(), 180.0f), cpv(0.0f, 300.0f));
+		cpBodySetPosition(body, cpvadd(cpvmult(frand_unit_circle(), 180.0f), cpv(0.0f, 300.0f)));
 		
 		cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
-		shape->e = 0.0f; shape->u = 0.0f;
+		cpShapeSetElasticity(shape, 0.0); cpShapeSetFriction(shape, 0.0);
 	}
 	
 	return space;
@@ -242,30 +241,30 @@ static cpSpace *init_ComplexTerrainCircles_1000(){
 
 static cpSpace *init_ComplexTerrainHexagons_1000(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
-	space->gravity = cpv(0, -100);
-	space->collisionSlop = 0.5f;
+	cpSpaceSetIterations(space, 10);
+	cpSpaceSetGravity(space, cpv(0, -100));
+	cpSpaceSetCollisionSlop(space, 0.5f);
 	
 	cpVect offset = cpv(-320, -240);
 	for(int i=0; i<(complex_terrain_count - 1); i++){
 		cpVect a = complex_terrain_verts[i], b = complex_terrain_verts[i+1];
-		cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpvadd(a, offset), cpvadd(b, offset), 0.0f));
+		cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpvadd(a, offset), cpvadd(b, offset), 0.0f));
 	}
 	
 	cpFloat radius = 5.0f;
 	cpVect hexagon[6] = {};
 	for(int i=0; i<6; i++){
-		cpFloat angle = -M_PI*2.0f*i/6.0f;
+		cpFloat angle = -CP_PI*2.0f*i/6.0f;
 		hexagon[i] = cpvmult(cpv(cos(angle), sin(angle)), radius - bevel);
 	}
 	
 	for(int i=0; i<1000; i++){
 		cpFloat mass = radius*radius;
-		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero)));
-		body->p = cpvadd(cpvmult(frand_unit_circle(), 180.0f), cpv(0.0f, 300.0f));
+		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero, 0.0f)));
+		cpBodySetPosition(body, cpvadd(cpvmult(frand_unit_circle(), 180.0f), cpv(0.0f, 300.0f)));
 		
-		cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew2(body, 6, hexagon, cpvzero, bevel));
-		shape->e = 0.0f; shape->u = 0.0f;
+		cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew(body, 6, hexagon, cpTransformIdentity, bevel));
+		cpShapeSetElasticity(shape, 0.0); cpShapeSetFriction(shape, 0.0);
 	}
 	
 	return space;
@@ -322,24 +321,24 @@ static int bouncy_terrain_count = sizeof(bouncy_terrain_verts)/sizeof(cpVect);
 
 static cpSpace *init_BouncyTerrainCircles_500(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
+	cpSpaceSetIterations(space, 10);
 	
 	cpVect offset = cpv(-320, -240);
 	for(int i=0; i<(bouncy_terrain_count - 1); i++){
 		cpVect a = bouncy_terrain_verts[i], b = bouncy_terrain_verts[i+1];
-		cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpvadd(a, offset), cpvadd(b, offset), 0.0f));
-		shape->e = 1.0f;
+		cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpvadd(a, offset), cpvadd(b, offset), 0.0f));
+		cpShapeSetElasticity(shape, 1.0);
 	}
 	
 	for(int i=0; i<500; i++){
 		cpFloat radius = 5.0f;
 		cpFloat mass = radius*radius;
 		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
-		body->p = cpvadd(cpvmult(frand_unit_circle(), 130.0f), cpvzero);
-		body->v = cpvmult(frand_unit_circle(), 50.0f);
+		cpBodySetPosition(body, cpvadd(cpvmult(frand_unit_circle(), 130.0f), cpvzero));
+		cpBodySetVelocity(body, cpvmult(frand_unit_circle(), 50.0f));
 		
 		cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
-		shape->e = 1.0f;
+		cpShapeSetElasticity(shape, 1.0);
 	}
 	
 	return space;
@@ -347,30 +346,30 @@ static cpSpace *init_BouncyTerrainCircles_500(){
 
 static cpSpace *init_BouncyTerrainHexagons_500(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
+	cpSpaceSetIterations(space, 10);
 	
 	cpVect offset = cpv(-320, -240);
 	for(int i=0; i<(bouncy_terrain_count - 1); i++){
 		cpVect a = bouncy_terrain_verts[i], b = bouncy_terrain_verts[i+1];
-		cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpvadd(a, offset), cpvadd(b, offset), 0.0f));
-		shape->e = 1.0f;
+		cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpvadd(a, offset), cpvadd(b, offset), 0.0f));
+		cpShapeSetElasticity(shape, 1.0);
 	}
 	
 	cpFloat radius = 5.0f;
 	cpVect hexagon[6] = {};
 	for(int i=0; i<6; i++){
-		cpFloat angle = -M_PI*2.0f*i/6.0f;
+		cpFloat angle = -CP_PI*2.0f*i/6.0f;
 		hexagon[i] = cpvmult(cpv(cos(angle), sin(angle)), radius - bevel);
 	}
 	
 	for(int i=0; i<500; i++){
 		cpFloat mass = radius*radius;
-		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero)));
-		body->p = cpvadd(cpvmult(frand_unit_circle(), 130.0f), cpvzero);
-		body->v = cpvmult(frand_unit_circle(), 50.0f);
+		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForPoly(mass, 6, hexagon, cpvzero, 0.0f)));
+		cpBodySetPosition(body, cpvadd(cpvmult(frand_unit_circle(), 130.0f), cpvzero));
+		cpBodySetVelocity(body, cpvmult(frand_unit_circle(), 50.0f));
 		
-		cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew2(body, 6, hexagon, cpvzero, bevel));
-		shape->e = 1.0f;
+		cpShape *shape = cpSpaceAddShape(space, cpPolyShapeNew(body, 6, hexagon, cpTransformIdentity, bevel));
+		cpShapeSetElasticity(shape, 1.0);
 	}
 	
 	return space;
@@ -388,43 +387,45 @@ static cpBool NoCollide_begin(cpArbiter *arb, cpSpace *space, void *data){
 
 static cpSpace *init_NoCollide(){
 	cpSpace *space = BENCH_SPACE_NEW();
-	space->iterations = 10;
+	cpSpaceSetIterations(space, 10);
 	
-	cpSpaceAddCollisionHandler(space, 2, 2, NoCollide_begin, NULL, NULL, NULL, NULL);
+	cpCollisionHandler *handler = cpSpaceAddCollisionHandler(space, 2, 2);
+	handler->beginFunc = NoCollide_begin;
+	
 	
 	float radius = 4.5f;
 	
-	cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpv(-330-radius, -250-radius), cpv( 330+radius, -250-radius), 0.0f))->e = 1.0f;
-	cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpv( 330+radius,  250+radius), cpv( 330+radius, -250-radius), 0.0f))->e = 1.0f;
-	cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpv( 330+radius,  250+radius), cpv(-330-radius,  250+radius), 0.0f))->e = 1.0f;
-	cpSpaceAddShape(space, cpSegmentShapeNew(space->staticBody, cpv(-330-radius, -250-radius), cpv(-330-radius,  250+radius), 0.0f))->e = 1.0f;
+	cpShapeSetElasticity(cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpv(-330-radius, -250-radius), cpv( 330+radius, -250-radius), 0.0f)), 1.0f);
+	cpShapeSetElasticity(cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpv( 330+radius,  250+radius), cpv( 330+radius, -250-radius), 0.0f)), 1.0f);
+	cpShapeSetElasticity(cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpv( 330+radius,  250+radius), cpv(-330-radius,  250+radius), 0.0f)), 1.0f);
+	cpShapeSetElasticity(cpSpaceAddShape(space, cpSegmentShapeNew(cpSpaceGetStaticBody(space), cpv(-330-radius, -250-radius), cpv(-330-radius,  250+radius), 0.0f)), 1.0f);
 	
 	for(int x=-320; x<=320; x+=20){
 		for(int y=-240; y<=240; y+=20){
-			cpSpaceAddShape(space, cpCircleShapeNew(space->staticBody, radius, cpv(x, y)));
+			cpSpaceAddShape(space, cpCircleShapeNew(cpSpaceGetStaticBody(space), radius, cpv(x, y)));
 		}
 	}
 	
 	for(int y=10-240; y<=240; y+=40){
 		cpFloat mass = 7.0f;
 		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
-		body->p = cpv(-320.0f, y);
-		body->v = cpv(100.0f, 0.0f);
+		cpBodySetPosition(body, cpv(-320.0f, y));
+		cpBodySetVelocity(body, cpv(100.0f, 0.0f));
 		
 		cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
-		shape->e = 1.0f;
-		shape->collision_type = 2;
+		cpShapeSetElasticity(shape, 1.0);
+		cpShapeSetCollisionType(shape, 2);
 	}
 	
 	for(int x=30-320; x<=320; x+=40){
 		cpFloat mass = 7.0f;
 		cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, radius, cpvzero)));
-		body->p = cpv(x, -240.0f);
-		body->v = cpv(0.0f, 100.0f); 
+		cpBodySetPosition(body, cpv(x, -240.0f));
+		cpBodySetVelocity(body, cpv(0.0f, 100.0f));
 		
 		cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
-		shape->e = 1.0f;
-		shape->collision_type = 2;
+		cpShapeSetElasticity(shape, 1.0);
+		cpShapeSetCollisionType(shape, 2);
 	}
 	
 	return space;

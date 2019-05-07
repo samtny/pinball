@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0001 NEW) # don't use MAKE_BACKWARDS_COMPATIBILITY but policies instead
+# CMP0042 is an apple specific option
+if (${APPLE})
+  cmake_policy(SET CMP0042 NEW) # use MACOSX_RPATH
+endif ()
 
 project(chipmunk)
 
@@ -14,6 +18,12 @@ if(NOT CMAKE_BUILD_TYPE)
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
       FORCE)
 endif()
+
+# to manually select install locations of libraries and executables
+#   -D LIB_INSTALL_DIR mylib
+#   -D BIN_INSTALL_DIR newbin
+set(LIB_INSTALL_DIR lib CACHE STRING "Install location of libraries")
+set(BIN_INSTALL_DIR bin CACHE STRING "Install location of executables")
 
 # other options for the build, you can i.e. activate the shared library by passing
 #   -D BUILD_SHARED=ON
@@ -58,5 +68,5 @@ endif()
 add_subdirectory(src)
 
 if(BUILD_DEMOS)
-  add_subdirectory(Demo)
+  add_subdirectory(demo)
 endif()

@@ -28,6 +28,7 @@ IOS_SDK_VERSION = latest_sdk()
 
 log("Building using iOS SDK #{IOS_SDK_VERSION}")
 
+PROJECT = "Chipmunk7.xcodeproj"
 VERBOSE = (not ARGV.include?("--quiet"))
 
 def system(command)
@@ -43,17 +44,40 @@ def system(command)
 	end
 end
 
-OUTPUT_DIR_NAME = "Chipmunk-iPhone"
-system "rm -rf #{OUTPUT_DIR_NAME}"
-system "mkdir #{OUTPUT_DIR_NAME}"
+def build(target, configuration, simulator)
+	sdk_os = (simulator ? "iphonesimulator" : "iphoneos")
+	sdk = "#{sdk_os}#{IOS_SDK_VERSION}"
+	
+	command = "xcodebuild -project #{PROJECT} -sdk #{sdk} -configuration #{configuration} -target #{target}"
+	system command
+	
+	return "build/#{configuration}-#{sdk_os}/lib#{target}.a"
+end
 
-system "xcodebuild -project Chipmunk6.xcodeproj -sdk iphoneos#{IOS_SDK_VERSION} -configuration Release -target ChipmunkStatic-iPhone"
-system "xcodebuild -project Chipmunk6.xcodeproj -sdk iphonesimulator#{IOS_SDK_VERSION} -arch i386 -configuration Debug -target ChipmunkStatic-iPhone"
-system "lipo build/Debug-iphonesimulator/libChipmunk-iPhone.a build/Release-iphoneos/libChipmunk-iPhone.a -create -output #{OUTPUT_DIR_NAME}/libChipmunk-iPhone.a"
+def build_fat_lib(target, copy_list)
+	iphone_lib = build(target, "Release", false)
+	simulator_lib = build(target, "Debug", true)
+	
+	dirname = "#{target}"
+	
+	system "rm -rf '#{dirname}'"
+	system "mkdir '#{dirname}'"
+	
+	system "lipo #{iphone_lib} #{simulator_lib} -create -output '#{dirname}/lib#{target}.a'"
+	
+	copy_list.each{|src| system "rsync -r --exclude='.*' '#{src}' '#{dirname}'"}
+	
+	puts "\n#{dirname}/ Succesfully built"
+end
 
-system "rsync -r --exclude='.*' ../include/chipmunk/ #{OUTPUT_DIR_NAME}"
-system "open #{OUTPUT_DIR_NAME}"
 
-puts "Copy #{OUTPUT_DIR_NAME} into your project and enjoy."
+build_fat_lib( "Chipmunk-iOS", [
+		"../include",
+])
+
+build_fat_lib("ObjectiveChipmunk-iOS", [
+	"../include",
+	"../objectivec/include",
+])
 
 BUILD_LOG.delete

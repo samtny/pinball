@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
 static cpBody *tankBody, *tankControlBody;
@@ -28,16 +28,16 @@ static void
 update(cpSpace *space, double dt)
 {
 	// turn the control body based on the angle relative to the actual body
-	cpVect mouseDelta = cpvsub(ChipmunkDemoMouse, cpBodyGetPos(tankBody));
-	cpFloat turn = cpvtoangle(cpvunrotate(cpBodyGetRot(tankBody), mouseDelta));
+	cpVect mouseDelta = cpvsub(ChipmunkDemoMouse, cpBodyGetPosition(tankBody));
+	cpFloat turn = cpvtoangle(cpvunrotate(cpBodyGetRotation(tankBody), mouseDelta));
 	cpBodySetAngle(tankControlBody, cpBodyGetAngle(tankBody) - turn);
 	
 	// drive the tank towards the mouse
-	if(cpvnear(ChipmunkDemoMouse, cpBodyGetPos(tankBody), 30.0)){
-		cpBodySetVel(tankControlBody, cpvzero); // stop
+	if(cpvnear(ChipmunkDemoMouse, cpBodyGetPosition(tankBody), 30.0)){
+		cpBodySetVelocity(tankControlBody, cpvzero); // stop
 	} else {
-		cpFloat direction = (cpvdot(mouseDelta, cpBodyGetRot(tankBody)) > 0.0 ? 1.0 : -1.0);
-		cpBodySetVel(tankControlBody, cpvrotate(cpBodyGetRot(tankBody), cpv(30.0f*direction, 0.0f)));
+		cpFloat direction = (cpvdot(mouseDelta, cpBodyGetRotation(tankBody)) > 0.0 ? 1.0 : -1.0);
+		cpBodySetVelocity(tankControlBody, cpvrotate(cpBodyGetRotation(tankBody), cpv(30.0f*direction, 0.0f)));
 	}
 	
 	cpSpaceStep(space, dt);
@@ -49,9 +49,9 @@ add_box(cpSpace *space, cpFloat size, cpFloat mass)
 	cpFloat radius = cpvlength(cpv(size, size));
 
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForBox(mass, size, size)));
-	cpBodySetPos(body, cpv(frand()*(640 - 2*radius) - (320 - radius), frand()*(480 - 2*radius) - (240 - radius)));
+	cpBodySetPosition(body, cpv(frand()*(640 - 2*radius) - (320 - radius), frand()*(480 - 2*radius) - (240 - radius)));
 	
-	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, size, size));
+	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, size, size, 0.0));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.7f);
 	
@@ -74,22 +74,22 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(-320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	for(int i=0; i<50; i++){
 		cpBody *body = add_box(space, 20, 1);
@@ -104,7 +104,7 @@ init(void)
 	}
 	
 	// We joint the tank to the control body and control the tank indirectly by modifying the control body.
-	tankControlBody = cpBodyNew(INFINITY, INFINITY);
+	tankControlBody = cpSpaceAddBody(space, cpBodyNewKinematic());
 	tankBody = add_box(space, 30, 10);
 	
 	cpConstraint *pivot = cpSpaceAddConstraint(space, cpPivotJointNew2(tankControlBody, tankBody, cpvzero, cpvzero));
@@ -123,7 +123,6 @@ static void
 destroy(cpSpace *space)
 {
 	ChipmunkDemoFreeSpaceChildren(space);
-	cpBodyFree(tankControlBody);
 	cpSpaceFree(space);
 }
 

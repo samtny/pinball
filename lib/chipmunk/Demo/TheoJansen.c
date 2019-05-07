@@ -25,7 +25,7 @@
  * Read more here: http://en.wikipedia.org/wiki/Theo_Jansen
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
 static cpConstraint *motor;
@@ -53,24 +53,24 @@ make_leg(cpSpace *space, cpFloat side, cpFloat offset, cpBody *chassis, cpBody *
 
 	// make leg
 	a = cpvzero, b = cpv(0.0f, side);
-	cpBody *upper_leg = cpSpaceAddBody(space, cpBodyNew(leg_mass, cpMomentForSegment(leg_mass, a, b)));
-	cpBodySetPos(upper_leg, cpv(offset, 0.0f));
+	cpBody *upper_leg = cpSpaceAddBody(space, cpBodyNew(leg_mass, cpMomentForSegment(leg_mass, a, b, 0.0f)));
+	cpBodySetPosition(upper_leg, cpv(offset, 0.0f));
 	
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(upper_leg, a, b, seg_radius));
-	cpShapeSetGroup(shape, 1);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	
 	cpSpaceAddConstraint(space, cpPivotJointNew2(chassis, upper_leg, cpv(offset, 0.0f), cpvzero));
 	
 	// lower leg
 	a = cpvzero, b = cpv(0.0f, -1.0f*side);
-	cpBody *lower_leg = cpSpaceAddBody(space, cpBodyNew(leg_mass, cpMomentForSegment(leg_mass, a, b)));
-	cpBodySetPos(lower_leg, cpv(offset, -side));
+	cpBody *lower_leg = cpSpaceAddBody(space, cpBodyNew(leg_mass, cpMomentForSegment(leg_mass, a, b, 0.0f)));
+	cpBodySetPosition(lower_leg, cpv(offset, -side));
 	
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(lower_leg, a, b, seg_radius));
-	cpShapeSetGroup(shape, 1);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(lower_leg, seg_radius*2.0f, b));
-	cpShapeSetGroup(shape, 1);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 1.0f);
 	
@@ -105,27 +105,27 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(-320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	cpFloat offset = 30.0f;
 
 	// make chassis
 	cpFloat chassis_mass = 2.0f;
 	a = cpv(-offset, 0.0f), b = cpv(offset, 0.0f);
-	cpBody *chassis = cpSpaceAddBody(space, cpBodyNew(chassis_mass, cpMomentForSegment(chassis_mass, a, b)));
+	cpBody *chassis = cpSpaceAddBody(space, cpBodyNew(chassis_mass, cpMomentForSegment(chassis_mass, a, b, 0.0f)));
 	
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(chassis, a, b, seg_radius));
-	cpShapeSetGroup(shape, 1);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	
 	// make crank
 	cpFloat crank_mass = 1.0f;
@@ -133,7 +133,7 @@ init(void)
 	cpBody *crank = cpSpaceAddBody(space, cpBodyNew(crank_mass, cpMomentForCircle(crank_mass, crank_radius, 0.0f, cpvzero)));
 	
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(crank, crank_radius, cpvzero));
-	cpShapeSetGroup(shape, 1);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	
 	cpSpaceAddConstraint(space, cpPivotJointNew2(chassis, crank, cpvzero, cpvzero));
 	
@@ -141,8 +141,8 @@ init(void)
 	
 	int num_legs = 2;
 	for(int i=0; i<num_legs; i++){
-		make_leg(space, side,  offset, chassis, crank, cpvmult(cpvforangle((cpFloat)(2*i+0)/(cpFloat)num_legs*M_PI), crank_radius));
-		make_leg(space, side, -offset, chassis, crank, cpvmult(cpvforangle((cpFloat)(2*i+1)/(cpFloat)num_legs*M_PI), crank_radius));
+		make_leg(space, side,  offset, chassis, crank, cpvmult(cpvforangle((cpFloat)(2*i+0)/(cpFloat)num_legs*CP_PI), crank_radius));
+		make_leg(space, side, -offset, chassis, crank, cpvmult(cpvforangle((cpFloat)(2*i+1)/(cpFloat)num_legs*CP_PI), crank_radius));
 	}
 	
 	motor = cpSpaceAddConstraint(space, cpSimpleMotorNew(chassis, crank, 6.0f));

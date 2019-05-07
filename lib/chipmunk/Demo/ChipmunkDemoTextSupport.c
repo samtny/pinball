@@ -24,7 +24,7 @@
 #include "GL/glew.h"
 #include "GL/glfw.h"
 
-#include "chipmunk_private.h"
+#include "chipmunk/chipmunk_private.h"
 #include "ChipmunkDemo.h"
 #include "ChipmunkDemoShaderSupport.h"
 #include "ChipmunkDemoTextSupport.h"
@@ -39,7 +39,7 @@ static GLuint program;
 static GLuint texture;
 
 struct v2f {GLfloat x, y;};
-typedef struct Vertex {struct v2f vertex, tex_coord; Color color;} Vertex;
+typedef struct Vertex {struct v2f vertex, tex_coord; cpSpaceDebugColor color;} Vertex;
 typedef struct Triangle {Vertex a, b, c;} Triangle;
 
 static GLuint vao = 0;
@@ -60,7 +60,7 @@ ChipmunkDemoTextInit(void)
 		varying vec4 v_color;
 		
 		void main(void){
-			// TODO get rid of the GL 2.x matrix bit eventually?
+			// TODO: get rid of the GL 2.x matrix bit eventually?
 			gl_Position = gl_ModelViewProjectionMatrix*vec4(vertex, 0.0, 1.0);
 			
 			v_color = color;
@@ -145,11 +145,11 @@ ChipmunkDemoTextInit(void)
 #undef MAX
 #define MAX(__a__, __b__) (__a__ > __b__ ? __a__ : __b__)
 
-static size_t triangle_capacity = 0;
-static size_t triangle_count = 0;
+static GLsizei triangle_capacity = 0;
+static GLsizei triangle_count = 0;
 static Triangle *triangle_buffer = NULL;
 
-static Triangle *PushTriangles(size_t count)
+static Triangle *PushTriangles(GLsizei count)
 {
 	if(triangle_count + count > triangle_capacity){
 		triangle_capacity += MAX(triangle_capacity, count);
@@ -162,7 +162,7 @@ static Triangle *PushTriangles(size_t count)
 }
 
 static GLfloat
-PushChar(int character, GLfloat x, GLfloat y, Color color)
+PushChar(int character, GLfloat x, GLfloat y, cpSpaceDebugColor color)
 {
 	int i = glyph_indexes[character];
 	GLfloat w = (GLfloat)sdf_tex_width;
@@ -197,12 +197,12 @@ PushChar(int character, GLfloat x, GLfloat y, Color color)
 #undef ChipmunkDemoTextDrawString
 
 void
-ChipmunkDemoTextDrawString(cpVect pos, char *str)
+ChipmunkDemoTextDrawString(cpVect pos, char const *str)
 {
-	Color c = LAColor(1.0f, 1.0f);
+	cpSpaceDebugColor c = LAColor(1.0f, 1.0f);
 	GLfloat x = (GLfloat)pos.x, y = (GLfloat)pos.y;
 	
-	for(int i=0, len=strlen(str); i<len; i++){
+	for(size_t i=0, len=strlen(str); i<len; i++){
 		if(str[i] == '\n'){
 			y -= LineHeight;
 			x = (GLfloat)pos.x;

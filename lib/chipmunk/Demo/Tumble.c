@@ -19,19 +19,14 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
-static cpBody *rogueBoxBody;
+static cpBody *KinematicBoxBody;
 
 static void
 update(cpSpace *space, double dt)
 {
-	// Manually update the position of the box body so that the box rotates.
-	// Normally Chipmunk calls this and cpBodyUpdateVelocity() for you,
-	// but we wanted to control the angular velocity explicitly.
-	cpBodyUpdatePosition(rogueBoxBody, dt);
-	
 	cpSpaceStep(space, dt);
 }
 
@@ -39,9 +34,9 @@ static void
 AddBox(cpSpace *space, cpVect pos, cpFloat mass, cpFloat width, cpFloat height)
 {
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForBox(mass, width, height)));
-	cpBodySetPos(body, pos);
+	cpBodySetPosition(body, pos);
 	
-	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height));
+	cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height, 0.0));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.7f);
 }
@@ -50,7 +45,7 @@ static void
 AddSegment(cpSpace *space, cpVect pos, cpFloat mass, cpFloat width, cpFloat height)
 {
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForBox(mass, width, height)));
-	cpBodySetPos(body, pos);
+	cpBodySetPosition(body, pos);
 	
 	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpv(0.0, (height - width)/2.0), cpv(0.0, (width - height)/2.0), width/2.0));
 	cpShapeSetElasticity(shape, 0.0f);
@@ -61,7 +56,7 @@ static void
 AddCircle(cpSpace *space, cpVect pos, cpFloat mass, cpFloat radius)
 {
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0, radius, cpvzero)));
-	cpBodySetPos(body, pos);
+	cpBodySetPosition(body, pos);
 	
 	cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
 	cpShapeSetElasticity(shape, 0.0f);
@@ -78,8 +73,8 @@ init(void)
 	
 	// We create an infinite mass rogue body to attach the line segments too
 	// This way we can control the rotation however we want.
-	rogueBoxBody = cpBodyNew(INFINITY, INFINITY);
-	cpBodySetAngVel(rogueBoxBody, 0.4f);
+	KinematicBoxBody = cpSpaceAddBody(space, cpBodyNewKinematic());
+	cpBodySetAngularVelocity(KinematicBoxBody, 0.4f);
 	
 	// Set up the static box.
 	cpVect a = cpv(-200, -200);
@@ -87,25 +82,25 @@ init(void)
 	cpVect c = cpv( 200,  200);
 	cpVect d = cpv( 200, -200);
 	
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(rogueBoxBody, a, b, 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(KinematicBoxBody, a, b, 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(rogueBoxBody, b, c, 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(KinematicBoxBody, b, c, 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(rogueBoxBody, c, d, 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(KinematicBoxBody, c, d, 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
-	shape = cpSpaceAddShape(space, cpSegmentShapeNew(rogueBoxBody, d, a, 0.0f));
+	shape = cpSpaceAddShape(space, cpSegmentShapeNew(KinematicBoxBody, d, a, 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	cpFloat mass = 1;
 	cpFloat width = 30;
@@ -135,7 +130,6 @@ static void
 destroy(cpSpace *space)
 {
 	ChipmunkDemoFreeSpaceChildren(space);
-	cpBodyFree(rogueBoxBody);
 	cpSpaceFree(space);
 }
 

@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
 static cpFloat pentagon_mass = 0.0f;
@@ -29,10 +29,10 @@ static cpFloat pentagon_moment = 0.0f;
 static void
 eachBody(cpBody *body, void *unused)
 {
-	cpVect pos = cpBodyGetPos(body);
+	cpVect pos = cpBodyGetPosition(body);
 	if(pos.y < -260 || cpfabs(pos.x) > 340){
 		cpFloat x = rand()/(cpFloat)RAND_MAX*640 - 320;
-		cpBodySetPos(body, cpv(x, 260));
+		cpBodySetPosition(body, cpv(x, 260));
 	}
 }
 
@@ -40,21 +40,21 @@ static void
 update(cpSpace *space, double dt)
 {
 	if(ChipmunkDemoRightDown){
-		cpShape *nearest = cpSpaceNearestPointQueryNearest(space, ChipmunkDemoMouse, 0.0, GRABABLE_MASK_BIT, CP_NO_GROUP, NULL);
+		cpShape *nearest = cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0.0, GRAB_FILTER, NULL);
 		if(nearest){
 			cpBody *body = cpShapeGetBody(nearest);
-			if(cpBodyIsStatic(body)){
-				cpSpaceConvertBodyToDynamic(space, body, pentagon_mass, pentagon_moment);
-				cpSpaceAddBody(space, body);
-			} else {
-				cpSpaceRemoveBody(space, body);
-				cpSpaceConvertBodyToStatic(space, body);
+			if(cpBodyGetType(body) == CP_BODY_TYPE_STATIC){
+				cpBodySetType(body, CP_BODY_TYPE_DYNAMIC);
+				cpBodySetMass(body, pentagon_mass);
+				cpBodySetMoment(body, pentagon_moment);
+			} else if(cpBodyGetType(body) == CP_BODY_TYPE_DYNAMIC) {
+				cpBodySetType(body, CP_BODY_TYPE_STATIC);
 			}
 		}
 	}
 	
-	cpSpaceStep(space, dt);
 	cpSpaceEachBody(space, &eachBody, NULL);
+	cpSpaceStep(space, dt);
 }
 
 #define NUM_VERTS 5
@@ -83,30 +83,30 @@ init(void)
 		for(int j=0; j<6; j++){
 			cpFloat stagger = (j%2)*40;
 			cpVect offset = cpv(i*80 - 320 + stagger, j*70 - 240);
-			shape = cpSpaceAddShape(space, cpPolyShapeNew(staticBody, 3, tris, offset));
+			shape = cpSpaceAddShape(space, cpPolyShapeNew(staticBody, 3, tris, cpTransformTranslate(offset), 0.0));
 			cpShapeSetElasticity(shape, 1.0f);
 			cpShapeSetFriction(shape, 1.0f);
-			cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+			cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 		}
 	}
 	
 	// Create vertexes for a pentagon shape.
 	cpVect verts[NUM_VERTS];
 	for(int i=0; i<NUM_VERTS; i++){
-		cpFloat angle = -2*M_PI*i/((cpFloat) NUM_VERTS);
+		cpFloat angle = -2.0f*CP_PI*i/((cpFloat) NUM_VERTS);
 		verts[i] = cpv(10*cos(angle), 10*sin(angle));
 	}
 	
 	pentagon_mass = 1.0;
-	pentagon_moment = cpMomentForPoly(1.0f, NUM_VERTS, verts, cpvzero);
+	pentagon_moment = cpMomentForPoly(1.0f, NUM_VERTS, verts, cpvzero, 0.0f);
 	
 	// Add lots of pentagons.
 	for(int i=0; i<300; i++){
 		body = cpSpaceAddBody(space, cpBodyNew(pentagon_mass, pentagon_moment));
 		cpFloat x = rand()/(cpFloat)RAND_MAX*640 - 320;
-		cpBodySetPos(body, cpv(x, 350));
+		cpBodySetPosition(body, cpv(x, 350));
 		
-		shape = cpSpaceAddShape(space, cpPolyShapeNew(body, NUM_VERTS, verts, cpvzero));
+		shape = cpSpaceAddShape(space, cpPolyShapeNew(body, NUM_VERTS, verts, cpTransformIdentity, 0.0));
 		cpShapeSetElasticity(shape, 0.0f);
 		cpShapeSetFriction(shape, 0.4f);
 	}

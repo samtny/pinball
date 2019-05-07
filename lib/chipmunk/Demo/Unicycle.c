@@ -19,10 +19,8 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
-
-#include "constraints/util.h"
 
 static cpBody *balance_body;
 static cpFloat balance_sin = 0.0;
@@ -32,10 +30,16 @@ static cpBody *wheel_body;
 static cpConstraint *motor;
 
 /*
-	TODO
+	TODO:
 	- Clamp max angle dynamically based on output torque.
 */
 
+
+static inline cpFloat
+bias_coef(cpFloat errorBias, cpFloat dt)
+{
+	return 1.0f - cpfpow(errorBias, dt);
+}
 
 static void motor_preSolve(cpConstraint *motor, cpSpace *space)
 {
@@ -45,18 +49,18 @@ static void motor_preSolve(cpConstraint *motor, cpSpace *space)
 	ChipmunkDebugDrawSegment(cpv(target_x, -1000.0), cpv(target_x, 1000.0), RGBAColor(1.0, 0.0, 0.0, 1.0));
 	
 	cpFloat max_v = 500.0;
-	cpFloat target_v = cpfclamp(bias_coef(0.5, dt/1.2)*(target_x - balance_body->p.x)/dt, -max_v, max_v);
-	cpFloat error_v = (target_v - balance_body->v.x);
+	cpFloat target_v = cpfclamp(bias_coef(0.5, dt/1.2)*(target_x - cpBodyGetPosition(balance_body).x)/dt, -max_v, max_v);
+	cpFloat error_v = (target_v - cpBodyGetVelocity(balance_body).x);
 	cpFloat target_sin = 3.0e-3*bias_coef(0.1, dt)*error_v/dt;
 	
 	cpFloat max_sin = cpfsin(0.6);
 	balance_sin = cpfclamp(balance_sin - 6.0e-5*bias_coef(0.2, dt)*error_v/dt, -max_sin, max_sin);
 	cpFloat target_a = asin(cpfclamp(-target_sin + balance_sin, -max_sin, max_sin));
-	cpFloat angular_diff = asin(cpvcross(balance_body->rot, cpvforangle(target_a)));
+	cpFloat angular_diff = asin(cpvcross(cpBodyGetRotation(balance_body), cpvforangle(target_a)));
 	cpFloat target_w = bias_coef(0.1, dt/0.4)*(angular_diff)/dt;
 	
 	cpFloat max_rate = 50.0;
-	cpFloat rate = cpfclamp(wheel_body->w + balance_body->w - target_w, -max_rate, max_rate);
+	cpFloat rate = cpfclamp(cpBodyGetAngularVelocity(wheel_body) + cpBodyGetAngularVelocity(balance_body) - target_w, -max_rate, max_rate);
 	cpSimpleMotorSetRate(motor, cpfclamp(rate, -max_rate, max_rate));
 	cpConstraintSetMaxForce(motor, 8.0e4);
 }
@@ -79,22 +83,22 @@ init(void)
 	
 	{
 		cpShape *shape = NULL;
-		cpBody *staticBody = space->staticBody;
+		cpBody *staticBody = cpSpaceGetStaticBody(space);
 		
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-3200,-240), cpv(3200,-240), 0.0f));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(0,-200), cpv(240,-240), 0.0f));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-240,-240), cpv(0,-200), 0.0f));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	}
 	
 	
@@ -104,11 +108,11 @@ init(void)
 		
 		cpFloat moment = cpMomentForCircle(mass, 0.0, radius, cpvzero);
 		wheel_body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-		wheel_body->p = cpv(0.0, -160.0 + radius);
+		cpBodySetPosition(wheel_body, cpv(0.0, -160.0 + radius));
 		
 		cpShape *shape = cpSpaceAddShape(space, cpCircleShapeNew(wheel_body, radius, cpvzero));
-		shape->u = 0.7;
-		shape->group = 1;
+		cpShapeSetFriction(shape, 0.7);
+	cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	}
 	
 	{
@@ -121,27 +125,27 @@ init(void)
 		cpFloat moment = cpMomentForBox2(mass, bb1) + cpMomentForBox2(mass, bb2);
 		
 		balance_body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-		balance_body->p = cpv(0.0, wheel_body->p.y + cog_offset);
+		cpBodySetPosition(balance_body, cpv(0.0, cpBodyGetPosition(wheel_body).y + cog_offset));
 		
 		cpShape *shape = NULL;
 		
-		shape = cpSpaceAddShape(space, cpBoxShapeNew2(balance_body, bb1));
-		shape->u = 1.0;
-		shape->group = 1;
+		shape = cpSpaceAddShape(space, cpBoxShapeNew2(balance_body, bb1, 0.0));
+		cpShapeSetFriction(shape, 1.0);
+		cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 		
-		shape = cpSpaceAddShape(space, cpBoxShapeNew2(balance_body, bb2));
-		shape->u = 1.0;
-		shape->group = 1;
+		shape = cpSpaceAddShape(space, cpBoxShapeNew2(balance_body, bb2, 0.0));
+		cpShapeSetFriction(shape, 1.0);
+		cpShapeSetFilter(shape, cpShapeFilterNew(1, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	}
 	
-	cpVect anchr1 = cpBodyWorld2Local(balance_body, wheel_body->p);
-	cpVect groove_a = cpvadd(anchr1, cpv(0.0,  30.0));
-	cpVect groove_b = cpvadd(anchr1, cpv(0.0, -10.0));
+	cpVect anchorA = cpBodyWorldToLocal(balance_body, cpBodyGetPosition(wheel_body));
+	cpVect groove_a = cpvadd(anchorA, cpv(0.0,  30.0));
+	cpVect groove_b = cpvadd(anchorA, cpv(0.0, -10.0));
 	cpSpaceAddConstraint(space, cpGrooveJointNew(balance_body, wheel_body, groove_a, groove_b, cpvzero));
-	cpSpaceAddConstraint(space, cpDampedSpringNew(balance_body, wheel_body, anchr1, cpvzero, 0.0, 6.0e2, 30.0));
+	cpSpaceAddConstraint(space, cpDampedSpringNew(balance_body, wheel_body, anchorA, cpvzero, 0.0, 6.0e2, 30.0));
 	
 	motor = cpSpaceAddConstraint(space, cpSimpleMotorNew(wheel_body, balance_body, 0.0));
-	motor->preSolve = motor_preSolve;
+	cpConstraintSetPreSolveFunc(motor, motor_preSolve);
 	
 	{
 		cpFloat width = 100.0;
@@ -149,9 +153,9 @@ init(void)
 		cpFloat mass = 3.0;
 		
 		cpBody *boxBody = cpSpaceAddBody(space, cpBodyNew(mass, cpMomentForBox(mass, width, height)));
-		cpBodySetPos(boxBody, cpv(200, -100));
+		cpBodySetPosition(boxBody, cpv(200, -100));
 		
-		cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(boxBody, width, height));
+		cpShape *shape = cpSpaceAddShape(space, cpBoxShapeNew(boxBody, width, height, 0.0));
 		cpShapeSetFriction(shape, 0.7);
 	}
 	

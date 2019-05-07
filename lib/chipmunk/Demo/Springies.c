@@ -21,7 +21,7 @@
  
 #include <string.h>
 
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
 static cpFloat
@@ -32,9 +32,9 @@ springForce(cpConstraint *spring, cpFloat dist)
 }
 
 static cpConstraint *
-new_spring(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2, cpFloat restLength, cpFloat stiff, cpFloat damp)
+new_spring(cpBody *a, cpBody *b, cpVect anchorA, cpVect anchorB, cpFloat restLength, cpFloat stiff, cpFloat damp)
 {
-	cpConstraint *spring = cpDampedSpringNew(a, b, anchr1, anchr2, restLength, stiff, damp);
+	cpConstraint *spring = cpDampedSpringNew(a, b, anchorA, anchorB, restLength, stiff, damp);
 	cpDampedSpringSetSpringForceFunc(spring, springForce);
 	
 	return spring;
@@ -54,10 +54,10 @@ add_bar(cpSpace *space, cpVect a, cpVect b, int group)
 	cpFloat mass = length/160.0f;
 	
 	cpBody *body = cpSpaceAddBody(space, cpBodyNew(mass, mass*length*length/12.0f));
-	cpBodySetPos(body, center);
+	cpBodySetPosition(body, center);
 	
 	cpShape *shape = cpSpaceAddShape(space, cpSegmentShapeNew(body, cpvsub(a, center), cpvsub(b, center), 10.0f));
-	cpShapeSetGroup(shape, group);
+	cpShapeSetFilter(shape, cpShapeFilterNew(group, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
 	
 	return body;
 }

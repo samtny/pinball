@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
 
 static const int image_width = 188;
@@ -79,7 +79,7 @@ update(cpSpace *space, double dt)
 static void
 DrawDot(cpBody *body, void *unused)
 {
-	ChipmunkDebugDrawDot(3.0, cpBodyGetPos(body), RGBAColor(200.0f/255.0f, 210.0f/255.0f, 230.0f/255.0f, 1.0f));
+	ChipmunkDebugDrawDot(3.0, cpBodyGetPosition(body), RGBAColor(200.0f/255.0f, 210.0f/255.0f, 230.0f/255.0f, 1.0f));
 }
 
 static void
@@ -87,14 +87,14 @@ draw(cpSpace *space)
 {
 	cpSpaceEachBody(space, DrawDot, NULL);
 	
-	ChipmunkDebugDrawCollisionPoints(space);
+//	ChipmunkDebugDrawCollisionPoints(space);
 }
 
 static cpShape *
 make_ball(cpFloat x, cpFloat y)
 {
 	cpBody *body = cpBodyNew(1.0, INFINITY);
-	cpBodySetPos(body, cpv(x, y));
+	cpBodySetPosition(body, cpv(x, y));
 
 	cpShape *shape = cpCircleShapeNew(body, 0.95, cpvzero);
 	cpShapeSetElasticity(shape, 0.0);
@@ -134,14 +134,14 @@ init(void)
 		}
 	}
 	
-	body = cpSpaceAddBody(space, cpBodyNew(INFINITY, INFINITY));
-	cpBodySetPos(body, cpv(-1000, -10));
-	cpBodySetVel(body, cpv(400, 0));
+	body = cpSpaceAddBody(space, cpBodyNew(1e9, INFINITY));
+	cpBodySetPosition(body, cpv(-1000, -10));
+	cpBodySetVelocity(body, cpv(400, 0));
 
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(body, 8.0f, cpvzero));
 	cpShapeSetElasticity(shape, 0.0);
 	cpShapeSetFriction(shape, 0.0);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	bodyCount++;
 

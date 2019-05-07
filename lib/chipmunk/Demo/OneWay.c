@@ -19,8 +19,12 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 #include "ChipmunkDemo.h"
+
+enum CollisionTypes {
+	COLLISION_TYPE_ONE_WAY = 1,
+};
 
 typedef struct OneWayPlatform {
 	cpVect n; // direction objects may pass through
@@ -29,14 +33,13 @@ typedef struct OneWayPlatform {
 static OneWayPlatform platformInstance;
 
 static cpBool
-preSolve(cpArbiter *arb, cpSpace *space, void *ignore)
+PreSolve(cpArbiter *arb, cpSpace *space, void *ignore)
 {
 	CP_ARBITER_GET_SHAPES(arb, a, b);
 	OneWayPlatform *platform = (OneWayPlatform *)cpShapeGetUserData(a);
 		
-	if(cpvdot(cpArbiterGetNormal(arb, 0), platform->n) < 0){
-		cpArbiterIgnore(arb);
-		return cpFalse;
+	if(cpvdot(cpArbiterGetNormal(arb), platform->n) < 0){
+		return cpArbiterIgnore(arb);
 	}
 	
 	return cpTrue;
@@ -64,42 +67,43 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(-320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	// Add our one way segment
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-160,-100), cpv(160,-100), 10.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetCollisionType(shape, 1);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetCollisionType(shape, COLLISION_TYPE_ONE_WAY);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	// We'll use the data pointer for the OneWayPlatform struct
 	platformInstance.n = cpv(0, 1); // let objects pass upwards
 	cpShapeSetUserData(shape, &platformInstance);
 	
 	
-	// Add a ball to make things more interesting
+	// Add a ball to test it out
 	cpFloat radius = 15.0f;
 	body = cpSpaceAddBody(space, cpBodyNew(10.0f, cpMomentForCircle(10.0f, 0.0f, radius, cpvzero)));
-	cpBodySetPos(body, cpv(0, -200));
-	cpBodySetVel(body, cpv(0, 170));
+	cpBodySetPosition(body, cpv(0, -200));
+	cpBodySetVelocity(body, cpv(0, 170));
 
 	shape = cpSpaceAddShape(space, cpCircleShapeNew(body, radius, cpvzero));
 	cpShapeSetElasticity(shape, 0.0f);
 	cpShapeSetFriction(shape, 0.9f);
 	cpShapeSetCollisionType(shape, 2);
 	
-	cpSpaceAddCollisionHandler(space, 1, 2, NULL, preSolve, NULL, NULL, NULL);
+	cpCollisionHandler *handler = cpSpaceAddWildcardHandler(space, COLLISION_TYPE_ONE_WAY);
+	handler->preSolveFunc = PreSolve;
 	
 	return space;
 }

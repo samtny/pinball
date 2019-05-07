@@ -1,16 +1,22 @@
+cmake_policy(SET CMP0015 NEW) # Convert relative paths
+
 find_package(OpenGL REQUIRED)
 
-# Quick and dirty package searching.
-# Will probably only work on Unixes.
-# TODO need to fix this up eventually.
-FIND_LIBRARY(GLFW_LIBRARIES glfw /usr/lib)
-FIND_LIBRARY(GLEW_LIBRARIES GLEW /usr/lib)
-FIND_PATH(GLFW_INCLUDE_DIR GL/glfw.h /usr/include/GL)
-FIND_PATH(GLEW_INCLUDE_DIR GL/glew.h /usr/include/GL)
-
+if(APPLE)
+	set(GLEW_INCLUDE_DIR ../xcode/libGLEW/include)
+	set(GLFW_INCLUDE_DIR ../xcode/libglfw/include)
+	set(chipmunk_demos_library_dirs ../xcode/libglfw/lib ../xcode/libGLEW/lib)
+	set(GLEW_LIBRARIES GLEW)
+	set(GLFW_LIBRARIES glfw)
+else(APPLE)
+	FIND_PATH(GLFW_INCLUDE_DIR GL/glfw.h /usr/include/GL)
+	FIND_PATH(GLEW_INCLUDE_DIR GL/glew.h /usr/include/GL)
+	FIND_LIBRARY(GLFW_LIBRARIES glfw /usr/lib)
+	FIND_LIBRARY(GLEW_LIBRARIES GLEW /usr/lib)
+endif(APPLE)
 
 set(chipmunk_demos_include_dirs
-  ${chipmunk_SOURCE_DIR}/include/chipmunk
+  ${chipmunk_SOURCE_DIR}/include
   ${GLFW_INCLUDE_DIR}
   ${GLEW_INCLUDE_DIR}
   ${OPENGL_INCLUDE_DIR}
@@ -23,13 +29,25 @@ set(chipmunk_demos_libraries
   ${OPENGL_LIBRARIES}
 )
 
+if(APPLE)
+	FIND_LIBRARY(APPKIT AppKit)
+	FIND_LIBRARY(IOKIT IOKit)
+	
+	list(APPEND chipmunk_demos_libraries ${APPKIT} ${IOKIT})
+endif(APPLE)
+
 if(NOT MSVC)
-  list(APPEND chipmunk_demos_libraries m)
+  list(APPEND chipmunk_demos_libraries m pthread)
 endif(NOT MSVC)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  list(APPEND chipmunk_demos_libraries BlocksRuntime)
+endif(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
 
 file(GLOB chipmunk_demos_source_files "*.c")
 
 include_directories(${chipmunk_demos_include_dirs})
+link_directories(${chipmunk_demos_library_dirs})
 add_executable(chipmunk_demos ${chipmunk_demos_source_files})
 target_link_libraries(chipmunk_demos ${chipmunk_demos_libraries})
 

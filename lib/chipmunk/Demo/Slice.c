@@ -19,8 +19,7 @@
  * SOFTWARE.
  */
  
-#include "chipmunk.h"
-#include "constraints/util.h"
+#include "chipmunk/chipmunk.h"
 
 #include "ChipmunkDemo.h"
 
@@ -31,13 +30,13 @@ ClipPoly(cpSpace *space, cpShape *shape, cpVect n, cpFloat dist)
 {
 	cpBody *body = cpShapeGetBody(shape);
 	
-	int count = cpPolyShapeGetNumVerts(shape);
+	int count = cpPolyShapeGetCount(shape);
 	int clippedCount = 0;
 	
 	cpVect *clipped = (cpVect *)alloca((count + 1)*sizeof(cpVect));
 	
 	for(int i=0, j=count-1; i<count; j=i, i++){
-		cpVect a = cpBodyLocal2World(body, cpPolyShapeGetVert(shape, j));
+		cpVect a = cpBodyLocalToWorld(body, cpPolyShapeGetVert(shape, j));
 		cpFloat a_dist = cpvdot(a, n) - dist;
 		
 		if(a_dist < 0.0){
@@ -45,7 +44,7 @@ ClipPoly(cpSpace *space, cpShape *shape, cpVect n, cpFloat dist)
 			clippedCount++;
 		}
 		
-		cpVect b = cpBodyLocal2World(body, cpPolyShapeGetVert(shape, i));
+		cpVect b = cpBodyLocalToWorld(body, cpPolyShapeGetVert(shape, i));
 		cpFloat b_dist = cpvdot(b, n) - dist;
 		
 		if(a_dist*b_dist < 0.0f){
@@ -57,15 +56,16 @@ ClipPoly(cpSpace *space, cpShape *shape, cpVect n, cpFloat dist)
 	}
 	
 	cpVect centroid = cpCentroidForPoly(clippedCount, clipped);
-	cpFloat mass = cpAreaForPoly(clippedCount, clipped)*DENSITY;
-	cpFloat moment = cpMomentForPoly(mass, clippedCount, clipped, cpvneg(centroid));
+	cpFloat mass = cpAreaForPoly(clippedCount, clipped, 0.0f)*DENSITY;
+	cpFloat moment = cpMomentForPoly(mass, clippedCount, clipped, cpvneg(centroid), 0.0f);
 	
 	cpBody *new_body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-	cpBodySetPos(new_body, centroid);
-	cpBodySetVel(new_body, cpBodyGetVelAtWorldPoint(body, centroid));
-	cpBodySetAngVel(new_body, cpBodyGetAngVel(body));
+	cpBodySetPosition(new_body, centroid);
+	cpBodySetVelocity(new_body, cpBodyGetVelocityAtWorldPoint(body, centroid));
+	cpBodySetAngularVelocity(new_body, cpBodyGetAngularVelocity(body));
 	
-	cpShape *new_shape = cpSpaceAddShape(space, cpPolyShapeNew(new_body, clippedCount, clipped, cpvneg(centroid)));
+	cpTransform transform = cpTransformTranslate(cpvneg(centroid));
+	cpShape *new_shape = cpSpaceAddShape(space, cpPolyShapeNew(new_body, clippedCount, clipped, transform, 0.0));
 	// Copy whatever properties you have set on the original shape that are important
 	cpShapeSetFriction(new_shape, cpShapeGetFriction(shape));
 }
@@ -97,13 +97,13 @@ SliceShapePostStep(cpSpace *space, cpShape *shape, struct SliceContext *context)
 }
 
 static void
-SliceQuery(cpShape *shape, cpFloat t, cpVect n, struct SliceContext *context)
+SliceQuery(cpShape *shape, cpVect point, cpVect normal, cpFloat alpha, struct SliceContext *context)
 {
 	cpVect a = context->a;
 	cpVect b = context->b;
 	
 	// Check that the slice was complete by checking that the endpoints aren't in the sliced shape.
-	if(!cpShapePointQuery(shape, a) && !cpShapePointQuery(shape, b)){
+	if(cpShapePointQuery(shape, a, NULL) > 0.0f && cpShapePointQuery(shape, b, NULL) > 0.0f){
 		// Can't modify the space during a query.
 		// Must make a post-step callback to do the actual slicing.
 		cpSpaceAddPostStepCallback(context->space, (cpPostStepFunc)SliceShapePostStep, shape, context);
@@ -127,7 +127,7 @@ update(cpSpace *space, double dt)
 		} else {
 			// MouseUp
 			struct SliceContext context = {sliceStart, ChipmunkDemoMouse, space};
-			cpSpaceSegmentQuery(space, sliceStart, ChipmunkDemoMouse, GRABABLE_MASK_BIT, CP_NO_GROUP, (cpSpaceSegmentQueryFunc)SliceQuery, &context);
+			cpSpaceSegmentQuery(space, sliceStart, ChipmunkDemoMouse, 0.0, GRAB_FILTER, (cpSpaceSegmentQueryFunc)SliceQuery, &context);
 		}
 		
 		lastClickState = ChipmunkDemoRightClick;
@@ -156,7 +156,7 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-1000,-240), cpv(1000,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	cpFloat width = 200.0f;
 	cpFloat height = 300.0f;
@@ -165,7 +165,7 @@ init(void)
 	
 	body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
 	
-	shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height));
+	shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height, 0.0));
 	cpShapeSetFriction(shape, 0.6f);
 		
 	return space;

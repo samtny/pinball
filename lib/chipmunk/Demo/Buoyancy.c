@@ -18,9 +18,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- 
-#include "chipmunk.h"
-#include "constraints/util.h"
+
+#include "chipmunk/chipmunk.h"
 
 #include "ChipmunkDemo.h"
 
@@ -35,6 +34,14 @@ update(cpSpace *space, double dt)
 
 char messageBuffer[1024] = {};
 
+// Modified from chipmunk_private.h
+static inline cpFloat
+k_scalar_body(cpBody *body, cpVect point, cpVect n)
+{
+	cpFloat rcn = cpvcross(cpvsub(point, cpBodyGetPosition(body)), n);
+	return 1.0f/cpBodyGetMass(body) + rcn*rcn/cpBodyGetMoment(body);
+}
+
 static cpBool
 waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 {
@@ -45,7 +52,7 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 	cpFloat level = cpShapeGetBB(water).t;
 	
 	// Clip the polygon against the water level
-	int count = cpPolyShapeGetNumVerts(poly);
+	int count = cpPolyShapeGetCount(poly);
 	int clippedCount = 0;
 #ifdef _MSC_VER
 	// MSVC is pretty much the only compiler in existence that doesn't support variable sized arrays.
@@ -55,8 +62,8 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 #endif
 
 	for(int i=0, j=count-1; i<count; j=i, i++){
-		cpVect a = cpBodyLocal2World(body, cpPolyShapeGetVert(poly, j));
-		cpVect b = cpBodyLocal2World(body, cpPolyShapeGetVert(poly, i));
+		cpVect a = cpBodyLocalToWorld(body, cpPolyShapeGetVert(poly, j));
+		cpVect b = cpBodyLocalToWorld(body, cpPolyShapeGetVert(poly, i));
 		
 		if(a.y < level){
 			clipped[clippedCount] = a;
@@ -75,10 +82,9 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 	}
 	
 	// Calculate buoyancy from the clipped polygon area
-	cpFloat clippedArea = cpAreaForPoly(clippedCount, clipped);
+	cpFloat clippedArea = cpAreaForPoly(clippedCount, clipped, 0.0f);
 	cpFloat displacedMass = clippedArea*FLUID_DENSITY;
 	cpVect centroid = cpCentroidForPoly(clippedCount, clipped);
-	cpVect r = cpvsub(centroid, cpBodyGetPos(body));
 	
 	ChipmunkDebugDrawPolygon(clippedCount, clipped, 0.0f, RGBAColor(0, 0, 1, 1), RGBAColor(0, 0, 1, 0.1f));
 	ChipmunkDebugDrawDot(5, centroid, RGBAColor(0, 0, 1, 1));
@@ -87,19 +93,20 @@ waterPreSolve(cpArbiter *arb, cpSpace *space, void *ptr)
 	cpVect g = cpSpaceGetGravity(space);
 	
 	// Apply the buoyancy force as an impulse.
-	apply_impulse(body, cpvmult(g, -displacedMass*dt), r);
+	cpBodyApplyImpulseAtWorldPoint(body, cpvmult(g, -displacedMass*dt), centroid);
 	
 	// Apply linear damping for the fluid drag.
-	cpVect v_centroid = cpvadd(body->v, cpvmult(cpvperp(r), body->w));
-	cpFloat k = k_scalar_body(body, r, cpvnormalize_safe(v_centroid));
+	cpVect v_centroid = cpBodyGetVelocityAtWorldPoint(body, centroid);
+	cpFloat k = k_scalar_body(body, centroid, cpvnormalize(v_centroid));
 	cpFloat damping = clippedArea*FLUID_DRAG*FLUID_DENSITY;
 	cpFloat v_coef = cpfexp(-damping*dt*k); // linear drag
 //	cpFloat v_coef = 1.0/(1.0 + damping*dt*cpvlength(v_centroid)*k); // quadratic drag
-	apply_impulse(body, cpvmult(cpvsub(cpvmult(v_centroid, v_coef), v_centroid), 1.0/k), r);
+	cpBodyApplyImpulseAtWorldPoint(body, cpvmult(cpvsub(cpvmult(v_centroid, v_coef), v_centroid), 1.0/k), centroid);
 	
 	// Apply angular damping for the fluid drag.
-	cpFloat w_damping = cpMomentForPoly(FLUID_DRAG*FLUID_DENSITY*clippedArea, clippedCount, clipped, cpvneg(body->p));
-	body->w *= cpfexp(-w_damping*dt*body->i_inv);
+	cpVect cog = cpBodyLocalToWorld(body, cpBodyGetCenterOfGravity(body));
+	cpFloat w_damping = cpMomentForPoly(FLUID_DRAG*FLUID_DENSITY*clippedArea, clippedCount, clipped, cpvneg(cog), 0.0f);
+	cpBodySetAngularVelocity(body, cpBodyGetAngularVelocity(body)*cpfexp(-w_damping*dt/cpBodyGetMoment(body)));
 	
 	return cpTrue;
 }
@@ -123,22 +130,22 @@ init(void)
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(-320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(320,-240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,-240), cpv(320,-240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(-320,240), cpv(320,240), 0.0f));
 	cpShapeSetElasticity(shape, 1.0f);
 	cpShapeSetFriction(shape, 1.0f);
-	cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+	cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 	
 	{
 		// Add the edges of the bucket
@@ -148,20 +155,20 @@ init(void)
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(bb.l, bb.b), cpv(bb.l, bb.t), radius));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(bb.r, bb.b), cpv(bb.r, bb.t), radius));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
 		shape = cpSpaceAddShape(space, cpSegmentShapeNew(staticBody, cpv(bb.l, bb.b), cpv(bb.r, bb.b), radius));
 		cpShapeSetElasticity(shape, 1.0f);
 		cpShapeSetFriction(shape, 1.0f);
-		cpShapeSetLayers(shape, NOT_GRABABLE_MASK);
+		cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 		
 		// Add the sensor for the water.
-		shape = cpSpaceAddShape(space, cpBoxShapeNew2(staticBody, bb));
+		shape = cpSpaceAddShape(space, cpBoxShapeNew2(staticBody, bb, 0.0));
 		cpShapeSetSensor(shape, cpTrue);
 		cpShapeSetCollisionType(shape, 1);
 	}
@@ -174,11 +181,11 @@ init(void)
 		cpFloat moment = cpMomentForBox(mass, width, height);
 		
 		body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-		cpBodySetPos(body, cpv(-50, -100));
-		cpBodySetVel(body, cpv(0, -100));
-		cpBodySetAngVel(body, 1);
+		cpBodySetPosition(body, cpv(-50, -100));
+		cpBodySetVelocity(body, cpv(0, -100));
+		cpBodySetAngularVelocity(body, 1);
 		
-		shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height));
+		shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height, 0.0));
 		cpShapeSetFriction(shape, 0.8f);
 	}
 	
@@ -189,15 +196,16 @@ init(void)
 		cpFloat moment = cpMomentForBox(mass, width, height);
 		
 		body = cpSpaceAddBody(space, cpBodyNew(mass, moment));
-		cpBodySetPos(body, cpv(-200, -50));
-		cpBodySetVel(body, cpv(0, -100));
-		cpBodySetAngVel(body, 1);
+		cpBodySetPosition(body, cpv(-200, -50));
+		cpBodySetVelocity(body, cpv(0, -100));
+		cpBodySetAngularVelocity(body, 1);
 		
-		shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height));
+		shape = cpSpaceAddShape(space, cpBoxShapeNew(body, width, height, 0.0));
 		cpShapeSetFriction(shape, 0.8f);
 	}
 	
-	cpSpaceAddCollisionHandler(space, 1, 0, NULL, (cpCollisionPreSolveFunc)waterPreSolve, NULL, NULL, NULL);
+	cpCollisionHandler *handler = cpSpaceAddCollisionHandler(space, 1, 0);
+	handler->preSolveFunc = (cpCollisionPreSolveFunc)waterPreSolve;
 		
 	return space;
 }

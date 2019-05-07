@@ -26,8 +26,9 @@
 #include "GL/glew.h"
 #include "GL/glfw.h"
 
-#include "chipmunk.h"
+#include "chipmunk/chipmunk.h"
 
+#include "ChipmunkDemoShaderSupport.h"
 
 void
 CheckGLErrors(void)
@@ -39,9 +40,6 @@ CheckGLErrors(void)
 		}
 	}
 }
-
-//typedef GLAPIENTRY void (*GETIV)(GLuint shader, GLenum pname, GLint *params);
-//typedef GLAPIENTRY void (*GETINFOLOG)(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog);
 
 static cpBool
 CheckError(GLint obj, GLenum status, PFNGLGETSHADERIVPROC getiv, PFNGLGETSHADERINFOLOGPROC getInfoLog)
@@ -71,7 +69,7 @@ CompileShader(GLenum type, const char *source)
 	glShaderSource(shader, 1, &source, NULL);
 	glCompileShader(shader);
 	
-	// TODO return placeholder shader instead?
+	// TODO: return placeholder shader instead?
 	cpAssertHard(CheckError(shader, GL_COMPILE_STATUS, glGetShaderiv, glGetShaderInfoLog), "Error compiling shader");
 	
 	return shader;
@@ -95,12 +93,12 @@ LinkProgram(GLint vshader, GLint fshader)
 cpBool
 ValidateProgram(GLint program)
 {
-	// TODO
+	// TODO: Implement?
 	return cpTrue;
 }
 
 void
-SetAttribute(GLuint program, char *name, GLint size, GLenum gltype, GLsizei stride, GLvoid *offset)
+SetAttribute(GLuint program, char const *name, GLint size, GLenum gltype, GLsizei stride, GLvoid *offset)
 {
 	GLint index = glGetAttribLocation(program, name);
 	glEnableVertexAttribArray(index);
