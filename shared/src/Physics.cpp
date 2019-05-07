@@ -203,10 +203,11 @@ void Physics::createBox(LayoutItem *item) {
 	cpFloat mass = area * item->o->m->d;
 	
 	// create body on which to hang the "box";
-	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, (const cpVect *)&item->v[0], cpvzero)));
+    // TODO: pass a radius?
+	body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForPoly(mass, 4, (const cpVect *)&item->v[0], cpvzero, 0)));
 	
 	// the implications of attaching all playfield objects to this non-zero-indexed body are not inconsequential...
-	cpBodySetPos(body, cpvmult(cpvadd(item->v[2], item->v[0]), 0.5f));
+	cpBodySetPosition(body, cpvmult(cpvadd(item->v[2], item->v[0]), 0.5f));
 	
 	// pin the box body at the four corners;
 	//constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, staticBody, boxVerts[0]));
@@ -221,28 +222,33 @@ void Physics::createBox(LayoutItem *item) {
 	
 	// hang the box shapes on the body;
 	// left
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[0]), cpBodyWorld2Local(body, item->v[1]), item->o->r1));
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorldToLocal(body, item->v[0]), cpBodyWorldToLocal(body, item->v[1]), item->o->r1));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupBox);
+    
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroupBox, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
 
 	// top
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[1]), cpBodyWorld2Local(body, item->v[2]), item->o->r1));
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorldToLocal(body, item->v[1]), cpBodyWorldToLocal(body, item->v[2]), item->o->r1));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupBox);
+    
+	cpShapeSetFilter(shape, filter);
 
 	// right
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[2]), cpBodyWorld2Local(body, item->v[3]), item->o->r1));
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorldToLocal(body, item->v[2]), cpBodyWorldToLocal(body, item->v[3]), item->o->r1));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupBox);
+    
+	cpShapeSetFilter(shape, filter);
 
 	// bottom
-	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorld2Local(body, item->v[3]), cpBodyWorld2Local(body, item->v[0]), item->o->r1));
+	shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpBodyWorldToLocal(body, item->v[3]), cpBodyWorldToLocal(body, item->v[0]), item->o->r1));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
-	cpShapeSetGroup(shape, shapeGroupBox);
+	
+    cpShapeSetFilter(shape, filter);
 
 	cpBodySetUserData(body, item);
 
@@ -262,7 +268,7 @@ void Physics::createSegment(LayoutItem *item) {
 
 	for (int i = 0; i < item->count-1; i++) {
 
-		cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorld2Local(box->bodies[0], item->v[i]), cpBodyWorld2Local(box->bodies[0], item->v[i+1]), item->o->r1));
+		cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(box->bodies[0], cpBodyWorldToLocal(box->bodies[0], item->v[i]), cpBodyWorldToLocal(box->bodies[0], item->v[i+1]), item->o->r1));
 		cpShapeSetElasticity(shape, item->o->m->e);
 		cpShapeSetFriction(shape, item->o->m->f);
 		cpShapeSetUserData(shape, item);
@@ -277,7 +283,7 @@ void Physics::createCircle(LayoutItem *item) {
 
 	LayoutItem *box = &_playfield->getLayout()->find("box")->second;
 
-	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], item->o->r1, cpBodyWorld2Local(box->bodies[0], item->v[0])));
+	cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(box->bodies[0], item->o->r1, cpBodyWorldToLocal(box->bodies[0], item->v[0])));
 	cpShapeSetElasticity(shape, item->o->m->e);
 	cpShapeSetFriction(shape, item->o->m->f);
 	cpShapeSetUserData(shape, item);
@@ -323,12 +329,12 @@ void Physics::unflip(LayoutItem *flipper) {
 }
 
 void Physics::nudge(cpVect dir) {
-	cpBodyApplyImpulse(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -0.1));
+	cpBodyApplyImpulseAtLocalPoint(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -0.1));
 	//cpBodyApplyForce(_boxBody, cpv(_nudgeImpulse * dir.x, _nudgeImpulse * dir.y), cpv(0, -01.));
 }
 
 void Physics::drag(cpVect translation) {
-    cpBodyApplyImpulse(_boxBody, cpv(_nudgeImpulse * translation.x, _nudgeImpulse * translation.y), cpv(0, -0.1));
+    cpBodyApplyImpulseAtLocalPoint(_boxBody, cpv(_nudgeImpulse * translation.x, _nudgeImpulse * translation.y), cpv(0, -0.1));
     
     if (!this->_dragJoint) {
         /*
@@ -489,9 +495,9 @@ void Physics::resetBallsToInitialPosition() {
 		LayoutItem item = iterator->second;
 		if (strcmp("ball", item.o->s.c_str()) == 0) {
 			cpBody *body = item.bodies[0];
-			cpBodyResetForces(body);
-			cpBodySetPos(body, cpv(item.v[0].x, item.v[0].y));
+			//cpBodyResetForces(body);
+            cpBodySetForce(body, cpvzero);
+			cpBodySetPosition(body, cpv(item.v[0].x, item.v[0].y));
 		}
 	}
 }
-

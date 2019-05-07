@@ -9,14 +9,14 @@ static double _slingshotImpulse = 0;
 
 static Physics *_physics_currentInstance;
 
-static int slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
-    
+static cpBool slingshotSwitchBegin(cpArbiter *arb, cpSpace *space, void *userData) {
+
     cpBody *slingshot, *sw;
     cpArbiterGetBodies(arb, &slingshot, &sw);
     
-    cpVect normal = cpArbiterGetNormal(arb, 0);
+    cpVect normal = cpArbiterGetNormal(arb);
     
-    cpBodyApplyImpulse(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);
+    cpBodyApplyImpulseAtWorldPoint(slingshot, cpvmult(normal, -_slingshotImpulse), cpvzero);
     
     /*
      LayoutItem *l = (LayoutItem *)slingshot->data;
@@ -36,10 +36,10 @@ Slingshot::Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody
     cpFloat area = (item->o->r1 * M_PI) * 2; // approx
     cpFloat mass = area * item->o->m->d;
     
-    cpSpace *_space = attachBody->space_private;
+    cpSpace *_space = attachBody->space;
     
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, item->v[0], item->v[1])));
-    cpBodySetPos(body, mid);
+    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, item->v[0], item->v[1], item->o->r1)));
+    cpBodySetPosition(body, mid);
     
     // target surface normal;
     cpVect normal = cpvnormalize(cpvperp(cpvsub(item->v[0], item->v[1])));
@@ -54,19 +54,22 @@ Slingshot::Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody
     cpVect grooveA = cpvadd(body->p, cpvmult(normal, _slingshotRestLength));
     cpVect grooveB = body->p;
     
-    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachBody, body, cpBodyWorld2Local(attachBody, grooveA), cpBodyWorld2Local(attachBody, grooveB), cpvzero));
-    constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachBody, body, cpBodyWorld2Local(attachBody, grooveA), cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
+    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachBody, body, cpBodyWorldToLocal(attachBody, grooveA), cpBodyWorldToLocal(attachBody, grooveB), cpvzero));
+    constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachBody, body, cpBodyWorldToLocal(attachBody, grooveA), cpvzero, _slingshotRestLength, _slingshotStiffness, _slingshotDamping));
     constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, attachBody, 0.0f, 0.0f));
     
     cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[0], body->p), cpvsub(item->v[1], body->p), item->o->r1));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
-    cpShapeSetGroup(shape, shapeGroupSlingshots);
+    
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroupSlingshots, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
+
     cpShapeSetCollisionType(shape, CollisionTypeSlingshot);
     cpShapeSetUserData(shape, item);
     
     // switch
-    shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachBody, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorld2Local(attachBody, grooveA)));
+    shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachBody, _slingshotRestLength - _slingshotSwitchGap, cpBodyWorldToLocal(attachBody, grooveA)));
     cpShapeSetSensor(shape, true);
     cpShapeSetCollisionType(shape, CollisionTypeSlingshotSwitch);
     
@@ -74,5 +77,7 @@ Slingshot::Slingshot(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody
     
     item->bodies.push_back(body);
     
-    cpSpaceAddCollisionHandler(_space, CollisionTypeSlingshot, CollisionTypeSlingshotSwitch, slingshotSwitchBegin, NULL, NULL, NULL, NULL);
+    cpCollisionHandler *collisionHandler = cpSpaceAddCollisionHandler(_space, CollisionTypeData[CollisionTypeSlingshot], CollisionTypeData[CollisionTypeSlingshotSwitch]);
+    
+    collisionHandler->beginFunc = slingshotSwitchBegin;
 }

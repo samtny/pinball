@@ -10,33 +10,35 @@ static Physics *_physics_currentInstance;
 void Flipper::Flip() {
     LayoutItem *flipper = this->item;
     
-    cpBodyResetForces(flipper->bodies[0]);
+    //cpBodyResetForces(flipper->bodies[0]);
+    cpBodySetForce(flipper->bodies[0], cpvzero);
     
     cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_flipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_flipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulseAtLocalPoint(flipper->bodies[0], cpv(0, -this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForceAtLocalPoint(flipper->bodies[0], cpv(0, -this->_flipForce * this->_flipDirection), anchor);
     
     anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_flipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_flipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulseAtLocalPoint(flipper->bodies[0], cpv(0, this->_flipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForceAtLocalPoint(flipper->bodies[0], cpv(0, this->_flipForce * this->_flipDirection), anchor);
 }
 
 void Flipper::Unflip() {
     LayoutItem *flipper = this->item;
 
-    cpBodyResetForces(flipper->bodies[0]);
+    //cpBodyResetForces(flipper->bodies[0]);
+    cpBodySetForce(flipper->bodies[0], cpvzero);
     
     cpVect anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, this->_unflipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, this->_unflipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulseAtLocalPoint(flipper->bodies[0], cpv(0, this->_unflipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForceAtLocalPoint(flipper->bodies[0], cpv(0, this->_unflipForce * this->_flipDirection), anchor);
     
     anchor = cpvadd(flipper->bodies[0]->p, cpvmult(cpv(-1, 0), this->_flipOffset));
     
-    cpBodyApplyImpulse(flipper->bodies[0], cpv(0, -this->_unflipImpulse * this->_flipDirection), anchor);
-    cpBodyApplyForce(flipper->bodies[0], cpv(0, -this->_unflipForce * this->_flipDirection), anchor);
+    cpBodyApplyImpulseAtLocalPoint(flipper->bodies[0], cpv(0, -this->_unflipImpulse * this->_flipDirection), anchor);
+    cpBodyApplyForceAtLocalPoint(flipper->bodies[0], cpv(0, -this->_unflipForce * this->_flipDirection), anchor);
 }
 
 Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics)
@@ -62,11 +64,11 @@ Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Ph
     cpFloat flipStart = flipAngle > 0 ? 0 : flipAngle;
     cpFloat flipEnd = flipAngle > 0 ? flipAngle : 0;
 
-    cpSpace *_space = attachBody->space_private;
+    cpSpace *_space = attachBody->space;
 
     // flipper body is round centered at base of flipper, and for this implementation has radius == flipper length;
     cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0.0f, length, cpvzero)));
-    cpBodySetPos(body, item->v[0]);
+    cpBodySetPosition(body, item->v[0]);
 
     cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(body, attachBody, item->v[0]));
     constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, attachBody, flipStart, flipEnd));
@@ -75,7 +77,9 @@ Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Ph
     cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
-    cpShapeSetGroup(shape, shapeGroup);
+    
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroup, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
 
     float diff = item->o->r1 - item->o->r2; // r1-prime
     float loft = atan2f(diff, (float)length);
@@ -89,7 +93,9 @@ Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Ph
     shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
-    cpShapeSetGroup(shape, shapeGroup);
+    
+    filter = cpShapeFilterNew(shapeGroup, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
 
     loft = -atan2f(diff, (float)length);
     p3n = cpvrotate(p2p1n, cpvforangle(loft));
@@ -98,7 +104,9 @@ Flipper::Flipper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Ph
     shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(item->v[1], body->p), cpvsub(p3, body->p), item->o->r2));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
-    cpShapeSetGroup(shape, shapeGroup);
+    
+    filter = cpShapeFilterNew(shapeGroup, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
 
     cpBodySetUserData(body, item);
 

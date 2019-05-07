@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef __PINBALL_PHYSICS__
+#define __PINBALL_PHYSICS__
 
 #include <map>
 
@@ -16,9 +17,13 @@ class Game;
 class Playfield;
 struct LayoutItem;
 
-#if CP_USE_CGPOINTS
+// CGPoints are structurally the same, and allow
+// easy interoperability with other Cocoa libraries
+#if CP_USE_CGTYPES
 typedef CGPoint cpVect;
 #else
+/// Chipmunk's 2D vector type.
+/// @addtogroup cpVect
 struct cpVect;
 #endif
 
@@ -96,3 +101,4 @@ private:
     std::map<std::string, Flipper(*)> flippers;
 };
 
+#endif

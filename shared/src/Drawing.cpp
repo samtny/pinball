@@ -27,7 +27,7 @@ void DrawShape(cpShape *shape, void *data) {
 
 	cpBody *body = shape->body;
 
-	switch (shape->klass_private->type) {
+	switch (shape->type) {
 	case CP_CIRCLE_SHAPE: {
 		cpCircleShape *circle = (cpCircleShape *)shape;
 		Coord2 tc = {circle->tc.x, circle->tc.y};
@@ -54,20 +54,21 @@ void DrawConstraint(cpConstraint *constraint, void *data) {
     cpBody *bodyA = constraint->a;
     cpBody *bodyB = constraint->b;
     
-    const cpConstraintClass *klass = constraint->CP_PRIVATE(klass);
+    const cpConstraintClass *klass = constraint->klass;
     
-    if (klass == cpPinJointGetClass()) {
+    if (cpConstraintIsPinJoint(constraint)) {
         cpPinJoint *joint = (cpPinJoint *)constraint;
         
         // draw
-        drawSimpleJoint(bodyA, bodyB, joint->anchr1, joint->anchr2, true);
-    } else if (klass == cpGrooveJointGetClass()) {
+        drawSimpleJoint(bodyA, bodyB, joint->anchorA, joint->anchorB, true);
+        
+    } else if (cpConstraintIsGrooveJoint(constraint)) {
         
         cpGrooveJoint *joint = (cpGrooveJoint *)constraint;
         
-        cpVect a = cpBodyLocal2World(bodyA, joint->grv_a);
-        cpVect b = cpBodyLocal2World(bodyA, joint->grv_b);
-        //cpVect c = cpBodyLocal2World(bodyB, joint->anchr2);
+        cpVect a = cpBodyLocalToWorld(bodyA, joint->grv_a);
+        cpVect b = cpBodyLocalToWorld(bodyA, joint->grv_b);
+        //cpVect c = cpBodyLocalToWorld(bodyB, joint->anchr2);
         
         DrawFatSegment({a.x, a.y}, {b.x, b.y}, 0.004, LINE_COLOR, FILL_COLOR);
     }
@@ -77,8 +78,8 @@ void DrawConstraint(cpConstraint *constraint, void *data) {
 
 void drawSimpleJoint(cpBody *bodyA, cpBody *bodyB, cpVect anchr1, cpVect anchr2, bool drawLine) {
     // anchor points in world coordinates
-    cpVect a = cpBodyLocal2World(bodyA, anchr1);
-    cpVect b = cpBodyLocal2World(bodyB, anchr2);
+    cpVect a = cpBodyLocalToWorld(bodyA, anchr1);
+    cpVect b = cpBodyLocalToWorld(bodyB, anchr2);
     
     Coord2 ap = {a.x, a.y};
     Coord2 bp = {b.x, b.y};

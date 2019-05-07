@@ -14,12 +14,12 @@
 
 static Physics *_physics_currentInstance;
 
-static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+static cpBool targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
     
     cpShape *target, *sw;
     cpArbiterGetShapes(arb, &target, &sw);
     
-    LayoutItem *l = (LayoutItem *)target->data;
+    LayoutItem *l = (LayoutItem *)target->userData;
     
     if (l) {
         _physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), NULL);
@@ -32,7 +32,7 @@ static int targetSwitchBegin(cpArbiter *arb, cpSpace *space, void *unused) {
 
 Target::Target(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics) {
     this->item = item;
-    cpSpace *_space = attachBody->space_private;
+    cpSpace *_space = attachBody->space;
     _physics_currentInstance = physics;
     
     double _targetRestLength = ::atof(item->o->meta.find("restLength")->second.c_str());
@@ -48,9 +48,9 @@ Target::Target(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     
     cpFloat area = (item->o->r1 * length) * 2;
     cpFloat mass = area * item->o->m->d;
-    
-    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b)));
-    cpBodySetPos(body, mid);
+
+    cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForSegment(mass, a, b, item->o->r1)));
+    cpBodySetPosition(body, mid);
     
     // target surface normal;
     cpVect targetNormal = cpvnormalize(cpvperp(cpvsub(a, b)));
@@ -59,19 +59,22 @@ Target::Target(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     cpVect grooveA = cpvadd(body->p, cpvmult(targetNormal, _targetRestLength));
     cpVect grooveB = body->p;
     
-    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachBody, body, cpBodyWorld2Local(attachBody, grooveA), cpBodyWorld2Local(attachBody, grooveB), cpvzero));
-    constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachBody, body, cpBodyWorld2Local(attachBody, grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
+    cpConstraint *constraint = cpSpaceAddConstraint(_space, cpGrooveJointNew(attachBody, body, cpBodyWorldToLocal(attachBody, grooveA), cpBodyWorldToLocal(attachBody, grooveB), cpvzero));
+    constraint = cpSpaceAddConstraint(_space, cpDampedSpringNew(attachBody, body, cpBodyWorldToLocal(attachBody, grooveA), cpvzero, _targetRestLength, _targetStiffness, _targetDamping));
     constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(body, attachBody, 0.0f, 0.0f));
     
     cpShape *shape = cpSpaceAddShape(_space, cpSegmentShapeNew(body, cpvsub(a, body->p), cpvsub(b, body->p), item->o->r1));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
     cpShapeSetCollisionType(shape, CollisionTypeTarget);
-    cpShapeSetGroup(shape, shapeGroupTargets);
+    
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroupTargets, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
+
     cpShapeSetUserData(shape, item);
     
     // switch
-    shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachBody, _targetRestLength - _targetSwitchGap, cpBodyWorld2Local(attachBody, grooveA)));
+    shape = cpSpaceAddShape(_space, cpCircleShapeNew(attachBody, _targetRestLength - _targetSwitchGap, cpBodyWorldToLocal(attachBody, grooveA)));
     cpShapeSetSensor(shape, true);
     cpShapeSetCollisionType(shape, CollisionTypeTargetSwitch);
     
@@ -79,5 +82,6 @@ Target::Target(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     
     item->bodies.push_back(body);
     
-    cpSpaceAddCollisionHandler(_space, CollisionTypeTarget, CollisionTypeTargetSwitch, targetSwitchBegin, NULL, NULL, NULL, NULL);
+    cpCollisionHandler *handler = cpSpaceAddCollisionHandler(_space, CollisionTypeData[CollisionTypeSlingshot], CollisionTypeData[CollisionTypeSwitch]);
+    handler->beginFunc = targetSwitchBegin;
 }

@@ -19,7 +19,7 @@ static Physics *_physics_currentInstance;
 
 static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
     
-    if (!(arb->CP_PRIVATE(state) == cpArbiterStateFirstColl)) return;
+    if (!(arb->state == CP_ARBITER_STATE_FIRST_COLLISION)) return;
     
     cpVect impulse = cpArbiterTotalImpulse(arb);
     
@@ -27,13 +27,13 @@ static void popBumperPostSolve(cpArbiter *arb, cpSpace *space, void *unused) {
         
         cpBody *ball, *pop;
         cpArbiterGetBodies(arb, &ball, &pop);
+
+        cpVect normal = cpArbiterGetNormal(arb);
         
-        cpVect normal = cpArbiterGetNormal(arb, 0);
+        cpBodyApplyImpulseAtLocalPoint(ball, cpvmult(normal, -_popBumperImpulse), cpvzero);
+        cpBodyApplyImpulseAtLocalPoint(pop, cpvmult(normal, _popBumperImpulse), cpvzero);
         
-        cpBodyApplyImpulse(ball, cpvmult(normal, -_popBumperImpulse), cpvzero);
-        cpBodyApplyImpulse(pop, cpvmult(normal, _popBumperImpulse), cpvzero);
-        
-        LayoutItem *l = (LayoutItem *)pop->data;
+        LayoutItem *l = (LayoutItem *)pop->userData;
         
         _physics_currentInstance->getDelegate()->switchClosed(l->n.c_str(), nullptr);
         
@@ -50,24 +50,29 @@ PopBumper::PopBumper(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody
     _popBumperImpulse = ::atof(item->o->meta.find("impulse")->second.c_str());
     _popBumperThreshold = ::atof(item->o->meta.find("threshold")->second.c_str());
     
-    cpSpace *_space = attachBody->space_private;
+    cpSpace *_space = attachBody->space;
     
     cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
-    cpBodySetPos(body, cpv(item->v[0].x, item->v[0].y));
+    cpBodySetPosition(body, cpv(item->v[0].x, item->v[0].y));
     
     cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
     cpShapeSetElasticity(shape, item->o->m->e);
     cpShapeSetFriction(shape, item->o->m->f);
     cpShapeSetCollisionType(shape, CollisionTypePopbumper);
-    cpShapeSetGroup(shape, shapeGroupPopbumpers);
+    
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroupPopbumpers, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
+    
     cpShapeSetUserData(shape, item);
     
     cpConstraint *constraint = cpSpaceAddConstraint(_space, cpPivotJointNew(attachBody, body, body->p));
     constraint = cpSpaceAddConstraint(_space, cpRotaryLimitJointNew(attachBody, body, 0.0f, 0.0f));
     
-    body->data = item;
+    body->userData = item;
     
     item->bodies.push_back(body);
     
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypePopbumper, NULL, NULL, popBumperPostSolve, NULL, NULL);
+    cpCollisionHandler *handler = cpSpaceAddCollisionHandler(_space, CollisionTypeData[CollisionTypeBall], CollisionTypeData[CollisionTypePopbumper]);
+    handler->postSolveFunc = popBumperPostSolve;
+    
 }

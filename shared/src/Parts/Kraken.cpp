@@ -44,7 +44,7 @@ static void ballGravityVelocityFuncKraken(cpBody *body, cpVect gravity, cpFloat 
     cpBodyUpdateVelocity(body, g, damping, dt);
 }
 
-static int krakenBegin(cpArbiter *arb, cpSpace *space, void *unused) {
+static cpBool krakenBegin(cpArbiter *arb, cpSpace *space, void *unused) {
     
     printf("%s", "begin");
     
@@ -69,7 +69,7 @@ static void krakenSeparate(cpArbiter *arb, cpSpace *space, void *unused) {
 
 Kraken::Kraken(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Physics *physics) {
     this->item = item;
-    cpSpace *_space = attachBody->space_private;
+    cpSpace *_space = attachBody->space;
     _physics_currentInstance = physics;
     
     cpVect a = cpv(item->v[0].x, item->v[0].y);
@@ -78,7 +78,7 @@ Kraken::Kraken(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     cpFloat mass = area * item->o->m->d;
     
     cpBody *body = cpSpaceAddBody(_space, cpBodyNew(mass, cpMomentForCircle(mass, 0, item->o->r1, cpvzero)));
-    cpBodySetPos(body, a);
+    cpBodySetPosition(body, a);
     
     cpShape *shape = cpSpaceAddShape(_space, cpCircleShapeNew(body, item->o->r1, cpvzero));
     cpShapeSetElasticity(shape, item->o->m->e);
@@ -87,7 +87,9 @@ Kraken::Kraken(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     cpShapeSetSensor(shape, true);
     cpShapeSetCollisionType(shape, CollisionTypeKraken);
     
-    cpShapeSetGroup(shape, shapeGroupKraken);
+    cpShapeFilter filter = cpShapeFilterNew(shapeGroupKraken, ~CP_ALL_CATEGORIES, ~CP_ALL_CATEGORIES);
+    cpShapeSetFilter(shape, filter);
+
     cpShapeSetUserData(shape, item);
     
     cpSpaceAddConstraint(_space, cpPivotJointNew(attachBody, body, body->p));
@@ -98,9 +100,11 @@ Kraken::Kraken(LayoutItem *item, shapeGroup shapeGroup, cpBody *attachBody, Phys
     
     cpSpaceAddConstraint(_space, cpSimpleMotorNew(attachBody, body, 2.0));
     
-    body->data = item;
+    body->userData = item;
     
     item->bodies.push_back(body);
     
-    cpSpaceAddCollisionHandler(_space, CollisionTypeBall, CollisionTypeKraken, krakenBegin, NULL, NULL, krakenSeparate, NULL);
+    cpCollisionHandler *handler = cpSpaceAddCollisionHandler(_space, CollisionTypeData[CollisionTypeBall], CollisionTypeData[CollisionTypeKraken]);
+    handler->beginFunc = krakenBegin;
+    handler->separateFunc = krakenSeparate;
 }
